@@ -22,6 +22,10 @@ brown: #e37a39
     background-color: #e37a39 !important;
 }
 
+.white {
+    color: #FFFFFF !important;
+}
+
 body {
     font-family: "Open Sans Condensed";
 }
@@ -32,6 +36,10 @@ a {
 
 p {
     margin: 0 0 0 0;
+}
+
+p.large {
+    font-size: large;
 }
 
 h1 {
@@ -46,10 +54,24 @@ h3 {
     margin: 0 0 0 0 !important;
 }
 
+i.icon-white {
+    color: white;
+}
+
 .hover-button2 {
     position: fixed !important;
     bottom: 30px;
     right: 30px;
+}
+
+.z-depth-1-reversed {
+    -webkit-box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.14), 0 -3px 1px -2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.14), 0 -3px 1px -2px rgba(0, 0, 0, 0.12);
+}
+
+.z-depth-2-reversed {
+    -webkit-box-shadow: 0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 /* Transactions view */
@@ -104,7 +126,7 @@ h3 {
     grid-gap: 2vh;
     grid-template-columns: 0.1fr 0.8fr 0.1fr;
     grid-template-rows: 0.4fr 0.4fr 0.2fr;
-    padding-top: 80px;
+    padding: 80px 8px 16px 8px;
 }
 
 .payment-header-shop {
@@ -130,7 +152,6 @@ h3 {
     grid-column: 2;
     grid-row: 3;
     text-align: center;
-    padding-bottom: 16px;
 }
 
 .payment-header-trash-icon {
@@ -140,9 +161,24 @@ h3 {
     margin: auto;
 }
 
-.payment-details-container {
-    -webkit-box-shadow: 5px 4px 0 0 rgba(0,0,0,0.14), 10px 1px 0 0 rgba(0,0,0,0.12), 4px 2px 0 -1px rgba(0,0,0,0.3);
-    box-shadow: 5px 4px 0 0 rgba(0,0,0,0.14), 10px 1px 0 0 rgba(0,0,0,0.12), 4px 2px 0 -1px rgba(0,0,0,0.3);
+.debit-card {
+    display: grid;
+    grid-template-columns: 0.6fr 0.4fr;
+    grid-gap: 2vh;
+}
+
+.debit-card-user {
+    grid-column: 1;
+}
+
+.debit-card-amount {
+    grid-column: 2;
+}
+
+.debit-blockquote {
+    margin: 16px 0;
+    padding-left: 1.5rem;
+    border-left: 5px solid #e37a39;
 }
 
 
