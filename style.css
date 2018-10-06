@@ -1,0 +1,155 @@
+/*
+red: #e3395e
+green: #5ee339
+blue: #3983e3
+brown: #e37a39
+*/
+
+@font-face {
+    font-family: "Open Sans Condensed";
+    src: url("fonts/opensanscondensed.woff") format("woff");
+}
+
+/* global styles */
+
+.blue-theme {
+    color: #ffffff !important;
+    background-color: #3983e3 !important;
+}
+
+.brown-theme {
+    color: #FFFFFF !important;
+    background-color: #e37a39 !important;
+}
+
+body {
+    font-family: "Open Sans Condensed";
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin: 0 0 0 0;
+}
+
+h1 {
+    margin: 0 0 0 0 !important;
+}
+
+h2 {
+    margin: 0 0 0 0 !important;
+}
+
+h3 {
+    margin: 0 0 0 0 !important;
+}
+
+.hover-button2 {
+    position: fixed !important;
+    bottom: 30px;
+    right: 30px;
+}
+
+/* Transactions view */
+
+.card-date {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.card-shop {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.card-category {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.card-amount {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.card-avatar {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.card-first-row {
+    padding-top: 0.5em;
+    padding-bottom: 0;
+}
+
+.card-last-row {
+    padding-top: 0;
+    padding-bottom: 0.5em;
+}
+
+.transaction-grid-card {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 0.25fr 0.5fr 0.25fr;
+}
+
+
+/* Payment view */
+
+.payment-header {
+    width: 100%;
+    display: grid;
+    grid-gap: 2vh;
+    grid-template-columns: 0.1fr 0.8fr 0.1fr;
+    grid-template-rows: 0.4fr 0.4fr 0.2fr;
+    padding-top: 80px;
+}
+
+.payment-header-shop {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: center;
+}
+
+.payment-header-amount {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: center;
+}
+
+.payment-header-pic-icon {
+    grid-column: 1;
+    grid-row: 3;
+    text-align: center;
+    margin: auto;
+}
+
+.payment-header-category {
+    grid-column: 2;
+    grid-row: 3;
+    text-align: center;
+    padding-bottom: 16px;
+}
+
+.payment-header-trash-icon {
+    grid-column: 3;
+    grid-row: 3;
+    text-align: center;
+    margin: auto;
+}
+
+.payment-details-container {
+    -webkit-box-shadow: 5px 4px 0 0 rgba(0,0,0,0.14), 10px 1px 0 0 rgba(0,0,0,0.12), 4px 2px 0 -1px rgba(0,0,0,0.3);
+    box-shadow: 5px 4px 0 0 rgba(0,0,0,0.14), 10px 1px 0 0 rgba(0,0,0,0.12), 4px 2px 0 -1px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+
+
+
