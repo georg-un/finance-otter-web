@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script language="javascript">
+
+        let urlParams = new URLSearchParams(window.location.search);
+        let targetUrl = 'http://localhost:8080/api/v1/payments/'.concat(urlParams.get('id'));
+
+        angular.module('GetRestObject', ['ngResource']);
+
+        function Ctrl($scope, $resource) {
+            var restservice = $resource(
+                targetUrl, {}, {
+                    query: {method: 'GET'}
+                }
+            );
+            $scope.payment = restservice.query();
+            console.log($scope.payment);
+        }
+
+    </script>
+</head>
+<title>Accounting Otter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
+<body>
+
+<div class="w3-overlay w3-hide-large w3-animate-opacity"
+     onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+
+<div class="w3-main" style="margin-left:250px;">
+
+    <nav class="z-depth-3" style="position:fixed; top:0;">
+        <div class="nav-wrapper blue-theme">
+            <a href="#" class="brand-logo center"><img src="graphics/otter-icon-64.png"/></a>
+            <div class="left">
+                <a href='transactions.html' class="btn-large blue-theme" style="box-shadow: none">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!--div id="myTop" class="w3-container w3-top blue-theme w3-large">
+        <p>
+            <span style="">
+                <a href="transactions.html">
+                    <i class="material-icons" style="padding-top: 6px;">arrow_back</i>
+                </a>
+            </span>
+            <span id="myIntro" class="w3-hide">Accounting Otter</span>
+        </p>
+    </div-->
+
+    <div ng-app="GetRestObject">
+        <div ng-controller="Ctrl">
+            <header class="brown-theme payment-header">
+
+                <div class="payment-header-shop">
+                    <h3>{{payment.shop}}</h3>
+                </div>
+                <div class="payment-header-amount">
+                    <h1>€ {{payment.sumAmount}},00</h1>
+                </div>
+                <div class="payment-header-pic-icon">
+                    <i class="material-icons">photo</i>
+                </div>
+                <div class="payment-header-category">
+                    <p>{{payment.category}}</p>
+                </div>
+                <div class="payment-header-trash-icon">
+                    <i class="material-icons">delete</i>
+                </div>
+            </header>
+        </div>
+    </div>
+
+
+    <div class="w3-container" style="padding:32px"/>
+
+
+    <div ng-app="GetRestObject">
+        <div ng-controller="Ctrl">
+            <div class="w3-panel w3-light-grey w3-card transaction-grid-card" ng-repeat="debit in payment['debits']">
+                <div class="card-avatar">
+                    <h2 style="text-align:left">G</h2> <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                </div>
+                <!--div class="card-date card-first-row">
+                    <p>{{transaction.description}}</p>
+                </div>
+                <div class="card-shop">
+                    <h2>{{transaction.shop}}</h2>
+                </div>
+                <div class="card-category card-last-row">
+                    <p>{{transaction.category}}</p>
+                </div>
+                <div class="card-amount" style="text-align:right">
+                    <h2>{{transaction.sumAmount}}</h2>
+                </div>
+                <div class="w3-content" style="max-width:800px">
+                    <div class="w3-row">
+                    </div>
+                </div-->
+            </div>
+        </div>
+
+        <a class="btn-floating btn-large waves-effect waves-light red hover-button2"><i class="material-icons">edit</i></a>
+
+
+        <footer class="w3-container blue-theme" style="padding:32px">
+            <p>Footer information goes here</p>
+        </footer>
+
+    </div>
+</div>
+
+
+<script>
+    // Open and close the sidebar on medium and small screens
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+        document.getElementById("myOverlay").style.display = "none";
+    }
+
+    // Change style of top container on scroll
+    window.onscroll = function () {
+        myFunction()
+    };
+
+    function myFunction() {
+        if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+            document.getElementById("myTop").classList.add("w3-card-4", "w3-animate-opacity");
+            document.getElementById("myIntro").classList.add("w3-show-inline-block");
+        } else {
+            document.getElementById("myIntro").classList.remove("w3-show-inline-block");
+            document.getElementById("myTop").classList.remove("w3-card-4", "w3-animate-opacity");
+        }
+    }
+
+    // Accordions
+    function myAccordion(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " violet-theme";
+        } else {
+            x.className = x.className.replace("w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" violet-theme", "");
+        }
+    }
+</script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+
+</body>
+</html>
+
