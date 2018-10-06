@@ -6,9 +6,7 @@
     <script language="javascript">
         let urlParams = new URLSearchParams(window.location.search);
         let targetUrl = 'http://localhost:8080/api/v1/payments/'.concat(urlParams.get('id'));
-
         angular.module('GetRestObject', ['ngResource']);
-
         function Ctrl($scope, $resource) {
             var restservice = $resource(
                 targetUrl, {}, {
@@ -22,83 +20,77 @@
 <title>Accounting Otter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
 <body>
 
-<div class="w3-overlay w3-hide-large w3-animate-opacity"
-     onclick="w3_close()" style="cursor:pointer" id="myOverlay">
-</div>
-
-<div class="w3-main">
-    <nav class="z-depth-3" style="position:fixed; top:0;">
-        <div class="nav-wrapper blue-theme">
-            <a href="#" class="brand-logo center"><img src="graphics/otter-icon-64.png"/></a>
-            <div class="left">
-                <a href='transactions.html' class="btn-large blue-theme" style="box-shadow: none">
-                    <i class="material-icons">arrow_back</i>
-                </a>
+    <div>
+        <nav class="z-depth-3" style="position:fixed; top:0;">
+            <div class="nav-wrapper blue-theme">
+                <a href="#" class="brand-logo center"><img src="graphics/otter-icon-64.png"/></a>
+                <div class="left">
+                    <a href='transactions.html' class="btn-large blue-theme" style="box-shadow: none">
+                        <i class="material-icons">arrow_back</i>
+                    </a>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <div ng-app="GetRestObject">
-        <div ng-controller="Ctrl">
+        <div ng-app="GetRestObject">
+            <div ng-controller="Ctrl">
 
 
-            <header class="brown-theme payment-header">
+                <header class="brown-theme payment-header">
 
-                <div class="payment-header-shop">
-                    <h3>{{payment.shop}}</h3>
-                </div>
-                <div class="payment-header-amount">
-                    <h1>€ {{payment.sumAmount}},00</h1>
-                </div>
-                <div class="payment-header-pic-icon valign-wrapper">
-                    <a href='#'><i class="material-icons icon-white">photo</i></a>
-                </div>
-                <div class="payment-header-category">
-                    <p style="vertical-align: middle">{{payment.category}}</p>
-                </div>
-                <div class="payment-header-trash-icon valign-wrapper">
-                    <a href='#'><i class="material-icons icon-white">delete</i></a>
-                </div>
-            </header>
+                    <div class="payment-header-shop">
+                        <h3>{{payment.shop}}</h3>
+                    </div>
+                    <div class="payment-header-amount">
+                        <h1>€ {{payment.sumAmount}},00</h1>
+                    </div>
+                    <div class="payment-header-pic-icon valign-wrapper">
+                        <a href='#'><i class="material-icons icon-white">photo</i></a>
+                    </div>
+                    <div class="payment-header-category">
+                        <p style="vertical-align: middle">{{payment.category}}</p>
+                    </div>
+                    <div class="payment-header-trash-icon valign-wrapper">
+                        <a href='#'><i class="material-icons icon-white">delete</i></a>
+                    </div>
+                </header>
 
-            <div class="w3-container z-depth-1-reversed" style="padding:32px">
+                <div class="w3-container z-depth-1-reversed" style="padding:32px">
 
-                <p><small>DESCRIPTION</small></p>
-                <div style="padding: 4px 0 8px 0;">
-                    <p class="large">Lorizzle own yo' dolizzle adipiscing ass {{payment.description}}</p>
-                </div>
-                <hr/>
-                <div style="padding: 8px 0 0 0"></div>
-                <p><small>DISTRIBUTION</small></p>
-                <div style="padding: 0 0 8px 0;">
-                    <div class="debit-blockquote">
-                        <div ng-repeat="debit in payment.debits">
-                            <div class="debit-card" style="padding-bottom: 4px">
-                                <div class="debit-card-user">
-                                    <p class="large">{{debit.debtorName}}:</p>
-                                </div>
-                                <div class="debit-card-amount">
-                                    <p class="large">{{debit.amount}} €</p>
+                    <p><small>DESCRIPTION</small></p>
+                    <div style="padding: 4px 0 8px 0;">
+                        <p class="large">Lorizzle own yo' dolizzle adipiscing ass {{payment.description}}</p>
+                    </div>
+                    <hr/>
+                    <div style="padding: 8px 0 0 0"></div>
+                    <p><small>DISTRIBUTION</small></p>
+                    <div style="padding: 0 0 8px 0;">
+                        <div class="debit-blockquote">
+                            <div ng-repeat="debit in payment.debits">
+                                <div class="debit-card" style="padding-bottom: 4px">
+                                    <div class="debit-card-user">
+                                        <p class="large">{{debit.debtorName}}:</p>
+                                    </div>
+                                    <div class="debit-card-amount">
+                                        <p class="large">{{debit.amount}} €</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
+                <i class="material-icons">edit</i>
+            </a>
         </div>
-        <a class="btn-floating btn-large waves-effect waves-light red hover-button2">
-            <i class="material-icons">edit</i>
-        </a>
     </div>
-</div>
 
-<script type="text/javascript" src="js/materialize.min.js"></script>
-
+    <script type="text/javascript" src="js/materialize.min.js"></script>
 </body>
 </html>
 

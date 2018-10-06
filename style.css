@@ -26,12 +26,17 @@ brown: #e37a39
     color: #FFFFFF !important;
 }
 
+.black {
+    color: black !important;
+}
+
 body {
     font-family: "Open Sans Condensed";
 }
 
 a {
     text-decoration: none;
+    color: inherit;
 }
 
 p {
@@ -40,6 +45,10 @@ p {
 
 p.large {
     font-size: large;
+}
+
+p.x-large {
+    font-size: x-large;
 }
 
 h1 {
@@ -56,6 +65,10 @@ h3 {
 
 i.icon-white {
     color: white;
+}
+
+i.icon-black {
+    color: black;
 }
 
 .hover-button2 {
@@ -115,6 +128,14 @@ i.icon-white {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     grid-template-rows: 0.25fr 0.5fr 0.25fr;
+    padding: 4px 8px 4px 8px;
+    margin: 0 0 10px 0;
+    background-color: #ffcc80;
+}
+
+.card-conatainer {
+    padding: 0 24px 0 24px;
+    margin-top: 80px;
 }
 
 
