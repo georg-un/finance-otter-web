@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script language="javascript">
+        let targetUrl = 'http://localhost:8080/api/v1/user';
+        angular.module('GetRestObject', ['ngResource']);
+        function Ctrl($scope, $resource) {
+            let restservice = $resource(
+                targetUrl, {}, {
+                    query: {method: 'GET', isArray: true}
+                }
+            );
+            $scope.users = restservice.query();
+            console.log($scope.users);
+
+            $scope.splitAtComma = function(int) {
+                return int.toFixed(2).toString().split('.');
+            };
+        }
+    </script>
+</head>
+<title>Accounting Otter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
+<body>
+
+<div>
+    <!-- navbar -->
+    <nav class="z-depth-3" style="position:fixed; top:0;">
+        <div class="nav-wrapper blue-theme">
+            <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
+            <div class="left">
+                <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+        </div>
+    </nav>
+    <!-- sidebar -->
+    <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+                <img src="images/tmp/tmp-background.jpg">
+            </div>
+            <a href="#user"><img class="circle" src="images/tmp/otter-avatar.jpg"></a>
+            <a href="#name"><span class="white-text name">Sea Otter</span></a>
+            <a href="#email"><span class="white-text email">give_me_fish@accounting-otter.com</span></a>
+        </div></li>
+        <li><a class="waves-effect" href="#!"><i class="material-icons">people</i>Overview</a></li>
+        <li><a class="waves-effect" href="transactions.html"><i class="material-icons">list</i>Transactions</a></li>
+        <br/><br/>
+        <li><div class="divider"></div></li>
+        <br/>
+        <li><a class="waves-effect" href="#!">Settings</a></li>
+        <li><a class="waves-effect" href="#!">Logout</a></li>
+    </ul>
+    <!-- user-card-container -->
+    <div class="user-card-conatainer">
+        <p><small>CREDIT OVERVIEW</small></p>
+        <br/>
+        <div ng-app="GetRestObject" ng-controller="Ctrl">
+            <div ng-repeat="user in users">
+                <div class="user-card">
+                    <div class="user-card-img valign-wrapper">
+                        <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
+                    </div>
+                    <div class="user-card-name">
+                        <p class="x-large" style="color:black;">{{user.username}}</p>
+                    </div>
+                    <div class="user-card-amount" style="text-align:right;">
+                        <p class="x-large" style="color:black;  display:inline;">
+                            {{splitAtComma(user.sumDebitAmounts)[0]}},
+                        </p>
+                        <p style="color:black; display:inline;">
+                            {{splitAtComma(user.sumDebitAmounts)[1]}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--
+        <!-- add button -->
+        <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, edge="left", draggable=true);
+    });
+</script>
+
+
+
+</body>
+</html>
+

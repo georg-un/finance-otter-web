@@ -87,59 +87,92 @@ i.icon-black {
     box-shadow: 0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
-/* Transactions view */
-
-.card-date {
-    grid-column: 2;
-    grid-row: 1;
+.avatar {
+    height: 36px;
+    width: 36px;
 }
 
-.card-shop {
-    grid-column: 2;
-    grid-row: 2;
-}
+/* Overview */
 
-.card-category {
-    grid-column: 2;
-    grid-row: 3;
-}
-
-.card-amount {
-    grid-column: 3;
-    grid-row: 2;
-}
-
-.card-avatar {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.card-first-row {
-    padding-top: 0.5em;
-    padding-bottom: 0;
-}
-
-.card-last-row {
-    padding-top: 0;
-    padding-bottom: 0.5em;
-}
-
-.transaction-grid-card {
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
-    grid-template-rows: 0.25fr 0.5fr 0.25fr;
-    padding: 4px 8px 4px 8px;
-    margin: 0 0 10px 0;
-    background-color: #fffde7;
-}
-
-.card-conatainer {
+.user-card-conatainer {
     padding: 0 24px 0 24px;
     margin-top: 80px;
 }
 
+.user-card {
+    display: grid;
+    grid-template-columns: 0.1fr 0.6fr 0.4fr;
+    grid-column-gap: 2vh;
+    margin-bottom: 2.5vh;
+}
 
-/* Payment view */
+.user-card-img {
+    grid-column: 1;
+}
+
+.user-card-name {
+    grid-column: 2;
+}
+
+.user-card-amount {
+    grid-column: 3;
+}
+
+
+/* Transactions view */
+
+.transaction-card-conatainer {
+    padding: 0 16px 0 16px;
+    margin-top: 80px;
+}
+
+.transaction-grid-card {
+    display: grid;
+    grid-template-columns: 0.1fr 0.6fr 0.4fr;
+    grid-template-rows: 0.25fr 0.5fr 0.25fr;
+    grid-column-gap: 2vh;
+    padding: 4px 16px 4px 16px;
+    margin: 0 0 10px 0;
+    background-color: #fffde7;
+}
+
+.transaction-card-date {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.transaction-card-shop {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.transaction-card-category {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.transaction-card-amount {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.transaction-card-avatar {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.transaction-card-first-row {
+    padding-top: 0.5em;
+    padding-bottom: 0;
+}
+
+.transaction-card-last-row {
+    padding-top: 0;
+    padding-bottom: 0.5em;
+}
+
+
+/* Payment */
 
 .payment-header {
     width: 100%;
@@ -201,12 +234,4 @@ i.icon-black {
     padding-left: 1.5rem;
     border-left: 5px solid #e37a39;
 }
-
-
-
-
-
-
-
-
 

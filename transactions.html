@@ -58,7 +58,7 @@
                 <a href="#name"><span class="white-text name">Sea Otter</span></a>
                 <a href="#email"><span class="white-text email">give_me_fish@accounting-otter.com</span></a>
             </div></li>
-            <li><a class="waves-effect" href="#!"><i class="material-icons">people</i>Overview</a></li>
+            <li><a class="waves-effect" href="overview.html"><i class="material-icons">people</i>Overview</a></li>
             <li><a class="waves-effect" href="#!"><i class="material-icons">list</i>Transactions</a></li>
             <br/><br/>
             <li><div class="divider"></div></li>
@@ -67,24 +67,24 @@
             <li><a class="waves-effect" href="#!">Logout</a></li>
         </ul>
         <!-- card-containes -->
-        <div class="card-conatainer">
+        <div class="transaction-card-conatainer">
             <div ng-app="GetRestObject" ng-controller="Ctrl">
                 <div ng-repeat="transaction in transactions">
                     <a ng-href='payment.html?id={{transaction.transactionId}}'>
                         <div class="transaction-grid-card z-depth-1">
-                            <div class="card-avatar valign-wrapper">
-                                <i class="material-icons icon-black">person</i>
+                            <div class="transaction-card-avatar valign-wrapper">
+                                <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
                             </div>
-                            <div class="card-date card-first-row">
+                            <div class="transaction-card-date transaction-card-first-row">
                                 <p style="color:black;">{{transaction.description}}</p>
                             </div>
-                            <div class="card-shop">
+                            <div class="transaction-card-shop">
                                 <p class="x-large" style="color:black;"><b>{{transaction.shop}}</b><p>
                             </div>
-                            <div class="card-category card-last-row">
+                            <div class="transaction-card-category transaction-card-last-row">
                                 <p style="color:black;">{{transaction.category}}</p>
                             </div>
-                            <div class="card-amount" style="text-align:right;">
+                            <div class="transaction-card-amount" style="text-align:right;">
                                 <p class="x-large" style="color:black;  display:inline;">
                                     {{splitAtComma(transaction.sumAmount)[0]}},
                                 </p>
