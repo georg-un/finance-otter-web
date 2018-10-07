@@ -38,20 +38,35 @@
 <link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
 <body>
 
-<!--div class="w3-overlay w3-hide-large w3-animate-opacity"
-     onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div-->
-
     <div>
+        <!-- navbar -->
         <nav class="z-depth-3" style="position:fixed; top:0;">
             <div class="nav-wrapper blue-theme">
-                <a href="#" class="brand-logo center"><img src="graphics/otter-icon-64.png"/></a>
+                <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
                 <div class="left">
-                    <a href='transactions.html' class="btn-large blue-theme" style="box-shadow: none">
-                        <i class="material-icons">menu</i>
-                    </a>
+                    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 </div>
             </div>
         </nav>
+        <!-- sidebar -->
+        <ul id="slide-out" class="sidenav">
+            <li><div class="user-view">
+                <div class="background">
+                    <img src="images/tmp/tmp-background.jpg">
+                </div>
+                <a href="#user"><img class="circle" src="images/tmp/otter-avatar.jpg"></a>
+                <a href="#name"><span class="white-text name">Sea Otter</span></a>
+                <a href="#email"><span class="white-text email">give_me_fish@accounting-otter.com</span></a>
+            </div></li>
+            <li><a class="waves-effect" href="#!"><i class="material-icons">people</i>Overview</a></li>
+            <li><a class="waves-effect" href="#!"><i class="material-icons">list</i>Transactions</a></li>
+            <br/><br/>
+            <li><div class="divider"></div></li>
+            <br/>
+            <li><a class="waves-effect" href="#!">Settings</a></li>
+            <li><a class="waves-effect" href="#!">Logout</a></li>
+        </ul>
+        <!-- card-containes -->
         <div class="card-conatainer">
             <div ng-app="GetRestObject" ng-controller="Ctrl">
                 <div ng-repeat="transaction in transactions">
@@ -74,21 +89,28 @@
                                     {{splitAtComma(transaction.sumAmount)[0]}},
                                 </p>
                                 <p style="color:black; display:inline;">
-
                                     {{splitAtComma(transaction.sumAmount)[1]}}
-
                                 </p>
                             </div>
                         </div>
                     </a>
-                    <!--hr/-->
                 </div>
             </div>
+            <!-- add button -->
             <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
                 <i class="material-icons">add</i>
             </a>
         </div>
     </div>
+
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, edge="left", draggable=true);
+    });
+</script>
+
 
 
 </body>
