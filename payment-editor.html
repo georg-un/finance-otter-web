@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script language="javascript">
+        let targetUrl = 'http://localhost:8080/api/v1/user';
+        angular.module('GetRestObject', ['ngResource']);
+        function Ctrl($scope, $resource) {
+            let restservice = $resource(
+                targetUrl, {}, {
+                    query: {method: 'GET', isArray: true}
+                }
+            );
+            $scope.users = restservice.query();
+            console.log($scope.users);
+
+            $scope.splitAtComma = function(int) {
+                return int.toFixed(2).toString().split('.');
+            };
+
+
+
+            $scope.distributeOnEmptyFields = function() {
+
+                // get user ids
+                let userIds= [];
+                for (i=0; i < $scope.users.length; i++) {
+                    userIds.push($scope.users[i]["userId"]);
+                }
+
+                // get total amount
+                let totalAmount = document.getElementById("amount").value;
+                if (totalAmount === "" || totalAmount == null) {
+                    M.toast({html: 'Please insert first the total amount!'});
+                    return;
+                }
+                totalAmount = currency(totalAmount);
+
+
+                // get amount of filled inputs
+                let filledOutAmount = currency(0);
+                let emptyFieldIds = [];
+
+                let tmpFieldValue;
+                for (i=0; i < userIds.length; i++) {
+                    tmpFieldValue = document.getElementById(userIds[i]).value;
+                    if (tmpFieldValue != null && tmpFieldValue !== "") {
+                        if (parseFloat(tmpFieldValue) < 0) {
+                            M.toast({html: 'Please insert only positive numbers!'});
+                            return;
+                        }
+                        filledOutAmount = filledOutAmount.add(parseFloat(document.getElementById(userIds[i]).value));
+                    } else {
+                        emptyFieldIds.push([userIds[i], currency(0)]);
+                    }
+                }
+
+                if (filledOutAmount.value >= currency(totalAmount).value) {
+                    M.toast({html: 'Sum of fields must be smaller than total amount!'});
+                    return;
+                }
+
+                if (emptyFieldIds.length <= 0) {
+                    M.toast({html: 'Please leave at least one field empty!'});
+                    return;
+                }
+
+                // get difference
+                let difference = totalAmount.subtract(filledOutAmount);
+
+                // divide difference by number of empty fields
+                let fieldValue = difference.value / emptyFieldIds.length;
+                fieldValue = currency(Math.floor(fieldValue * 100) / 100);  // make sure values are rounded down
+
+                // get remainder
+                let remainder = difference.subtract(currency(fieldValue).multiply(emptyFieldIds.length));
+
+                // distribute fieldValue on empty fields
+                for (i=0; i < emptyFieldIds.length; i++) {
+                    emptyFieldIds[i][1] = emptyFieldIds[i][1].add(fieldValue);
+                }
+
+                // distribute remainder on empty fields
+                for (i=0; i < (remainder.multiply(100)); i++) {
+                    emptyFieldIds[i][1] = emptyFieldIds[i][1].add(0.01);
+                }
+
+                // make sure that values add up to total
+                let checkEmptyFieldValues = currency(0);
+                for (i=0; i < emptyFieldIds.length; i++) {
+                    checkEmptyFieldValues = checkEmptyFieldValues.add(emptyFieldIds[i][1]);
+                }
+                if (checkEmptyFieldValues.add(filledOutAmount) != totalAmount.value) {
+                    M.toast({html: 'Ooops! Something went wrong...'});
+                    return;
+                }
+
+                // set values of empty fields
+                for (i=0; i < emptyFieldIds.length; i++) {
+                    document.getElementById(emptyFieldIds[i][0]).value = emptyFieldIds[i][1].value;
+                }
+
+            }
+
+        }
+    </script>
+</head>
+<title>Accounting Otter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
+<body>
+
+    <div  ng-app="GetRestObject" ng-controller="Ctrl">
+        <!-- navbar -->
+        <nav class="z-depth-3" style="position:fixed; top:0; z-index: 9999">
+            <div class="nav-wrapper blue-theme">
+                <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
+                <div class="left">
+                    <a class="sidenav-trigger" href="transactions.html">
+                        <i class="material-icons">close</i>
+                    </a>
+                </div>
+                <div class="right">
+                    <a class="sidenav-trigger" href="transactions.html">
+                        <p class="large">
+                            <b>SAVE</b>
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <!-- editor-container -->
+        <div class="pay-edit-conatainer">
+
+            <p><small>AMOUNT</small></p>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">euro_symbol</i>
+                <input id="amount" type="number" min="0" step="0.01"/>
+                <label>1234.56 €</label>
+            </div>
+
+            <p><small>SHOP</small></p>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">store</i>
+                <input id="shop" type="text"/>
+                <label>Otter Mart</label>
+            </div>
+
+            <p><small>CATEGORY</small></p>
+            <div class="input-field col s12">
+                <select id="category" class="browser-default">
+                    <option value="" disabled selected>Choose the category</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+            </div>
+
+            <p><small>DATE</small></p>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">today</i>
+                <input id="date" type="date"/>
+            </div>
+
+            <p><small>DESCRIPTION</small></p>
+            <div class="input-field col s12">
+                <textarea id="description" class="materialize-textarea"></textarea>
+            </div>
+
+            <p><small>DISTRIBUTION</small></p>
+            <br/>
+            <div>
+                <p>
+                    <label>
+                        <input id="custom-distribution" type="checkbox" class="filled-in" ng-model="ModelData.Equal"/>
+                        <span>Custom distribution</span>
+                    </label>
+                </p>
+                <div ng-show="ModelData.Equal">
+                    <br/>
+                    <div ng-repeat="user in users">
+                        <div class="pay-edit-user-card">
+                            <div class="pay-edit-card-user valign-wrapper">
+                                {{user.username}}
+                            </div>
+                            <div class="pay-edit-card-input">
+                                <input id={{user.userId}} type="number" min="0" step="0.01"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <a class="waves-effect waves-light btn" ng-click="distributeOnEmptyFields()">distribute to empty fields</a>
+                    <br/><br/><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/currency.js@1.2.1/dist/currency.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+    </script>
+    <script>
+        document.getElementById('date').valueAsDate = new Date();
+    </script>
+
+
+
+</body>
+</html>
+
