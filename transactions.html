@@ -27,6 +27,13 @@
             $scope.splitAtComma = function(int) {
                 return int.toFixed(2).toString().split('.');
             };
+
+            $scope.convertToDateString = function(timestamp) {
+                let date = new Date(timestamp).toISOString().split('T');
+                date = date[0].split('-');
+                let datestring = date[2] + '.' + date[1] + '.' + date[0];
+                return datestring;
+            }
         }
 
     </script>
@@ -40,7 +47,7 @@
 
     <div>
         <!-- navbar -->
-        <nav class="z-depth-3" style="position:fixed; top:0;">
+        <nav class="z-depth-3" style="position:fixed; top:0; z-index: 5000">
             <div class="nav-wrapper blue-theme">
                 <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
                 <div class="left">
@@ -49,7 +56,7 @@
             </div>
         </nav>
         <!-- sidebar -->
-        <ul id="slide-out" class="sidenav">
+        <ul id="slide-out" class="sidenav" style="z-index: 6000">
             <li><div class="user-view">
                 <div class="background">
                     <img src="images/tmp/tmp-background.jpg">
@@ -71,12 +78,13 @@
             <div ng-app="GetRestObject" ng-controller="Ctrl">
                 <div ng-repeat="transaction in transactions">
                     <a ng-href='payment.html?id={{transaction.transactionId}}'>
-                        <div class="transaction-grid-card z-depth-1">
+                        <div class="transaction-grid-card z-depth-1 hoverable">
                             <div class="transaction-card-avatar valign-wrapper">
                                 <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
                             </div>
                             <div class="transaction-card-date transaction-card-first-row">
-                                <p style="color:black;">{{transaction.description}}</p>
+                                <!--p style="color:black;">{{transaction.description}}</p-->
+                                <p style="color:black;">{{convertToDateString(transaction.date)}}</p>
                             </div>
                             <div class="transaction-card-shop">
                                 <p class="x-large" style="color:black;"><b>{{transaction.shop}}</b><p>
@@ -97,22 +105,19 @@
                 </div>
             </div>
             <!-- add button -->
-            <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
+            <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html">
                 <i class="material-icons">add</i>
             </a>
         </div>
     </div>
 
-<script type="text/javascript" src="js/materialize.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.sidenav');
-        var instances = M.Sidenav.init(elems, edge="left", draggable=true);
-    });
-</script>
-
-
-
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems, edge="left", draggable=true);
+        });
+    </script>
 </body>
 </html> 
 

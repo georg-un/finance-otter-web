@@ -51,6 +51,10 @@ p.x-large {
     font-size: x-large;
 }
 
+p.xx-large {
+    font-size: xx-large;
+}
+
 h1 {
     margin: 0 0 0 0 !important;
 }
@@ -233,5 +237,27 @@ i.icon-black {
     margin: 16px 0;
     padding-left: 1.5rem;
     border-left: 5px solid #e37a39;
+}
+
+
+/* Payment editor */
+
+.pay-edit-conatainer {
+    padding: 0 24px 0 24px;
+    margin-top: 80px;
+}
+
+.pay-edit-user-card {
+    display: grid;
+    grid-template-columns: 0.7fr 0.4fr;
+    grid-column-gap: 2vh;
+}
+
+.pay-edit-card-user {
+    grid-column: 1;
+}
+
+.pay-edit-card-input {
+    grid-column: 2;
 }
 

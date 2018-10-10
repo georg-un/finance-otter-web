@@ -30,7 +30,7 @@
 
 <div>
     <!-- navbar -->
-    <nav class="z-depth-3" style="position:fixed; top:0;">
+    <nav class="z-depth-3" style="position:fixed; top:0; z-index: 5000">
         <div class="nav-wrapper blue-theme">
             <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
             <div class="left">
@@ -39,7 +39,7 @@
         </div>
     </nav>
     <!-- sidebar -->
-    <ul id="slide-out" class="sidenav">
+    <ul id="slide-out" class="sidenav" style="z-index: 6000">
         <li><div class="user-view">
             <div class="background">
                 <img src="images/tmp/tmp-background.jpg">
@@ -80,9 +80,8 @@
                 </div>
             </div>
         </div>
-        <!--
         <!-- add button -->
-        <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
+        <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html">
             <i class="material-icons">add</i>
         </a>
     </div>

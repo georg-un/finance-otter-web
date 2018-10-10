@@ -7,13 +7,18 @@
         let urlParams = new URLSearchParams(window.location.search);
         let targetUrl = 'http://localhost:8080/api/v1/payments/'.concat(urlParams.get('id'));
         angular.module('GetRestObject', ['ngResource']);
-        function Ctrl($scope, $resource) {
+        function Ctrl($scope, $resource, $http) {
             var restservice = $resource(
                 targetUrl, {}, {
                     query: {method: 'GET'}
                 }
             );
             $scope.payment = restservice.query();
+
+            $scope.deletePayment = function() {
+                $http.delete('http://localhost:8080/api/v1/payments/'.concat($scope.payment.transactionId));
+                window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/transactions.html");  // TODO: switch to hostname global
+            };
         }
     </script>
 </head>
@@ -29,7 +34,7 @@
             <div class="nav-wrapper blue-theme">
                 <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
                 <div class="left">
-                    <a href='transactions.html' class="btn-large blue-theme" style="box-shadow: none">
+                    <a href='transactions.html' class="sidenav-trigger">
                         <i class="material-icons">arrow_back</i>
                     </a>
                 </div>
@@ -55,11 +60,11 @@
                         <p style="vertical-align: middle">{{payment.category}}</p>
                     </div>
                     <div class="payment-header-trash-icon valign-wrapper">
-                        <a href='#'><i class="material-icons icon-white">delete</i></a>
+                        <a ng-click="deletePayment()"><i class="material-icons icon-white">delete</i></a>
                     </div>
                 </header>
 
-                <div class="w3-container z-depth-1-reversed" style="padding:32px">
+                <div class="z-depth-1-reversed" style="padding:32px">
 
                     <p><small>DESCRIPTION</small></p>
                     <div style="padding: 4px 0 8px 0;">
@@ -84,13 +89,14 @@
                     </div>
                 </div>
             </div>
-            <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
+            <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html">
                 <i class="material-icons">edit</i>
             </a>
         </div>
     </div>
 
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/currency.js@1.2.1/dist/currency.min.js"></script>
 </body>
 </html>
 
