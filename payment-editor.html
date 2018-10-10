@@ -64,9 +64,9 @@
             <div class="input-field col s12">
                 <select id="category" class="browser-default">
                     <option value="" disabled selected>Choose the category</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
+                    <option value="groceries">groceries</option>
+                    <option value="transportation">transportation</option>
+                    <option value="work">work</option>
                 </select>
             </div>
 
@@ -165,7 +165,7 @@
                         // create payload
                         let payload = {};
                         payload.userId = 1;  // TODO: get userId from session
-                        payload.datetime = document.getElementById('date').value;
+                        payload.date = document.getElementById('date').value;
                         payload.category = document.getElementById('category').value;
                         payload.shop = document.getElementById('shop').value;
                         payload.description = document.getElementById('description').value;

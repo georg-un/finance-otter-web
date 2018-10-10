@@ -27,6 +27,13 @@
             $scope.splitAtComma = function(int) {
                 return int.toFixed(2).toString().split('.');
             };
+
+            $scope.convertToDateString = function(timestamp) {
+                let date = new Date(timestamp).toISOString().split('T');
+                date = date[0].split('-');
+                let datestring = date[2] + '.' + date[1] + '.' + date[0];
+                return datestring;
+            }
         }
 
     </script>
@@ -76,7 +83,8 @@
                                 <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
                             </div>
                             <div class="transaction-card-date transaction-card-first-row">
-                                <p style="color:black;">{{transaction.description}}</p>
+                                <!--p style="color:black;">{{transaction.description}}</p-->
+                                <p style="color:black;">{{convertToDateString(transaction.date)}}</p>
                             </div>
                             <div class="transaction-card-shop">
                                 <p class="x-large" style="color:black;"><b>{{transaction.shop}}</b><p>
