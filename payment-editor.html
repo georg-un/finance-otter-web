@@ -6,41 +6,38 @@
     <script language="javascript">
         let targetUrl = 'http://localhost:8080/api/v1/user';
         angular.module('GetRestObject', ['ngResource']);
-        function Ctrl($scope, $resource) {
+        function Ctrl($scope, $resource, $http) {
             let restservice = $resource(
                 targetUrl, {}, {
                     query: {method: 'GET', isArray: true}
                 }
             );
             $scope.users = restservice.query();
-            console.log($scope.users);
 
             $scope.splitAtComma = function(int) {
                 return int.toFixed(2).toString().split('.');
             };
 
-
-
-            $scope.distributeOnEmptyFields = function() {
-
-                // get user ids
+            $scope.getUserIds = function() {
                 let userIds= [];
                 for (i=0; i < $scope.users.length; i++) {
                     userIds.push($scope.users[i]["userId"]);
                 }
+                return userIds;
+            };
 
-                // get total amount
+            $scope.getTotalAmount = function() {
                 let totalAmount = document.getElementById("amount").value;
                 if (totalAmount === "" || totalAmount == null) {
                     M.toast({html: 'Please insert first the total amount!'});
-                    return;
+                    throw new Error("Value of input-field with id 'amount' is empty.");
                 }
-                totalAmount = currency(totalAmount);
+                return currency(totalAmount);
+            };
 
-
-                // get amount of filled inputs
+            $scope.getFilledOutAmountAndEmptyFields = function(userIds) {
                 let filledOutAmount = currency(0);
-                let emptyFieldIds = [];
+                let emptyFields = [];
 
                 let tmpFieldValue;
                 for (i=0; i < userIds.length; i++) {
@@ -48,59 +45,158 @@
                     if (tmpFieldValue != null && tmpFieldValue !== "") {
                         if (parseFloat(tmpFieldValue) < 0) {
                             M.toast({html: 'Please insert only positive numbers!'});
-                            return;
+                            throw new Error("Number in input-field of class 'debit-input' is negative.")
                         }
                         filledOutAmount = filledOutAmount.add(parseFloat(document.getElementById(userIds[i]).value));
                     } else {
-                        emptyFieldIds.push([userIds[i], currency(0)]);
+                        emptyFields.push({
+                            "fieldId" : userIds[i],
+                            "assignedValue" : currency(0)});
                     }
                 }
-
-                if (filledOutAmount.value >= currency(totalAmount).value) {
-                    M.toast({html: 'Sum of fields must be smaller than total amount!'});
-                    return;
+                return {
+                    "filledOutAmount" : filledOutAmount,
+                    "emptyFields" : emptyFields
                 }
+            };
 
-                if (emptyFieldIds.length <= 0) {
-                    M.toast({html: 'Please leave at least one field empty!'});
-                    return;
-                }
 
+            $scope.distributeValuesByBresenhamAlgorithm = function(totalAmount, filledOutAmount, emptyFields) {
                 // get difference
                 let difference = totalAmount.subtract(filledOutAmount);
 
                 // divide difference by number of empty fields
-                let fieldValue = difference.value / emptyFieldIds.length;
+                let fieldValue = difference.value / emptyFields.length;
                 fieldValue = currency(Math.floor(fieldValue * 100) / 100);  // make sure values are rounded down
 
                 // get remainder
-                let remainder = difference.subtract(currency(fieldValue).multiply(emptyFieldIds.length));
+                let remainder = difference.subtract(currency(fieldValue).multiply(emptyFields.length));
 
                 // distribute fieldValue on empty fields
-                for (i=0; i < emptyFieldIds.length; i++) {
-                    emptyFieldIds[i][1] = emptyFieldIds[i][1].add(fieldValue);
+                for (i=0; i < emptyFields.length; i++) {
+                    emptyFields[i].assignedValue = emptyFields[i].assignedValue.add(fieldValue);
                 }
 
                 // distribute remainder on empty fields
                 for (i=0; i < (remainder.multiply(100)); i++) {
-                    emptyFieldIds[i][1] = emptyFieldIds[i][1].add(0.01);
+                    emptyFields[i].assignedValue = emptyFields[i].assignedValue.add(0.01);
                 }
+                return emptyFields;
+            };
 
-                // make sure that values add up to total
+            $scope.validateDistribution = function(totalAmount, filledOutAmount, emptyFields) {
                 let checkEmptyFieldValues = currency(0);
-                for (i=0; i < emptyFieldIds.length; i++) {
-                    checkEmptyFieldValues = checkEmptyFieldValues.add(emptyFieldIds[i][1]);
+                for (i=0; i < emptyFields.length; i++) {
+                    checkEmptyFieldValues = checkEmptyFieldValues.add(emptyFields[i].assignedValue);
                 }
                 if (checkEmptyFieldValues.add(filledOutAmount) != totalAmount.value) {
                     M.toast({html: 'Ooops! Something went wrong...'});
-                    return;
+                    throw new Error("Sum of values from filled out debit fields and values to be assigned to empty debit fields does not match with value from total amount");
                 }
+            };
+
+            $scope.distributeOnEmptyFieldsButton = function() {
+                // get user ids
+                let userIds = $scope.getUserIds();
+
+                // get total amount
+                let totalAmount = $scope.getTotalAmount();
+
+                // get amount of filled inputs
+                let tmpValue = $scope.getFilledOutAmountAndEmptyFields(userIds);
+                let filledOutAmount = tmpValue.filledOutAmount;
+                let emptyFields = tmpValue.emptyFields;
+
+                if (filledOutAmount.value >= currency(totalAmount).value) {
+                    M.toast({html: 'Sum of fields must be smaller than total amount!'});
+                    throw new Error("Sum of input-fields of class 'debit-input' is larger than value of 'amount'.")
+                }
+                if (emptyFields.length <= 0) {
+                    M.toast({html: 'Please leave at least one field empty!'});
+                    throw new Error("All input-fields of class 'debit-input' have a value assigned.")
+                }
+
+                // distribute amount on empty fields
+                emptyFields = $scope.distributeValuesByBresenhamAlgorithm(totalAmount, filledOutAmount, emptyFields);
+
+                // make sure that values add up to total
+                $scope.validateDistribution(totalAmount, filledOutAmount, emptyFields);
 
                 // set values of empty fields
-                for (i=0; i < emptyFieldIds.length; i++) {
-                    document.getElementById(emptyFieldIds[i][0]).value = emptyFieldIds[i][1].value;
+                for (i=0; i < emptyFields.length; i++) {
+                    document.getElementById(emptyFields[i].fieldId).value = emptyFields[i].assignedValue.value;
+                }
+            };
+
+            $scope.distributeOnEmptyFieldsBeforeSubmit = function() {
+                // get user ids
+                let userIds = $scope.getUserIds();
+
+                // get total amount
+                let totalAmount = $scope.getTotalAmount();
+
+                // get amount of filled inputs
+                let tmpValue = $scope.getFilledOutAmountAndEmptyFields(userIds);
+                let filledOutAmount = tmpValue.filledOutAmount;
+                let emptyFields = tmpValue.emptyFields;
+
+                // distribute amount on empty fields
+                emptyFields = $scope.distributeValuesByBresenhamAlgorithm(totalAmount, filledOutAmount, emptyFields);
+
+                // make sure that values add up to total
+                $scope.validateDistribution(totalAmount, filledOutAmount, emptyFields);
+
+                return emptyFields;
+            };
+
+
+            $scope.removeValues = function() {
+                let fields = document.getElementsByClassName("debit-input");
+                for(i=0; i < fields.length; i++) {
+                    fields[i].value = "";
+                }
+            };
+
+            $scope.submit = function() {
+                // make sure distribution is set and valid
+                let emptyFields;
+                let checkboxValue = document.getElementById('custom-distribution').checked;
+                if ( checkboxValue === false ) {
+                    emptyFields = $scope.distributeOnEmptyFieldsBeforeSubmit();
+                } else if ( checkboxValue === true && $scope.getFilledOutAmountAndEmptyFields( $scope.getUserIds() ).emptyFields.length > 0 ) {
+                    $scope.distributeOnEmptyFieldsButton();
                 }
 
+                // create debits
+                let debits = [];
+                if (checkboxValue === true ) {
+                    let debitFields = document.getElementsByClassName('debit-input');
+                    for (i = 0; i < debitFields.length; i++) {
+                        debits[i] = {
+                            "debtorId": parseInt(debitFields[i].id),
+                            "amount": currency(parseFloat(debitFields[i].value)).value
+                        }
+                    }
+                } else if (checkboxValue === false) {
+                    for (i = 0; i < emptyFields.length; i++) {
+                        debits[i] = {
+                            "debtorId": parseInt(emptyFields[i].fieldId),
+                            "amount": currency(parseFloat(emptyFields[i].assignedValue)).value
+                        }
+                    }
+                }
+
+                // create payload
+                let payload = { };
+                payload.userId = 1;  // TODO: get userId from session
+                payload.datetime = document.getElementById('date').value;
+                payload.category = document.getElementById('category').value;
+                payload.shop = document.getElementById('shop').value;
+                payload.description = document.getElementById('description').value;
+                payload.billId = null;
+                payload.debits = debits;
+
+                $http.post("http://localhost:8080/api/v1/payments", payload);
             }
 
         }
@@ -124,7 +220,7 @@
                     </a>
                 </div>
                 <div class="right">
-                    <a class="sidenav-trigger" href="transactions.html">
+                    <a class="sidenav-trigger" ng-click="submit()"> <!--href="transactions.html"-->
                         <p class="large">
                             <b>SAVE</b>
                         </p>
@@ -175,7 +271,7 @@
             <div>
                 <p>
                     <label>
-                        <input id="custom-distribution" type="checkbox" class="filled-in" ng-model="ModelData.Equal"/>
+                        <input id="custom-distribution" type="checkbox" class="filled-in" ng-model="ModelData.Equal" ng-click="removeValues()"/>
                         <span>Custom distribution</span>
                     </label>
                 </p>
@@ -187,12 +283,12 @@
                                 {{user.username}}
                             </div>
                             <div class="pay-edit-card-input">
-                                <input id={{user.userId}} type="number" min="0" step="0.01"/>
+                                <input id={{user.userId}} class="debit-input" type="number" min="0" step="0.01"/>
                             </div>
                         </div>
                     </div>
                     <br/>
-                    <a class="waves-effect waves-light btn" ng-click="distributeOnEmptyFields()">distribute to empty fields</a>
+                    <a class="waves-effect waves-light btn" ng-click="distributeOnEmptyFieldsButton()">distribute to empty fields</a>
                     <br/><br/><br/>
                 </div>
             </div>
