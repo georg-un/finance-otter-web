@@ -19,6 +19,11 @@
                 $http.delete('http://localhost:8080/api/v1/payments/'.concat($scope.payment.transactionId));
                 window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/transactions.html");  // TODO: switch to hostname global
             };
+
+            $scope.convertToCurrency = function(float) {
+                return currency(float, { precision: 2 }).toString();
+
+            }
         }
     </script>
 </head>
@@ -51,7 +56,7 @@
                         <h3>{{payment.shop}}</h3>
                     </div>
                     <div class="payment-header-amount">
-                        <h1>€ {{payment.sumAmount}},00</h1>
+                        <h1>€ {{convertToCurrency(payment.sumAmount)}}</h1>
                     </div>
                     <div class="payment-header-pic-icon valign-wrapper">
                         <a href='#'><i class="material-icons icon-white">photo</i></a>
@@ -60,7 +65,7 @@
                         <p style="vertical-align: middle">{{payment.category}}</p>
                     </div>
                     <div class="payment-header-trash-icon valign-wrapper">
-                        <a ng-click="deletePayment()"><i class="material-icons icon-white">delete</i></a>
+                        <i  ng-click="deletePayment()" class="material-icons icon-white">delete</i>
                     </div>
                 </header>
 
@@ -81,7 +86,7 @@
                                         <p class="large">{{debit.debtorName}}:</p>
                                     </div>
                                     <div class="debit-card-amount">
-                                        <p class="large">{{debit.amount}} €</p>
+                                        <p class="large">{{convertToCurrency(debit.amount)}} €</p>
                                     </div>
                                 </div>
                             </div>
