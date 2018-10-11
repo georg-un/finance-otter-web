@@ -4,8 +4,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
     <script language="javascript">
+        // get url params
         let urlParams = new URLSearchParams(window.location.search);
-        let targetUrl = 'http://localhost:8080/api/v1/payments/'.concat(urlParams.get('id'));
+        let transactionId = urlParams.get('id');
+        let targetUrl = 'http://localhost:8080/api/v1/payments/'.concat(transactionId);
+        let editButtonTarget = '/media/Daten-Partition/Repositories/accounting_otter_webapp/payment-editor.html?mode=edit&id='.concat(transactionId);  // TODO: switch to hostname global
+
         angular.module('GetRestObject', ['ngResource']);
         function Ctrl($scope, $resource, $http) {
             var restservice = $resource(
@@ -15,6 +19,8 @@
             );
             $scope.payment = restservice.query();
 
+            $scope.editButtonTarget = editButtonTarget;
+
             $scope.deletePayment = function() {
                 $http.delete('http://localhost:8080/api/v1/payments/'.concat($scope.payment.transactionId));
                 window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/transactions.html");  // TODO: switch to hostname global
@@ -22,7 +28,6 @@
 
             $scope.convertToCurrency = function(float) {
                 return currency(float, { precision: 2 }).toString();
-
             }
         }
     </script>
@@ -34,7 +39,7 @@
 <link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
 <body>
 
-    <div>
+    <div ng-app="GetRestObject" ng-controller="Ctrl">
         <nav class="z-depth-3" style="position:fixed; top:0;">
             <div class="nav-wrapper blue-theme">
                 <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
@@ -46,58 +51,54 @@
             </div>
         </nav>
 
-        <div ng-app="GetRestObject">
-            <div ng-controller="Ctrl">
+        <div>
+            <header class="brown-theme payment-header">
 
+                <div class="payment-header-shop">
+                    <h3>{{payment.shop}}</h3>
+                </div>
+                <div class="payment-header-amount">
+                    <h1>€ {{convertToCurrency(payment.sumAmount)}}</h1>
+                </div>
+                <div class="payment-header-pic-icon valign-wrapper">
+                    <a href='#'><i class="material-icons icon-white">photo</i></a>
+                </div>
+                <div class="payment-header-category">
+                    <p style="vertical-align: middle">{{payment.category}}</p>
+                </div>
+                <div class="payment-header-trash-icon valign-wrapper">
+                    <i  ng-click="deletePayment()" class="material-icons icon-white">delete</i>
+                </div>
+            </header>
 
-                <header class="brown-theme payment-header">
+            <div class="z-depth-1-reversed" style="padding:32px">
 
-                    <div class="payment-header-shop">
-                        <h3>{{payment.shop}}</h3>
-                    </div>
-                    <div class="payment-header-amount">
-                        <h1>€ {{convertToCurrency(payment.sumAmount)}}</h1>
-                    </div>
-                    <div class="payment-header-pic-icon valign-wrapper">
-                        <a href='#'><i class="material-icons icon-white">photo</i></a>
-                    </div>
-                    <div class="payment-header-category">
-                        <p style="vertical-align: middle">{{payment.category}}</p>
-                    </div>
-                    <div class="payment-header-trash-icon valign-wrapper">
-                        <i  ng-click="deletePayment()" class="material-icons icon-white">delete</i>
-                    </div>
-                </header>
-
-                <div class="z-depth-1-reversed" style="padding:32px">
-
-                    <p><small>DESCRIPTION</small></p>
-                    <div style="padding: 4px 0 8px 0;">
-                        <p class="large">Lorizzle own yo' dolizzle adipiscing ass {{payment.description}}</p>
-                    </div>
-                    <hr/>
-                    <div style="padding: 8px 0 0 0"></div>
-                    <p><small>DISTRIBUTION</small></p>
-                    <div style="padding: 0 0 8px 0;">
-                        <div class="debit-blockquote">
-                            <div ng-repeat="debit in payment.debits">
-                                <div class="debit-card" style="padding-bottom: 4px">
-                                    <div class="debit-card-user">
-                                        <p class="large">{{debit.debtorName}}:</p>
-                                    </div>
-                                    <div class="debit-card-amount">
-                                        <p class="large">{{convertToCurrency(debit.amount)}} €</p>
-                                    </div>
+                <p><small>DESCRIPTION</small></p>
+                <div style="padding: 4px 0 8px 0;">
+                    <p class="large">Lorizzle own yo' dolizzle adipiscing ass {{payment.description}}</p>
+                </div>
+                <hr/>
+                <div style="padding: 8px 0 0 0"></div>
+                <p><small>DISTRIBUTION</small></p>
+                <div style="padding: 0 0 8px 0;">
+                    <div class="debit-blockquote">
+                        <div ng-repeat="debit in payment.debits">
+                            <div class="debit-card" style="padding-bottom: 4px">
+                                <div class="debit-card-user">
+                                    <p class="large">{{debit.debtorName}}:</p>
+                                </div>
+                                <div class="debit-card-amount">
+                                    <p class="large">{{convertToCurrency(debit.amount)}} €</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html">
-                <i class="material-icons">edit</i>
-            </a>
         </div>
+        <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" ng-href={{editButtonTarget}}>
+            <i class="material-icons">edit</i>
+        </a>
     </div>
 
     <script type="text/javascript" src="js/materialize.min.js"></script>

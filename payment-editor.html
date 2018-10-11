@@ -3,8 +3,34 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script language="JavaScript">
+        $(document).ready(function(){
+            let searchParams = new URLSearchParams(window.location.search);
+            if (searchParams.get('mode') === 'edit' || searchParams.get('mode') === 'create') {
+                window.MODE = searchParams.get('mode');
+            } else {
+                window.MODE = null;
+            }
+            if (window.MODE === 'edit') {
+                if (searchParams.has('id')) {
+                    window.TRANSACTION_ID = parseInt(searchParams.get('id'));
+                } else {
+                    window.TRANSACTION_ID  = undefined;
+                    M.toast({html: "Ooops! You're in edit mode, but no transaction id is supplied!"});
+                    throw new Error("MODE is 'edit' but no id is supplied as url parameter.");
+                }
+            }
+        });
+    </script>
 
     <script language="javascript">
+        // get url params
+        let urlParams = new URLSearchParams(window.location.search);
+        let mode = urlParams.get('mode');
+
         let targetUrl = 'http://localhost:8080/api/v1/user';
         angular.module('GetRestObject', ['ngResource']);
         function Ctrl($scope, $resource, $http) {
@@ -14,6 +40,8 @@
                 }
             );
             $scope.users = restservice.query();
+
+            $scope.mode = mode;
         };
     </script>
 </head>
@@ -50,14 +78,12 @@
             <div class="input-field col s12">
                 <i class="material-icons prefix">euro_symbol</i>
                 <input id="amount" type="number" min="0" step="0.01"/>
-                <label>1234.56 €</label>
             </div>
 
             <p><small>SHOP</small></p>
             <div class="input-field col s12">
                 <i class="material-icons prefix">store</i>
                 <input id="shop" type="text"/>
-                <label>Otter Mart</label>
             </div>
 
             <p><small>CATEGORY</small></p>
@@ -90,7 +116,7 @@
                         <span>Custom distribution</span>
                     </label>
                 </p>
-                <div ng-show="ModelData.Equal">
+                <div ng-show="ModelData.Equal || mode ==='edit'">
                     <br/>
                     <div ng-repeat="user in users">
                         <div class="pay-edit-user-card">
@@ -110,10 +136,38 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/currency.js@1.2.1/dist/currency.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script language="javascript">
+
+
+
+        // if mode == edit, load payment and put current values into inputs
+        $(window).on('load', function() {
+            if (window.MODE === 'edit') {
+                let target = 'http://localhost:8080/api/v1/payments/'.concat(window.TRANSACTION_ID);
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    url: target,
+                    success: function (payment) {
+                        console.log(payment);
+
+                        $('#amount').val( currency(payment.sumAmount) );
+                        $('#shop').val( payment.shop );
+                        $('#description').val( payment.description );
+                        $('#category').val( payment.category );
+                        $('#date').val( new Date(payment.date).toISOString().split('T')[0] );
+                        $('#custom-distribution').prop('checked', true);
+                        for (i=0; i < payment.debits.length; i++) {
+                            $('#' + payment.debits[i].debtorId).val(
+                                currency(payment.debits[i].amount)
+                            );
+                        }
+
+                    }
+                });
+            }
+        });
 
         $(document).ready(function() {
             $('#distribute').click(function() {
@@ -172,19 +226,39 @@
                         payload.billId = null;
                         payload.debits = debits;
 
-                        $.ajax({
-                            type: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            dataType: "json",
-                            url: 'http://localhost:8080/api/v1/payments',
-                            data: JSON.stringify(payload),
-                            success: function (data) {
-                                window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/payment.html?id=".concat(data.transactionId));  // TODO: switch to hostname global
-                            }
-                        });
+                        if (MODE === 'create') {
+                            $.ajax({
+                                type: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                dataType: "json",
+                                url: 'http://localhost:8080/api/v1/payments',
+                                data: JSON.stringify(payload),
+                                success: function (data) {
+                                    window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/payment.html?id=".concat(data.transactionId));  // TODO: switch to hostname global
+                                }
+                            });
+                        } else if (MODE === 'edit') {
+                            payload.transactionId = window.TRANSACTION_ID;
+                            $.ajax({
+                                type: 'PUT',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                dataType: "json",
+                                url: 'http://localhost:8080/api/v1/payments',
+                                data: JSON.stringify(payload),
+                                success: function (data) {
+                                    window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/payment.html?id=".concat(data.transactionId));  // TODO: switch to hostname global
+                                }
+                            });
+                        } else {
+                            M.toast({html: 'Ooops! Something went wrong. Please reload the page!'});
+                            throw new Error("MODE was neither 'create' nor 'edit'.");
+                        }
                     }
                 });
             });
@@ -330,6 +404,12 @@
             for(i=0; i < fields.length; i++) {
                 fields[i].value = "";
             }
+        };
+
+        convertToDateString = function(timestamp) {
+            let date = new Date(timestamp).toISOString().split('T');
+            date = date[0].split('-');
+            return date[2] + '.' + date[1] + '.' + date[0];
         };
     </script>
 
