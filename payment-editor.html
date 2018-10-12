@@ -42,6 +42,10 @@
             $scope.users = restservice.query();
 
             $scope.mode = mode;
+
+            $scope.convertToShortName = function(firstName, lastName) {
+                return firstName.concat(' ', lastName.charAt(0), '.')
+            };
         };
     </script>
 </head>
@@ -121,7 +125,7 @@
                     <div ng-repeat="user in users">
                         <div class="pay-edit-user-card">
                             <div class="pay-edit-card-user valign-wrapper">
-                                {{user.username}}
+                                {{convertToShortName(user.firstName, user.lastName)}}
                             </div>
                             <div class="pay-edit-card-input">
                                 <input id={{user.userId}} class="debit-input" type="number" min="0" step="0.01"/>

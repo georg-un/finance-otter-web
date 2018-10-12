@@ -28,7 +28,11 @@
 
             $scope.convertToCurrency = function(float) {
                 return currency(float, { precision: 2 }).toString();
-            }
+            };
+
+            $scope.convertToShortName = function(firstName, lastName) {
+                return firstName.concat(' ', lastName.charAt(0), '.')
+            };
         }
     </script>
 </head>
@@ -73,11 +77,13 @@
 
             <div class="z-depth-1-reversed" style="padding:32px">
 
-                <p><small>DESCRIPTION</small></p>
-                <div style="padding: 4px 0 8px 0;">
-                    <p class="large">Lorizzle own yo' dolizzle adipiscing ass {{payment.description}}</p>
+                <div ng-show="payment.description != ''">
+                    <p><small>DESCRIPTION</small></p>
+                    <div style="padding: 4px 0 8px 0;">
+                        <p class="large">{{payment.description}}</p>
+                    </div>
+                    <hr/>
                 </div>
-                <hr/>
                 <div style="padding: 8px 0 0 0"></div>
                 <p><small>DISTRIBUTION</small></p>
                 <div style="padding: 0 0 8px 0;">
@@ -85,7 +91,7 @@
                         <div ng-repeat="debit in payment.debits">
                             <div class="debit-card" style="padding-bottom: 4px">
                                 <div class="debit-card-user">
-                                    <p class="large">{{debit.debtorName}}:</p>
+                                    <p class="large">{{convertToShortName(debit.debtorFirstName, debit.debtorLastName)}}</p>
                                 </div>
                                 <div class="debit-card-amount">
                                     <p class="large">{{convertToCurrency(debit.amount)}} €</p>

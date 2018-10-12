@@ -18,6 +18,10 @@
             $scope.splitAtComma = function(int) {
                 return int.toFixed(2).toString().split('.');
             };
+
+            $scope.convertToShortName = function(firstName, lastName) {
+                return firstName.concat(' ', lastName.charAt(0), '.')
+            };
         }
     </script>
 </head>
@@ -67,7 +71,7 @@
                             <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
                         </div>
                         <div class="user-card-name">
-                            <p class="x-large" style="color:black;">{{user.username}}</p>
+                            <p class="x-large" style="color:black;">{{convertToShortName(user.firstName, user.lastName)}}</p>
                         </div>
                         <div class="user-card-amount" style="text-align:right;">
                             <p class="x-large" style="color:black;  display:inline;">
