@@ -3,27 +3,8 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
-    <script language="javascript">
-        let targetUrl = 'http://localhost:8080/api/v1/user';
-        angular.module('GetRestObject', ['ngResource']);
-        function Ctrl($scope, $resource) {
-            let restservice = $resource(
-                targetUrl, {}, {
-                    query: {method: 'GET', isArray: true}
-                }
-            );
-            $scope.users = restservice.query();
-            console.log($scope.users);
+    <script type="text/javascript" src="js/otter-overview.js"></script>
 
-            $scope.splitAtComma = function(int) {
-                return int.toFixed(2).toString().split('.');
-            };
-
-            $scope.convertToShortName = function(firstName, lastName) {
-                return firstName.concat(' ', lastName.charAt(0), '.')
-            };
-        }
-    </script>
 </head>
 <title>Accounting Otter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
