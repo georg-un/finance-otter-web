@@ -1,22 +1,49 @@
 let targetUrl = 'http://localhost:8080/api/v1';
-angular.module('GetRestObject', ['ngResource']);
-function Ctrl($scope, $resource) {
-    let restservice = $resource(
-        targetUrl.concat('/user'), {}, {
-            query: {method: 'GET', isArray: true}
+
+splitAtComma = function(int) {
+    return int.toFixed(2).toString().split('.');
+};
+
+convertToShortName = function(firstName, lastName) {
+    return firstName.concat(' ', lastName.charAt(0), '.')
+};
+
+getUserPicUrl = function(targetUrl, userId) {
+    return targetUrl.concat('/user/', userId, '/pic');
+};
+
+
+// load user cards
+$(document).ready(function() {
+    $.ajax({
+        type: 'GET',
+        dataType: "json",
+        url: targetUrl.concat('/user'),
+        success: function (data) {
+            $.each(data, function(index, value) {
+                    let card =
+                        "<div class='user-card'>" +
+                            "<div class='user-card-img valign-wrapper'>" +
+                                "<img class='circle avatar' src='" + getUserPicUrl(targetUrl, value.userId) + "'>" +
+                            "</div>" +
+                            "<div class='user-card-name'>" +
+                                "<p class='x-large' style='color:black;'>" +
+                                    convertToShortName(value.firstName, value.lastName) +
+                                "</p>" +
+                            "</div>" +
+                            "<div class='user-card-amount' style='text-align:right;'>" +
+                                "<p class='x-large' style='color:black; display:inline;'>" +
+                                    splitAtComma(value.sumDebitAmounts)[0] +
+                                "</p>" +
+                                "<p style='color:black; display:inline;'>" +
+                                    splitAtComma(value.sumDebitAmounts)[1] +
+                                "</p>" +
+                            "</div>" +
+                        "</div>";
+
+                    $("#credit-overview-container").append(card);
+                }
+            )
         }
-    );
-    $scope.users = restservice.query();
-
-    $scope.splitAtComma = function(int) {
-        return int.toFixed(2).toString().split('.');
-    };
-
-    $scope.convertToShortName = function(firstName, lastName) {
-        return firstName.concat(' ', lastName.charAt(0), '.')
-    };
-
-    $scope.getUserPicUrl = function(userId) {
-        return targetUrl.concat('/user/', userId, '/pic');
-    }
-}
+    })
+});

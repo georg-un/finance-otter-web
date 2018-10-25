@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/otter-overview.js"></script>
-
 </head>
 <title>Accounting Otter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,28 +40,11 @@
             <li><a class="waves-effect" href="#!">Logout</a></li>
         </ul>
         <!-- user-card-container -->
-        <div class="user-card-conatainer">
+        <div class="user-card-container">
             <p><small>CREDIT OVERVIEW</small></p>
             <br/>
-            <div ng-app="GetRestObject" ng-controller="Ctrl">
-                <div ng-repeat="user in users">
-                    <div class="user-card">
-                        <div class="user-card-img valign-wrapper">
-                            <img class="circle avatar" src="{{getUserPicUrl(user.userId)}}">
-                        </div>
-                        <div class="user-card-name">
-                            <p class="x-large" style="color:black;">{{convertToShortName(user.firstName, user.lastName)}}</p>
-                        </div>
-                        <div class="user-card-amount" style="text-align:right;">
-                            <p class="x-large" style="color:black;  display:inline;">
-                                {{splitAtComma(user.sumDebitAmounts)[0]}},
-                            </p>
-                            <p style="color:black; display:inline;">
-                                {{splitAtComma(user.sumDebitAmounts)[1]}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+            <div id="credit-overview-container">
+                <!-- user cards are appended here -->
             </div>
             <!-- add button -->
             <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html?mode=create">

@@ -28,7 +28,6 @@ $(document).ready(function() {
         dataType: "json",
         url: targetUrl.concat('/transactions?start=', start, "&end=", end),
         success: function (data) {
-            console.log({"whole": data});
             $.each(data, function(index, value) {
                 let card =
                    "<a href='payment.html?id=" + value.transactionId + "'>" +
