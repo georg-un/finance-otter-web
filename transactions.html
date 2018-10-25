@@ -3,6 +3,7 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/otter-transactions.js"></script>
 </head>
 <title>Accounting Otter</title>
@@ -42,15 +43,14 @@
         </ul>
         <!-- card-containes -->
         <div class="transaction-card-conatainer">
-            <div ng-app="GetRestObject" ng-controller="Ctrl">
+            <!--div ng-app="GetRestObject" ng-controller="Ctrl">
                 <div ng-repeat="transaction in transactions">
                     <a ng-href='payment.html?id={{transaction.transactionId}}'>
                         <div class="transaction-grid-card z-depth-1 hoverable">
                             <div class="transaction-card-avatar valign-wrapper">
-                                <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
+                                <img class="circle avatar" ng-src="{{getUserPicUrl(transaction.userId)}}">
                             </div>
                             <div class="transaction-card-date transaction-card-first-row">
-                                <!--p style="color:black;">{{transaction.description}}</p-->
                                 <p style="color:black;">{{convertToDateString(transaction.date)}}</p>
                             </div>
                             <div class="transaction-card-shop">
@@ -70,7 +70,7 @@
                         </div>
                     </a>
                 </div>
-            </div>
+            </div-->
             <!-- add button -->
             <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html?mode=create">
                 <i class="material-icons">add</i>
