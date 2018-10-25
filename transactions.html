@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/otter-transactions.js"></script>
 </head>
@@ -43,34 +41,6 @@
         </ul>
         <!-- card-containes -->
         <div class="transaction-card-conatainer">
-            <!--div ng-app="GetRestObject" ng-controller="Ctrl">
-                <div ng-repeat="transaction in transactions">
-                    <a ng-href='payment.html?id={{transaction.transactionId}}'>
-                        <div class="transaction-grid-card z-depth-1 hoverable">
-                            <div class="transaction-card-avatar valign-wrapper">
-                                <img class="circle avatar" ng-src="{{getUserPicUrl(transaction.userId)}}">
-                            </div>
-                            <div class="transaction-card-date transaction-card-first-row">
-                                <p style="color:black;">{{convertToDateString(transaction.date)}}</p>
-                            </div>
-                            <div class="transaction-card-shop">
-                                <p class="x-large" style="color:black;"><b>{{transaction.shop}}</b><p>
-                            </div>
-                            <div class="transaction-card-category transaction-card-last-row">
-                                <p style="color:black;">{{transaction.category}}</p>
-                            </div>
-                            <div class="transaction-card-amount" style="text-align:right;">
-                                <p class="x-large" style="color:black;  display:inline;">
-                                    {{splitAtComma(transaction.sumAmount)[0]}},
-                                </p>
-                                <p style="color:black; display:inline;">
-                                    {{splitAtComma(transaction.sumAmount)[1]}}
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div-->
             <!-- add button -->
             <a class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3" href="payment-editor.html?mode=create">
                 <i class="material-icons">add</i>
