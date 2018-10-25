@@ -33,7 +33,7 @@ $(document).ready(function() {
                             "</div>" +
                             "<div class='user-card-amount' style='text-align:right;'>" +
                                 "<p class='x-large' style='color:black; display:inline;'>" +
-                                    splitAtComma(value.sumDebitAmounts)[0] +
+                                    splitAtComma(value.sumDebitAmounts)[0] + "." +
                                 "</p>" +
                                 "<p style='color:black; display:inline;'>" +
                                     splitAtComma(value.sumDebitAmounts)[1] +

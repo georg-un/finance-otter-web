@@ -46,7 +46,7 @@ $(document).ready(function() {
                             "</div>" +
                             "<div class='transaction-card-amount' style='text-align:right;'>" +
                                 "<p class='x-large' style='color:black; display:inline;'>" +
-                                    splitAtComma(value.sumAmount)[0] +
+                                    splitAtComma(value.sumAmount)[0] + "." +
                                 "</p>" +
                                 "<p style='color:black; display:inline;'>" +
                                     splitAtComma(value.sumAmount)[1] +
