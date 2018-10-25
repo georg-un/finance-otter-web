@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/otter-pre-loaded.js"></script>
-    <script type="text/javascript" src="js/otter-angular-app.js"></script>
-
 </head>
 <title>Accounting Otter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,13 +11,13 @@
 <link rel="stylesheet" href="css/materialize.min.css" type="text/css" media="screen,projection"/>
 <body>
 
-    <div  ng-app="GetRestObject" ng-controller="Ctrl">
+    <div>
         <!-- navbar -->
         <nav class="z-depth-3" style="position:fixed; top:0; z-index: 9999">
             <div class="nav-wrapper blue-theme">
                 <a href="#" class="brand-logo center"><img src="images/otter-icon-64.png"/></a>
                 <div class="left">
-                    <a class="sidenav-trigger" href="" onclick="xButton()">
+                    <a id="xButton" class="sidenav-trigger" href="">
                         <i class="material-icons">close</i>
                     </a>
                 </div>
@@ -76,21 +71,14 @@
             <div>
                 <p>
                     <label>
-                        <input id="custom-distribution" type="checkbox" class="filled-in" ng-model="ModelData.Equal" onclick="removeValues()"/>
+                        <input id="custom-distribution" type="checkbox" class="filled-in" onclick="removeValues()"/>
                         <span>Custom distribution</span>
                     </label>
                 </p>
-                <div ng-show="ModelData.Equal || mode ==='edit'">
+                <div id="distribution-user-container">
                     <br/>
-                    <div ng-repeat="user in users">
-                        <div class="pay-edit-user-card">
-                            <div class="pay-edit-card-user valign-wrapper">
-                                {{convertToShortName(user.firstName, user.lastName)}}
-                            </div>
-                            <div class="pay-edit-card-input">
-                                <input id={{user.userId}} class="debit-input" type="number" min="0" step="0.01"/>
-                            </div>
-                        </div>
+                    <div id='user-card-container'>
+                        <!-- content is inserted here -->
                     </div>
                     <br/>
                     <a class="waves-effect waves-light btn" id="distribute">distribute to empty fields</a>
@@ -99,20 +87,15 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript" src="https://unpkg.com/currency.js@1.2.1/dist/currency.min.js"></script>
     <script type="text/javascript" src="js/otter-payment-editor.js"></script>
-
+    <script type="text/javascript" src="js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var elems = document.querySelectorAll('select');
             var instances = M.FormSelect.init(elems);
         });
     </script>
-    <script>
-
-    </script>
-
 </body>
 </html>
 

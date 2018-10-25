@@ -1,3 +1,67 @@
+let targetUrl = 'http://localhost:8080/api/v1';
+
+convertToShortName = function(firstName, lastName) {
+    return firstName.concat(' ', lastName.charAt(0), '.')
+};
+
+
+$(document).ready(function() {
+    $.ajax({
+        type: 'GET',
+        dataType: "json",
+        url: targetUrl.concat('/user'),
+        success: function (data) {
+            $.each(data, function (index, value) {
+                let card =
+                    "<div class='pay-edit-user-card'>" +
+                        "<div class='pay-edit-card-user valign-wrapper'>" +
+                            convertToShortName(value.firstName, value.lastName) +
+                        "</div>" +
+                        "<div class='pay-edit-card-input'>" +
+                            "<input id=" + value.userId + "class='debit-input' type='number' min='0' step='0.01'/>" +
+                        "</div>" +
+                    "</div>";
+                $('#user-card-container').append(card);
+            });
+        }
+    });
+});
+
+
+$(document).ready(function(){
+    if (window.MODE === 'create') {
+        $('#custom-distribution').prop('checked', false);
+        $('#distribution-user-container').hide();
+    } else if (window.MODE === 'edit') {
+        $('#custom-distribution').prop('checked', true);
+        $('#distribution-user-container').show();
+    }
+});
+
+
+$(document).ready(function(){
+    $('#custom-distribution').change(function() {
+       if (this.checked || window.MODE === 'edit') {
+           $("#distribution-user-container").show();
+       } else {
+           $("#distribution-user-container").hide();
+       }
+    });
+});
+
+// if mode == edit, X-button must link back to payment, else it must link to transactions
+$(document).ready(function() {
+    $('#xButton').click(function (e) {
+        e.preventDefault();
+        if (window.MODE === 'edit') {
+            window.location.replace("payment.html?id=".concat(window.TRANSACTION_ID));
+        } else {
+            window.location.replace("transactions.html");
+        }
+    });
+});
+
+
 /* EDITOR FUNCTIONS */
 
 // if mode == edit, load payment and put current values into inputs
@@ -28,14 +92,7 @@ $(window).on('load', function() {
     }
 });
 
-// if mode == edit, X-button must link back to payment, else it must link to transactions
-xButton = function() {
-    if (window.MODE === 'edit') {
-        window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/payment.html?id=".concat(window.TRANSACTION_ID));  // TODO: switch to hostname global
-    } else {
-        window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/transactions.html");  // TODO: switch to hostname global
-    }
-};
+
 
 
 $(document).ready(function() {
