@@ -28,6 +28,16 @@ $(window).on('load', function() {
     }
 });
 
+// if mode == edit, X-button must link back to payment, else it must link to transactions
+xButton = function() {
+    if (window.MODE === 'edit') {
+        window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/payment.html?id=".concat(window.TRANSACTION_ID));  // TODO: switch to hostname global
+    } else {
+        window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/transactions.html");  // TODO: switch to hostname global
+    }
+};
+
+
 $(document).ready(function() {
     $('#distribute').click(function() {
         $.ajax({

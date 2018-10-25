@@ -1,4 +1,6 @@
 // get url params
+
+// TODO: this causes "transaction already active" because it does not wait for response
 let urlParams = new URLSearchParams(window.location.search);
 let mode = urlParams.get('mode');
 

@@ -16,7 +16,7 @@ function Ctrl($scope, $resource, $http) {
     $scope.editButtonTarget = editButtonTarget;
 
     $scope.deletePayment = function() {
-        $http.delete('http://localhost:8080/api/v1/payments/'.concat($scope.payment.transactionId));
+        $http.delete('http://localhost:8080/api/v1/payments/'.concat($scope.payment.transactionId));  // TODO: this works only when button is long pressed
         window.location.replace("/media/Daten-Partition/Repositories/accounting_otter_webapp/transactions.html");  // TODO: switch to hostname global
     };
 

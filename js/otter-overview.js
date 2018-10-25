@@ -1,8 +1,8 @@
-let targetUrl = 'http://localhost:8080/api/v1/user';
+let targetUrl = 'http://localhost:8080/api/v1';
 angular.module('GetRestObject', ['ngResource']);
 function Ctrl($scope, $resource) {
     let restservice = $resource(
-        targetUrl, {}, {
+        targetUrl.concat('/user'), {}, {
             query: {method: 'GET', isArray: true}
         }
     );
@@ -15,4 +15,8 @@ function Ctrl($scope, $resource) {
     $scope.convertToShortName = function(firstName, lastName) {
         return firstName.concat(' ', lastName.charAt(0), '.')
     };
+
+    $scope.getUserPicUrl = function(userId) {
+        return targetUrl.concat('/user/', userId, '/pic');
+    }
 }

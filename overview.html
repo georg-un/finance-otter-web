@@ -49,7 +49,7 @@
                 <div ng-repeat="user in users">
                     <div class="user-card">
                         <div class="user-card-img valign-wrapper">
-                            <img class="circle avatar" src="images/tmp/otter-avatar.jpg">
+                            <img class="circle avatar" src="{{getUserPicUrl(user.userId)}}">
                         </div>
                         <div class="user-card-name">
                             <p class="x-large" style="color:black;">{{convertToShortName(user.firstName, user.lastName)}}</p>
