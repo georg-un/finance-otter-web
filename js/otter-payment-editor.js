@@ -18,7 +18,7 @@ $(document).ready(function() {
                             convertToShortName(value.firstName, value.lastName) +
                         "</div>" +
                         "<div class='pay-edit-card-input'>" +
-                            "<input id=" + value.userId + "class='debit-input' type='number' min='0' step='0.01'/>" +
+                            "<input id='" + value.userId + "' class='debit-input' type='number' min='0' step='0.01'/>" +
                         "</div>" +
                     "</div>";
                 $('#user-card-container').append(card);
