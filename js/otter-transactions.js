@@ -21,44 +21,53 @@ splitAtComma = function(int) {
 };
 
 
+// instantiate keycloak
+let keycloak = Keycloak();
+
+
 // add transaction cards
 $(document).ready(function() {
-    $.ajax({
-        type: 'GET',
-        dataType: "json",
-        url: targetUrl.concat('/transactions?start=', start, "&end=", end),
-        success: function (data) {
-            $.each(data, function(index, value) {
-                let card =
-                   "<a href='payment.html?id=" + value.transactionId + "'>" +
-                       "<div class='transaction-grid-card z-depth-1 hoverable'>" +
+    keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
+        //alert(authenticated ? 'authenticated' : 'not authenticated');
+        $.ajax({
+            type: 'GET',
+            dataType: "json",
+            url: targetUrl.concat('/transactions?start=', start, "&end=", end),
+            headers: {'Authorization': 'Bearer ' + keycloak.token},
+            success: function (data) {
+                $.each(data, function(index, value) {
+                        let card =
+                            "<a href='payment.html?id=" + value.transactionId + "'>" +
+                            "<div class='transaction-grid-card z-depth-1 hoverable'>" +
                             "<div class='transaction-card-avatar valign-wrapper'>" +
-                                "<img class='circle avatar' src='" + targetUrl + "/user/" + value.userId + "/pic'>" +
+                            "<img class='circle avatar' src='" + targetUrl + "/user/" + value.userId + "/pic'>" +
                             "</div>" +
                             "<div class='transaction-card-date transaction-card-first-row'>" +
-                                "<p style='color:black;'>" + convertToDateString(value.date) + "</p>" +
+                            "<p style='color:black;'>" + convertToDateString(value.date) + "</p>" +
                             "</div>" +
                             "<div class='transaction-card-shop'>" +
-                                "<p class='x-large' style='color:black;'><b>" + value.shop + "</b><p>" +
+                            "<p class='x-large' style='color:black;'><b>" + value.shop + "</b><p>" +
                             "</div>" +
                             "<div class='transaction-card-category transaction-card-last-row'>" +
-                                "<p style='color:black;'>" + value.category + "</p>" +
+                            "<p style='color:black;'>" + value.category + "</p>" +
                             "</div>" +
                             "<div class='transaction-card-amount' style='text-align:right;'>" +
-                                "<p class='x-large' style='color:black; display:inline;'>" +
-                                    splitAtComma(value.sumAmount)[0] + "." +
-                                "</p>" +
-                                "<p style='color:black; display:inline;'>" +
-                                    splitAtComma(value.sumAmount)[1] +
-                                "</p>" +
+                            "<p class='x-large' style='color:black; display:inline;'>" +
+                            splitAtComma(value.sumAmount)[0] + "." +
+                            "</p>" +
+                            "<p style='color:black; display:inline;'>" +
+                            splitAtComma(value.sumAmount)[1] +
+                            "</p>" +
                             "</div>" +
-                        "</div>" +
-                    "</a>";
+                            "</div>" +
+                            "</a>";
 
-                $(".transaction-card-conatainer").append(card);
-                }
-
-            )
-        }
-    })
+                        $(".transaction-card-conatainer").append(card);
+                    }
+                )
+            }
+        })
+    }).error(function() {
+        console.log('Failed to initialize Keycloak');
+    });
 });
