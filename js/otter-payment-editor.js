@@ -47,9 +47,6 @@ $(document).ready(function() {
                                 $('#date').val(new Date(payment.date).toISOString().split('T')[0]);
                                 $('#custom-distribution').prop('checked', true);
                                 for (i = 0; i < payment.debits.length; i++) {
-                                    console.log(i);
-                                    console.log($("#user3"));
-                                    console.log($('#user'.concat(payment.debits[i].debtorId)));
                                     $('#user' + payment.debits[i].debtorId).val(
                                         currency(payment.debits[i].amount)
                                     );
@@ -119,7 +116,6 @@ $(document).ready(function() {
 
                         // create payload
                         let payload = {};
-                        payload.userId = 1;  // TODO: get userId from session
                         payload.date = document.getElementById('date').value;
                         payload.category = document.getElementById('category').value;
                         payload.shop = document.getElementById('shop').value;
