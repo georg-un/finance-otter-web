@@ -20,7 +20,6 @@ splitAtComma = function(int) {
 };
 
 
-
 // add transaction cards
 $(document).ready(function() {
     import(otter_host.concat("/auth/js/keycloak.js")).then(function() {
