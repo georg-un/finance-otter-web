@@ -3,7 +3,6 @@ convertToShortName = function(firstName, lastName) {
 };
 
 
-
 $(document).ready(function() {
 
     import(otter_host.concat("/auth/js/keycloak.js")).then(function() {
@@ -25,47 +24,45 @@ $(document).ready(function() {
                             convertToShortName(value.firstName, value.lastName) +
                             "</div>" +
                             "<div class='pay-edit-card-input'>" +
-                            "<input id='" + value.userId + "' class='debit-input' type='number' min='0' step='0.01'/>" +
+                            "<input id='user" + value.userId + "' class='debit-input' type='number' min='0' step='0.01'/>" +
                             "</div>" +
                             "</div>";
                         $('#user-card-container').append(card);
                     });
+
+                    // get payment details if mode is edit
+                    if (window.MODE === 'edit') {
+                        $.ajax({
+                            type: 'GET',
+                            dataType: "json",
+                            headers: {'Authorization': 'Bearer ' + keycloak.token},
+                            url: targetUrl.concat("/payments/", window.TRANSACTION_ID),
+                            success: function (payment) {
+                                console.log(payment);
+
+                                $('#amount').val(currency(payment.sumAmount));
+                                $('#shop').val(payment.shop);
+                                $('#description').val(payment.description);
+                                $('#category').val(payment.category);
+                                $('#date').val(new Date(payment.date).toISOString().split('T')[0]);
+                                $('#custom-distribution').prop('checked', true);
+                                for (i = 0; i < payment.debits.length; i++) {
+                                    console.log(i);
+                                    console.log($("#user3"));
+                                    console.log($('#user'.concat(payment.debits[i].debtorId)));
+                                    $('#user' + payment.debits[i].debtorId).val(
+                                        currency(payment.debits[i].amount)
+                                    );
+                                }
+                            }
+                        });
+                    }
                 }
             });
+
         }).error(function () {
             console.log('Failed to initialize Keycloak');
         });
-
-        // get payment details if mode is edit
-        if (window.MODE === 'edit') {
-            let target = targetUrl.concat("/payments/", window.TRANSACTION_ID);
-            keycloak.updateToken(30).success(function () {
-                $.ajax({
-                    type: 'GET',
-                    dataType: "json",
-                    headers: {'Authorization': 'Bearer ' + keycloak.token},
-                    url: target,
-                    success: function (payment) {
-                        console.log(payment);
-
-                        $('#amount').val(currency(payment.sumAmount));
-                        $('#shop').val(payment.shop);
-                        $('#description').val(payment.description);
-                        $('#category').val(payment.category);
-                        $('#date').val(new Date(payment.date).toISOString().split('T')[0]);
-                        $('#custom-distribution').prop('checked', true);
-                        for (i = 0; i < payment.debits.length; i++) {
-                            $('#' + payment.debits[i].debtorId).val(
-                                currency(payment.debits[i].amount)
-                            );
-                        }
-
-                    }
-                });
-            }).error(function () {
-                console.log('Failed to refresh token');
-            });
-        }
 
         // distribute on empty fields-button
         $('#distribute').click(function () {
@@ -107,14 +104,14 @@ $(document).ready(function() {
                             let debitFields = document.getElementsByClassName('debit-input');
                             for (i = 0; i < debitFields.length; i++) {
                                 debits[i] = {
-                                    "debtorId": parseInt(debitFields[i].id),
+                                    "debtorId": parseInt(debitFields[i].id.substring(4)),
                                     "amount": currency(parseFloat(debitFields[i].value)).value
                                 }
                             }
                         } else if (checkboxValue === false) {
                             for (i = 0; i < emptyFields.length; i++) {
                                 debits[i] = {
-                                    "debtorId": parseInt(emptyFields[i].fieldId),
+                                    "debtorId": parseInt(emptyFields[i].fieldId.substring(4)),
                                     "amount": currency(parseFloat(emptyFields[i].assignedValue)).value
                                 }
                             }
@@ -288,16 +285,16 @@ getFilledOutAmountAndEmptyFields = function(userIds) {
 
     let tmpFieldValue;
     for (i=0; i < userIds.length; i++) {
-        tmpFieldValue = document.getElementById(userIds[i]).value;
+        tmpFieldValue = document.getElementById('user' + userIds[i]).value;
         if (tmpFieldValue != null && tmpFieldValue !== "") {
             if (parseFloat(tmpFieldValue) < 0) {
                 M.toast({html: 'Please insert only positive numbers!'});
                 throw new Error("Number in input-field of class 'debit-input' is negative.")
             }
-            filledOutAmount = filledOutAmount.add(parseFloat(document.getElementById(userIds[i]).value));
+            filledOutAmount = filledOutAmount.add(parseFloat(document.getElementById('user' + userIds[i]).value));
         } else {
             emptyFields.push({
-                "fieldId" : userIds[i],
+                "fieldId" : 'user' + userIds[i],
                 "assignedValue" : currency(0)});
         }
     }
