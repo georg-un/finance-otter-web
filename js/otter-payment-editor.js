@@ -1,37 +1,176 @@
-let targetUrl = 'http://localhost:8080/api/v1';
-
 convertToShortName = function(firstName, lastName) {
     return firstName.concat(' ', lastName.charAt(0), '.')
 };
 
-// instatiate keycloak
-let keycloak = Keycloak();
 
 
 $(document).ready(function() {
-    keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
-        $.ajax({
-            type: 'GET',
-            dataType: "json",
-            headers: {'Authorization': 'Bearer ' + keycloak.token},
-            url: targetUrl.concat('/user'),
-            success: function (data) {
-                $.each(data, function (index, value) {
-                    let card =
-                        "<div class='pay-edit-user-card'>" +
+
+    import(otter_host.concat("/auth/js/keycloak.js")).then(function() {
+        // instatiate keycloak
+        let keycloak = Keycloak();
+
+        // get users
+        keycloak.init({onLoad: 'login-required'}).success(function (authenticated) {
+            $.ajax({
+                type: 'GET',
+                dataType: "json",
+                headers: {'Authorization': 'Bearer ' + keycloak.token},
+                url: targetUrl.concat('/user'),
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        let card =
+                            "<div class='pay-edit-user-card'>" +
                             "<div class='pay-edit-card-user valign-wrapper'>" +
-                                convertToShortName(value.firstName, value.lastName) +
+                            convertToShortName(value.firstName, value.lastName) +
                             "</div>" +
                             "<div class='pay-edit-card-input'>" +
-                                "<input id='" + value.userId + "' class='debit-input' type='number' min='0' step='0.01'/>" +
+                            "<input id='" + value.userId + "' class='debit-input' type='number' min='0' step='0.01'/>" +
                             "</div>" +
-                        "</div>";
-                    $('#user-card-container').append(card);
-                });
-            }
+                            "</div>";
+                        $('#user-card-container').append(card);
+                    });
+                }
+            });
+        }).error(function () {
+            console.log('Failed to initialize Keycloak');
         });
-    }).error(function() {
-        console.log('Failed to initialize Keycloak');
+
+        // get payment details if mode is edit
+        if (window.MODE === 'edit') {
+            let target = targetUrl.concat("/payments/", window.TRANSACTION_ID);
+            keycloak.updateToken(30).success(function () {
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    headers: {'Authorization': 'Bearer ' + keycloak.token},
+                    url: target,
+                    success: function (payment) {
+                        console.log(payment);
+
+                        $('#amount').val(currency(payment.sumAmount));
+                        $('#shop').val(payment.shop);
+                        $('#description').val(payment.description);
+                        $('#category').val(payment.category);
+                        $('#date').val(new Date(payment.date).toISOString().split('T')[0]);
+                        $('#custom-distribution').prop('checked', true);
+                        for (i = 0; i < payment.debits.length; i++) {
+                            $('#' + payment.debits[i].debtorId).val(
+                                currency(payment.debits[i].amount)
+                            );
+                        }
+
+                    }
+                });
+            }).error(function () {
+                console.log('Failed to refresh token');
+            });
+        }
+
+        // distribute on empty fields-button
+        $('#distribute').click(function () {
+            keycloak.updateToken(30).success(function () {
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    headers: {'Authorization': 'Bearer ' + keycloak.token},
+                    url: targetUrl.concat('/user'),
+                    success: function (data) {
+                        distributeOnEmptyFields(data);
+                    }
+                });
+            }).error(function () {
+                console.log('Failed to refresh token');
+            });
+        });
+
+        // submit button action
+        $('#submit').click(function () {
+            keycloak.updateToken(30).success(function () {
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    headers: {'Authorization': 'Bearer ' + keycloak.token},
+                    url: targetUrl.concat('/user'),
+                    success: function (data) {
+                        // make sure distribution is set and valid
+                        let emptyFields;
+                        let checkboxValue = document.getElementById('custom-distribution').checked;
+                        if (checkboxValue === false) {
+                            emptyFields = distributeOnEmptyFieldsBeforeSubmit(data);
+                        } else if (checkboxValue === true && getFilledOutAmountAndEmptyFields(getUserIds(data)).emptyFields.length > 0) {
+                            distributeOnEmptyFields(data);
+                        }
+                        // create debits
+                        let debits = [];
+                        if (checkboxValue === true) {
+                            let debitFields = document.getElementsByClassName('debit-input');
+                            for (i = 0; i < debitFields.length; i++) {
+                                debits[i] = {
+                                    "debtorId": parseInt(debitFields[i].id),
+                                    "amount": currency(parseFloat(debitFields[i].value)).value
+                                }
+                            }
+                        } else if (checkboxValue === false) {
+                            for (i = 0; i < emptyFields.length; i++) {
+                                debits[i] = {
+                                    "debtorId": parseInt(emptyFields[i].fieldId),
+                                    "amount": currency(parseFloat(emptyFields[i].assignedValue)).value
+                                }
+                            }
+                        }
+
+                        // create payload
+                        let payload = {};
+                        payload.userId = 1;  // TODO: get userId from session
+                        payload.date = document.getElementById('date').value;
+                        payload.category = document.getElementById('category').value;
+                        payload.shop = document.getElementById('shop').value;
+                        payload.description = document.getElementById('description').value;
+                        payload.billId = null;
+                        payload.debits = debits;
+
+                        if (MODE === 'create') {
+                            $.ajax({
+                                type: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + keycloak.token
+                                },
+                                dataType: "json",
+                                url: targetUrl.concat('/payments'),
+                                data: JSON.stringify(payload),
+                                success: function (data) {
+                                    window.location.replace("/payment.html?id=".concat(data.transactionId));
+                                }
+                            });
+                        } else if (MODE === 'edit') {
+                            payload.transactionId = window.TRANSACTION_ID;
+                            $.ajax({
+                                type: 'PUT',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + keycloak.token
+                                },
+                                dataType: "json",
+                                url: 'http://localhost:8080/api/v1/payments',
+                                data: JSON.stringify(payload),
+                                success: function (data) {
+                                    window.location.replace("/payment.html?id=".concat(data.transactionId));
+                                }
+                            });
+                        } else {
+                            M.toast({html: 'Ooops! Something went wrong. Please reload the page!'});
+                            throw new Error("MODE was neither 'create' nor 'edit'.");
+                        }
+                    }
+                });
+            }).error(function () {
+                console.log('Failed to initialize Keycloak');
+            });
+        });
     });
 });
 
@@ -71,150 +210,6 @@ $(document).ready(function() {
 
 
 /* EDITOR FUNCTIONS */
-
-// if mode == edit, load payment and put current values into inputs
-$(document).on('ready', function() {
-    if (window.MODE === 'edit') {
-        let target = 'http://localhost:8080/api/v1/payments/'.concat(window.TRANSACTION_ID);
-        keycloak.updateToken(30).success(function() {
-            $.ajax({
-                type: 'GET',
-                dataType: "json",
-                headers: {'Authorization': 'Bearer ' + keycloak.token},
-                url: target,
-                success: function (payment) {
-                    console.log(payment);
-
-                    $('#amount').val( currency(payment.sumAmount) );
-                    $('#shop').val( payment.shop );
-                    $('#description').val( payment.description );
-                    $('#category').val( payment.category );
-                    $('#date').val( new Date(payment.date).toISOString().split('T')[0] );
-                    $('#custom-distribution').prop('checked', true);
-                    for (i=0; i < payment.debits.length; i++) {
-                        $('#' + payment.debits[i].debtorId).val(
-                            currency(payment.debits[i].amount)
-                        );
-                    }
-
-                }
-            });
-        }).error(function() {
-            console.log('Failed to refresh token');
-        });
-    }
-});
-
-
-
-
-$(document).ready(function() {
-    $('#distribute').click(function() {
-        keycloak.updateToken(30).success(function() {
-            $.ajax({
-                type: 'GET',
-                dataType: "json",
-                headers: {'Authorization': 'Bearer ' + keycloak.token},
-                url: 'http://localhost:8080/api/v1/user',
-                success: function (data) {
-                    distributeOnEmptyFields(data);
-                }
-            });
-        }).error(function() {
-            console.log('Failed to refresh token');
-        });
-    });
-});
-
-$(document).ready(function() {
-    $('#submit').click(function () {
-        keycloak.updateToken(30).success(function() {
-            $.ajax({
-                type: 'GET',
-                dataType: "json",
-                headers: {'Authorization': 'Bearer ' + keycloak.token},
-                url: 'http://localhost:8080/api/v1/user',
-                success: function (data) {
-                    // make sure distribution is set and valid
-                    let emptyFields;
-                    let checkboxValue = document.getElementById('custom-distribution').checked;
-                    if (checkboxValue === false) {
-                        emptyFields = distributeOnEmptyFieldsBeforeSubmit(data);
-                    } else if (checkboxValue === true && getFilledOutAmountAndEmptyFields(getUserIds(data)).emptyFields.length > 0) {
-                        distributeOnEmptyFields(data);
-                    }
-                    // create debits
-                    let debits = [];
-                    if (checkboxValue === true) {
-                        let debitFields = document.getElementsByClassName('debit-input');
-                        for (i = 0; i < debitFields.length; i++) {
-                            debits[i] = {
-                                "debtorId": parseInt(debitFields[i].id),
-                                "amount": currency(parseFloat(debitFields[i].value)).value
-                            }
-                        }
-                    } else if (checkboxValue === false) {
-                        for (i = 0; i < emptyFields.length; i++) {
-                            debits[i] = {
-                                "debtorId": parseInt(emptyFields[i].fieldId),
-                                "amount": currency(parseFloat(emptyFields[i].assignedValue)).value
-                            }
-                        }
-                    }
-
-                    // create payload
-                    let payload = {};
-                    payload.userId = 1;  // TODO: get userId from session
-                    payload.date = document.getElementById('date').value;
-                    payload.category = document.getElementById('category').value;
-                    payload.shop = document.getElementById('shop').value;
-                    payload.description = document.getElementById('description').value;
-                    payload.billId = null;
-                    payload.debits = debits;
-
-                    if (MODE === 'create') {
-                        $.ajax({
-                            type: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + keycloak.token
-                            },
-                            dataType: "json",
-                            url: 'http://localhost:8080/api/v1/payments',
-                            data: JSON.stringify(payload),
-                            success: function (data) {
-                                window.location.replace("/payment.html?id=".concat(data.transactionId));
-                            }
-                        });
-                    } else if (MODE === 'edit') {
-                        payload.transactionId = window.TRANSACTION_ID;
-                        $.ajax({
-                            type: 'PUT',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + keycloak.token
-                            },
-                            dataType: "json",
-                            url: 'http://localhost:8080/api/v1/payments',
-                            data: JSON.stringify(payload),
-                            success: function (data) {
-                                window.location.replace("/payment.html?id=".concat(data.transactionId));
-                            }
-                        });
-                    } else {
-                        M.toast({html: 'Ooops! Something went wrong. Please reload the page!'});
-                        throw new Error("MODE was neither 'create' nor 'edit'.");
-                    }
-                }
-            });
-        }).error(function() {
-            console.log('Failed to initialize Keycloak');
-        });
-    });
-});
-
 
 distributeOnEmptyFields = function(users) {
     // get user ids
