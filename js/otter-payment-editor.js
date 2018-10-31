@@ -38,8 +38,6 @@ $(document).ready(function() {
                             headers: {'Authorization': 'Bearer ' + keycloak.token},
                             url: targetUrl.concat("/payments/", window.TRANSACTION_ID),
                             success: function (payment) {
-                                console.log(payment);
-
                                 $('#amount').val(currency(payment.sumAmount));
                                 $('#shop').val(payment.shop);
                                 $('#description').val(payment.description);
