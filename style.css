@@ -17,6 +17,10 @@ brown: #e37a39
     background-color: #3983e3 !important;
 }
 
+.lightblue-background{
+    background-color: #e2f3ff !important;
+}
+
 .brown-theme {
     color: #FFFFFF !important;
     background-color: #e37a39 !important;
@@ -137,7 +141,7 @@ i.icon-black {
     grid-column-gap: 2vh;
     padding: 4px 16px 4px 16px;
     margin: 0 0 10px 0;
-    background-color: #fffde7;
+    background-color: #FFFFFF !important;
 }
 
 .transaction-card-date {

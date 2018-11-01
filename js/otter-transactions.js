@@ -7,10 +7,10 @@ if (start == null) {
 if (end == null) {
     end = 15;
 }
-let targetUrl = 'http://localhost:8080/api/v1';
 
 convertToDateString = function(timestamp) {
-    let date = new Date(timestamp).toISOString().split('T');
+    let currentDate = new Date();
+    let date = new Date(timestamp - (currentDate.getTimezoneOffset() * 60000)).toISOString().split('T');
     date = date[0].split('-');
     let datestring = date[2] + '.' + date[1] + '.' + date[0];
     return datestring;
@@ -23,42 +23,52 @@ splitAtComma = function(int) {
 
 // add transaction cards
 $(document).ready(function() {
-    $.ajax({
-        type: 'GET',
-        dataType: "json",
-        url: targetUrl.concat('/transactions?start=', start, "&end=", end),
-        success: function (data) {
-            $.each(data, function(index, value) {
-                let card =
-                   "<a href='payment.html?id=" + value.transactionId + "'>" +
-                       "<div class='transaction-grid-card z-depth-1 hoverable'>" +
-                            "<div class='transaction-card-avatar valign-wrapper'>" +
+    import(otter_host.concat("/auth/js/keycloak.js")).then(function() {
+        // instantiate keycloak
+        let keycloak = Keycloak();
+
+        keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
+            //alert(authenticated ? 'authenticated' : 'not authenticated');
+            $.ajax({
+                type: 'GET',
+                dataType: "json",
+                url: targetUrl.concat('/transactions?start=', start, "&end=", end),
+                headers: {'Authorization': 'Bearer ' + keycloak.token},
+                success: function (data) {
+                    $.each(data, function(index, value) {
+                            let card =
+                                "<a href='payment.html?id=" + value.transactionId + "'>" +
+                                "<div class='transaction-grid-card z-depth-1 hoverable'>" +
+                                "<div class='transaction-card-avatar valign-wrapper'>" +
                                 "<img class='circle avatar' src='" + targetUrl + "/user/" + value.userId + "/pic'>" +
-                            "</div>" +
-                            "<div class='transaction-card-date transaction-card-first-row'>" +
+                                "</div>" +
+                                "<div class='transaction-card-date transaction-card-first-row'>" +
                                 "<p style='color:black;'>" + convertToDateString(value.date) + "</p>" +
-                            "</div>" +
-                            "<div class='transaction-card-shop'>" +
+                                "</div>" +
+                                "<div class='transaction-card-shop'>" +
                                 "<p class='x-large' style='color:black;'><b>" + value.shop + "</b><p>" +
-                            "</div>" +
-                            "<div class='transaction-card-category transaction-card-last-row'>" +
+                                "</div>" +
+                                "<div class='transaction-card-category transaction-card-last-row'>" +
                                 "<p style='color:black;'>" + value.category + "</p>" +
-                            "</div>" +
-                            "<div class='transaction-card-amount' style='text-align:right;'>" +
-                                "<p class='x-large' style='color:black; display:inline;'>" +
-                                    splitAtComma(value.sumAmount)[0] + "." +
+                                "</div>" +
+                                "<div class='transaction-card-amount' style='text-align:right;'>" +
+                                "<p class='x-large' style='color:black; display:inline;'>&euro; " +
+                                splitAtComma(value.sumAmount)[0] + "." +
                                 "</p>" +
                                 "<p style='color:black; display:inline;'>" +
-                                    splitAtComma(value.sumAmount)[1] +
+                                splitAtComma(value.sumAmount)[1] +
                                 "</p>" +
-                            "</div>" +
-                        "</div>" +
-                    "</a>";
+                                "</div>" +
+                                "</div>" +
+                                "</a>";
 
-                $(".transaction-card-conatainer").append(card);
+                            $(".transaction-card-conatainer").append(card);
+                        }
+                    )
                 }
-
-            )
-        }
-    })
+            })
+        }).error(function() {
+            console.log('Failed to initialize Keycloak');
+        });
+    });
 });
