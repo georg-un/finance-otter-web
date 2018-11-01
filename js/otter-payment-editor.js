@@ -42,7 +42,8 @@ $(document).ready(function() {
                                 $('#shop').val(payment.shop);
                                 $('#description').val(payment.description);
                                 $('#category').val(payment.category);
-                                $('#date').val(new Date(payment.date).toISOString().split('T')[0]);
+                                let currentDate = new Date();
+                                $('#date').val(new Date(payment.date - (currentDate.getTimezoneOffset() * 60000)).toISOString().split('T')[0]);
                                 $('#custom-distribution').prop('checked', true);
                                 for (i = 0; i < payment.debits.length; i++) {
                                     $('#user' + payment.debits[i].debtorId).val(

@@ -9,7 +9,8 @@ if (end == null) {
 }
 
 convertToDateString = function(timestamp) {
-    let date = new Date(timestamp).toISOString().split('T');
+    let currentDate = new Date();
+    let date = new Date(timestamp - (currentDate.getTimezoneOffset() * 60000)).toISOString().split('T');
     date = date[0].split('-');
     let datestring = date[2] + '.' + date[1] + '.' + date[0];
     return datestring;
