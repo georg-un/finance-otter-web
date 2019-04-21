@@ -75,20 +75,33 @@ $(document).ready(function() {
 
         // delete button
         $('#delete-button').click( function() {
-
-            keycloak.updateToken(30).success(function() {
-                $.ajax({
-                    url: targetUrl.concat('/payments/', transactionId),
-                    headers: {'Authorization': 'Bearer ' + keycloak.token},
-                    type: 'DELETE',
-                    success: function() {
-                        window.location.replace("/transactions.html");
-                    }
+            keycloak.loadUserProfile().success(function(profile) {
+                keycloak.updateToken(30).success(function() {
+                    $.ajax({
+                        type: 'GET',
+                        dataType: "json",
+                        headers: {'Authorization': 'Bearer ' + keycloak.token},
+                        url: targetUrl.concat('/payments/', transactionId),
+                        success: function (data) {
+                            if (data.username === profile.username) {
+                                $.ajax({
+                                    url: targetUrl.concat('/payments/', transactionId),
+                                    headers: {'Authorization': 'Bearer ' + keycloak.token},
+                                    type: 'DELETE',
+                                    success: function () {
+                                        window.location.replace("/transactions.html");
+                                    }
+                                });
+                            }
+                            else {
+                                M.toast({html: "Only the creator of a payment can delete it."});
+                            }
+                        }
+                    });
+                }).error(function () {
+                    console.log('Failed to refresh token');
                 });
-            }).error(function() {
-                console.log('Failed to refresh token');
             });
         });
-
     });
 });
