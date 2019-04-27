@@ -2521,7 +2521,7 @@ $jscomp.polyfill = function (e, r, p, m) {
           this.close();
         }
 
-        // CASE WHEN USER TYPE LETTERS
+        // CASE WHEN USERS TYPE LETTERS
         var letter = String.fromCharCode(e.which).toLowerCase(),
             nonLetters = [9, 13, 27, 38, 40];
         if (letter && nonLetters.indexOf(e.which) === -1) {
