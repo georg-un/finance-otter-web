@@ -16,3 +16,21 @@ mat-card {
   margin: 0px 8px 8px 8px;
   padding: 16px 16px 16px 16px;
 }
+
+.sidenav-container {
+  height: 100vh;
+  background-color: #E3F2FD;
+}
+
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidenav {
+  padding: 20px;
+}
+
+
