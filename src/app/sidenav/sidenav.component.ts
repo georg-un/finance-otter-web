@@ -24,8 +24,4 @@ export class SidenavComponent implements OnInit {
     this.sidenavService.setSidenav(this.sidenav)
   }
 
-
-
-
-
 }
