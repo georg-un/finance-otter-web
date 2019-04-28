@@ -1,0 +1,32 @@
+<mat-card>
+  <mat-card-content>
+    <div class='transaction-grid-card'>
+      <div class='transaction-card-avatar'>
+          <img mat-card-avatar [src]='avatar'>
+      </div>
+
+      <div class='transaction-card-date transaction-card-first-row'>
+        <p>{{transaction.date | date : "dd.MM.yyyy"}}</p>
+      </div>
+
+      <div class='transaction-card-shop'>
+        <h1>{{transaction.shop | titlecase}}</h1>
+      </div>
+
+      <div class='transaction-card-category transaction-card-last-row'>
+        <p>{{transaction.category | lowercase}}</p>
+      </div>
+
+      <div class='transaction-card-amount' style='text-align:right;'>
+        <h1>&euro; {{transaction.sumAmount}}</h1>
+      </div>
+
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+
+
+<!--a href='payment.html?id=" + value.transactionId + "'>
+</a-->
