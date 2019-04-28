@@ -28,7 +28,7 @@ $(document).ready(function() {
                     $.each(data, function(index, value) {
                             let card =
                                 "<div class='user-card'>" +
-                                    "<div class='user-card-img valign-wrapper'>" +
+                                    "<div class='user-card-avatar valign-wrapper'>" +
                                         "<img class='circle avatar' src='" + getUserPicUrl(targetUrl, value.userId) + "'>" +
                                     "</div>" +
                                     "<div class='user-card-name'>" +
