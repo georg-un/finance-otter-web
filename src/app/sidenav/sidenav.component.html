@@ -1,4 +1,27 @@
-<mat-drawer #sidenav class="sidenav" mode="over" opened="false">
-  <p>Auto-resizing sidenav</p>
-</mat-drawer>
-<!--button type="button" mat-button (click)="drawer.toggle()">Toggle sidenav</button-->
+<mat-sidenav #sidenav class="sidenav" mode="over" opened="false" fixedInViewport="true">
+
+  <div class="account-card">
+    <img mat-card-avatar [src]='avatar'>
+    <p>{{user.firstName}} {{user.lastName}}</p>
+  </div>
+
+  <div class="link-container">
+    <mat-list>
+
+      <a routerLink="/overview" routerLinkActive="true" (click)="sidenav.toggle()">
+        <mat-list-item>
+          <mat-icon mat-list-icon>people</mat-icon>
+          <p>Overview</p>
+        </mat-list-item>
+      </a>
+
+      <a routerLink="/transactions" routerLinkActive="true" (click)="sidenav.toggle()">
+        <mat-list-item>
+          <mat-icon mat-list-icon>list</mat-icon>
+          <p>Transactions</p>
+        </mat-list-item>
+      </a>
+
+    </mat-list>
+  </div>
+</mat-sidenav>

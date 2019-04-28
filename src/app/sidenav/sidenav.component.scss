@@ -1,1 +1,35 @@
+@import "/../../assets/variables";
+
+mat-sidenav {
+  width: 62vw;
+}
+
+.account-card {
+  $height: 24vh;
+  top: 0;
+  height: $height;
+  background-color: $dark-background;
+  padding: 16px 16px 16px 16px;
+  position: relative;
+
+  p {
+    position: absolute;
+    bottom: 8px;
+    font-size: 1.25em;
+  }
+
+  img {
+    $img-size: 64px;
+    padding-top: calc((#{$height} / 2) - (#{$img-size} / 2));
+    padding-bottom: calc((#{$height} / 2) - (#{$img-size} / 2));
+    position: absolute;
+    height: $img-size;
+    width: $img-size;
+  }
+}
+
+.link-container {
+  margin-top: 16px;
+}
+
 

@@ -5,7 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TransactionCardComponent } from './transaction-card/transaction-card.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatButtonModule, MatCardModule, MatIconModule, MatSidenavModule, MatToolbarModule} from "@angular/material";
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatListModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from "@angular/material";
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { HeaderComponent } from './header/header.component';
 import { TransactionsComponent } from './transactions/transactions.component';
@@ -30,7 +37,8 @@ import { OverviewComponent } from './overview/overview.component';
     MatButtonModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
