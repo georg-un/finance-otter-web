@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {TransactionsComponent} from "./transactions/transactions.component";
 import {OverviewComponent} from "./overview/overview.component";
+import {PaymentViewComponent} from "./payment-view/payment-view.component";
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'overview',
     component: OverviewComponent
+  },
+  {
+    path: 'payment',
+    component: PaymentViewComponent
   }
 ];
 

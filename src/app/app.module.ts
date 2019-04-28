@@ -18,6 +18,8 @@ import { HeaderComponent } from './header/header.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { OverviewComponent } from './overview/overview.component';
+import { PaymentViewComponent } from './payment-view/payment-view.component';
+import { DebitCardComponent } from './debit-card/debit-card.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { OverviewComponent } from './overview/overview.component';
     HeaderComponent,
     TransactionsComponent,
     UserCardComponent,
-    OverviewComponent
+    OverviewComponent,
+    PaymentViewComponent,
+    DebitCardComponent
   ],
   imports: [
     BrowserModule,
