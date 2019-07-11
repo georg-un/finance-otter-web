@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MockRestService} from "../rest-service/mock-rest.service";
-import {Payment} from "../rest-service/entity/payment";
+import {MockRestService} from '../rest-service/mock-rest.service';
+import {Payment} from '../rest-service/entity/payment';
 
 @Component({
   selector: 'app-payment-view',

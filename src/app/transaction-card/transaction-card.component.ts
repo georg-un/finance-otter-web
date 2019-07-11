@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Transaction} from "../rest-service/entity/transaction";
+import {Transaction} from '../rest-service/entity/transaction';
 
 @Component({
   selector: 'app-transaction-card',
@@ -9,7 +9,7 @@ import {Transaction} from "../rest-service/entity/transaction";
 export class TransactionCardComponent implements OnInit {
 
   @Input() transaction: Transaction;
-  avatar: any = "assets/otter-avatar.jpg";
+  avatar: any = 'assets/otter-avatar.jpg';
 
   constructor() {
   }

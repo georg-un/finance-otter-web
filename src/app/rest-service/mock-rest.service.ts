@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Transaction} from "./entity/transaction";
-import {TRANSACTION1} from "./mock-data/transaction1";
-import {TRANSACTIONS} from "./mock-data/transactions";
-import {Payment} from "./entity/payment";
-import {PAYMENT1} from "./mock-data/payment1";
-import {User} from "./entity/user";
-import {USERS} from "./mock-data/users";
+import {Transaction} from './entity/transaction';
+import {TRANSACTION1} from './mock-data/transaction1';
+import {TRANSACTIONS} from './mock-data/transactions';
+import {Payment} from './entity/payment';
+import {PAYMENT1} from './mock-data/payment1';
+import {User} from './entity/user';
+import {USERS} from './mock-data/users';
 
 
 @Injectable({

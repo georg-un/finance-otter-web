@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {MatSidenav} from "@angular/material";
+import {MatSidenav} from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class SidenavService {
     this.sidenav = sidenav;
   }
 
-  toogle(): void {
+  toggle(): void {
     this.sidenav.toggle();
   }
 }

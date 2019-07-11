@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SidenavService} from "../sidenav/sidenav.service";
+import {SidenavService} from '../sidenav/sidenav.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSidenav(): void {
-    this.sidenavService.toogle();
+    this.sidenavService.toggle();
   }
 
 }

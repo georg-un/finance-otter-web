@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {User} from "../rest-service/entity/user";
+import {User} from '../rest-service/entity/user';
 
 @Component({
   selector: 'app-user-card',
@@ -9,7 +9,7 @@ import {User} from "../rest-service/entity/user";
 export class UserCardComponent implements OnInit {
 
   @Input() user: User;
-  avatar: any = "assets/otter-avatar.jpg";
+  avatar: any = 'assets/otter-avatar.jpg';
 
   constructor() { }
 
