@@ -15,7 +15,6 @@ export class TransactionCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.transaction);
   }
 
 }

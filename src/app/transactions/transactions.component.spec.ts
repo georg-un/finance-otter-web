@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TransactionsComponent } from './transactions.component';
+import {MockRestService} from '../rest-service/mock-rest.service';
+import {TransactionCardComponent} from '../transaction-card/transaction-card.component';
+import {MatCardModule} from '@angular/material';
 
 describe('TransactionsComponent', () => {
   let component: TransactionsComponent;
@@ -8,7 +11,16 @@ describe('TransactionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionsComponent ]
+      imports: [
+        MatCardModule,
+      ],
+      declarations: [
+        TransactionsComponent,
+        TransactionCardComponent,
+      ],
+      providers: [
+        {provide: MockRestService, useClass: MockRestService},
+      ]
     })
     .compileComponents();
   }));

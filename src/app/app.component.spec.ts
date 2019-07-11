@@ -1,15 +1,26 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import {HeaderComponent} from './header/header.component';
+import {SidenavComponent} from './sidenav/sidenav.component';
+import {MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatListModule,
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        HeaderComponent,
+        SidenavComponent,
       ],
     }).compileComponents();
   }));
@@ -20,16 +31,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'accounting-otter-web'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('accounting-otter-web');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to accounting-otter-web!');
-  });
 });
