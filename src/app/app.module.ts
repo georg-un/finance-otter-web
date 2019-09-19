@@ -21,6 +21,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { DebitCardComponent } from './debit-card/debit-card.component';
 import { PaymentEditorComponent } from './payment-editor/payment-editor.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PaymentEditorComponent } from './payment-editor/payment-editor.componen
     OverviewComponent,
     PaymentViewComponent,
     DebitCardComponent,
-    PaymentEditorComponent
+    PaymentEditorComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
