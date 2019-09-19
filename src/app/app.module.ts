@@ -7,10 +7,10 @@ import { TransactionCardComponent } from './transaction-card/transaction-card.co
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
-  MatCardModule,
-  MatIconModule,
-  MatListModule,
-  MatSidenavModule,
+  MatCardModule, MatCheckboxModule, MatDatepickerModule,
+  MatIconModule, MatInputModule,
+  MatListModule, MatMenuModule, MatNativeDateModule, MatSelectModule,
+  MatSidenavModule, MatSlideToggleModule,
   MatToolbarModule
 } from '@angular/material';
 import { SidenavComponent } from './layout/sidenav/sidenav.component';
@@ -22,6 +22,7 @@ import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { DebitCardComponent } from './debit-card/debit-card.component';
 import { PaymentEditorComponent } from './payment-editor/payment-editor.component';
 import { LayoutComponent } from './layout/layout.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,15 @@ import { LayoutComponent } from './layout/layout.component';
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
+    FormsModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

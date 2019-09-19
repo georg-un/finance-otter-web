@@ -4,6 +4,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { OverviewComponent } from './overview/overview.component';
 import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { LayoutComponent } from './layout/layout.component';
+import { PaymentEditorComponent } from './payment-editor/payment-editor.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,11 @@ const routes: Routes = [
       {
         path: 'payment',
         component: PaymentViewComponent
-      }
+      },
+      {
+        path: 'edit',
+        component: PaymentEditorComponent
+      },
     ]
   }
 ];

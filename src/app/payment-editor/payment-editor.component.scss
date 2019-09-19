@@ -1,0 +1,43 @@
+@import "../../assets/variables";
+
+mat-list-item {
+  ::ng-deep {
+    .mat-list-item-content {
+      width: 100%;
+    }
+  }
+}
+
+.editor-wrapper {
+  background-color: $light-primary;
+  height: 100%;
+  padding: 36px 24px 0 24px;
+  flex: 1;
+}
+
+.editor-row {
+  display: flex;
+}
+
+.editor-symbol-col {
+  flex: 1;
+  margin: auto;
+}
+
+.editor-input-col {
+  flex: 9;
+  margin: auto 8vw auto auto
+}
+
+.debit-row {
+  display: flex;
+}
+
+.debit-name-col {
+  flex: 1;
+}
+
+.debit-input-col {
+  width: 25vw;
+  margin-right: 8vw;
+}
