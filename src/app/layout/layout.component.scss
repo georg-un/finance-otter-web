@@ -1,8 +1,9 @@
 @import "../../assets/variables";
 
-.body-container {
+.main-content {
   margin-top: 56px;
   height: calc(100vh - 56px);
+  padding-top: 2px;
   background-color: $light-primary;
   z-index: 1;
 }

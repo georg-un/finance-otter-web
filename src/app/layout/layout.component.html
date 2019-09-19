@@ -1,8 +1,11 @@
-<mat-drawer-container class="body-container">
-  <app-header></app-header>
-  <app-sidenav></app-sidenav>
-  <router-outlet style="height: 100vh"></router-outlet>
-  <button mat-fab class="fab-button">
-    <mat-icon>add</mat-icon>
-  </button>
-</mat-drawer-container>
+<div>
+  <app-sidenav>
+    <app-header></app-header>
+    <div class="main-content">
+      <router-outlet ></router-outlet>
+      <button mat-fab class="fab-button">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    </app-sidenav>
+</div>
