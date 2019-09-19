@@ -13,8 +13,8 @@ import {
   MatSidenavModule,
   MatToolbarModule
 } from '@angular/material';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { HeaderComponent } from './header/header.component';
+import { SidenavComponent } from './layout/sidenav/sidenav.component';
+import { HeaderComponent } from './layout/header/header.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { OverviewComponent } from './overview/overview.component';

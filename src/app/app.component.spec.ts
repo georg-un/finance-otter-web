@@ -1,8 +1,8 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import {HeaderComponent} from './header/header.component';
-import {SidenavComponent} from './sidenav/sidenav.component';
+import {HeaderComponent} from './layout/header/header.component';
+import {SidenavComponent} from './layout/sidenav/sidenav.component';
 import {MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
