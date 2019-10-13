@@ -1,5 +1,11 @@
 @import "../../assets/variables";
 
+:host {
+  mat-slide-toggle {
+    height: 42px;
+  }
+}
+
 mat-list-item {
   ::ng-deep {
     .mat-list-item-content {
@@ -27,6 +33,11 @@ mat-list-item {
 .editor-input-col {
   flex: 9;
   margin: auto 8vw auto auto
+}
+
+.delete-sweep {
+  position: absolute;
+  right: 50px;
 }
 
 .debit-row {
