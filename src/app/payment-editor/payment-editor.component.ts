@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MockRestService } from '../rest-service/mock-rest.service';
 import { User } from '../rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
-import {Transaction} from "../rest-service/entity/transaction";
+import { Transaction } from "../rest-service/entity/transaction";
 
 @Component({
   selector: 'app-payment-editor',

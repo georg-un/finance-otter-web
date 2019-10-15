@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PaymentViewComponent } from './payment-view.component';
 import {MockRestService} from '../rest-service/mock-rest.service';
-import {DebitCardComponent} from '../debit-card/debit-card.component';
+import {DebitCardComponent} from './debit-card/debit-card.component';
 
 describe('PaymentViewComponent', () => {
   let component: PaymentViewComponent;

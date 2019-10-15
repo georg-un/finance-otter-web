@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OverviewComponent } from './overview.component';
-import {UserCardComponent} from '../user-card/user-card.component';
+import {UserCardComponent} from './user-card/user-card.component';
 import {MatCardModule} from '@angular/material';
 
 describe('OverviewComponent', () => {
