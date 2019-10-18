@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Transaction } from '../../rest-service/entity/transaction';
+import { Transaction } from '../../core/rest-service/entity/transaction';
 
 @Component({
   selector: 'app-transaction-card',

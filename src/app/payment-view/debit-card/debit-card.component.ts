@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Debit } from '../../rest-service/entity/debit';
+import { Debit } from '../../core/rest-service/entity/debit';
 
 @Component({
   selector: 'app-debit-card',

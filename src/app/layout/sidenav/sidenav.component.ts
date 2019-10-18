@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SidenavService } from './sidenav.service';
 import { MatSidenav } from '@angular/material';
-import { User } from '../../rest-service/entity/user';
-import { MockRestService } from '../../rest-service/mock-rest.service';
+import { User } from '../../core/rest-service/entity/user';
+import { MockRestService } from '../../core/rest-service/mock-rest.service';
 
 @Component({
   selector: 'app-sidenav',

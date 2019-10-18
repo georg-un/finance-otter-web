@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TransactionCardComponent } from './transaction-card.component';
-import {TRANSACTION1} from '../../rest-service/mock-data/transaction1';
+import {TRANSACTION1} from '../../core/rest-service/mock-data/transaction1';
 import {MatCardModule} from '@angular/material';
 
 describe('TransactionCardComponent', () => {

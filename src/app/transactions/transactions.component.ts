@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MockRestService } from '../rest-service/mock-rest.service';
-import { Transaction } from '../rest-service/entity/transaction';
+import { MockRestService } from '../core/rest-service/mock-rest.service';
+import { Transaction } from '../core/rest-service/entity/transaction';
 
 @Component({
   selector: 'app-transactions',
