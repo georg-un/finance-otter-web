@@ -5,8 +5,7 @@ import {
   createSelector,
   MetaReducer
 } from '@ngrx/store';
-import { environment } from '../../../environments/environment';
-import * as fromCore from "./core.reducer";
+import { environment } from '../../environments/environment';
 
 
 export interface State {
@@ -14,7 +13,7 @@ export interface State {
 }
 
 export const reducers: ActionReducerMap<State> = {
-  core: fromCore.reducer
+
 };
 
 

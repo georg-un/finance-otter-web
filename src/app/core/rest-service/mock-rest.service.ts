@@ -6,6 +6,7 @@ import { Payment } from './entity/payment';
 import { PAYMENT1 } from './mock-data/payment1';
 import { User } from './entity/user';
 import { USERS } from './mock-data/users';
+import { Observable, of } from "rxjs";
 
 
 @Injectable({
@@ -27,8 +28,8 @@ export class MockRestService {
     return PAYMENT1;
   }
 
-  fetchUsers(): User[] {
-    return USERS;
+  fetchUsers(): Observable<User[]> {
+    return of(USERS);
   }
 
   fetchCurrentUser(): User {

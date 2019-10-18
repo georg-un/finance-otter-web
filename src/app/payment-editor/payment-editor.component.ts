@@ -26,7 +26,9 @@ export class PaymentEditorComponent implements OnInit {
   ngOnInit() {
     this.transaction.userId = this.apiService.fetchCurrentUser().userId;
 
-    this.users = this.apiService.fetchUsers();
+    this.apiService.fetchUsers().subscribe((users: User[]) => {
+      this.users = users;
+    });
 
     this.distributionFragments = this.users.map((user: User) => {
       return {user: user, amount: null, checked: true}

@@ -12,7 +12,9 @@ export class OverviewComponent implements OnInit {
   users: User[];
 
   constructor(private mockRestService: MockRestService) {
-    this.users = mockRestService.fetchUsers();
+    mockRestService.fetchUsers().subscribe((users: User[]) => {
+      this.users = users;
+    });
   }
 
   ngOnInit() {
