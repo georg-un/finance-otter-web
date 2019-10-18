@@ -8,6 +8,15 @@ import { OverviewModule } from "./overview/overview.module";
 import { TransactionsModule } from "./transactions/transactions.module";
 import { PaymentViewModule } from "./payment-view/payment-view.module";
 import { PaymentEditorModule } from "./payment-editor/payment-editor.module";
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './store/app.effects';
+import { INITIAL_STATE } from "./store/initial-state";
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+
 
 @NgModule({
   declarations: [
@@ -21,7 +30,18 @@ import { PaymentEditorModule } from "./payment-editor/payment-editor.module";
     PaymentEditorModule,
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers, 
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+      },
+      initialState: INITIAL_STATE
+    }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([AppEffects]),
+    StoreRouterConnectingModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
