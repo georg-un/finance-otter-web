@@ -24,8 +24,8 @@ export class MockRestService {
     return TRANSACTIONS;
   }
 
-  fetchPayment(transactionId: number): Payment {
-    return PAYMENT1;
+  fetchPayment(transactionId: number): Observable<Payment> {
+    return of(PAYMENT1);
   }
 
   fetchUsers(): Observable<User[]> {

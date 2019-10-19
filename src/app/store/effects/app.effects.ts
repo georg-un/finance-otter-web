@@ -6,7 +6,6 @@ import { EMPTY } from "rxjs";
 import * as CoreActions from '../actions/core.actions';
 
 
-
 @Injectable()
 export class CoreEffects {
 
@@ -15,6 +14,16 @@ export class CoreEffects {
     mergeMap(() => this.restService.fetchUsers()
       .pipe(
         map(users => (CoreActions.userDataReceived({users}))),
+        catchError(() => EMPTY)
+      ))
+    )
+  );
+
+  loadPayments$ = createEffect(() => this.actions$.pipe(
+    ofType(CoreActions.requestPaymentData),
+    mergeMap((action) => this.restService.fetchPayment(action.transactionId)
+      .pipe(
+        map(payment => (CoreActions.paymentDataReceived({payment}))),
         catchError(() => EMPTY)
       ))
     )

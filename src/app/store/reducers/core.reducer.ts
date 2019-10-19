@@ -24,8 +24,10 @@ export const initialState: CoreState = {
 
 const coreReducer = createReducer(
   initialState,
-  on(CoreActions.requestUserData, state => ({...state, userDataLoading: true})),
-  on(CoreActions.userDataReceived, (state, {users}) => ({...state, users: users, userDataLoading: false}))
+  on(CoreActions.requestUserData, (state) => ({...state, userDataLoading: true})),
+  on(CoreActions.userDataReceived, (state, {users}) => ({...state, users: users, userDataLoading: false})),
+  on(CoreActions.requestPaymentData, (state) => ({...state, paymentDataLoading: true})),
+  on(CoreActions.paymentDataReceived, (state, {payment}) => ({...state, payment: payment, paymentDataLoading: false})),
 );
 
 export function reducer(state: CoreState | undefined, action: Action) {
