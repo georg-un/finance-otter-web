@@ -2,7 +2,7 @@
   <mat-sidenav #sidenav class="sidenav" mode="over" opened="false">
     <div class="account-card">
       <img mat-card-avatar [src]='avatar'>
-      <p>{{user.firstName}} {{user.lastName}}</p>
+      <p>{{(currentUser$ | async)?.firstName}} {{(currentUser$ | async)?.lastName}}</p>
     </div>
 
     <div class="link-container">

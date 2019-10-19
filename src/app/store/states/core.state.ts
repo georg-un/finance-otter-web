@@ -4,6 +4,7 @@ import { Payment } from "../../core/rest-service/entity/payment";
 
 export interface CoreState {
   users: User[],
+  currentUserId: number,
   userDataLoading: boolean
   transactions: Transaction[],
   transactionDataLoading: boolean,
@@ -13,6 +14,7 @@ export interface CoreState {
 
 export const initialState: CoreState = {
   users: null,
+  currentUserId: 1,
   userDataLoading: false,
   transactions: null,
   transactionDataLoading: false,

@@ -33,8 +33,4 @@ export class MockRestService {
     return of(USERS).pipe(delay(1500));
   }
 
-  fetchCurrentUser(): Observable<User> {
-    return of(USERS[0]).pipe(delay(1000));
-  }
-
 }

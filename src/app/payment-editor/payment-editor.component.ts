@@ -3,6 +3,9 @@ import { MockRestService } from '../core/rest-service/mock-rest.service';
 import { User } from '../core/rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
 import { Transaction } from "../core/rest-service/entity/transaction";
+import { AppState } from "../store/states/app.state";
+import { Store } from "@ngrx/store";
+import { selectCurrentUser } from "../store/selectors/core.selectors";
 
 @Component({
   selector: 'app-payment-editor',
@@ -21,11 +24,12 @@ export class PaymentEditorComponent implements OnInit {
   users: User[];
   distributionFragments: {user: User, amount: number, checked: boolean}[];
 
-  constructor(private apiService: MockRestService) { }
+  constructor(private apiService: MockRestService,
+              private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.apiService.fetchCurrentUser().subscribe(user => {
-      this.transaction.userId = user.userId;
+    this.store.select(selectCurrentUser).subscribe((currentUser: User) => {
+      this.transaction.userId = currentUser.userId;
     });
 
     this.apiService.fetchUsers().subscribe((users: User[]) => {

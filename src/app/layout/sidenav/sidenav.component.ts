@@ -1,29 +1,42 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidenavService } from './sidenav.service';
 import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
 import { MockRestService } from '../../core/rest-service/mock-rest.service';
+import { Store } from "@ngrx/store";
+import { AppState } from "../../store/states/app.state";
+import { selectCurrentUser } from "../../store/selectors/core.selectors";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnInit, OnDestroy {
+
+  private currentUser$: Observable<User>;
+  private onDestroy$: Subject<boolean> = new Subject();
+  avatar: string = 'assets/otter-avatar.jpg';
 
   @ViewChild('sidenav') public sidenav: MatSidenav;
-  private user: User;
-  avatar: any = 'assets/otter-avatar.jpg';
 
   constructor(private sidenavService: SidenavService,
-              private mockRestService: MockRestService
+              private mockRestService: MockRestService,
+              private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.mockRestService.fetchCurrentUser().subscribe(user => {
-      this.user = user;
-    });
+    this.currentUser$ = this.store
+      .select(selectCurrentUser)
+      .pipe(takeUntil(this.onDestroy$));
     this.sidenavService.setSidenav(this.sidenav);
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next(true);
+    this.onDestroy$.complete();
   }
 
 }
