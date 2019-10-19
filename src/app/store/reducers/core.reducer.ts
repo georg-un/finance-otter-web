@@ -1,26 +1,7 @@
 import { Action, createReducer, on } from "@ngrx/store";
-import { User } from "../../core/rest-service/entity/user";
 import * as CoreActions from '../actions/core.actions';
-import { Transaction } from "../../core/rest-service/entity/transaction";
-import { Payment } from "../../core/rest-service/entity/payment";
+import { CoreState, initialState } from "../states/core.state";
 
-export interface CoreState {
-  users: User[],
-  userDataLoading: boolean
-  transactions: Transaction[],
-  transactionDataLoading: boolean,
-  payment: Payment,
-  paymentDataLoading: boolean
-}
-
-export const initialState: CoreState = {
-  users: null,
-  userDataLoading: false,
-  transactions: null,
-  transactionDataLoading: false,
-  payment: null,
-  paymentDataLoading: false
-};
 
 const coreReducer = createReducer(
   initialState,

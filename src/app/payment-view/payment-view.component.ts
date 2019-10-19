@@ -4,7 +4,7 @@ import { Payment } from '../core/rest-service/entity/payment';
 import { Store } from "@ngrx/store";
 import * as CoreActions from '../store/actions/core.actions';
 import { selectPayment } from "../store/selectors/core.selectors";
-import { AppState } from "../store/app.state";
+import { AppState } from "../store/states/app.state";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 

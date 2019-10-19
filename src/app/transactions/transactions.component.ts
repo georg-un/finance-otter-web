@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MockRestService } from '../core/rest-service/mock-rest.service';
 import { Transaction } from '../core/rest-service/entity/transaction';
-import { AppState } from "../store/app.state";
+import { AppState } from "../store/states/app.state";
 import { Store } from "@ngrx/store";
 import * as CoreActions from '../store/actions/core.actions';
 import { selectTransactions } from "../store/selectors/core.selectors";
