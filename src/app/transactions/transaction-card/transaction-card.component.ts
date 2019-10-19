@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Transaction } from '../../core/rest-service/entity/transaction';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-transaction-card',
@@ -11,10 +12,14 @@ export class TransactionCardComponent implements OnInit {
   @Input() transaction: Transaction;
   avatar: any = 'assets/otter-avatar.jpg';
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
+  }
+
+  onClick(): void {
+    this.router.navigateByUrl('/payment/' + this.transaction.userId);
   }
 
 }

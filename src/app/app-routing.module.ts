@@ -25,7 +25,7 @@ const routes: Routes = [
         component: OverviewComponent
       },
       {
-        path: 'payment',
+        path: 'payment/:transactionId',
         component: PaymentViewComponent
       },
       {
