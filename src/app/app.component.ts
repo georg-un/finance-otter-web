@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { requestUserData } from "./store/actions/core.actions";
+import { AppState } from "./store/app.state";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { requestUserData } from "./store/actions/core.actions";
 export class AppComponent implements OnInit {
 
   constructor(
-    private store: Store<any>
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
