@@ -29,6 +29,16 @@ export class CoreEffects {
     )
   );
 
+  loadTransactions$ = createEffect(() => this.actions$.pipe(
+    ofType(CoreActions.requestTransactionData),
+    mergeMap((action) => this.restService.fetchTransactions(action.offset, action.limit)
+      .pipe(
+        map(transactions => (CoreActions.transactionDataReceived({transactions}))),
+        catchError(() => EMPTY)
+      ))
+    )
+  );
+
   constructor(private actions$: Actions,
               private restService: MockRestService) {}
 

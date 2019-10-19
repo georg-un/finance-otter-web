@@ -20,8 +20,8 @@ export class MockRestService {
     return TRANSACTION1;
   }
 
-  fetchTransactions(): Transaction[] {
-    return TRANSACTIONS;
+  fetchTransactions(offset: number, limit: number): Observable<Transaction[]> {
+    return of(TRANSACTIONS);
   }
 
   fetchPayment(transactionId: number): Observable<Payment> {
