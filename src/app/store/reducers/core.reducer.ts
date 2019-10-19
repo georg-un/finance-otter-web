@@ -28,6 +28,7 @@ const coreReducer = createReducer(
   on(CoreActions.userDataReceived, (state, {users}) => ({...state, users: users, userDataLoading: false})),
   on(CoreActions.requestPaymentData, (state) => ({...state, paymentDataLoading: true})),
   on(CoreActions.paymentDataReceived, (state, {payment}) => ({...state, payment: payment, paymentDataLoading: false})),
+  on(CoreActions.clearPaymentData, (state) => ({...state, payment: null, paymentDataLoading: false}))
 );
 
 export function reducer(state: CoreState | undefined, action: Action) {

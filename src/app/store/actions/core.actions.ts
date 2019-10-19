@@ -20,3 +20,7 @@ export const paymentDataReceived = createAction(
   '[Core] Payment Data Received',
   props<{payment: Payment}>()
 );
+
+export const clearPaymentData = createAction(
+  '[Core] Clear Payment Data'
+);
