@@ -1,44 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { MockRestService } from '../core/rest-service/mock-rest.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
 import { Transaction } from "../core/rest-service/entity/transaction";
 import { AppState } from "../store/states/app.state";
 import { Store } from "@ngrx/store";
-import { selectCurrentUser } from "../store/selectors/core.selectors";
+import { selectCurrentUser, selectUsers } from "../store/selectors/core.selectors";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-payment-editor',
   templateUrl: './payment-editor.component.html',
   styleUrls: ['./payment-editor.component.scss']
 })
-export class PaymentEditorComponent implements OnInit {
+export class PaymentEditorComponent implements OnInit, OnDestroy {
 
   // TODO: Add animation to slide custom debit fields in and out
   // TODO: Add validation before upload
 
   transaction: Transaction = new Transaction();
-
   customDistribution = false;
+  onDestroy$: Subject<boolean> = new Subject();
 
   users: User[];
   distributionFragments: {user: User, amount: number, checked: boolean}[];
 
-  constructor(private apiService: MockRestService,
-              private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.store.select(selectCurrentUser).subscribe((currentUser: User) => {
-      this.transaction.userId = currentUser.userId;
-    });
+    this.store.select(selectCurrentUser)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((currentUser: User) => {
+        this.transaction.userId = currentUser.userId;
+      });
 
-    this.apiService.fetchUsers().subscribe((users: User[]) => {
-      this.users = users;
-    });
+    this.store.select(selectUsers)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((users: User[]) => {
+        this.users = users;
+        this.distributionFragments = this.users.map((user: User) => {
+          return {user: user, amount: null, checked: true}
+        });
+      });
 
-    this.distributionFragments = this.users.map((user: User) => {
-      return {user: user, amount: null, checked: true}
-    });
+
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next(true);
+    this.onDestroy$.complete();
   }
 
   onDistributionToggleChange(change: MatSlideToggleChange): void {

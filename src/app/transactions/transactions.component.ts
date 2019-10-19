@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MockRestService } from '../core/rest-service/mock-rest.service';
 import { Transaction } from '../core/rest-service/entity/transaction';
 import { AppState } from "../store/states/app.state";
 import { Store } from "@ngrx/store";
@@ -18,9 +17,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   transactions: Transaction[];
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private mockRestService: MockRestService,
-              private store: Store<AppState>
-  ) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
     this.store.dispatch(CoreActions.requestTransactionData({offset: 0, limit: 0}));

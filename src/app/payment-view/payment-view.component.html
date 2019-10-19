@@ -1,16 +1,16 @@
 <div class="payment-header">
 
   <div class="payment-header-shop">
-    <p>{{payment.transaction.shop | titlecase}}</p>
+    <p>{{(payment$ | async)?.transaction.shop | titlecase}}</p>
   </div>
   <div class="payment-header-amount">
-    <p>€ {{payment.transaction.sumAmount}}</p>
+    <p>€ {{(payment$ | async)?.transaction.sumAmount}}</p>
   </div>
   <div class="payment-header-pic-icon">
     <a href='#'><i class="material-icons icon-white">photo</i></a>
   </div>
   <div class="payment-header-category">
-    <p>{{payment.transaction.category | lowercase}}</p>
+    <p>{{(payment$ | async)?.transaction.category | lowercase}}</p>
   </div>
   <div class="payment-header-trash-icon">
     <i id='delete-button' class="material-icons icon-white">delete</i>
@@ -21,11 +21,11 @@
 <div class="detail-container z-depth-1-reversed">
 
   <div id='payment-description'>
-    <p>{{payment.transaction.description}}</p>
+    <p>{{(payment$ | async)?.transaction.description}}</p>
   </div>
   <p class="detail-title">DISTRIBUTION</p>
   <div class="debit-blockquote">
-    <ng-container *ngFor="let debit of payment.debits">
+    <ng-container *ngFor="let debit of (payment$ | async)?.debits">
       <app-debit-card [debit]="debit"></app-debit-card>
     </ng-container>
   </div>

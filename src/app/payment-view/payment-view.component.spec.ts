@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PaymentViewComponent } from './payment-view.component';
-import {MockRestService} from '../core/rest-service/mock-rest.service';
 import {DebitCardComponent} from './debit-card/debit-card.component';
 
 describe('PaymentViewComponent', () => {
@@ -14,9 +13,7 @@ describe('PaymentViewComponent', () => {
         PaymentViewComponent,
         DebitCardComponent,
       ],
-      providers: [
-        {provide: MockRestService, useClass: MockRestService},
-      ]
+      providers: []
     })
     .compileComponents();
   }));

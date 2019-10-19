@@ -3,6 +3,16 @@ import { createSelector } from "@ngrx/store";
 
 export const selectCore = (state: AppState) => state.core;
 
+export const selectPayment = createSelector(
+  selectCore,
+  state => state.payment
+);
+
+export const selectTransactions = createSelector(
+  selectCore,
+  state => state.transactions
+);
+
 export const selectUsers = createSelector(
   selectCore,
   state => state.users

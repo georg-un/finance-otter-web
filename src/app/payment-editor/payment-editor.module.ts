@@ -10,7 +10,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule,
+  MatMenuModule, MatNativeDateModule,
   MatSelectModule,
   MatSlideToggleModule
 } from "@angular/material";
@@ -25,6 +25,7 @@ import {
     FormsModule,
     MatSelectModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     MatSlideToggleModule,
     MatIconModule,
     MatCheckboxModule,

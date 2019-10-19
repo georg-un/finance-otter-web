@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidenavService } from './sidenav.service';
 import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
-import { MockRestService } from '../../core/rest-service/mock-rest.service';
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store/states/app.state";
 import { selectCurrentUser } from "../../store/selectors/core.selectors";
@@ -23,7 +22,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') public sidenav: MatSidenav;
 
   constructor(private sidenavService: SidenavService,
-              private mockRestService: MockRestService,
               private store: Store<AppState>
   ) { }
 
