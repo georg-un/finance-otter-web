@@ -24,7 +24,9 @@ export class PaymentEditorComponent implements OnInit {
   constructor(private apiService: MockRestService) { }
 
   ngOnInit() {
-    this.transaction.userId = this.apiService.fetchCurrentUser().userId;
+    this.apiService.fetchCurrentUser().subscribe(user => {
+      this.transaction.userId = user.userId;
+    });
 
     this.apiService.fetchUsers().subscribe((users: User[]) => {
       this.users = users;

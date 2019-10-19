@@ -16,11 +16,13 @@ export class SidenavComponent implements OnInit {
   avatar: any = 'assets/otter-avatar.jpg';
 
   constructor(private sidenavService: SidenavService,
-              private mockRestService: MockRestService) {
-    this.user = mockRestService.fetchCurrentUser();
-  }
+              private mockRestService: MockRestService
+  ) { }
 
   ngOnInit() {
+    this.mockRestService.fetchCurrentUser().subscribe(user => {
+      this.user = user;
+    });
     this.sidenavService.setSidenav(this.sidenav);
   }
 
