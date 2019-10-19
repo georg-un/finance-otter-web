@@ -6,6 +6,6 @@ export const setFAB = createAction(
 );
 
 export const setFABLink = createAction(
-  '[Layout] Set FAB Link]',
+  '[Layout] Set FAB Link',
   props<{fabLink: string}>()
 );

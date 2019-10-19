@@ -3,7 +3,7 @@ import { AppState } from "../store/states/app.state";
 import { Store } from "@ngrx/store";
 import { selectFAB, selectFABLink } from "../store/selectors/layout.selectors";
 import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Router } from "@angular/router";
 
 @Component({
@@ -39,7 +39,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   onFABClick(): void {
-    this.store.select(selectFABLink).subscribe((fabLink: string) => {
+    this.store.select(selectFABLink)
+      .pipe(take(1))
+      .subscribe((fabLink: string) => {
       this.router.navigateByUrl(fabLink);
     });
 
