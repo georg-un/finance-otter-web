@@ -1,7 +1,7 @@
 import { AppState } from "../states/app.state";
 import { createSelector } from "@ngrx/store";
 
-export const selectCore = (state: AppState) => state.core;
+const selectCore = (state: AppState) => state.core;
 
 export const selectPayment = createSelector(
   selectCore,

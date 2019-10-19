@@ -3,8 +3,8 @@
     <app-header></app-header>
     <div class="main-content">
       <router-outlet ></router-outlet>
-      <button mat-fab class="fab-button">
-        <mat-icon>add</mat-icon>
+      <button mat-fab class="fab-button" *ngIf="showFAB">
+        <mat-icon>{{fabIcon}}</mat-icon>
       </button>
     </div>
     </app-sidenav>
