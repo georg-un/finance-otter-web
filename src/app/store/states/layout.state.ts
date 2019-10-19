@@ -1,7 +1,9 @@
 export interface LayoutState {
-  fab: string
+  fab: string,
+  fabLink: string
 }
 
 export const initialState: LayoutState = {
-  fab: 'add'
+  fab: 'add',
+  fabLink: 'edit'
 };

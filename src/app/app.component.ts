@@ -4,7 +4,7 @@ import { requestUserData } from "./store/actions/core.actions";
 import { AppState } from "./store/states/app.state";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs/operators";
-import { setFAB } from "./store/actions/layout.actions";
+import { setFAB, setFABLink } from "./store/actions/layout.actions";
 
 @Component({
   selector: 'app-root',
@@ -27,16 +27,18 @@ export class AppComponent implements OnInit {
       switch (route.url.split('/')[1]) {
         case 'transactions':
           this.store.dispatch(setFAB({fab: 'add'}));
+          this.store.dispatch(setFABLink({fabLink: '/edit'}));
           break;
         case 'overview':
           this.store.dispatch(setFAB({fab: 'add'}));
+          this.store.dispatch(setFABLink({fabLink: '/edit'}));
           break;
         case 'edit':
           this.store.dispatch(setFAB({fab: null}));
           break;
         case 'payment':
-          console.log(route.url);
           this.store.dispatch(setFAB({fab: 'edit'}));
+          this.store.dispatch(setFABLink({fabLink: '/edit/' + route.url.split('/')[2]}));
           break;
       }
     });

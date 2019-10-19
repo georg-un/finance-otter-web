@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from "../store/states/app.state";
 import { Store } from "@ngrx/store";
-import { selectFAB } from "../store/selectors/layout.selectors";
+import { selectFAB, selectFABLink } from "../store/selectors/layout.selectors";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-layout',
@@ -16,7 +17,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   protected fabIcon: string = 'add';
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>,
+              private router: Router) { }
 
   ngOnInit() {
     this.store.select(selectFAB)
@@ -34,6 +36,13 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.onDestroy$.next(true);
     this.onDestroy$.complete();
+  }
+
+  onFABClick(): void {
+    this.store.select(selectFABLink).subscribe((fabLink: string) => {
+      this.router.navigateByUrl(fabLink);
+    });
+
   }
 
 }

@@ -7,3 +7,8 @@ export const selectFAB = createSelector(
   selectLayout,
   state => state.fab
 );
+
+export const selectFABLink = createSelector(
+  selectLayout,
+  state => state.fabLink
+);

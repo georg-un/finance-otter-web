@@ -3,7 +3,11 @@
     <app-header></app-header>
     <div class="main-content">
       <router-outlet ></router-outlet>
-      <button mat-fab class="fab-button" *ngIf="showFAB">
+      <button
+        mat-fab class="fab-button"
+        *ngIf="showFAB"
+        (click)="onFABClick()"
+      >
         <mat-icon>{{fabIcon}}</mat-icon>
       </button>
     </div>

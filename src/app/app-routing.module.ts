@@ -32,6 +32,10 @@ const routes: Routes = [
         path: 'edit',
         component: PaymentEditorComponent
       },
+      {
+        path: 'edit/:transactionId',
+        component: PaymentEditorComponent
+      }
     ]
   }
 ];
