@@ -4,7 +4,7 @@ import { requestUserData } from "./store/actions/core.actions";
 import { AppState } from "./store/states/app.state";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter } from "rxjs/operators";
-import { setFAB, setFABLink } from "./store/actions/layout.actions";
+import { setFAB, setFABLink, setHeaderButtons } from "./store/actions/layout.actions";
 
 @Component({
   selector: 'app-root',
@@ -28,17 +28,21 @@ export class AppComponent implements OnInit {
         case 'transactions':
           this.store.dispatch(setFAB({fab: 'add'}));
           this.store.dispatch(setFABLink({fabLink: '/edit'}));
+          this.store.dispatch(setHeaderButtons({leftHeaderButton: 'menu', rightHeaderButton: 'sync'}));
           break;
         case 'overview':
           this.store.dispatch(setFAB({fab: 'add'}));
           this.store.dispatch(setFABLink({fabLink: '/edit'}));
+          this.store.dispatch(setHeaderButtons({leftHeaderButton: 'menu', rightHeaderButton: 'sync'}));
           break;
         case 'edit':
           this.store.dispatch(setFAB({fab: null}));
+          this.store.dispatch(setHeaderButtons({leftHeaderButton: 'clear', rightHeaderButton: 'done'}));
           break;
         case 'payment':
           this.store.dispatch(setFAB({fab: 'edit'}));
           this.store.dispatch(setFABLink({fabLink: '/edit/' + route.url.split('/')[2]}));
+          this.store.dispatch(setHeaderButtons({leftHeaderButton: 'clear', rightHeaderButton: 'sync'}));
           break;
       }
     });

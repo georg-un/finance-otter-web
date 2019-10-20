@@ -12,3 +12,13 @@ export const selectFABLink = createSelector(
   selectLayout,
   state => state.fabLink
 );
+
+export const selectLeftHeaderButton = createSelector(
+  selectLayout,
+  state => state.leftHeaderButton
+);
+
+export const selectRightHeaderButton = createSelector(
+  selectLayout,
+  state => state.rightHeaderButton
+);
