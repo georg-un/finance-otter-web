@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Transaction } from '../../core/rest-service/entity/transaction';
-import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-transaction-card',
@@ -12,14 +11,15 @@ export class TransactionCardComponent implements OnInit {
   @Input() transaction: Transaction;
   avatar: any = 'assets/otter-avatar.jpg';
 
-  constructor(private router: Router) {
-  }
+  @Output() cardClick: EventEmitter<number> = new EventEmitter();
+
+  constructor() { }
 
   ngOnInit() {
   }
 
   onClick(): void {
-    this.router.navigateByUrl('/payment/' + this.transaction.userId);
+    this.cardClick.emit(this.transaction.transactionId);
   }
 
 }
