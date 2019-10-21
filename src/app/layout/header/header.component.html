@@ -1,0 +1,8 @@
+<mat-toolbar color="primary" class="mat-elevation-z4 header">
+  <button mat-icon-button (click)="onLeftButtonClick()">
+    <mat-icon>{{leftHeaderButton}}</mat-icon>
+  </button>
+  <button mat-icon-button (click)="onRightButtonClick()" *ngIf="rightHeaderButton">
+    <mat-icon>{{rightHeaderButton}}</mat-icon>
+  </button>
+</mat-toolbar>

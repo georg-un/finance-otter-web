@@ -1,0 +1,18 @@
+.user-card {
+  display: grid;
+  grid-template-columns: 0.1fr 0.6fr 0.4fr;
+  grid-column-gap: 2vh;
+  margin-bottom: 2.5vh;
+}
+
+.user-card-avatar {
+  grid-column: 1;
+}
+
+.user-card-name {
+  grid-column: 2;
+}
+
+.user-card-amount {
+  grid-column: 3;
+}

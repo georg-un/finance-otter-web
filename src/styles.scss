@@ -1,0 +1,28 @@
+// @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import "~material-design-icons/iconfont/material-icons.css";
+@import '~@angular/material/theming';
+@import "assets/variables";
+
+@include mat-core();
+@include angular-material-theme($theme);
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+p {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+mat-card {
+  margin: 8px 8px 0 8px;
+  padding: 16px 16px 16px 16px;
+}

@@ -1,0 +1,16 @@
+@import "../../assets/variables";
+
+.main-content {
+  margin-top: 56px;
+  height: calc(100vh - 56px);
+  padding-top: 2px;
+  background-color: $light-primary;
+  z-index: 1;
+}
+
+.fab-button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 2;
+}
