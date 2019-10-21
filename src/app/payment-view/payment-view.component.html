@@ -1,0 +1,38 @@
+<div class="payment-header">
+
+  <div class="payment-header-shop">
+    <p>{{(payment$ | async)?.transaction.shop | titlecase}}</p>
+  </div>
+  <div class="payment-header-amount">
+    <p>€ {{(payment$ | async)?.transaction.sumAmount}}</p>
+  </div>
+  <div class="payment-header-pic-icon">
+    <a href='#'><i class="material-icons icon-white">photo</i></a>
+  </div>
+  <div class="payment-header-category">
+    <p>{{(payment$ | async)?.transaction.category | lowercase}}</p>
+  </div>
+  <div class="payment-header-trash-icon">
+    <i id='delete-button' class="material-icons icon-white">delete</i>
+  </div>
+
+</div>
+
+<div class="detail-container z-depth-1-reversed">
+
+  <div id='payment-description'>
+    <p>{{(payment$ | async)?.transaction.description}}</p>
+  </div>
+  <p class="detail-title">DISTRIBUTION</p>
+  <div class="debit-blockquote">
+    <ng-container *ngFor="let debit of (payment$ | async)?.debits">
+      <app-debit-card [debit]="debit"></app-debit-card>
+    </ng-container>
+  </div>
+
+</div>
+
+
+<!--a id='edit-button' class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
+  <i class="material-icons">edit</i>
+</a-->

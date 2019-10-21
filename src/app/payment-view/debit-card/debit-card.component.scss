@@ -1,0 +1,18 @@
+@import "../../../assets/variables";
+
+.debit-card {
+  display: grid;
+  grid-template-columns: 0.6fr 0.4fr;
+  grid-gap: 2vh;
+  margin: 16px 0 16px 0;
+}
+
+.debit-card-user {
+  grid-column: 1;
+  font-size: large;
+}
+
+.debit-card-amount {
+  grid-column: 2;
+  font-size: large;
+}

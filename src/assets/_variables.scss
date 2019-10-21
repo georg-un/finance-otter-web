@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+$primary: mat-palette($mat-blue,800);
+$accent: mat-palette($mat-red,600);
+$theme: mat-light-theme($primary, $accent);
+
+$very-light-primary: #E8F2FC; // 95%
+$light-primary: #E3F2FD;  // 50
+$darker-light-primary: #90CAF9;  // 200
+
+$light-accent: #FFEBEE;  // 50
+$darker-light-accent: #EF9A9A;  // 200
