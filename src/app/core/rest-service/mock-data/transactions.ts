@@ -9,9 +9,6 @@ export const TRANSACTIONS: Transaction[] = [
     shop: 'Bio Shop',
     description: 'Needed stuff',
     billId: null,
-    username: 'alice',
-    firstName: 'Alice',
-    lastName: 'Cooper',
     sumAmount: 40.86
   },
   {
@@ -22,9 +19,6 @@ export const TRANSACTIONS: Transaction[] = [
     shop: 'Pet Store',
     description: 'Bought new dog food',
     billId: null,
-    username: 'bob',
-    firstName: 'Bob',
-    lastName: 'Ross',
     sumAmount: 64.02
   },
   {
@@ -35,9 +29,6 @@ export const TRANSACTIONS: Transaction[] = [
     shop: 'Drugstore',
     description: null,
     billId: null,
-    username: 'charlie',
-    firstName: 'Charlie',
-    lastName: 'Brown',
     sumAmount: 22.32
   }
 ];

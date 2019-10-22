@@ -26,13 +26,8 @@
   <p class="detail-title">DISTRIBUTION</p>
   <div class="debit-blockquote">
     <ng-container *ngFor="let debit of (payment$ | async)?.debits">
-      <app-debit-card [debit]="debit"></app-debit-card>
+      <app-debit-card [debit]="debit" [user]="(findUser(debit.debtorId) | async)"></app-debit-card>
     </ng-container>
   </div>
 
 </div>
-
-
-<!--a id='edit-button' class="btn-floating btn-large waves-effect waves-light red hover-button2 z-depth-3">
-  <i class="material-icons">edit</i>
-</a-->

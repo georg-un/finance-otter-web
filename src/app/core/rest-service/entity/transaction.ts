@@ -6,8 +6,5 @@ export class Transaction {
   shop: string;
   description: string;
   billId: string;
-  username: string;
-  firstName: string;
-  lastName: string;
   sumAmount: number;
 }

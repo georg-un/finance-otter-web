@@ -8,8 +8,5 @@ export const TRANSACTION1: Transaction = {
   shop: 'Bio Shop',
   description: 'Needed stuff',
   billId: null,
-  username: 'alice',
-  firstName: 'Alice',
-  lastName: 'Cooper',
   sumAmount: 40.86
 };
