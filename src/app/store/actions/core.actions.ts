@@ -35,3 +35,13 @@ export const paymentDataReceived = createAction(
 export const clearPaymentData = createAction(
   '[Core] Clear Payment Data'
 );
+
+export const addNewPayment = createAction(
+  '[Core] Add New Payment',
+  props<{payment: Payment}>()
+);
+
+export const paymentUploadFailed = createAction(
+  '[Core] Payment Upload Failed',
+  props<{transactionId: number}>()
+);

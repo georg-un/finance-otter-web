@@ -33,4 +33,10 @@ export class MockRestService {
     return of(USERS).pipe(delay(1500));
   }
 
+  uploadNewPayment(payment: Payment): Observable<{transactionId: number, code: number, message: string}> {
+    return of({transactionId: payment.transaction.transactionId, code: 200, message: null}).pipe(
+      delay(500)
+    );
+  }
+
 }

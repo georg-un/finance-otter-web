@@ -39,6 +39,20 @@ export class CoreEffects {
     )
   );
 
+  uploadPayment$ = createEffect(() => this.actions$.pipe(
+    ofType(CoreActions.addNewPayment),
+    mergeMap((action) => this.restService.uploadNewPayment(action.payment)
+      .pipe(
+        map(result => {
+            if (result.code !== 200) {
+              console.log(result.code, result.message);  // TODO: Show this in a toast message
+              return CoreActions.paymentUploadFailed({transactionId: result.transactionId});
+            }
+          }),
+        catchError(() => EMPTY))
+      )
+  ));
+
   constructor(private actions$: Actions,
               private restService: MockRestService) {}
 
