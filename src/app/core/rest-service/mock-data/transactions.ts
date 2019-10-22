@@ -4,7 +4,7 @@ export const TRANSACTIONS: Transaction[] = [
   {
     transactionId: 1,
     userId: 1,
-    date: new Date(1554415200000),
+    date: 1554415200000,
     category: 'Groceries',
     shop: 'Bio Shop',
     description: 'Needed stuff',
@@ -14,7 +14,7 @@ export const TRANSACTIONS: Transaction[] = [
   {
     transactionId: 2,
     userId: 2,
-    date: new Date(1554415200000),
+    date: 1554415200000,
     category: 'Pets',
     shop: 'Pet Store',
     description: 'Bought new dog food',
@@ -24,7 +24,7 @@ export const TRANSACTIONS: Transaction[] = [
   {
     transactionId: 3,
     userId: 3,
-    date: new Date(1554415200000),
+    date: 1554415200000,
     category: 'Hygiene',
     shop: 'Drugstore',
     description: null,

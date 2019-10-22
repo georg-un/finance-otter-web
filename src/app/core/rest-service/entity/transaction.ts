@@ -1,7 +1,7 @@
 export class Transaction {
   transactionId: number;
   userId: number;
-  date: Date;
+  date: number;
   category: string;
   shop: string;
   description: string;

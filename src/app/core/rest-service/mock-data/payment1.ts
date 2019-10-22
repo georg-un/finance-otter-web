@@ -3,7 +3,7 @@ import { Payment } from '../entity/payment';
 export const PAYMENT1: Payment =
   {
     transaction: {
-      date: new Date(1554415200000),
+      date: 1554415200000,
       category: 'Groceries',
       shop: 'Bio Shop',
       description: null,
