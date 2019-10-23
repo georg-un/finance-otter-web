@@ -11,7 +11,7 @@ export class TransactionCardComponent implements OnInit {
   @Input() transaction: Transaction;
   avatar: any = 'assets/otter-avatar.jpg';
 
-  @Output() cardClick: EventEmitter<number> = new EventEmitter();
+  @Output() cardClick: EventEmitter<string> = new EventEmitter();
 
   constructor() { }
 

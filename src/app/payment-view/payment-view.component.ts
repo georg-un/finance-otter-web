@@ -18,7 +18,7 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
 
   private payment$: Observable<Payment>;
   private users$: Observable<User[]>;
-  private transactionId: number;
+  private transactionId: string;
 
   private onDestroy$: Subject<boolean> = new Subject();
 
@@ -29,7 +29,7 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
     this.users$ = this.store.select(selectUsers);
 
     this.route.paramMap.subscribe(params => {
-      this.transactionId = parseInt(params.get('transactionId'));
+      this.transactionId = params.get('transactionId');
     });
 
     this.store.dispatch(CoreActions.requestPaymentData({transactionId: this.transactionId}));

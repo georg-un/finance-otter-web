@@ -9,17 +9,17 @@ export const PAYMENT1: Payment =
       description: null,
       billId: null,
       userId: 1,
-      transactionId: 1,
+      transactionId: 'krSe.1554415200000',
       sumAmount: 40.86
     },
     debits: [
       {
-        debitId: 1,
+        debitId: 'krSe.15544152000234',
         debtorId: 2,
         amount: 20.43
       },
       {
-        debitId: 2,
+        debitId: 'krSe.15544152000456',
         debtorId: 3,
         amount: 20.43
       }

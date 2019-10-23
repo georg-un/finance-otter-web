@@ -2,7 +2,7 @@ import { Transaction } from '../entity/transaction';
 
 export const TRANSACTIONS: Transaction[] = [
   {
-    transactionId: 1,
+    transactionId: 'rfSf.1554415200743',
     userId: 1,
     date: 1554415200000,
     category: 'Groceries',
@@ -12,7 +12,7 @@ export const TRANSACTIONS: Transaction[] = [
     sumAmount: 40.86
   },
   {
-    transactionId: 2,
+    transactionId: 'rfBs.1554415200833',
     userId: 2,
     date: 1554415200000,
     category: 'Pets',
@@ -22,7 +22,7 @@ export const TRANSACTIONS: Transaction[] = [
     sumAmount: 64.02
   },
   {
-    transactionId: 3,
+    transactionId: 'rSfv.1554415207443',
     userId: 3,
     date: 1554415200000,
     category: 'Hygiene',

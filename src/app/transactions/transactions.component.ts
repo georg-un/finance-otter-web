@@ -35,7 +35,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.onDestroy$.complete();
   }
 
-  onCardClick($event: number): void {
+  onCardClick($event: string): void {
     this.router.navigateByUrl('/payment/' + $event);
   }
 

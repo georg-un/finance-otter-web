@@ -24,7 +24,7 @@ export const transactionDataReceived = createAction(
 
 export const requestPaymentData = createAction(
   '[Core] Request Payment Data',
-  props<{transactionId: number}>()
+  props<{transactionId: string}>()
 );
 
 export const paymentDataReceived = createAction(
@@ -43,5 +43,5 @@ export const addNewPayment = createAction(
 
 export const paymentUploadFailed = createAction(
   '[Core] Payment Upload Failed',
-  props<{transactionId: number}>()
+  props<{transactionId: string}>()
 );

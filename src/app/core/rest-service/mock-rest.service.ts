@@ -17,7 +17,7 @@ export class MockRestService {
 
   constructor() { }
 
-  fetchTransaction(transactionId: number): Observable<Transaction> {
+  fetchTransaction(transactionId: string): Observable<Transaction> {
     return of(TRANSACTION1).pipe(delay(1000));
   }
 
@@ -25,7 +25,7 @@ export class MockRestService {
     return of(TRANSACTIONS).pipe(delay(1500));
   }
 
-  fetchPayment(transactionId: number): Observable<Payment> {
+  fetchPayment(transactionId: string): Observable<Payment> {
     return of(PAYMENT1).pipe(delay(1500));
   }
 
@@ -33,7 +33,7 @@ export class MockRestService {
     return of(USERS).pipe(delay(1500));
   }
 
-  uploadNewPayment(payment: Payment): Observable<{transactionId: number, code: number, message: string}> {
+  uploadNewPayment(payment: Payment): Observable<{transactionId: string, code: number, message: string}> {
     return of({transactionId: payment.transaction.transactionId, code: 200, message: null}).pipe(
       delay(500)
     );
