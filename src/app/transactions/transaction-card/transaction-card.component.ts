@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Transaction } from '../../core/rest-service/entity/transaction';
+import { Payment } from "../../core/rest-service/entity/payment";
 
 @Component({
   selector: 'app-transaction-card',
@@ -8,7 +8,7 @@ import { Transaction } from '../../core/rest-service/entity/transaction';
 })
 export class TransactionCardComponent implements OnInit {
 
-  @Input() transaction: Transaction;
+  @Input() payment: Payment;
   avatar: any = 'assets/otter-avatar.jpg';
 
   @Output() cardClick: EventEmitter<string> = new EventEmitter();
@@ -19,7 +19,7 @@ export class TransactionCardComponent implements OnInit {
   }
 
   onClick(): void {
-    this.cardClick.emit(this.transaction.transactionId);
+    this.cardClick.emit(this.payment.paymentId);
   }
 
 }

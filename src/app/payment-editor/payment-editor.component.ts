@@ -1,12 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
-import { Transaction } from "../core/rest-service/entity/transaction";
 import { AppState } from "../store/states/app.state";
 import { Store } from "@ngrx/store";
 import { selectCurrentUser, selectUsers } from "../store/selectors/core.selectors";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { Payment } from "../core/rest-service/entity/payment";
+import { IdGeneratorService } from "../core/id-generator.service";
+import { Debit } from "../core/rest-service/entity/debit";
+import { addNewPayment } from "../store/actions/core.actions";
+import { EditorService } from "./editor.service";
 
 @Component({
   selector: 'app-payment-editor',
@@ -18,20 +22,22 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
   // TODO: Add animation to slide custom debit fields in and out
   // TODO: Add validation before upload
 
-  transaction: Transaction = new Transaction();
+  payment: Payment = new Payment();
   customDistribution = false;
   onDestroy$: Subject<boolean> = new Subject();
 
   users: User[];
   distributionFragments: {user: User, amount: number, checked: boolean}[];
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>,
+              private editorService: EditorService,
+              private idGeneratorService: IdGeneratorService) { }
 
   ngOnInit() {
     this.store.select(selectCurrentUser)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((currentUser: User) => {
-        this.transaction.userId = currentUser.userId;
+        this.payment.userId = currentUser.userId;
       });
 
     this.store.select(selectUsers)
@@ -43,12 +49,66 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
         });
       });
 
-
+    this.editorService.addPaymentTrigger
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(() => {
+        this.submitPayment();
+      })
   }
 
   ngOnDestroy(): void {
     this.onDestroy$.next(true);
     this.onDestroy$.complete();
+  }
+
+  submitPayment(): void {
+    if (!this.isPaymentValid()) {
+      return
+    }
+    this.generatePayment();
+    this.store.dispatch(
+      addNewPayment({
+        payment: this.payment
+      })
+    );
+  }
+
+  generatePayment(): void {
+    const transactionId = this.idGeneratorService.generateId();
+    this.payment.paymentId = transactionId;
+    this.payment.debits = [];
+    this.distributionFragments.forEach(distributionFragment => {
+      this.payment.debits.push(
+        new Debit({
+          transactionId: transactionId,
+          debitId: this.idGeneratorService.generateId(),
+          debtorId: distributionFragment.user.userId,
+          amount: distributionFragment.amount
+        })
+      );
+    });
+  }
+
+  isPaymentValid(): boolean {
+    if (!this.payment.userId) {
+      console.log('userId is missing');  // TODO: Display toast messages as well.
+      return false;
+    } else if (!this.payment.date) {
+      console.log('date is missing');
+      return false;
+    } else if(!this.payment.sumAmount) {
+      console.log('sumAmount is missing');
+      return false;
+    } else if (
+      this.payment.sumAmount !==
+      this.distributionFragments
+        .map(fragment => fragment.amount)
+        .reduce((sum, current) => sum + current)) {
+      console.log('sumAmount and sum of debit amounts do not match');
+      return false;
+    } else {
+      return true;
+    }
   }
 
   onDistributionToggleChange(change: MatSlideToggleChange): void {
@@ -63,7 +123,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
 
   distributeToAllFields(): void {
     const rest = this.getRest(
-      this.transaction.sumAmount,
+      this.payment.sumAmount,
       this.distributionFragments.map(fragment => { return fragment.amount })
     );
     const nCheckedFields = this.distributionFragments.filter(fragment => fragment.checked).length;
@@ -79,7 +139,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
 
   distributeToEmptyFields(): void {
     const rest = this.getRest(
-      this.transaction.sumAmount,
+      this.payment.sumAmount,
       this.distributionFragments.map(fragment => { return fragment.amount })
     );
     const nCheckedAndEmptyFields = this.distributionFragments

@@ -6,19 +6,19 @@
       </div>
 
       <div class='transaction-card-date transaction-card-first-row'>
-        <p>{{transaction.date | date : "dd.MM.yyyy"}}</p>
+        <p>{{payment.date | date : "dd.MM.yyyy"}}</p>
       </div>
 
       <div class='transaction-card-shop'>
-        <p>{{transaction.shop | titlecase}}</p>
+        <p>{{payment.shop | titlecase}}</p>
       </div>
 
       <div class='transaction-card-category transaction-card-last-row'>
-        <p>{{transaction.category | lowercase}}</p>
+        <p>{{payment.category | lowercase}}</p>
       </div>
 
       <div class='transaction-card-amount' style='text-align:right;'>
-        <p>&euro; {{transaction.sumAmount}}</p>
+        <p>&euro; {{payment.sumAmount}}</p>
       </div>
 
     </div>

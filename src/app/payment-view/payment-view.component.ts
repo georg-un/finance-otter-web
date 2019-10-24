@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Payment } from '../core/rest-service/entity/payment';
 import { Store } from "@ngrx/store";
 import * as CoreActions from '../store/actions/core.actions';
