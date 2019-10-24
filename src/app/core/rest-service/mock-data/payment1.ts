@@ -1,4 +1,5 @@
 import { Payment } from '../entity/payment';
+import { SyncStatusEnum } from "../entity/transaction";
 
 export const PAYMENT1: Payment =
   {
@@ -10,6 +11,7 @@ export const PAYMENT1: Payment =
       billId: null,
       userId: 1,
       transactionId: 'krSe.1554415200000',
+      syncStatus: SyncStatusEnum.Remote,
       sumAmount: 40.86
     },
     debits: [

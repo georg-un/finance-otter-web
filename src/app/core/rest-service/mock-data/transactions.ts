@@ -1,4 +1,4 @@
-import { Transaction } from '../entity/transaction';
+import { SyncStatusEnum, Transaction } from '../entity/transaction';
 
 export const TRANSACTIONS: Transaction[] = [
   {
@@ -8,6 +8,7 @@ export const TRANSACTIONS: Transaction[] = [
     category: 'Groceries',
     shop: 'Bio Shop',
     description: 'Needed stuff',
+    syncStatus: SyncStatusEnum.Remote,
     billId: null,
     sumAmount: 40.86
   },
@@ -18,6 +19,7 @@ export const TRANSACTIONS: Transaction[] = [
     category: 'Pets',
     shop: 'Pet Store',
     description: 'Bought new dog food',
+    syncStatus: SyncStatusEnum.Remote,
     billId: null,
     sumAmount: 64.02
   },
@@ -28,6 +30,7 @@ export const TRANSACTIONS: Transaction[] = [
     category: 'Hygiene',
     shop: 'Drugstore',
     description: null,
+    syncStatus: SyncStatusEnum.Remote,
     billId: null,
     sumAmount: 22.32
   }

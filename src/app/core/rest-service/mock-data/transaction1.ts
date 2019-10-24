@@ -1,4 +1,4 @@
-import { Transaction } from '../entity/transaction';
+import { SyncStatusEnum, Transaction } from '../entity/transaction';
 
 export const TRANSACTION1: Transaction = {
   transactionId: 'deTf.1554415200582',
@@ -7,6 +7,7 @@ export const TRANSACTION1: Transaction = {
   category: 'Groceries',
   shop: 'Bio Shop',
   description: 'Needed stuff',
+  syncStatus: SyncStatusEnum.Remote,
   billId: null,
   sumAmount: 40.86
 };
