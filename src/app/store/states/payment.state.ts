@@ -1,8 +1,8 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
-import { Payment, SyncStatusEnum } from "../../core/rest-service/entity/payment";
+import { Payment } from "../../core/rest-service/entity/payment";
 
 export interface PaymentState extends EntityState<Payment> {
-  syncState: SyncStatusEnum;
+  syncJobs: number;
 }
 
 export const paymentAdapter: EntityAdapter<Payment> = createEntityAdapter<Payment>({
@@ -16,6 +16,6 @@ export function sortByDate(a: Payment, b: Payment): number {
 }
 
 export const initialState: PaymentState = paymentAdapter.getInitialState({
-  syncState: null,
+  syncJobs: 0,
   sortComparer: sortByDate,
 });
