@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Transaction } from './entity/transaction';
-import { TRANSACTION1 } from './mock-data/transaction1';
-import { TRANSACTIONS } from './mock-data/transactions';
-import { Payment } from './entity/payment';
-import { PAYMENT1 } from './mock-data/payment1';
-import { User } from './entity/user';
 import { USERS } from './mock-data/users';
+import { PAYMENT1 } from './mock-data/payment1';
+import { PAYMENTS } from './mock-data/payments';
+import { Payment } from './entity/payment';
+import { User } from './entity/user';
 import { Observable, of } from "rxjs";
 import { delay } from "rxjs/operators";
 
@@ -17,15 +15,11 @@ export class MockRestService {
 
   constructor() { }
 
-  fetchTransaction(transactionId: string): Observable<Transaction> {
-    return of(TRANSACTION1).pipe(delay(1000));
+  fetchPayments(offset: number, limit: number): Observable<Payment[]> {
+    return of(PAYMENTS).pipe(delay(1500));
   }
 
-  fetchTransactions(offset: number, limit: number): Observable<Transaction[]> {
-    return of(TRANSACTIONS).pipe(delay(1500));
-  }
-
-  fetchPayment(transactionId: string): Observable<Payment> {
+  fetchPayment(paymentId: string): Observable<Payment> {
     return of(PAYMENT1).pipe(delay(1500));
   }
 
@@ -33,8 +27,8 @@ export class MockRestService {
     return of(USERS).pipe(delay(1500));
   }
 
-  uploadNewPayment(payment: Payment): Observable<{transactionId: string, code: number, message: string}> {
-    return of({transactionId: payment.transaction.transactionId, code: 200, message: null}).pipe(
+  uploadNewPayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}> {
+    return of({payment: payment, code: 200, message: null}).pipe(
       delay(500)
     );
   }
