@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../store/states/app.state";
 import { Location } from "@angular/common";
 import { selectLeftHeaderButton, selectRightHeaderButton } from "../../store/selectors/layout.selectors";
+import { EditorService } from "../../payment-editor/editor.service";
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private sidenavService: SidenavService,
+              private editorService: EditorService,
               private store: Store<AppState>,
               private location: Location) { }
 
@@ -47,6 +49,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else if (this.leftHeaderButton === 'menu') {
       this.sidenavService.toggle();
     }
+  }
+
+  onRightButtonClick(): void {
+    this.editorService.emitAddPaymentTrigger();
   }
 
 }
