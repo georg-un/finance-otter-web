@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaymentEditorComponent } from "./payment-editor.component";
-import { FormsModule } from "@angular/forms";
+import { PaymentEditorComponent } from './payment-editor.component';
+import { FormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -13,7 +13,7 @@ import {
   MatMenuModule, MatNativeDateModule,
   MatSelectModule,
   MatSlideToggleModule
-} from "@angular/material";
+} from '@angular/material';
 
 @NgModule({
   declarations: [

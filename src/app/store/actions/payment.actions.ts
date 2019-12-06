@@ -1,6 +1,6 @@
-import { createAction, props } from "@ngrx/store";
-import { Payment } from "../../core/rest-service/entity/payment";
-import { Update } from "@ngrx/entity";
+import { createAction, props } from '@ngrx/store';
+import { Payment } from '../../core/rest-service/entity/payment';
+import { Update } from '@ngrx/entity';
 
 export const addPayment = createAction('[Payment] Add Payment', props<{ payment: Payment }>());
 export const addPayments = createAction('[Payment] Add Payments', props<{ payments: Payment[] }>());

@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import * as PaymentActions from "../actions/payment.actions";
-import { catchError, map, mergeMap, tap } from "rxjs/operators";
-import { EMPTY } from "rxjs";
-import { MockRestService } from "../../core/rest-service/mock-rest.service";
-import { Router } from "@angular/router";
-import { Update } from "@ngrx/entity";
-import { Payment, SyncStatusEnum } from "../../core/rest-service/entity/payment";
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import * as PaymentActions from '../actions/payment.actions';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { MockRestService } from '../../core/rest-service/mock-rest.service';
+import { Router } from '@angular/router';
+import { Update } from '@ngrx/entity';
+import { Payment, SyncStatusEnum } from '../../core/rest-service/entity/payment';
 
 @Injectable()
 export class PaymentEffects {

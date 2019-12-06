@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidenavService } from './sidenav.service';
 import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
-import { Store } from "@ngrx/store";
-import { AppState } from "../../store/states/app.state";
-import { selectCurrentUser } from "../../store/selectors/core.selectors";
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/states/app.state';
+import { selectCurrentUser } from '../../store/selectors/core.selectors';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidenav',

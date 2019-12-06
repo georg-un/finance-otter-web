@@ -1,6 +1,6 @@
-import { userAdapter } from "../states/user.state";
-import { createSelector } from "@ngrx/store";
-import { AppState } from "../states/app.state";
+import { userAdapter } from '../states/user.state';
+import { createSelector } from '@ngrx/store';
+import { AppState } from '../states/app.state';
 
 const {
   selectIds,

@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppState } from "../store/states/app.state";
-import { Store } from "@ngrx/store";
-import { selectFAB, selectFABLink } from "../store/selectors/layout.selectors";
-import { Subject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
-import { Router } from "@angular/router";
+import { AppState } from '../store/states/app.state';
+import { Store } from '@ngrx/store';
+import { selectFAB, selectFABLink } from '../store/selectors/layout.selectors';
+import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',

@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppState } from "../store/states/app.state";
-import { Store } from "@ngrx/store";
+import { AppState } from '../store/states/app.state';
+import { Store } from '@ngrx/store';
 import * as CoreActions from '../store/actions/core.actions';
-import { selectTransactions } from "../store/selectors/core.selectors";
-import { takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
-import { Router } from "@angular/router";
-import { Payment } from "../core/rest-service/entity/payment";
+import { selectTransactions } from '../store/selectors/core.selectors';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { Payment } from '../core/rest-service/entity/payment';
 
 @Component({
   selector: 'app-transactions',

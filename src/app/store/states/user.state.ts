@@ -1,5 +1,5 @@
-import { createEntityAdapter, EntityAdapter, EntityState } from "@ngrx/entity";
-import { User } from "../../core/rest-service/entity/user";
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { User } from '../../core/rest-service/entity/user';
 
 export interface UserState extends EntityState<User> {
   currentUserId: number;

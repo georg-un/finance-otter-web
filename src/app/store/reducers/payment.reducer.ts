@@ -1,12 +1,12 @@
-import { Action, createReducer, on } from "@ngrx/store";
-import { initialState, paymentAdapter, PaymentState } from "../states/payment.state";
-import * as PaymentActions from "../actions/payment.actions";
+import { Action, createReducer, on } from '@ngrx/store';
+import { initialState, paymentAdapter, PaymentState } from '../states/payment.state';
+import * as PaymentActions from '../actions/payment.actions';
 
 
 const paymentReducer = createReducer(
   initialState,
   on(PaymentActions.addPayment, (state, { payment }) => {
-    return paymentAdapter.addOne(payment, state)
+    return paymentAdapter.addOne(payment, state);
   }),
   on(PaymentActions.addPayments, (state, { payments }) => {
     return paymentAdapter.addMany(payments, state);

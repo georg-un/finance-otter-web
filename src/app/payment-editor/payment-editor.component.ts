@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
-import { AppState } from "../store/states/app.state";
-import { Store } from "@ngrx/store";
-import { selectCurrentUser, selectUsers } from "../store/selectors/core.selectors";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { Payment } from "../core/rest-service/entity/payment";
-import { IdGeneratorService } from "../core/id-generator.service";
-import { Debit } from "../core/rest-service/entity/debit";
-import { addNewPayment } from "../store/actions/core.actions";
-import { EditorService } from "./editor.service";
+import { AppState } from '../store/states/app.state';
+import { Store } from '@ngrx/store';
+
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Payment } from '../core/rest-service/entity/payment';
+import { IdGeneratorService } from '../core/id-generator.service';
+import { Debit } from '../core/rest-service/entity/debit';
+import { addNewPayment } from '../store/actions/core.actions';
+import { EditorService } from './editor.service';
+import { selectCurrentUser } from '../store/selectors/user.selector';
 
 @Component({
   selector: 'app-payment-editor',
@@ -45,7 +46,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
       .subscribe((users: User[]) => {
         this.users = users;
         this.distributionFragments = this.users.map((user: User) => {
-          return {user: user, amount: null, checked: true}
+          return {user: user, amount: null, checked: true};
         });
       });
 
@@ -53,7 +54,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.onDestroy$))
       .subscribe(() => {
         this.submitPayment();
-      })
+      });
   }
 
   ngOnDestroy(): void {
@@ -63,7 +64,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
 
   submitPayment(): void {
     if (!this.isPaymentValid()) {
-      return
+      return;
     }
     this.generatePayment();
     this.store.dispatch(
@@ -96,7 +97,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
     } else if (!this.payment.date) {
       console.log('date is missing');
       return false;
-    } else if(!this.payment.sumAmount) {
+    } else if (!this.payment.sumAmount) {
       console.log('sumAmount is missing');
       return false;
     } else if (
@@ -118,13 +119,13 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
   resetDebits(): void {
     this.distributionFragments.forEach(fragment => {
       fragment.amount = null;
-    })
+    });
   }
 
   distributeToAllFields(): void {
     const rest = this.getRest(
       this.payment.sumAmount,
-      this.distributionFragments.map(fragment => { return fragment.amount })
+      this.distributionFragments.map(fragment => fragment.amount)
     );
     const nCheckedFields = this.distributionFragments.filter(fragment => fragment.checked).length;
 
@@ -140,7 +141,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
   distributeToEmptyFields(): void {
     const rest = this.getRest(
       this.payment.sumAmount,
-      this.distributionFragments.map(fragment => { return fragment.amount })
+      this.distributionFragments.map(fragment => fragment.amount)
     );
     const nCheckedAndEmptyFields = this.distributionFragments
       .filter(fragment => fragment.checked && !fragment.amount)
@@ -164,12 +165,12 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
     const assignedValue = Math.floor((rest / nFields) * 100 ) / 100;
     const remainder = Math.floor((rest * 100) % nFields) / 100;
 
-    for (let i=0; i < nFields; i++) {
+    for (let i = 0; i < nFields; i++) {
       result.push(assignedValue);
     }
 
     let j = 0;
-    for (let i=0; i < remainder * 100; i++) {
+    for (let i = 0; i < remainder * 100; i++) {
       if (j >= nFields) {
         j = 0;
       }

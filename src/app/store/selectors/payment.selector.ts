@@ -1,4 +1,4 @@
-import { paymentAdapter } from "../states/payment.state";
+import { paymentAdapter } from '../states/payment.state';
 
 const {
   selectIds,

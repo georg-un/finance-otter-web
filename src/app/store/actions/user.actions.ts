@@ -1,6 +1,6 @@
-import { createAction, props } from "@ngrx/store";
-import { User } from "../../core/rest-service/entity/user";
-import { Update } from "@ngrx/entity";
+import { createAction, props } from '@ngrx/store';
+import { User } from '../../core/rest-service/entity/user';
+import { Update } from '@ngrx/entity';
 
 export const addUser = createAction('[User] Add User', props<{ user: User }>());
 export const addUsers = createAction('[User] Add Users', props<{ users: User[] }>());

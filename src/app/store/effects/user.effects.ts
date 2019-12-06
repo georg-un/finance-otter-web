@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap } from "rxjs/operators";
-import * as UserActions from "../actions/user.actions";
-import { EMPTY } from "rxjs";
+import { Injectable } from '@angular/core';
+import { createEffect, ofType } from '@ngrx/effects';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import * as UserActions from '../actions/user.actions';
+import { EMPTY } from 'rxjs';
 
 @Injectable
 export class UserEffects {

@@ -1,5 +1,5 @@
-import { AppState } from "../states/app.state";
-import { createSelector } from "@ngrx/store";
+import { AppState } from '../states/app.state';
+import { createSelector } from '@ngrx/store';
 
 const selectLayout = (state: AppState) => state.layout;
 

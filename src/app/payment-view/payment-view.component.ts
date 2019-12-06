@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Payment } from '../core/rest-service/entity/payment';
-import { Store } from "@ngrx/store";
+import { Store } from '@ngrx/store';
 import * as CoreActions from '../store/actions/core.actions';
-import { selectPayment, selectUsers } from "../store/selectors/core.selectors";
-import { AppState } from "../store/states/app.state";
-import { Observable, Subject } from "rxjs";
-import { map, take, takeUntil } from "rxjs/operators";
-import { ActivatedRoute } from "@angular/router";
-import { User } from "../core/rest-service/entity/user";
+import { selectPayment, selectUsers } from '../store/selectors/core.selectors';
+import { AppState } from '../store/states/app.state';
+import { Observable, Subject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../core/rest-service/entity/user';
 
 @Component({
   selector: 'app-payment-view',

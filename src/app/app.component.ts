@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from "@ngrx/store";
-import { requestUserData } from "./store/actions/core.actions";
-import { AppState } from "./store/states/app.state";
-import { NavigationEnd, Router } from "@angular/router";
-import { filter } from "rxjs/operators";
-import { setFAB, setFABLink, setHeaderButtons } from "./store/actions/layout.actions";
+import { Store } from '@ngrx/store';
+import { requestUserData } from './store/actions/core.actions';
+import { AppState } from './store/states/app.state';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { setFAB, setFABLink, setHeaderButtons } from './store/actions/layout.actions';
 
 @Component({
   selector: 'app-root',
