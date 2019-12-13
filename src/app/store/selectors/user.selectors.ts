@@ -20,7 +20,7 @@ export const selectUserCount = createSelector(selectUsers, selectTotal);
 
 export const selectCurrentUser = createSelector(
   selectUsers,
-  users => users[users.currentUserId]
+  users => users.entities[users.currentUserId]
 );
 
 export const selectUserById = () => {
