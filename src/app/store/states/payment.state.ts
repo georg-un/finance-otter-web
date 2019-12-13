@@ -10,9 +10,13 @@ export const paymentAdapter: EntityAdapter<Payment> = createEntityAdapter<Paymen
 });
 
 export function sortByDate(a: Payment, b: Payment): number {
-  if (a.date > b.date)  return 1;
-  else if (a.date < b.date) return -1;
-  else return 0;
+  if (a.date > b.date) {
+    return 1;
+  } else if (a.date < b.date) {
+    return -1;
+  } else {
+    return 0;
+  }
 }
 
 export const initialState: PaymentState = paymentAdapter.getInitialState({

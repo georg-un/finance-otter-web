@@ -5,7 +5,7 @@ import { UserActions } from '../actions/user.actions';
 const userReducer = createReducer(
   initialState,
   on(UserActions.addUser, (state, { user }) => {
-    return userAdapter.addOne(user, state)
+    return userAdapter.addOne(user, state);
   }),
   on(UserActions.addUsers, (state, { users }) => {
     return userAdapter.addMany(users, state);

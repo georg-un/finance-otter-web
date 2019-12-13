@@ -17,9 +17,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   private currentUser$: Observable<User>;
   private onDestroy$: Subject<boolean> = new Subject();
-  avatar: string = 'assets/otter-avatar.jpg';
+  avatar = 'assets/otter-avatar.jpg';
 
-  @ViewChild('sidenav') public sidenav: MatSidenav;
+  @ViewChild('sidenav', {static: false}) public sidenav: MatSidenav;
 
   constructor(private sidenavService: SidenavService,
               private store: Store<AppState>

@@ -2,16 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
 import { AppState } from '../store/states/app.state';
-import { select, Store } from '@ngrx/store';
-
-import { Observable, Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Payment } from '../core/rest-service/entity/payment';
 import { IdGeneratorService } from '../core/id-generator.service';
 import { Debit } from '../core/rest-service/entity/debit';
-import { addNewPayment } from '../store/actions/payment.actions';
 import { EditorService } from './editor.service';
 import { selectAllUsers, selectCurrentUser } from '../store/selectors/user.selector';
+import { PaymentActions } from '../store/actions/payment.actions';
 
 @Component({
   selector: 'app-payment-editor',
@@ -27,7 +26,8 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
   customDistribution = false;
 
   users: User[];
-  distributionFragments: {user: User, amount: number, checked: boolean}[];
+  distributionFragments: {user: User; amount: number; checked: boolean}[];
+
   private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private store: Store<AppState>,
@@ -69,7 +69,7 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
     }
     this.generatePayment();
     this.store.dispatch(
-      addNewPayment({
+      PaymentActions.addNewPayment({
         payment: this.payment
       })
     );
