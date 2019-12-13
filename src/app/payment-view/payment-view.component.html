@@ -26,7 +26,9 @@
   <p class="detail-title">DISTRIBUTION</p>
   <div class="debit-blockquote">
     <ng-container *ngFor="let debit of (payment$ | async)?.debits">
-      <app-debit-card [debit]="debit" [user]="(findUser(debit.debtorId) | async)"></app-debit-card>
+      <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
+        <app-debit-card [debit]="debit" [user]="user"></app-debit-card>
+      </ng-container>
     </ng-container>
   </div>
 

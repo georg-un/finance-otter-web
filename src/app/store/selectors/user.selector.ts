@@ -26,7 +26,7 @@ export const selectCurrentUser = createSelector(
 export const selectUserById = () => {
   return createSelector(
     selectUserEntities,
-    (entities: Dictionary<User>, props: { id: string }) => {
+    (entities: Dictionary<User>, props: { id: number }) => {
       return entities[props.id];
     },
   );

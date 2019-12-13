@@ -21,6 +21,9 @@ const userReducer = createReducer(
   }),
   on(UserActions.clearUsers, state => {
     return userAdapter.removeAll(state);
+  }),
+  on(UserActions.usersReceived, (state, {users}) => {
+    return userAdapter.upsertMany(users, state);
   })
 );
 
