@@ -9,7 +9,7 @@ import { Payment } from '../core/rest-service/entity/payment';
 import { IdGeneratorService } from '../core/id-generator.service';
 import { Debit } from '../core/rest-service/entity/debit';
 import { EditorService } from './editor.service';
-import { selectAllUsers, selectCurrentUser } from '../store/selectors/user.selector';
+import { selectAllUsers, selectCurrentUser } from '../store/selectors/user.selectors';
 import { PaymentActions } from '../store/actions/payment.actions';
 
 @Component({

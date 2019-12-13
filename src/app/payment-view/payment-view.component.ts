@@ -6,8 +6,8 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../core/rest-service/entity/user';
-import { selectUserById } from '../store/selectors/user.selector';
-import { selectPaymentById } from '../store/selectors/payment.selector';
+import { selectUserById } from '../store/selectors/user.selectors';
+import { selectPaymentById } from '../store/selectors/payment.selectors';
 
 
 @Component({

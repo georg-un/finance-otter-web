@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Payment } from '../core/rest-service/entity/payment';
 import { PaymentActions } from '../store/actions/payment.actions';
-import { selectAllPayments } from '../store/selectors/payment.selector';
+import { selectAllPayments } from '../store/selectors/payment.selectors';
 
 @Component({
   selector: 'app-transactions',

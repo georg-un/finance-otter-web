@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class LayoutComponent implements OnInit, OnDestroy {
 
   protected showFAB = true;
-  protected fabIcon: string = 'add';
+  protected fabIcon = 'add';
   private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private store: Store<AppState>,

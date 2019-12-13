@@ -4,7 +4,7 @@ import { LayoutComponent } from './layout.component';
 import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AppRoutingModule } from '../app-routing.module';
-import { MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { MatButtonModule, MatIconModule, MatListModule, MatSidenavModule, MatToo
     MatToolbarModule,
     MatListModule,
     MatSidenavModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCardModule
   ]
 })
 export class LayoutModule { }

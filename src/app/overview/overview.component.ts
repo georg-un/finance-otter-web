@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
-import { selectAllUsers } from '../store/selectors/user.selector';
+import { selectAllUsers } from '../store/selectors/user.selectors';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

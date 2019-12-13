@@ -3,7 +3,7 @@ import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { selectCurrentUser } from '../../store/selectors/user.selector';
+import { selectCurrentUser } from '../../store/selectors/user.selectors';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { isSidenavOpen } from '../../store/selectors/layout.selectors';
