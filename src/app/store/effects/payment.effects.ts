@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { MockRestService } from '../../core/rest-service/mock-rest.service';
 import { Router } from '@angular/router';
 import { Update } from '@ngrx/entity';
 import { Payment, SyncStatusEnum } from '../../core/rest-service/entity/payment';
 import { PaymentActions } from '../actions/payment.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../states/app.state';
+import { RouterSelectors } from '../selectors/router.selectors';
+import { selectPagination } from '../selectors/layout.selectors';
 
 @Injectable()
 export class PaymentEffects {
 
   constructor(private actions$: Actions,
+              private store: Store<AppState>,
               private restService: MockRestService,
               private router: Router) {}
 
@@ -57,6 +62,24 @@ export class PaymentEffects {
           }
         }))
     )
+  ));
+
+  syncPayment$ = createEffect(() => this.actions$.pipe(  // TODO: What to do with local payments?
+    ofType(PaymentActions.syncPayments),
+    withLatestFrom(
+      this.store.select(selectPagination),
+      this.store.select(RouterSelectors.selectCurrentUrl)),
+    mergeMap(([action, pagination, currentUrl]) => {
+      const actions = [];
+      // If payment details are displayed, look if there is an updated version on the server
+      if (currentUrl.startsWith('/payment')) {
+        const paymentId = currentUrl.split('/')[1];
+         actions.push(PaymentActions.requestSinglePayment({paymentId: paymentId}));
+      }
+      // Update all payments in the current pagination
+      actions.push(PaymentActions.requestPayments(pagination));
+      return actions;
+    })
   ));
 
 }

@@ -17,4 +17,5 @@ export class PaymentActions {
   static addNewPayment = createAction('[Payment] Add New Payment', props<{payment: Payment}>());
   static paymentUploadSuccessful = createAction('[Payment] Payment Upload Successful', props<{payment: Update<Payment>}>());
   static paymentUploadFailed = createAction('[Payment] Payment Upload Failed', props<{payment: Update<Payment>}>());
+  static syncPayments = createAction('[Payment] Sync Payment');
 }

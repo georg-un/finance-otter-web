@@ -30,7 +30,7 @@ const paymentReducer = createReducer(
     return paymentAdapter.addMany(payments, {...state, syncJobs: state.syncJobs - 1});
   }),
   on(PaymentActions.requestSinglePayment, state => (
-    {...state, isSyncing: true}
+    {...state, syncJobs: state.syncJobs + 1}
   )),
   on(PaymentActions.singlePaymentReceived, (state, { payment }) => {
     return paymentAdapter.addOne(payment, {...state, syncJobs: state.syncJobs - 1});

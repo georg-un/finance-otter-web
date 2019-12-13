@@ -8,6 +8,8 @@ import { selectLeftHeaderButton, selectRightHeaderButton } from '../../store/sel
 import { EditorService } from '../../payment-editor/editor.service';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
+import { PaymentActions } from '../../store/actions/payment.actions';
+import { UserActions } from '../../store/actions/user.actions';
 
 @Component({
   selector: 'app-header',
@@ -54,6 +56,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onRightButtonClick(): void {
     if (this.rightHeaderButton === RightButtonIconEnum.Done) {
       this.editorService.emitAddPaymentTrigger();
+    } else {
+      this.store.dispatch(UserActions.requestUsers());
+      this.store.dispatch(PaymentActions.syncPayments());
     }
   }
 
