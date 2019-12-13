@@ -1,6 +1,8 @@
 import { paymentAdapter } from '../states/payment.state';
 import { AppState } from '../states/app.state';
 import { createSelector } from '@ngrx/store';
+import { Dictionary } from '@ngrx/entity';
+import { Payment } from '../../core/rest-service/entity/payment';
 
 const {
   selectIds,
@@ -16,7 +18,11 @@ export const selectPaymentEntities = createSelector(selectPayments, selectEntiti
 export const selectAllPayments = createSelector(selectPayments, selectAll);
 export const selectPaymentCount = createSelector(selectPayments, selectTotal);
 
-export const selectPaymentById = createSelector(
-  selectPayments,
-  payments => (id: number) => payments[id]
-);
+export const selectPaymentById = () => {
+  return createSelector(
+    selectPaymentEntities,
+    (entities: Dictionary<Payment>, props: { id: string }) => {
+      return entities[props.id];
+    },
+  );
+};

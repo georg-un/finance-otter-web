@@ -1,6 +1,8 @@
 import { userAdapter } from '../states/user.state';
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../states/app.state';
+import { Dictionary } from '@ngrx/entity';
+import { User } from '../../core/rest-service/entity/user';
 
 const {
   selectIds,
@@ -20,3 +22,12 @@ export const selectCurrentUser = createSelector(
   selectUsers,
   users => users[users.currentUserId]
 );
+
+export const selectUserById = () => {
+  return createSelector(
+    selectUserEntities,
+    (entities: Dictionary<User>, props: { id: string }) => {
+      return entities[props.id];
+    },
+  );
+};

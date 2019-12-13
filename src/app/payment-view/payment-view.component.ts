@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../core/rest-service/entity/user';
 import { selectAllUsers } from '../store/selectors/user.selector';
 import { selectPaymentById } from '../store/selectors/payment.selector';
-import { PaymentActions } from '../store/actions/payment.actions';
 
 
 @Component({
@@ -30,17 +29,17 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.users$ = this.store.select(selectAllUsers);
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(params => {
       this.transactionId = params.get('transactionId');
     });
 
-    this.store.dispatch(PaymentActions.requestPaymentData({transactionId: this.transactionId}));
-    this.payment$ = this.store.select(selectPaymentById, this.transactionId)
-      .pipe(takeUntil(this.onDestroy$));
+    // this.store.dispatch(PaymentActions.requestPaymentData({transactionId: this.transactionId}));
+    this.payment$ = this.store.select(selectPaymentById(), {id: this.transactionId});
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(PaymentActions.clearPaymentData());
     this.onDestroy$.next(true);
     this.onDestroy$.complete();
   }
