@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, paymentAdapter, PaymentState } from '../states/payment.state';
-import * as PaymentActions from '../actions/payment.actions';
+import { PaymentActions } from '../actions/payment.actions';
 
 
 const paymentReducer = createReducer(

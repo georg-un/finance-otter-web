@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
-import * as CoreActions from '../store/actions/core.actions';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Payment } from '../core/rest-service/entity/payment';
+import { PaymentActions } from '../store/actions/payment.actions';
 import { selectAllPayments } from '../store/selectors/payment.selector';
 
 @Component({
@@ -22,7 +22,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
-    this.store.dispatch(CoreActions.requestTransactionData({offset: 0, limit: 0}));
+    this.store.dispatch(PaymentActions.requestPayments({offset: 0, limit: 0}));
     this.store.select(selectAllPayments)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((payments: Payment[]) => {

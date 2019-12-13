@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import * as PaymentActions from '../actions/payment.actions';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { MockRestService } from '../../core/rest-service/mock-rest.service';
 import { Router } from '@angular/router';
 import { Update } from '@ngrx/entity';
 import { Payment, SyncStatusEnum } from '../../core/rest-service/entity/payment';
+import { PaymentActions } from '../actions/payment.actions';
 
 @Injectable()
 export class PaymentEffects {
+
+  constructor(private actions$: Actions,
+              private restService: MockRestService,
+              private router: Router) {}
 
   loadPayments$ = createEffect(() => this.actions$.pipe(
     ofType(PaymentActions.requestPayments),
@@ -54,10 +58,5 @@ export class PaymentEffects {
         }))
     )
   ));
-
-  constructor(private actions$: Actions,
-              private restService: MockRestService,
-              private router: Router)
-  {}
 
 }

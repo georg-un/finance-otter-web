@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Payment } from '../core/rest-service/entity/payment';
 import { Store } from '@ngrx/store';
-import * as CoreActions from '../store/actions/core.actions';
 import { AppState } from '../store/states/app.state';
 import { Observable, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
@@ -9,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../core/rest-service/entity/user';
 import { selectAllUsers } from '../store/selectors/user.selector';
 import { selectPaymentById } from '../store/selectors/payment.selector';
+import { PaymentActions } from '../store/actions/payment.actions';
 
 
 @Component({
@@ -34,13 +34,13 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
       this.transactionId = params.get('transactionId');
     });
 
-    this.store.dispatch(CoreActions.requestPaymentData({transactionId: this.transactionId}));
+    this.store.dispatch(PaymentActions.requestPaymentData({transactionId: this.transactionId}));
     this.payment$ = this.store.select(selectPaymentById, this.transactionId)
       .pipe(takeUntil(this.onDestroy$));
   }
 
   ngOnDestroy(): void {
-    this.store.dispatch(CoreActions.clearPaymentData());
+    this.store.dispatch(PaymentActions.clearPaymentData());
     this.onDestroy$.next(true);
     this.onDestroy$.complete();
   }

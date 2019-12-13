@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Payment } from '../core/rest-service/entity/payment';
 import { IdGeneratorService } from '../core/id-generator.service';
 import { Debit } from '../core/rest-service/entity/debit';
-import { addNewPayment } from '../store/actions/core.actions';
+import { addNewPayment } from '../store/actions/payment.actions';
 import { EditorService } from './editor.service';
 import { selectAllUsers, selectCurrentUser } from '../store/selectors/user.selector';
 
