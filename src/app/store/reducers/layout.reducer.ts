@@ -12,7 +12,8 @@ const layoutReducer = createReducer(
   on(LayoutActions.setHeaderButtons, (state, {leftHeaderButton, rightHeaderButton}) => (
     {...state, leftHeaderButton: leftHeaderButton, rightHeaderButton: rightHeaderButton}
   )),
-  on(LayoutActions.toggleSidenav, state => ({...state, sidenavOpen: !state.sidenavOpen}))
+  on(LayoutActions.toggleSidenav, state => ({...state, sidenavOpen: !state.sidenavOpen})),
+  on(LayoutActions.setPagination, (state, {offset, limit}) => ({...state, pagination: {offset: offset, limit: limit}}))
 );
 
 export function reducer(state: LayoutState | undefined, action: Action) {

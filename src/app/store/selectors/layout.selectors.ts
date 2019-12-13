@@ -27,3 +27,8 @@ export const isSidenavOpen = createSelector(
   selectLayout,
   state => state.sidenavOpen
 );
+
+export const selectPagination = createSelector(
+  selectLayout,
+  state => state.pagination
+);

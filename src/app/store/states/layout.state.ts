@@ -4,6 +4,7 @@ export interface LayoutState {
   leftHeaderButton: string;
   rightHeaderButton: string;
   sidenavOpen: boolean;
+  pagination: {offset: number, limit: number};
 }
 
 export const initialState: LayoutState = {
@@ -11,5 +12,6 @@ export const initialState: LayoutState = {
   fabLink: 'edit',
   leftHeaderButton: 'menu',
   rightHeaderButton: 'sync',
-  sidenavOpen: false
+  sidenavOpen: false,
+  pagination: {offset: 0, limit: 15}
 };
