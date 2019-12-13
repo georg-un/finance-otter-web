@@ -11,7 +11,8 @@ const layoutReducer = createReducer(
   on(LayoutActions.setRightHeaderButton, (state, {rightHeaderButton}) => ({...state, rightHeaderButton: rightHeaderButton})),
   on(LayoutActions.setHeaderButtons, (state, {leftHeaderButton, rightHeaderButton}) => (
     {...state, leftHeaderButton: leftHeaderButton, rightHeaderButton: rightHeaderButton}
-    ))
+  )),
+  on(LayoutActions.toggleSidenav, state => ({...state, sidenavOpen: !state.sidenavOpen}))
 );
 
 export function reducer(state: LayoutState | undefined, action: Action) {

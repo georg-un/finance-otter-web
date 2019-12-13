@@ -3,11 +3,13 @@ export interface LayoutState {
   fabLink: string;
   leftHeaderButton: string;
   rightHeaderButton: string;
+  sidenavOpen: boolean;
 }
 
 export const initialState: LayoutState = {
   fab: 'add',
   fabLink: 'edit',
   leftHeaderButton: 'menu',
-  rightHeaderButton: 'sync'
+  rightHeaderButton: 'sync',
+  sidenavOpen: false
 };

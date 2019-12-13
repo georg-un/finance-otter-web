@@ -22,3 +22,8 @@ export const selectRightHeaderButton = createSelector(
   selectLayout,
   state => state.rightHeaderButton
 );
+
+export const isSidenavOpen = createSelector(
+  selectLayout,
+  state => state.sidenavOpen
+);

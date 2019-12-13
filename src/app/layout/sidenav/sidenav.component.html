@@ -1,5 +1,11 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav class="sidenav" mode="over" opened="false">
+  <mat-sidenav
+    #sidenav
+    class="sidenav"
+    mode="over"
+    opened="false"
+    (openedChange)="onOpenedChange($event)"
+  >
     <div class="account-card">
       <img mat-card-avatar [src]='avatar'>
       <p>{{(currentUser$ | async)?.firstName}} {{(currentUser$ | async)?.lastName}}</p>
@@ -8,14 +14,14 @@
     <div class="link-container">
       <mat-list>
 
-        <a routerLink="/overview" routerLinkActive="true" (click)="sidenav.toggle()">
+        <a routerLink="/overview" routerLinkActive="true" (click)="sidenav.toggle(false)">
           <mat-list-item>
             <mat-icon mat-list-icon>people</mat-icon>
             <p>Overview</p>
           </mat-list-item>
         </a>
 
-        <a routerLink="/transactions" routerLinkActive="true" (click)="sidenav.toggle()">
+        <a routerLink="/transactions" routerLinkActive="true" (click)="sidenav.toggle(false)">
           <mat-list-item>
             <mat-icon mat-list-icon>list</mat-icon>
             <p>Transactions</p>

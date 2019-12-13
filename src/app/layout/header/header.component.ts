@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SidenavService } from '../sidenav/sidenav.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -7,6 +6,7 @@ import { AppState } from '../../store/states/app.state';
 import { Location } from '@angular/common';
 import { selectLeftHeaderButton, selectRightHeaderButton } from '../../store/selectors/layout.selectors';
 import { EditorService } from '../../payment-editor/editor.service';
+import { LayoutActions } from '../../store/actions/layout.actions';
 
 @Component({
   selector: 'app-header',
@@ -19,8 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected rightHeaderButton = 'sync';
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private sidenavService: SidenavService,
-              private editorService: EditorService,
+  constructor(private editorService: EditorService,
               private store: Store<AppState>,
               private location: Location) { }
 
@@ -47,7 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.leftHeaderButton === 'clear') {
       this.location.back();
     } else if (this.leftHeaderButton === 'menu') {
-      this.sidenavService.toggle();
+      this.store.dispatch(LayoutActions.toggleSidenav());
     }
   }
 

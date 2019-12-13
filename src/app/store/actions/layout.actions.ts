@@ -15,4 +15,7 @@ export class LayoutActions {
 
   static setHeaderButtons = createAction('[Layout] Set Header Buttons',
     props<{leftHeaderButton: string, rightHeaderButton: string}>());
+
+  static toggleSidenav = createAction('[Layout] Toggle Sidenav');
+
 }
