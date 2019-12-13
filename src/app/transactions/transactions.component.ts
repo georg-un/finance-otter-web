@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Payment } from '../core/rest-service/entity/payment';
 import { PaymentActions } from '../store/actions/payment.actions';
-import { selectAllPayments } from '../store/selectors/payment.selectors';
+import { PaymentSelectors } from '../store/selectors/payment.selectors';
 
 @Component({
   selector: 'app-transactions',
@@ -23,7 +23,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(PaymentActions.requestPayments({offset: 0, limit: 0}));
-    this.store.select(selectAllPayments)
+    this.store.select(PaymentSelectors.selectAllPayments)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((payments: Payment[]) => {
         this.payments = payments;

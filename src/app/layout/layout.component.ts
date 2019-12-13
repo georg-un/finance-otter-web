@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
-import { selectFAB, selectFABLink } from '../store/selectors/layout.selectors';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { LayoutSelectors } from '../store/selectors/layout.selectors';
 
 @Component({
   selector: 'app-layout',
@@ -21,7 +21,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
-    this.store.select(selectFAB)
+    this.store.select(LayoutSelectors.selectFAB)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((fab: string) => {
         if (fab && (fab === 'add' || fab === 'edit')) {
@@ -39,7 +39,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   onFABClick(): void {
-    this.store.select(selectFABLink)
+    this.store.select(LayoutSelectors.selectFABLink)
       .pipe(take(1))
       .subscribe((fabLink: string) => {
       this.router.navigateByUrl(fabLink);

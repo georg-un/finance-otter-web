@@ -4,12 +4,12 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Location } from '@angular/common';
-import { selectLeftHeaderButton, selectRightHeaderButton } from '../../store/selectors/layout.selectors';
 import { EditorService } from '../../payment-editor/editor.service';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 import { PaymentActions } from '../../store/actions/payment.actions';
 import { UserActions } from '../../store/actions/user.actions';
+import { LayoutSelectors } from '../../store/selectors/layout.selectors';
 
 @Component({
   selector: 'app-header',
@@ -27,13 +27,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private location: Location) { }
 
   ngOnInit() {
-    this.store.select(selectLeftHeaderButton)
+    this.store.select(LayoutSelectors.selectLeftHeaderButton)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((leftHeaderButton: string) => {
         this.leftHeaderButton = leftHeaderButton;
       });
 
-    this.store.select(selectRightHeaderButton)
+    this.store.select(LayoutSelectors.selectRightHeaderButton)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((rightHeaderButton: string) => {
         this.rightHeaderButton = rightHeaderButton;

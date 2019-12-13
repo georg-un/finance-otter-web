@@ -9,8 +9,8 @@ import { Payment } from '../core/rest-service/entity/payment';
 import { IdGeneratorService } from '../core/id-generator.service';
 import { Debit } from '../core/rest-service/entity/debit';
 import { EditorService } from './editor.service';
-import { selectAllUsers, selectCurrentUser } from '../store/selectors/user.selectors';
 import { PaymentActions } from '../store/actions/payment.actions';
+import { UserSelectors } from '../store/selectors/user.selectors';
 
 @Component({
   selector: 'app-payment-editor',
@@ -37,13 +37,13 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.store.select(selectCurrentUser)
+    this.store.select(UserSelectors.selectCurrentUser)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((currentUser: User) => {
         this.payment.userId = currentUser.userId;
       });
 
-    this.store.select(selectAllUsers)
+    this.store.select(UserSelectors.selectAllUsers)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((users: User[]) => {
         this.users = users;

@@ -13,16 +13,20 @@ const {
 
 const selectPayments = (state: AppState) => state.payments;
 
-export const selectPaymentIds = createSelector(selectPayments, selectIds);
-export const selectPaymentEntities = createSelector(selectPayments, selectEntities);
-export const selectAllPayments = createSelector(selectPayments, selectAll);
-export const selectPaymentCount = createSelector(selectPayments, selectTotal);
+export class PaymentSelectors {
 
-export const selectPaymentById = () => {
-  return createSelector(
-    selectPaymentEntities,
-    (entities: Dictionary<Payment>, props: { id: string }) => {
-      return entities[props.id];
-    },
-  );
-};
+  static selectPaymentIds = createSelector(selectPayments, selectIds);
+  static selectPaymentEntities = createSelector(selectPayments, selectEntities);
+  static selectAllPayments = createSelector(selectPayments, selectAll);
+  static selectPaymentCount = createSelector(selectPayments, selectTotal);
+
+  static selectPaymentById = () => {
+    return createSelector(
+      PaymentSelectors.selectPaymentEntities,
+      (entities: Dictionary<Payment>, props: { id: string }) => {
+        return entities[props.id];
+      },
+    );
+  }
+
+}

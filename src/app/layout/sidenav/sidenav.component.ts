@@ -3,11 +3,11 @@ import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { selectCurrentUser } from '../../store/selectors/user.selectors';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { isSidenavOpen } from '../../store/selectors/layout.selectors';
 import { LayoutActions } from '../../store/actions/layout.actions';
+import { UserSelectors } from '../../store/selectors/user.selectors';
+import { LayoutSelectors } from '../../store/selectors/layout.selectors';
 
 @Component({
   selector: 'app-sidenav',
@@ -26,8 +26,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.currentUser$ = this.store.select(selectCurrentUser);
-    this.store.select(isSidenavOpen)
+    this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
+    this.store.select(LayoutSelectors.isSidenavOpen)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((isOpen: boolean) => {
         this.sidenavOpen = isOpen;

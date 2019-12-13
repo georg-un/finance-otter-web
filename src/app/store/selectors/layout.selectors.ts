@@ -3,32 +3,13 @@ import { createSelector } from '@ngrx/store';
 
 const selectLayout = (state: AppState) => state.layout;
 
-export const selectFAB = createSelector(
-  selectLayout,
-  state => state.fab
-);
+export class LayoutSelectors {
 
-export const selectFABLink = createSelector(
-  selectLayout,
-  state => state.fabLink
-);
+  static selectFAB = createSelector(selectLayout, state => state.fab);
+  static selectFABLink = createSelector(selectLayout, state => state.fabLink);
+  static selectLeftHeaderButton = createSelector(selectLayout, state => state.leftHeaderButton);
+  static selectRightHeaderButton = createSelector(selectLayout, state => state.rightHeaderButton);
+  static isSidenavOpen = createSelector(selectLayout, state => state.sidenavOpen);
+  static selectPagination = createSelector(selectLayout, state => state.pagination);
 
-export const selectLeftHeaderButton = createSelector(
-  selectLayout,
-  state => state.leftHeaderButton
-);
-
-export const selectRightHeaderButton = createSelector(
-  selectLayout,
-  state => state.rightHeaderButton
-);
-
-export const isSidenavOpen = createSelector(
-  selectLayout,
-  state => state.sidenavOpen
-);
-
-export const selectPagination = createSelector(
-  selectLayout,
-  state => state.pagination
-);
+}

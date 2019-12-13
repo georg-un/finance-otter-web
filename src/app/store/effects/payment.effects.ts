@@ -10,7 +10,7 @@ import { PaymentActions } from '../actions/payment.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../states/app.state';
 import { RouterSelectors } from '../selectors/router.selectors';
-import { selectPagination } from '../selectors/layout.selectors';
+import { LayoutSelectors } from '../selectors/layout.selectors';
 
 @Injectable()
 export class PaymentEffects {
@@ -67,7 +67,7 @@ export class PaymentEffects {
   syncPayment$ = createEffect(() => this.actions$.pipe(  // TODO: What to do with local payments?
     ofType(PaymentActions.syncPayments),
     withLatestFrom(
-      this.store.select(selectPagination),
+      this.store.select(LayoutSelectors.selectPagination),
       this.store.select(RouterSelectors.selectCurrentUrl)),
     mergeMap(([action, pagination, currentUrl]) => {
       const actions = [];

@@ -6,8 +6,8 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../core/rest-service/entity/user';
-import { selectUserById } from '../store/selectors/user.selectors';
-import { selectPaymentById } from '../store/selectors/payment.selectors';
+import { UserSelectors } from '../store/selectors/user.selectors';
+import { PaymentSelectors } from '../store/selectors/payment.selectors';
 
 
 @Component({
@@ -36,7 +36,7 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
     });
 
     // this.store.dispatch(PaymentActions.requestPaymentData({transactionId: this.transactionId}));
-    this.payment$ = this.store.select(selectPaymentById(), {id: this.transactionId});
+    this.payment$ = this.store.select(PaymentSelectors.selectPaymentById(), {id: this.transactionId});
   }
 
   ngOnDestroy(): void {
@@ -45,7 +45,7 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
   }
 
   selectUserById(id: number): Observable<User> {
-    return this.store.select(selectUserById(), {id: id});
+    return this.store.select(UserSelectors.selectUserById(), {id: id});
   }
 
 }

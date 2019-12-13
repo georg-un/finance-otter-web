@@ -13,21 +13,27 @@ const {
 
 const selectUsers = (state: AppState) => state.users;
 
-export const selectUserIds = createSelector(selectUsers, selectIds);
-export const selectUserEntities = createSelector(selectUsers, selectEntities);
-export const selectAllUsers = createSelector(selectUsers, selectAll);
-export const selectUserCount = createSelector(selectUsers, selectTotal);
+export class UserSelectors {
 
-export const selectCurrentUser = createSelector(
-  selectUsers,
-  users => users.entities[users.currentUserId]
-);
+  static selectUserIds = createSelector(selectUsers, selectIds);
+  static selectUserEntities = createSelector(selectUsers, selectEntities);
+  static selectAllUsers = createSelector(selectUsers, selectAll);
+  static selectUserCount = createSelector(selectUsers, selectTotal);
 
-export const selectUserById = () => {
-  return createSelector(
-    selectUserEntities,
-    (entities: Dictionary<User>, props: { id: number }) => {
-      return entities[props.id];
-    },
+  static selectCurrentUser = createSelector(selectUsers,
+    users => users.entities[users.currentUserId]
   );
-};
+
+  static selectUserById = () => {
+    return createSelector(
+      UserSelectors.selectUserEntities,
+      (entities: Dictionary<User>, props: { id: number }) => {
+        return entities[props.id];
+      },
+    );
+  }
+
+}
+
+
+
