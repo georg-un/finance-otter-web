@@ -2,16 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
 import { AppState } from '../store/states/app.state';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Payment } from '../core/rest-service/entity/payment';
 import { IdGeneratorService } from '../core/id-generator.service';
 import { Debit } from '../core/rest-service/entity/debit';
 import { addNewPayment } from '../store/actions/core.actions';
 import { EditorService } from './editor.service';
-import { selectCurrentUser } from '../store/selectors/user.selector';
+import { selectAllUsers, selectCurrentUser } from '../store/selectors/user.selector';
 
 @Component({
   selector: 'app-payment-editor',
@@ -25,23 +25,24 @@ export class PaymentEditorComponent implements OnInit, OnDestroy {
 
   payment: Payment = new Payment();
   customDistribution = false;
-  onDestroy$: Subject<boolean> = new Subject();
 
   users: User[];
   distributionFragments: {user: User, amount: number, checked: boolean}[];
+  private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private store: Store<AppState>,
               private editorService: EditorService,
               private idGeneratorService: IdGeneratorService) { }
 
   ngOnInit() {
+
     this.store.select(selectCurrentUser)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((currentUser: User) => {
         this.payment.userId = currentUser.userId;
       });
 
-    this.store.select(selectUsers)
+    this.store.select(selectAllUsers)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((users: User[]) => {
         this.users = users;

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/rest-service/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
-import { selectUsers } from '../store/selectors/core.selectors';
+import { selectAllUsers } from '../store/selectors/user.selector';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -19,11 +19,11 @@ export class OverviewComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.select(selectUsers)
+    this.store.select(selectAllUsers)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((users: User[]) => {
-        this.users = users;
-      })
+      this.users = users;
+    });
   }
 
   ngOnDestroy(): void {

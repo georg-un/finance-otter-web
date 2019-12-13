@@ -2,12 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Payment } from '../core/rest-service/entity/payment';
 import { Store } from '@ngrx/store';
 import * as CoreActions from '../store/actions/core.actions';
-import { selectPayment, selectUsers } from '../store/selectors/core.selectors';
 import { AppState } from '../store/states/app.state';
 import { Observable, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../core/rest-service/entity/user';
+import { selectAllUsers } from '../store/selectors/user.selector';
+import { selectPaymentById } from '../store/selectors/payment.selector';
+
 
 @Component({
   selector: 'app-payment-view',
@@ -26,14 +28,14 @@ export class PaymentViewComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.users$ = this.store.select(selectUsers);
+    this.users$ = this.store.select(selectAllUsers);
 
     this.route.paramMap.subscribe(params => {
       this.transactionId = params.get('transactionId');
     });
 
     this.store.dispatch(CoreActions.requestPaymentData({transactionId: this.transactionId}));
-    this.payment$ = this.store.select(selectPayment)
+    this.payment$ = this.store.select(selectPaymentById, this.transactionId)
       .pipe(takeUntil(this.onDestroy$));
   }
 

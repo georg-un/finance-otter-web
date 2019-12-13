@@ -4,7 +4,7 @@ import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { selectCurrentUser } from '../../store/selectors/core.selectors';
+import { selectCurrentUser } from '../../store/selectors/user.selector';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

@@ -9,12 +9,12 @@ const {
   selectTotal,
 } = userAdapter.getSelectors();
 
-export const selectUserIds = selectIds;
-export const selectUserEntities = selectEntities;
-export const selectAllUsers = selectAll;
-export const selectUserCount = selectTotal;
-
 const selectUsers = (state: AppState) => state.users;
+
+export const selectUserIds = createSelector(selectUsers, selectIds);
+export const selectUserEntities = createSelector(selectUsers, selectEntities);
+export const selectAllUsers = createSelector(selectUsers, selectAll);
+export const selectUserCount = createSelector(selectUsers, selectTotal);
 
 export const selectCurrentUser = createSelector(
   selectUsers,
