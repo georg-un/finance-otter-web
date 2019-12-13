@@ -5,6 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LayoutActions } from './store/actions/layout.actions';
 import { UserActions } from './store/actions/user.actions';
+import { LeftButtonIconEnum, RightButtonIconEnum } from './layout/header/button-enums';
 
 @Component({
   selector: 'app-root',
@@ -29,21 +30,29 @@ export class AppComponent implements OnInit {
         case 'transactions':
           this.store.dispatch(LayoutActions.setFAB({fab: 'add'}));
           this.store.dispatch(LayoutActions.setFABLink({fabLink: '/edit'}));
-          this.store.dispatch(LayoutActions.setHeaderButtons({leftHeaderButton: 'menu', rightHeaderButton: 'sync'}));
+          this.store.dispatch(LayoutActions.setHeaderButtons(
+            {leftHeaderButton: LeftButtonIconEnum.Menu, rightHeaderButton: RightButtonIconEnum.Sync}
+            ));
           break;
         case 'overview':
           this.store.dispatch(LayoutActions.setFAB({fab: 'add'}));
           this.store.dispatch(LayoutActions.setFABLink({fabLink: '/edit'}));
-          this.store.dispatch(LayoutActions.setHeaderButtons({leftHeaderButton: 'menu', rightHeaderButton: 'sync'}));
+          this.store.dispatch(LayoutActions.setHeaderButtons(
+            {leftHeaderButton: LeftButtonIconEnum.Menu, rightHeaderButton: RightButtonIconEnum.Sync}
+            ));
           break;
         case 'edit':
           this.store.dispatch(LayoutActions.setFAB({fab: null}));
-          this.store.dispatch(LayoutActions.setHeaderButtons({leftHeaderButton: 'clear', rightHeaderButton: 'done'}));
+          this.store.dispatch(LayoutActions.setHeaderButtons(
+            {leftHeaderButton: LeftButtonIconEnum.Clear, rightHeaderButton: RightButtonIconEnum.Done}
+            ));
           break;
         case 'payment':
           this.store.dispatch(LayoutActions.setFAB({fab: 'edit'}));
           this.store.dispatch(LayoutActions.setFABLink({fabLink: '/edit/' + route.url.split('/')[2]}));
-          this.store.dispatch(LayoutActions.setHeaderButtons({leftHeaderButton: 'clear', rightHeaderButton: 'sync'}));
+          this.store.dispatch(LayoutActions.setHeaderButtons(
+            {leftHeaderButton: LeftButtonIconEnum.Back, rightHeaderButton: RightButtonIconEnum.Sync}
+            ));
           break;
       }
     });

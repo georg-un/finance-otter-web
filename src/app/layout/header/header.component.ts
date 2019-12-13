@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 import { selectLeftHeaderButton, selectRightHeaderButton } from '../../store/selectors/layout.selectors';
 import { EditorService } from '../../payment-editor/editor.service';
 import { LayoutActions } from '../../store/actions/layout.actions';
+import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 
 @Component({
   selector: 'app-header',
@@ -43,15 +44,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLeftButtonClick(): void {
-    if (this.leftHeaderButton === 'clear') {
+    if (this.leftHeaderButton !== LeftButtonIconEnum.Menu) {
       this.location.back();
-    } else if (this.leftHeaderButton === 'menu') {
+    } else {
       this.store.dispatch(LayoutActions.toggleSidenav());
     }
   }
 
   onRightButtonClick(): void {
-    this.editorService.emitAddPaymentTrigger();
+    if (this.rightHeaderButton === RightButtonIconEnum.Done) {
+      this.editorService.emitAddPaymentTrigger();
+    }
   }
 
 }
