@@ -11,6 +11,11 @@ mat-toolbar {
   justify-content: space-between;
 }
 
+.logo {
+  height: 56px;
+  width: 56px;
+}
+
 .rotate-icon {
   animation: rotate 2s linear infinite;
   transform-origin: center center;

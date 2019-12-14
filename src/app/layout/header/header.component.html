@@ -2,6 +2,7 @@
   <button mat-icon-button (click)="onLeftButtonClick()">
     <mat-icon>{{leftHeaderButton}}</mat-icon>
   </button>
+  <img class="logo" [src]="'assets/otter-icon-128.png'" *ngIf="showLogo">
   <button mat-icon-button (click)="onRightButtonClick()" *ngIf="rightHeaderButton">
     <mat-icon [ngClass]="{'rotate-icon': shouldIconRotate}">{{rightHeaderButton}}</mat-icon>
   </button>

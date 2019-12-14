@@ -19,6 +19,7 @@ import { PaymentSelectors } from '../../store/selectors/payment.selectors';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  protected showLogo: boolean;
   protected shouldIconRotate: boolean;
   protected leftHeaderButton = 'menu';
   protected rightHeaderButton = 'sync';
