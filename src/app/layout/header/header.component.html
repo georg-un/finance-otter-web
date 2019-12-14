@@ -3,6 +3,6 @@
     <mat-icon>{{leftHeaderButton}}</mat-icon>
   </button>
   <button mat-icon-button (click)="onRightButtonClick()" *ngIf="rightHeaderButton">
-    <mat-icon>{{rightHeaderButton}}</mat-icon>
+    <mat-icon [ngClass]="{'rotate-icon': shouldIconRotate}">{{rightHeaderButton}}</mat-icon>
   </button>
 </mat-toolbar>

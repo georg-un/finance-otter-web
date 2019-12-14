@@ -19,6 +19,7 @@ export class PaymentSelectors {
   static selectPaymentEntities = createSelector(selectPayments, selectEntities);
   static selectAllPayments = createSelector(selectPayments, selectAll);
   static selectPaymentCount = createSelector(selectPayments, selectTotal);
+  static selectSyncJobs = createSelector(selectPayments, state => state.syncJobs);
 
   static selectPaymentById = () => {
     return createSelector(
