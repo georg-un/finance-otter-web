@@ -14,10 +14,12 @@ import {
   MatSelectModule,
   MatSlideToggleModule
 } from '@angular/material';
+import { PaymentEditorEditComponent } from './payment-editor-edit.component';
 
 @NgModule({
   declarations: [
     PaymentEditorNewComponent,
+    PaymentEditorEditComponent
   ],
   imports: [
     CommonModule,

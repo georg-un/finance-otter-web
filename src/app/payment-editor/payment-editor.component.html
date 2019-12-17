@@ -39,7 +39,8 @@
     <i class="material-icons editor-symbol-col">today</i>
     <mat-form-field class="editor-input-col">
       <input
-        [(ngModel)]="payment.date"
+        [ngModel]="date ? date : undefined"
+        (ngModelChange)="payment.date = $event"
         [matDatepicker]="picker"
         matInput
         placeholder="Date"
@@ -62,7 +63,11 @@
 
   <br/>
 
-  <mat-slide-toggle labelPosition="before" (change)="onDistributionToggleChange($event)">
+  <mat-slide-toggle
+    labelPosition="before"
+    [checked]="customDistribution"
+    (change)="onDistributionToggleChange($event)"
+  >
     <p><small>CUSTOM DISTRIBUTION</small></p>
   </mat-slide-toggle>
 
