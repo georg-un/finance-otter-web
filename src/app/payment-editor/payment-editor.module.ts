@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaymentEditorComponent } from './payment-editor.component';
+import { PaymentEditorNewComponent } from './payment-editor-new.component';
 import { FormsModule } from '@angular/forms';
 import {
   MatButtonModule,
@@ -17,7 +17,7 @@ import {
 
 @NgModule({
   declarations: [
-    PaymentEditorComponent
+    PaymentEditorNewComponent,
   ],
   imports: [
     CommonModule,

@@ -29,19 +29,20 @@ export class AppComponent implements OnInit {
       switch (route.url.split('/')[1]) {
         case 'transactions':
           this.store.dispatch(LayoutActions.setFAB({fab: 'add'}));
-          this.store.dispatch(LayoutActions.setFABLink({fabLink: '/edit'}));
+          this.store.dispatch(LayoutActions.setFABLink({fabLink: '/new'}));
           this.store.dispatch(LayoutActions.setHeaderButtons(
             {leftHeaderButton: LeftButtonIconEnum.Menu, rightHeaderButton: RightButtonIconEnum.Sync}
             ));
           break;
         case 'overview':
           this.store.dispatch(LayoutActions.setFAB({fab: 'add'}));
-          this.store.dispatch(LayoutActions.setFABLink({fabLink: '/edit'}));
+          this.store.dispatch(LayoutActions.setFABLink({fabLink: '/new'}));
           this.store.dispatch(LayoutActions.setHeaderButtons(
             {leftHeaderButton: LeftButtonIconEnum.Menu, rightHeaderButton: RightButtonIconEnum.Sync}
             ));
           break;
         case 'edit':
+        case 'new':
           this.store.dispatch(LayoutActions.setFAB({fab: null}));
           this.store.dispatch(LayoutActions.setHeaderButtons(
             {leftHeaderButton: LeftButtonIconEnum.Clear, rightHeaderButton: RightButtonIconEnum.Done}

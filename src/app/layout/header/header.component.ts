@@ -4,7 +4,7 @@ import { combineLatest, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Location } from '@angular/common';
-import { EditorService } from '../../payment-editor/editor.service';
+import { PaymentEditorService } from '../../payment-editor/payment-editor.service';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 import { PaymentActions } from '../../store/actions/payment.actions';
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected rightHeaderButton = 'sync';
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private editorService: EditorService,
+  constructor(private editorService: PaymentEditorService,
               private store: Store<AppState>,
               private location: Location) { }
 

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EditorService } from './editor.service';
+import { PaymentEditorService } from './payment-editor.service';
 
-describe('EditorService', () => {
+describe('PaymentEditorService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EditorService = TestBed.get(EditorService);
+    const service: PaymentEditorService = TestBed.get(PaymentEditorService);
     expect(service).toBeTruthy();
   });
 });

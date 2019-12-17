@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class EditorService {
+export class PaymentEditorService {
 
   addPaymentTrigger: Subject<boolean> = new Subject();
 

@@ -4,7 +4,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { OverviewComponent } from './overview/overview.component';
 import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { LayoutComponent } from './layout/layout.component';
-import { PaymentEditorComponent } from './payment-editor/payment-editor.component';
+import { PaymentEditorNewComponent } from './payment-editor/payment-editor-new.component';
 
 const routes: Routes = [
   {
@@ -25,12 +25,12 @@ const routes: Routes = [
         component: OverviewComponent
       },
       {
-        path: 'payment/:transactionId',
+        path: 'payment/:paymentId',
         component: PaymentViewComponent
       },
       {
-        path: 'edit',
-        component: PaymentEditorComponent
+        path: 'new',
+        component: PaymentEditorNewComponent
       },
       {
         path: 'edit/:transactionId',
