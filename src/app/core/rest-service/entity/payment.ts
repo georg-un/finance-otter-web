@@ -15,6 +15,8 @@ export class Payment {
 
 export enum SyncStatusEnum {
   Local = 'local',
-  Remote = 'remote',
-  Syncing = 'syncing'
+  LocalUpdate = 'localUpdate',
+  LocalDelete = 'localDelete',
+  Syncing = 'syncing',
+  Remote = 'remote'
 }

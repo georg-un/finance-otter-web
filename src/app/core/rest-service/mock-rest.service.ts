@@ -28,8 +28,22 @@ export class MockRestService {
   }
 
   uploadNewPayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}> {
-    return of({payment: payment, code: 200, message: null}).pipe(
-      delay(500)
+    const returnedPayment = Object.assign({}, payment);
+    return of({payment: returnedPayment, code: 200, message: null}).pipe(
+      delay(2500)
+    );
+  }
+
+  updatePayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}> {
+    const returnedPayment = Object.assign({}, payment);
+    return of({payment: returnedPayment, code: 200, message: null}).pipe(
+      delay(2500)
+    );
+  }
+
+  deletePayment(paymentId: string): Observable<{paymentId: string, code: number, message: string}> {
+    return of({paymentId: paymentId, code: 200, message: null}).pipe(
+      delay(2500)
     );
   }
 

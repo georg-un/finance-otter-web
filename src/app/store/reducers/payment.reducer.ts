@@ -5,42 +5,63 @@ import { PaymentActions } from '../actions/payment.actions';
 
 const paymentReducer = createReducer(
   initialState,
-  on(PaymentActions.addPayment, (state, { payment }) => {
+  on(PaymentActions.addPaymentEntity, (state, { payment }) => {
     return paymentAdapter.addOne(payment, state);
   }),
-  on(PaymentActions.addPayments, (state, { payments }) => {
+  on(PaymentActions.addPaymentEntities, (state, { payments }) => {
     return paymentAdapter.addMany(payments, state);
   }),
-  on(PaymentActions.updatePayment, (state, { payment }) => {
+  on(PaymentActions.updatePaymentEntity, (state, { payment }) => {
     return paymentAdapter.updateOne(payment, state);
   }),
-  on(PaymentActions.updatePayments, (state, { payments }) => {
+  on(PaymentActions.updatePaymentEntities, (state, { payments }) => {
     return paymentAdapter.updateMany(payments, state);
   }),
-  on(PaymentActions.replacePayments, (state, { payments }) => {
+  on(PaymentActions.replacePaymentEntities, (state, { payments }) => {
     return paymentAdapter.addAll(payments, state);
   }),
-  on(PaymentActions.clearPayments, state => {
+  on(PaymentActions.clearPaymentEntities, state => {
     return paymentAdapter.removeAll(state);
   }),
-  on(PaymentActions.requestPayments, state => (
-    {...state, syncJobs: state.syncJobs + 1}
-  )),
+  on(PaymentActions.requestPayments, state => {
+    return  {...state, syncJobs: state.syncJobs + 1};
+  }),
   on(PaymentActions.paymentsReceived, (state, { payments }) => {
     return paymentAdapter.addMany(payments, {...state, syncJobs: state.syncJobs - 1});
   }),
-  on(PaymentActions.requestSinglePayment, state => (
-    {...state, syncJobs: state.syncJobs + 1}
-  )),
+  on(PaymentActions.requestSinglePayment, state => {
+    return {...state, syncJobs: state.syncJobs + 1};
+  }),
   on(PaymentActions.singlePaymentReceived, (state, { payment }) => {
     return paymentAdapter.addOne(payment, {...state, syncJobs: state.syncJobs - 1});
   }),
   on(PaymentActions.addNewPayment, (state, { payment }) => {
     return paymentAdapter.addOne(payment, {...state, syncJobs: state.syncJobs + 1});
   }),
+  on(PaymentActions.updatePayment, (state, { payment }) => {
+    return {...state, syncJobs: state.syncJobs + 1};
+  }),
+  on(PaymentActions.deletePayment, (state, { payment }) => {
+    return paymentAdapter.removeOne(payment.paymentId, {...state, syncJobs: state.syncJobs + 1})
+  }),
   on(PaymentActions.paymentUploadSuccessful, (state, { payment }) => {
-    return paymentAdapter.updateOne(payment, {...state, syncJobs: state.syncJobs - 1});
-  })
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PaymentActions.paymentUploadFailed, (state, { paymentId }) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PaymentActions.paymentUpdateSuccessful, (state, { payment }) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PaymentActions.paymentUpdateFailed, (state, { paymentId }) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PaymentActions.paymentDeleteSuccessful, (state, { paymentId }) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PaymentActions.paymentDeleteFailed, (state, { payment }) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
 );
 
 

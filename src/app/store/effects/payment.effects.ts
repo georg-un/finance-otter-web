@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
 import { MockRestService } from '../../core/rest-service/mock-rest.service';
 import { Router } from '@angular/router';
-import { Update } from '@ngrx/entity';
-import { Payment, SyncStatusEnum } from '../../core/rest-service/entity/payment';
+import { SyncStatusEnum } from '../../core/rest-service/entity/payment';
 import { PaymentActions } from '../actions/payment.actions';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { AppState } from '../states/app.state';
 import { RouterSelectors } from '../selectors/router.selectors';
 import { LayoutSelectors } from '../selectors/layout.selectors';
@@ -43,28 +42,73 @@ export class PaymentEffects {
   uploadPayment$ = createEffect(() => this.actions$.pipe(
     ofType(PaymentActions.addNewPayment),
     tap((action) => this.router.navigateByUrl('payment/' + action.payment.paymentId)),
-    mergeMap((action) => this.restService.uploadNewPayment(action.payment)
+    switchMap((action) => new Observable<Action>((observer) => {
+      // Update sync-status of payment to 'syncing'
+      const setSyncStatusAction = PaymentActions.updatePaymentEntity({
+        payment: {
+          id: action.payment.paymentId,
+          changes: {syncStatus: SyncStatusEnum.Syncing}
+        }
+      });
+      observer.next(setSyncStatusAction);
+      // Upload payment and dispatch action according to upload result
+      this.restService.uploadNewPayment(action.payment)
+        .pipe(take(1))
+        .subscribe((result) => {
+          if (result.code !== 200) {
+            console.log(result.code, result.message);  // TODO: Show this in a toast message
+            observer.next(PaymentActions.paymentUploadFailed({paymentId: action.payment.paymentId}));
+          } else {
+            observer.next(PaymentActions.paymentUploadSuccessful({payment: result.payment}));
+          }
+        })
+    }))
+  ));
+
+  updatePayment$ = createEffect(() => this.actions$.pipe(
+    ofType(PaymentActions.updatePayment),
+    tap((action) => this.router.navigateByUrl('payment/' + action.payment.paymentId)),
+    switchMap((action) => new Observable<Action>((observer) => {
+      // Update sync-status of payment to 'syncing'
+      const setSyncStatusAction = PaymentActions.updatePaymentEntity({
+        payment: {
+          id: action.payment.paymentId,
+          changes: {syncStatus: SyncStatusEnum.Syncing}
+        }
+      });
+      observer.next(setSyncStatusAction);
+      // Upload payment and dispatch action according to upload result
+      this.restService.updatePayment(action.payment)
+        .pipe(take(1))
+        .subscribe((result) => {
+          if (result.code !== 200) {
+            console.log(result.code, result.message);  // TODO: Show this in a toast message
+            observer.next(PaymentActions.paymentUpdateFailed({paymentId: action.payment.paymentId}));
+          } else {
+            observer.next(PaymentActions.paymentUpdateSuccessful({payment: result.payment}));
+          }
+        })
+    }))
+  ));
+
+  deletePayment$ = createEffect(() => this.actions$.pipe(
+    ofType(PaymentActions.deletePayment),
+    tap(() => this.router.navigateByUrl('/')),
+    mergeMap((action) => this.restService.deletePayment(action.payment.paymentId)
       .pipe(
         map(result => {
           if (result.code !== 200) {
             console.log(result.code, result.message);  // TODO: Show this in a toast message
-            const localUpdate: Update<Payment> = {
-              id: result.payment.paymentId,
-              changes: {syncStatus: SyncStatusEnum.Local}
-            };
-            return PaymentActions.paymentUploadFailed({payment: localUpdate});
+            return PaymentActions.paymentDeleteFailed({payment: action.payment});
           } else {
-            const remoteUpdate: Update<Payment> = {
-              id: result.payment.paymentId,
-              changes: {syncStatus: SyncStatusEnum.Remote}
-            };
-            return PaymentActions.paymentUploadSuccessful({payment: remoteUpdate});
+            return PaymentActions.paymentDeleteSuccessful({paymentId: action.payment.paymentId});
           }
-        }))
+        })
+      )
     )
   ));
 
-  syncPayment$ = createEffect(() => this.actions$.pipe(  // TODO: What to do with local payments?
+  syncPayment$ = createEffect(() => this.actions$.pipe(  // TODO: What to do with local payments? What to do with payments that are already syncing?
     ofType(PaymentActions.syncPayments),
     withLatestFrom(
       this.store.select(LayoutSelectors.selectPagination),
@@ -81,5 +125,44 @@ export class PaymentEffects {
       return actions;
     })
   ));
+
+  paymentUploadOrUpdateSuccessful$ = createEffect(() => this.actions$.pipe(
+    ofType(PaymentActions.paymentUploadSuccessful, PaymentActions.paymentUpdateSuccessful),
+    map((action) => PaymentActions.updatePaymentEntity({
+        payment: {
+          id: action.payment.paymentId,
+          changes: {...action.payment, syncStatus: SyncStatusEnum.Remote}
+        }
+      })
+    ))
+  );
+
+  paymentUploadFailed$ = createEffect(() => this.actions$.pipe(
+    ofType(PaymentActions.paymentUploadFailed),
+    map((action) => PaymentActions.updatePaymentEntity({
+      payment: {
+        id: action.paymentId,
+        changes: { syncStatus: SyncStatusEnum.Local }
+      }
+    })))
+  );
+
+  paymentUpdateFailed$ = createEffect(() => this.actions$.pipe(
+    ofType(PaymentActions.paymentUpdateFailed),
+    map((action) => PaymentActions.updatePaymentEntity({
+      payment: {
+        id: action.paymentId,
+        changes: { syncStatus: SyncStatusEnum.LocalUpdate }
+      }
+    })))
+  );
+
+  paymentDeleteFailed$ = createEffect(() => this.actions$.pipe(
+    ofType(PaymentActions.paymentDeleteFailed),
+    map((action) =>  PaymentActions.addPaymentEntity(
+      {payment: {...action.payment, syncStatus: SyncStatusEnum.LocalDelete}}
+      ))
+    )
+  );
 
 }
