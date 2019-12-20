@@ -65,13 +65,13 @@ export class PaymentEditorNewComponent extends AbstractEditor implements OnInit 
   }
 
   generatePayment(): void {
-    const transactionId = this.idGeneratorService.generateId();
-    this.payment.paymentId = transactionId;
+    const paymentId = this.idGeneratorService.generateId();
+    this.payment.paymentId = paymentId;
     this.payment.debits = [];
     this.distributionFragments.forEach(distributionFragment => {
       this.payment.debits.push(
         new Debit({
-          transactionId: transactionId,
+          transactionId: paymentId,
           debitId: this.idGeneratorService.generateId(),
           debtorId: distributionFragment.user.userId,
           amount: distributionFragment.amount

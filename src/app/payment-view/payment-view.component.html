@@ -1,19 +1,21 @@
 <div class="payment-header">
 
   <div class="payment-header-shop">
-    <p>{{(payment$ | async)?.shop | titlecase}}</p>
+    <p>{{ payment.shop | titlecase }}</p>
   </div>
   <div class="payment-header-amount">
-    <p>€ {{(payment$ | async)?.sumAmount}}</p>
+    <p>€ {{ payment.sumAmount }}</p>
   </div>
-  <div class="payment-header-pic-icon">
-    <a href='#'><i class="material-icons icon-white">photo</i></a>
-  </div>
+  <button mat-icon-button class="payment-header-pic-icon">
+    <mat-icon>photo</mat-icon>
+  </button>
   <div class="payment-header-category">
-    <p>{{(payment$ | async)?.category | lowercase}}</p>
+    <p>{{ payment.category | lowercase }}</p>
   </div>
   <div class="payment-header-trash-icon">
-    <i id='delete-button' class="material-icons icon-white">delete</i>
+  <button mat-icon-button (click)="onDeleteButtonClick()" class="payment-header-trash-icon">
+    <mat-icon>delete</mat-icon>
+  </button>
   </div>
 
 </div>
@@ -21,11 +23,11 @@
 <div class="detail-container z-depth-1-reversed">
 
   <div id='payment-description'>
-    <p>{{(payment$ | async)?.description}}</p>
+    <p>{{ payment.description }}</p>
   </div>
   <p class="detail-title">DISTRIBUTION</p>
   <div class="debit-blockquote">
-    <ng-container *ngFor="let debit of (payment$ | async)?.debits">
+    <ng-container *ngFor="let debit of payment.debits">
       <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
         <app-debit-card [debit]="debit" [user]="user"></app-debit-card>
       </ng-container>

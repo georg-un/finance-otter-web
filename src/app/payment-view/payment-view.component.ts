@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { User } from '../core/rest-service/entity/user';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { PaymentSelectors } from '../store/selectors/payment.selectors';
+import { take } from "rxjs/operators";
+import { PaymentActions } from "../store/actions/payment.actions";
 
 
 @Component({
@@ -16,17 +18,24 @@ import { PaymentSelectors } from '../store/selectors/payment.selectors';
 export class PaymentViewComponent implements OnInit {
 
   // FIXME: Load entity data if not present.
-
-  private payment$: Observable<Payment>;
+  private payment: Payment;
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.payment$ = this.store.select(PaymentSelectors.selectCurrentPayment);
+    this.store.select(PaymentSelectors.selectCurrentPayment)
+      .pipe(take(1))
+      .subscribe((payment) => {
+      this.payment = payment;
+    })
   }
 
   selectUserById(id: number): Observable<User> {
     return this.store.select(UserSelectors.selectUserById(), {id: id});
+  }
+
+  onDeleteButtonClick(): void {
+    this.store.dispatch(PaymentActions.deletePayment({payment: this.payment}));
   }
 
 }
