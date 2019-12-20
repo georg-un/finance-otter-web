@@ -67,7 +67,7 @@ export class PaymentEditorEditComponent extends AbstractEditor implements OnInit
       return;
     }
     this.store.dispatch(
-      PaymentActions.addNewPayment({  // FIXME: Add action to update remote payment.
+      PaymentActions.updatePayment({
         payment: this.payment
       })
     );
