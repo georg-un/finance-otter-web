@@ -9,7 +9,7 @@ export interface LayoutState {
 
 export const initialState: LayoutState = {
   fab: 'add',
-  fabLink: 'edit',
+  fabLink: 'new',
   leftHeaderButton: 'menu',
   rightHeaderButton: 'sync',
   sidenavOpen: false,
