@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { LayoutActions } from './store/actions/layout.actions';
 import { UserActions } from './store/actions/user.actions';
 import { LeftButtonIconEnum, RightButtonIconEnum } from './layout/header/button-enums';
+import { PaymentActions } from "./store/actions/payment.actions";
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.requestUsers());
+    this.store.dispatch(PaymentActions.requestPayments({offset: 0, limit: 0}));
 
     // TODO: Move this logic to ngrx router
     this.router.events.pipe(
