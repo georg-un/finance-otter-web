@@ -4,22 +4,22 @@ import { UserActions } from '../actions/user.actions';
 
 const userReducer = createReducer(
   initialState,
-  on(UserActions.addUser, (state, { user }) => {
+  on(UserActions.addUserEntity, (state, { user }) => {
     return userAdapter.addOne(user, state);
   }),
-  on(UserActions.addUsers, (state, { users }) => {
+  on(UserActions.addUserEntities, (state, { users }) => {
     return userAdapter.addMany(users, state);
   }),
-  on(UserActions.updateUser, (state, { user }) => {
+  on(UserActions.updateUserEntity, (state, { user }) => {
     return userAdapter.updateOne(user, state);
   }),
-  on(UserActions.updateUsers, (state, { users }) => {
+  on(UserActions.updateUserEntities, (state, { users }) => {
     return userAdapter.updateMany(users, state);
   }),
-  on(UserActions.replaceUsers, (state, { users }) => {
+  on(UserActions.replaceUserEntities, (state, { users }) => {
     return userAdapter.addAll(users, state);
   }),
-  on(UserActions.clearUsers, state => {
+  on(UserActions.removeUserEntities, state => {
     return userAdapter.removeAll(state);
   }),
   on(UserActions.usersReceived, (state, {users}) => {
