@@ -12,5 +12,7 @@ $indicator-green: mat-color(mat-palette($mat-green), 300);
 $indicator-orange: mat-color(mat-palette($mat-orange), 400);
 $indicator-red: mat-color(mat-palette($mat-red), 500);
 
+$header-background: mat-color(mat-palette($mat-purple), 500);
+$header-font-color: mat-color(mat-palette($mat-purple), default-contrast);
 
 $header-height: 56px;

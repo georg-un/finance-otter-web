@@ -11,6 +11,8 @@ import { DistributionFragment } from './distribution-fragment';
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 
+  // FIXME: 12.56€ does not work.
+
   payment: Payment;
   users$: Observable<User[]>;
   date: Date;

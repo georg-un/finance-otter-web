@@ -19,6 +19,7 @@ export class PaymentViewComponent implements OnInit {
 
   // FIXME: Load entity data if not present.
   private payment: Payment;
+  private user$: Observable<User>;
 
   constructor(private store: Store<AppState>) { }
 
@@ -27,6 +28,7 @@ export class PaymentViewComponent implements OnInit {
       .pipe(take(1))
       .subscribe((payment) => {
       this.payment = payment;
+      this.user$ = this.selectUserById(payment.userId);
     })
   }
 

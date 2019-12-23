@@ -31,7 +31,7 @@ export const PAYMENTS: Payment[] = [
     category: 'pets',
     shop: 'Pet Store',
     description: 'Bought new dog food',
-    syncStatus: SyncStatusEnum.Remote,
+    syncStatus: SyncStatusEnum.Syncing,
     billId: null,
     sumAmount: 64.02,
     debits: [
@@ -54,7 +54,7 @@ export const PAYMENTS: Payment[] = [
     category: 'hygiene',
     shop: 'Drugstore',
     description: null,
-    syncStatus: SyncStatusEnum.Remote,
+    syncStatus: SyncStatusEnum.LocalDelete,
     billId: null,
     sumAmount: 22.32,
     debits: [
