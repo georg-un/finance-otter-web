@@ -1,0 +1,13 @@
+@import "../../../assets/variables";
+
+.success {
+  color: $indicator-green;
+}
+
+.process {
+  color: $indicator-orange;
+}
+
+.error {
+  color: $indicator-red;
+}

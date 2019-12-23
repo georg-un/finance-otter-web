@@ -1,7 +1,6 @@
 <mat-card (click)="onClick()">
   <mat-card-content>
     <div class='payment-card'>
-
       <div class='grid-cell__r2-c1'>
           <img mat-card-avatar [src]='avatar'>
       </div>
@@ -28,11 +27,10 @@
       </div>
 
       <div class="grid-cell__r3-c3">
-        <span class="sync-status-indicator"
-              [ngClass]="{'syncing': payment.syncStatus === 'syncing',
-                          'remote': payment.syncStatus === 'remote',
-                          'local': payment.syncStatus.toString().startsWith('local')}"
-        ></span>
+        <app-sync-indicator [syncStatus]="payment.syncStatus"
+                            [size]="'18px'"
+                            class="sync-status-indicator"
+        ></app-sync-indicator>
       </div>
 
     </div>
