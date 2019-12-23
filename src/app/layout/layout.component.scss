@@ -1,8 +1,8 @@
 @import "../../assets/variables";
 
 .main-content {
-  margin-top: 56px;
-  height: calc(100vh - 56px);
+  margin-top: calc(#{$header-height} - 2px);
+  height: calc(100vh - #{$header-height});
   padding-top: 2px;
   background-color: $light-primary;
   z-index: 1;
