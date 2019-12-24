@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransactionsComponent } from './transactions.component';
-import {TransactionCardComponent} from './transaction-card/transaction-card.component';
+import { PaymentListComponent } from './payment-list.component';
+import {PaymentCardComponent} from './payment-card/payment-card.component';
 import {MatCardModule} from '@angular/material';
 
-describe('TransactionsComponent', () => {
-  let component: TransactionsComponent;
-  let fixture: ComponentFixture<TransactionsComponent>;
+describe('PaymentListComponent', () => {
+  let component: PaymentListComponent;
+  let fixture: ComponentFixture<PaymentListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -14,8 +14,8 @@ describe('TransactionsComponent', () => {
         MatCardModule,
       ],
       declarations: [
-        TransactionsComponent,
-        TransactionCardComponent,
+        PaymentListComponent,
+        PaymentCardComponent,
       ],
       providers: []
     })
@@ -23,7 +23,7 @@ describe('TransactionsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionsComponent);
+    fixture = TestBed.createComponent(PaymentListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

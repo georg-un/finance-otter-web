@@ -8,11 +8,11 @@ import { Payment } from '../core/rest-service/entity/payment';
 import { PaymentSelectors } from '../store/selectors/payment.selectors';
 
 @Component({
-  selector: 'app-transactions',
-  templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.scss']
+  selector: 'app-payment-list',
+  templateUrl: './payment-list.component.html',
+  styleUrls: ['./payment-list.component.scss']
 })
-export class TransactionsComponent implements OnInit, OnDestroy {
+export class PaymentListComponent implements OnInit, OnDestroy {
 
   payments: Payment[];
   private onDestroy$: Subject<boolean> = new Subject();

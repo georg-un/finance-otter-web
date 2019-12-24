@@ -1,24 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransactionCardComponent } from './transaction-card.component';
+import { PaymentCardComponent } from './payment-card.component';
 import {MatCardModule} from '@angular/material';
 
-describe('TransactionCardComponent', () => {
-  let component: TransactionCardComponent;
-  let fixture: ComponentFixture<TransactionCardComponent>;
+describe('PaymentCardComponent', () => {
+  let component: PaymentCardComponent;
+  let fixture: ComponentFixture<PaymentCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         MatCardModule,
       ],
-      declarations: [ TransactionCardComponent ]
+      declarations: [ PaymentCardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionCardComponent);
+    fixture = TestBed.createComponent(PaymentCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Payment } from '../../core/rest-service/entity/payment';
 
 @Component({
-  selector: 'app-transaction-card',
-  templateUrl: './transaction-card.component.html',
-  styleUrls: ['./transaction-card.component.scss']
+  selector: 'app-payment-card',
+  templateUrl: './payment-card.component.html',
+  styleUrls: ['./payment-card.component.scss']
 })
-export class TransactionCardComponent implements OnInit {
+export class PaymentCardComponent implements OnInit {
 
   @Input() payment: Payment;
   avatar: any = 'assets/otter-avatar.jpg';

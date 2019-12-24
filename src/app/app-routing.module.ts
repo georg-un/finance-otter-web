@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransactionsComponent } from './transactions/transactions.component';
+import { PaymentListComponent } from './payment-list/payment-list.component';
 import { OverviewComponent } from './overview/overview.component';
 import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { LayoutComponent } from './layout/layout.component';
@@ -14,15 +14,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: `/transactions`,
+        redirectTo: `/overview`,
         pathMatch: 'full'
       },
       {
-        path: 'transactions',
-        component: TransactionsComponent
+        path: 'overview',
+        component: PaymentListComponent
       },
       {
-        path: 'overview',
+        path: 'summary',
         component: OverviewComponent
       },
       {

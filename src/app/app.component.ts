@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
       filter(event => event instanceof NavigationEnd)
     ).subscribe((route: NavigationEnd) => {
       switch (route.url.split('/')[1]) {
-        case 'transactions':
+        case 'payment-list':
           this.store.dispatch(LayoutActions.setFAB({fab: 'add'}));
           this.store.dispatch(LayoutActions.setFABLink({fabLink: '/new'}));
           this.store.dispatch(LayoutActions.setHeaderButtons(
