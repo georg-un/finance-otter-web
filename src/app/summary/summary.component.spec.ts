@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OverviewComponent } from './overview.component';
+import { SummaryComponent } from './summary.component';
 import {UserCardComponent} from './user-card/user-card.component';
 import {MatCardModule} from '@angular/material';
 
-describe('OverviewComponent', () => {
-  let component: OverviewComponent;
-  let fixture: ComponentFixture<OverviewComponent>;
+describe('SummaryComponent', () => {
+  let component: SummaryComponent;
+  let fixture: ComponentFixture<SummaryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -14,7 +14,7 @@ describe('OverviewComponent', () => {
         MatCardModule,
       ],
       declarations: [
-        OverviewComponent,
+        SummaryComponent,
         UserCardComponent,
       ]
     })
@@ -22,7 +22,7 @@ describe('OverviewComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OverviewComponent);
+    fixture = TestBed.createComponent(SummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

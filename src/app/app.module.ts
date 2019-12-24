@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './layout/layout.module';
-import { OverviewModule } from './overview/overview.module';
+import { SummaryModule } from './summary/summary.module';
 import { PaymentListModule } from './payment-list/payment-list.module';
 import { PaymentViewModule } from './payment-view/payment-view.module';
 import { PaymentEditorModule } from './payment-editor/payment-editor.module';
@@ -18,7 +18,7 @@ import { SharedModule } from "./shared/shared.module";
   imports: [
     SharedModule,
     LayoutModule,
-    OverviewModule,
+    SummaryModule,
     PaymentListModule,
     PaymentViewModule,
     PaymentEditorModule,

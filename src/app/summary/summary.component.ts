@@ -7,11 +7,11 @@ import { takeUntil } from 'rxjs/operators';
 import { UserSelectors } from '../store/selectors/user.selectors';
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+  selector: 'app-summary',
+  templateUrl: './summary.component.html',
+  styleUrls: ['./summary.component.scss']
 })
-export class OverviewComponent implements OnInit, OnDestroy {
+export class SummaryComponent implements OnInit, OnDestroy {
 
   users: User[];
   private onDestroy$: Subject<boolean> = new Subject();

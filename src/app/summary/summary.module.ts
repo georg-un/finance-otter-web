@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OverviewComponent } from './overview.component';
+import { SummaryComponent } from './summary.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { MatCardModule } from '@angular/material';
 
 @NgModule({
   declarations: [
-    OverviewComponent,
+    SummaryComponent,
     UserCardComponent
   ],
   imports: [
@@ -14,4 +14,4 @@ import { MatCardModule } from '@angular/material';
     MatCardModule
   ]
 })
-export class OverviewModule { }
+export class SummaryModule { }

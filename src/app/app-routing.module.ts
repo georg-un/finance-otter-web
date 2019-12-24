@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PaymentListComponent } from './payment-list/payment-list.component';
-import { OverviewComponent } from './overview/overview.component';
+import { SummaryComponent } from './summary/summary.component';
 import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PaymentEditorNewComponent } from './payment-editor/payment-editor-new.component';
@@ -23,7 +23,7 @@ const routes: Routes = [
       },
       {
         path: 'summary',
-        component: OverviewComponent
+        component: SummaryComponent
       },
       {
         path: 'payment/:paymentId',
