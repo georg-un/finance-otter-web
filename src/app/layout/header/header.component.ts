@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { combineLatest, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Location } from '@angular/common';
@@ -10,7 +10,6 @@ import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 import { PaymentActions } from '../../store/actions/payment.actions';
 import { UserActions } from '../../store/actions/user.actions';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
-import { PaymentSelectors } from '../../store/selectors/payment.selectors';
 
 @Component({
   selector: 'app-header',
@@ -19,8 +18,8 @@ import { PaymentSelectors } from '../../store/selectors/payment.selectors';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  protected showLogo: boolean;
-  protected shouldIconRotate: boolean;
+  protected showLogo$: Observable<boolean>;
+  protected shouldSyncIconRotate$: Observable<boolean>;
   protected leftHeaderButton = 'menu';
   protected rightHeaderButton = 'sync';
   private onDestroy$: Subject<boolean> = new Subject();
@@ -30,6 +29,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private location: Location) { }
 
   ngOnInit() {
+    this.showLogo$ = this.store.select(LayoutSelectors.showLogo);
+    this.shouldSyncIconRotate$ = this.store.select(LayoutSelectors.shouldSyncIconRotate);
+
     this.store.select(LayoutSelectors.selectLeftHeaderButton)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((leftHeaderButton: string) => {
@@ -40,17 +42,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((rightHeaderButton: string) => {
         this.rightHeaderButton = rightHeaderButton;
-        this.showLogo = rightHeaderButton !== RightButtonIconEnum.Done;
       });
-
-    combineLatest([
-      this.store.select(PaymentSelectors.selectSyncJobs),
-      this.store.select(LayoutSelectors.selectRightHeaderButton)
-    ])
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe(([syncJobs, rightButton]: [number, string]) => {
-        this.shouldIconRotate = syncJobs > 0 && rightButton === RightButtonIconEnum.Sync;
-    });
   }
 
   ngOnDestroy(): void {

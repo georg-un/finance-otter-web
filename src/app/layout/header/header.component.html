@@ -2,10 +2,10 @@
   <button mat-icon-button (click)="onLeftButtonClick()">
     <mat-icon>{{leftHeaderButton}}</mat-icon>
   </button>
-  <a [routerLink]="['/']" *ngIf="showLogo">
+  <a [routerLink]="['/']" *ngIf="showLogo$ | async">
     <img class="logo" [src]="'assets/otter-icon-128.png'">
   </a>
   <button mat-icon-button (click)="onRightButtonClick()" *ngIf="rightHeaderButton">
-    <mat-icon [ngClass]="{'rotate-icon': shouldIconRotate}">{{rightHeaderButton}}</mat-icon>
+    <mat-icon [ngClass]="{'rotate-icon': (shouldSyncIconRotate$ | async)}">{{rightHeaderButton}}</mat-icon>
   </button>
 </mat-toolbar>

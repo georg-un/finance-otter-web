@@ -5,13 +5,6 @@ import { LayoutActions } from '../actions/layout.actions';
 
 const layoutReducer = createReducer(
   initialState,
-  on(LayoutActions.setFAB, (state, {fab}) => ({...state, fab: fab})),
-  on(LayoutActions.setFABLink, (state, {fabLink}) => ({...state, fabLink: fabLink})),
-  on(LayoutActions.setLeftHeaderButton, (state, {leftHeaderButton}) => ({...state, leftHeaderButton: leftHeaderButton})),
-  on(LayoutActions.setRightHeaderButton, (state, {rightHeaderButton}) => ({...state, rightHeaderButton: rightHeaderButton})),
-  on(LayoutActions.setHeaderButtons, (state, {leftHeaderButton, rightHeaderButton}) => (
-    {...state, leftHeaderButton: leftHeaderButton, rightHeaderButton: rightHeaderButton}
-  )),
   on(LayoutActions.toggleSidenav, state => ({...state, sidenavOpen: !state.sidenavOpen})),
   on(LayoutActions.setPagination, (state, {offset, limit}) => ({...state, pagination: {offset: offset, limit: limit}}))
 );
