@@ -4,7 +4,7 @@ import { animate, animateChild, group, query, style, transition, trigger } from 
 export const rotateOnChange = trigger('rotateOnChange', [
   transition('* => *',[
     style({transform: 'rotate(-90deg)'}),
-    animate('100ms')
+    animate('200ms')
   ])
   ]);
 

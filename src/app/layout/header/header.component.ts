@@ -10,11 +10,13 @@ import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 import { PaymentActions } from '../../store/actions/payment.actions';
 import { UserActions } from '../../store/actions/user.actions';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
+import { rotateOnChange } from "../layout.animations";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  animations: [rotateOnChange]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
