@@ -16,3 +16,7 @@ $header-background: mat-color(mat-palette($mat-purple), 500);
 $header-font-color: mat-color(mat-palette($mat-purple), default-contrast);
 
 $header-height: 56px;
+
+* {
+  --header-height: 56px
+}

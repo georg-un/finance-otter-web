@@ -3,13 +3,15 @@ import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { LayoutSelectors } from '../store/selectors/layout.selectors';
+import { rotateOnChange, expandFromFAB } from "./layout.animations";
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  styleUrls: ['./layout.component.scss'],
+  animations: [rotateOnChange, expandFromFAB]
 })
 export class LayoutComponent implements OnInit, OnDestroy {
 
@@ -45,6 +47,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(fabLink);
     });
 
+  }
+
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
 }

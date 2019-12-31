@@ -1,14 +1,14 @@
-<div>
+<div class="app-container">
   <app-sidenav>
     <app-header></app-header>
-    <div class="main-content">
-      <router-outlet ></router-outlet>
-      <button
-        mat-fab class="fab-button"
-        *ngIf="showFAB"
-        (click)="onFABClick()"
+    <div class="main-content" [@routeAnimations]="prepareRoute(outlet)">
+      <router-outlet class='outlet' #outlet="outlet"></router-outlet>
+      <button mat-fab
+              class="fab-button"
+              *ngIf="showFAB"
+              (click)="onFABClick()"
       >
-        <mat-icon>{{fabIcon}}</mat-icon>
+        <mat-icon class="fab-icon" [@rotateOnChange]="fabIcon">{{fabIcon}}</mat-icon>
       </button>
     </div>
     </app-sidenav>

@@ -19,23 +19,28 @@ const routes: Routes = [
       },
       {
         path: 'overview',
-        component: PaymentListComponent
+        component: PaymentListComponent,
+        data: {animation: 'Overview'}
       },
       {
         path: 'summary',
-        component: SummaryComponent
+        component: SummaryComponent,
+        data: {animation: 'Summary'}
       },
       {
         path: 'payment/:paymentId',
-        component: PaymentViewComponent
+        component: PaymentViewComponent,
+        data: {animation: 'PaymentView'}
       },
       {
         path: 'new',
-        component: PaymentEditorNewComponent
+        component: PaymentEditorNewComponent,
+        data: {animation: 'Editor'}
       },
       {
         path: 'edit/:paymentId',
-        component: PaymentEditorEditComponent
+        component: PaymentEditorEditComponent,
+        data: {animation: 'Editor'}
       }
     ]
   }
