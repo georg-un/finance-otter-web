@@ -209,7 +209,7 @@ export const expandFromFAB =
       ]),
       // Move the detail container down to reveal the payment detail header
       query('.detail-container', [
-        animate('200ms ease-out', style({
+        animate('250ms ease-out', style({
           marginTop: 'calc(var(--header-height)/2 + var(--payment-header-height))'
         }))
       ]),
@@ -221,7 +221,7 @@ export const expandFromFAB =
     transition('PaymentView => Overview', [
       // Set up views
       group([
-        // Keep the leave view fixed
+        // Keep the enter view fixed under the leave view
         query(':enter', [style({
           position: 'absolute',
           top: 0,
@@ -231,7 +231,6 @@ export const expandFromFAB =
         })],{
           limit: 1
         }),
-        // Place the enter view at the bottom with a height of 0
         query(':leave', [style({
           overflowY: 'hidden',
           position: 'absolute',
@@ -267,4 +266,47 @@ export const expandFromFAB =
       query(':enter', animateChild()),
     ]),
 
+
+    // Fade out and in between summary & overview
+    transition('Summary <=> Overview', [
+      // Set up views
+      group([
+        // Keep leave view fixed
+        query(':leave', [style({
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          paddingTop: 'var(--header-height)'
+        })],{
+          limit: 1
+        }),
+      ]),
+      // Set enter view in place with an opacity of 0
+      query(':enter', [style({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        paddingTop: 'var(--header-height)',
+        opacity: 0
+      })],{
+        limit: 1
+      }),
+      query(':leave', animateChild()),
+      // Fade out leave view
+      query(':leave', [
+        animate('150ms', style({
+          opacity: 0
+        }))
+      ]),
+      // Wait a few milliseconds and fade in enter view
+      query(':enter', [
+        animate('150ms 30ms', style({
+          opacity: 1
+        }))
+      ]),
+      query(':enter', animateChild())
+    ])
+    
   ]);
