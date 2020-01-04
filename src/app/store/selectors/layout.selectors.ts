@@ -60,7 +60,7 @@ function deriveLayoutFromUrl(url: string): Layout {
     layout.fabLink = '/edit/' + url.split('/')[2];
     layout.leftHeaderButton = LeftButtonIconEnum.Back;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
-    layout.showLogo = true;
+    layout.showLogo = false;
   } else if (url.startsWith('/new') || url.startsWith('/edit')) {
     layout.fab = null;
     layout.fabLink = '/';

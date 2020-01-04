@@ -2,8 +2,8 @@
   <button mat-icon-button (click)="onLeftButtonClick()">
     <mat-icon [@rotateOnChange]="leftHeaderButton">{{leftHeaderButton}}</mat-icon>
   </button>
-  <a [routerLink]="['/']" *ngIf="showLogo$ | async">
-    <img class="logo" [src]="'assets/otter-icon-128.png'">
+  <a [routerLink]="['/']">
+    <img class="logo" [src]="'assets/otter-icon-128.png'" [@fadeOnChange]="(showLogo$ | async)" *ngIf="showLogo$ | async">
   </a>
   <button mat-icon-button (click)="onRightButtonClick()" *ngIf="rightHeaderButton">
     <mat-icon
