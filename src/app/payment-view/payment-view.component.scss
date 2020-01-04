@@ -68,7 +68,7 @@ $payment-header-height: 31vh;
   z-index: 2;
   margin-top: calc(#{$header-height}/2 + #{$payment-header-height});
   padding: 32px;
-  min-height: calc(100vh - (#{$header-height} + #{$payment-header-height} + 32px + 64px));  // header + payment-header + padding + 2x detail container padding
+  min-height: calc(100vh - (#{$header-height} + #{$payment-header-height} + 32px + 64px) + 4px);  // header + payment-header + padding + 2x detail container padding
   background-color: #e8f2fc;
 }
 

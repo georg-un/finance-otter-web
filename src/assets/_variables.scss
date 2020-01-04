@@ -18,5 +18,6 @@ $header-font-color: mat-color(mat-palette($mat-purple), default-contrast);
 $header-height: 56px;
 
 * {
-  --header-height: 56px
+  --header-height: 56px;
+  --payment-header-height: 31vh;
 }
