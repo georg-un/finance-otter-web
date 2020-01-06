@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { SidenavService } from './sidenav.service';
 import { MatSidenav } from '@angular/material';
 import { User } from '../../core/rest-service/entity/user';
-import { Store } from "@ngrx/store";
-import { AppState } from "../../store/states/app.state";
-import { selectCurrentUser } from "../../store/selectors/core.selectors";
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/states/app.state';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { LayoutActions } from '../../store/actions/layout.actions';
+import { UserSelectors } from '../../store/selectors/user.selectors';
+import { LayoutSelectors } from '../../store/selectors/layout.selectors';
 
 @Component({
   selector: 'app-sidenav',
@@ -16,25 +17,33 @@ import { takeUntil } from "rxjs/operators";
 export class SidenavComponent implements OnInit, OnDestroy {
 
   private currentUser$: Observable<User>;
+  private sidenavOpen: boolean;
   private onDestroy$: Subject<boolean> = new Subject();
-  avatar: string = 'assets/otter-avatar.jpg';
+  avatar = 'assets/otter-avatar.jpg';
 
-  @ViewChild('sidenav') public sidenav: MatSidenav;
+  @ViewChild('sidenav', {static: true}) public sidenav: MatSidenav;
 
-  constructor(private sidenavService: SidenavService,
-              private store: Store<AppState>
-  ) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.currentUser$ = this.store
-      .select(selectCurrentUser)
-      .pipe(takeUntil(this.onDestroy$));
-    this.sidenavService.setSidenav(this.sidenav);
+    this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
+    this.store.select(LayoutSelectors.isSidenavOpen)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((isOpen: boolean) => {
+        this.sidenavOpen = isOpen;
+        this.sidenav.toggle(isOpen);
+      });
   }
 
   ngOnDestroy(): void {
     this.onDestroy$.next(true);
     this.onDestroy$.complete();
+  }
+
+  onOpenedChange($event: boolean) {
+    if ($event !== this.sidenavOpen) {
+      this.store.dispatch(LayoutActions.toggleSidenav());
+    }
   }
 
 }

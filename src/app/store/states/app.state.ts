@@ -1,7 +1,11 @@
-import { CoreState } from "./core.state";
-import { LayoutState } from "./layout.state";
+import { LayoutState } from './layout.state';
+import { PaymentState } from './payment.state';
+import { UserState } from './user.state';
+import { RouterReducerState } from '@ngrx/router-store';
 
 export interface AppState {
-  core: CoreState,
-  layout: LayoutState
+  users: UserState;
+  payments: PaymentState;
+  layout: LayoutState;
+  router: RouterReducerState;
 }

@@ -1,11 +1,14 @@
 @import "../../assets/variables";
 
+.app-container {
+  height: 100vh;
+}
+
 .main-content {
-  margin-top: 56px;
-  height: calc(100vh - 56px);
-  padding-top: 2px;
-  background-color: $light-primary;
+  height: stretch;
   z-index: 1;
+  background-color: $light-primary;
+  padding-top: var(--header-height)
 }
 
 .fab-button {

@@ -1,12 +1,31 @@
+@import "../../../assets/variables";
+
 mat-toolbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 2;
+  z-index: 5;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
+}
+
+.logo {
+  height: $header-height;
+  width: $header-height;
+  vertical-align: middle;
+}
+
+.rotate-icon {
+  animation: rotate 2s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(-360deg);
+  }
 }

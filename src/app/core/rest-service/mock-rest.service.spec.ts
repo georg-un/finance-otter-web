@@ -23,8 +23,8 @@ describe('MockRestService', () => {
 
   it('should load mocked transactions', () => {
     const service: MockRestService = TestBed.get(MockRestService);
-    expect(service.fetchTransactions().length).toBe(3);
-    expect(service.fetchTransactions()[0].username).toBe('alice');
+    expect(service.fetchPayments().length).toBe(3);
+    expect(service.fetchPayments()[0].username).toBe('alice');
   });
 
   it('should load mocked users', () => {

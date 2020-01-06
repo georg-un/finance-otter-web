@@ -1,26 +1,9 @@
-import { createAction, props } from "@ngrx/store";
+import { createAction, props } from '@ngrx/store';
 
-export const setFAB = createAction(
-  '[Layout] Set FAB',
-  props<{fab: string}>()
-);
+export class LayoutActions {
 
-export const setFABLink = createAction(
-  '[Layout] Set FAB Link',
-  props<{fabLink: string}>()
-);
+  static toggleSidenav = createAction('[Layout] Toggle Sidenav');
 
-export const setLeftHeaderButton = createAction(
-  '[Layout] Set Left Header Button',
-  props<{leftHeaderButton: string}>()
-);
+  static setPagination = createAction('[Layout] Set Pagination', props<{offset: number, limit: number}>());
 
-export const setRightHeaderButton = createAction(
-  '[Layout] Set Right Header Button',
-  props<{rightHeaderButton: string}>()
-);
-
-export const setHeaderButtons = createAction(
-  '[Layout] Set Header Buttons',
-  props<{leftHeaderButton: string, rightHeaderButton: string}>()
-);
+}

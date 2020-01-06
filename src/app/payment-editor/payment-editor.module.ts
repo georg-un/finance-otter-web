@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaymentEditorComponent } from "./payment-editor.component";
-import { FormsModule } from "@angular/forms";
+import { PaymentEditorNewComponent } from './payment-editor-new.component';
+import { FormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -13,11 +13,13 @@ import {
   MatMenuModule, MatNativeDateModule,
   MatSelectModule,
   MatSlideToggleModule
-} from "@angular/material";
+} from '@angular/material';
+import { PaymentEditorEditComponent } from './payment-editor-edit.component';
 
 @NgModule({
   declarations: [
-    PaymentEditorComponent
+    PaymentEditorNewComponent,
+    PaymentEditorEditComponent
   ],
   imports: [
     CommonModule,

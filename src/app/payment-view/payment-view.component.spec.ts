@@ -21,7 +21,6 @@ describe('PaymentViewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PaymentViewComponent);
     component = fixture.componentInstance;
-    component.transactionId = 0;
     fixture.detectChanges();
   });
 

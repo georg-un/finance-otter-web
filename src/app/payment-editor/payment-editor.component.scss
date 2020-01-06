@@ -15,8 +15,8 @@ mat-list-item {
 }
 
 .editor-wrapper {
+  height: stretch;
   background-color: $light-primary;
-  height: 100%;
   padding: 36px 24px 0 24px;
   flex: 1;
 }

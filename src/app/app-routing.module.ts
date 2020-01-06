@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TransactionsComponent } from './transactions/transactions.component';
-import { OverviewComponent } from './overview/overview.component';
+import { PaymentListComponent } from './payment-list/payment-list.component';
+import { SummaryComponent } from './summary/summary.component';
 import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { LayoutComponent } from './layout/layout.component';
-import { PaymentEditorComponent } from './payment-editor/payment-editor.component';
+import { PaymentEditorNewComponent } from './payment-editor/payment-editor-new.component';
+import { PaymentEditorEditComponent } from './payment-editor/payment-editor-edit.component';
 
 const routes: Routes = [
   {
@@ -13,28 +14,33 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: `/transactions`,
+        redirectTo: `/overview`,
         pathMatch: 'full'
       },
       {
-        path: 'transactions',
-        component: TransactionsComponent
-      },
-      {
         path: 'overview',
-        component: OverviewComponent
+        component: PaymentListComponent,
+        data: {animation: 'Overview'}
       },
       {
-        path: 'payment/:transactionId',
-        component: PaymentViewComponent
+        path: 'summary',
+        component: SummaryComponent,
+        data: {animation: 'Summary'}
       },
       {
-        path: 'edit',
-        component: PaymentEditorComponent
+        path: 'payment/:paymentId',
+        component: PaymentViewComponent,
+        data: {animation: 'PaymentView'}
       },
       {
-        path: 'edit/:transactionId',
-        component: PaymentEditorComponent
+        path: 'new',
+        component: PaymentEditorNewComponent,
+        data: {animation: 'Editor'}
+      },
+      {
+        path: 'edit/:paymentId',
+        component: PaymentEditorEditComponent,
+        data: {animation: 'Editor'}
       }
     ]
   }

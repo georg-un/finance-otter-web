@@ -5,7 +5,7 @@
     <mat-form-field class="editor-input-col">
       <mat-label>Amount</mat-label>
       <input
-        [(ngModel)]="transaction.sumAmount"
+        [(ngModel)]="payment.sumAmount"
         matInput type="number" min="0" step="0.01"/>
     </mat-form-field>
   </div>
@@ -15,7 +15,7 @@
     <i class="material-icons editor-symbol-col">store</i>
     <mat-form-field class="editor-input-col">
       <mat-label>Shop</mat-label>
-      <input [(ngModel)]="transaction.shop"
+      <input [(ngModel)]="payment.shop"
              matInput type="text"/>
     </mat-form-field>
   </div>
@@ -25,7 +25,7 @@
     <mat-form-field class="editor-input-col">
       <mat-label>Category</mat-label>
       <mat-select
-        [(ngModel)]="transaction.category"
+        [(ngModel)]="payment.category"
         id="category" class="browser-default"
       >
         <mat-option value="groceries">groceries</mat-option>
@@ -39,7 +39,8 @@
     <i class="material-icons editor-symbol-col">today</i>
     <mat-form-field class="editor-input-col">
       <input
-        [(ngModel)]="transaction.date"
+        [ngModel]="date ? date : undefined"
+        (ngModelChange)="payment.date = $event"
         [matDatepicker]="picker"
         matInput
         placeholder="Date"
@@ -54,7 +55,7 @@
     <mat-form-field class="editor-input-col">
       <mat-label>Notes</mat-label>
       <input
-        [(ngModel)]="transaction.description"
+        [(ngModel)]="payment.description"
         matInput type="text"
       />
     </mat-form-field>
@@ -62,7 +63,11 @@
 
   <br/>
 
-  <mat-slide-toggle labelPosition="before" (change)="onDistributionToggleChange($event)">
+  <mat-slide-toggle
+    labelPosition="before"
+    [checked]="customDistribution"
+    (change)="onDistributionToggleChange($event)"
+  >
     <p><small>CUSTOM DISTRIBUTION</small></p>
   </mat-slide-toggle>
 

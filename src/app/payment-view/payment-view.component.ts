@@ -1,42 +1,43 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Payment } from '../core/rest-service/entity/payment';
-import { Store } from "@ngrx/store";
-import * as CoreActions from '../store/actions/core.actions';
-import { selectPayment } from "../store/selectors/core.selectors";
-import { AppState } from "../store/states/app.state";
-import { Observable, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { ActivatedRoute } from "@angular/router";
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/states/app.state';
+import { Observable } from 'rxjs';
+import { User } from '../core/rest-service/entity/user';
+import { UserSelectors } from '../store/selectors/user.selectors';
+import { PaymentSelectors } from '../store/selectors/payment.selectors';
+import { take } from "rxjs/operators";
+import { PaymentActions } from "../store/actions/payment.actions";
+
 
 @Component({
   selector: 'app-payment-view',
   templateUrl: './payment-view.component.html',
   styleUrls: ['./payment-view.component.scss']
 })
-export class PaymentViewComponent implements OnInit, OnDestroy {
+export class PaymentViewComponent implements OnInit {
 
-  private payment$: Observable<Payment>;
-  private transactionId: number;
+  // FIXME: Load entity data if not present.
+  private payment: Payment;
+  private user$: Observable<User>;
 
-  private onDestroy$: Subject<boolean> = new Subject();
-
-  constructor(private store: Store<AppState>,
-              private route: ActivatedRoute) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.transactionId = parseInt(params.get('transactionId'));
-    });
-
-    this.store.dispatch(CoreActions.requestPaymentData({transactionId: this.transactionId}));
-    this.payment$ = this.store.select(selectPayment)
-      .pipe(takeUntil(this.onDestroy$));
+    this.store.select(PaymentSelectors.selectCurrentPayment)
+      .pipe(take(1))
+      .subscribe((payment) => {
+      this.payment = payment;
+      this.user$ = this.selectUserById(payment.userId);
+    })
   }
 
-  ngOnDestroy(): void {
-    this.store.dispatch(CoreActions.clearPaymentData());
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
+  selectUserById(id: number): Observable<User> {
+    return this.store.select(UserSelectors.selectUserById(), {id: id});
+  }
+
+  onDeleteButtonClick(): void {
+    this.store.dispatch(PaymentActions.deletePayment({payment: this.payment}));
   }
 
 }

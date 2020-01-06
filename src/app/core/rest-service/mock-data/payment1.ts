@@ -1,35 +1,25 @@
-import { Payment } from '../entity/payment';
+import { Payment, SyncStatusEnum } from '../entity/payment';
 
 export const PAYMENT1: Payment =
   {
-    transaction: {
-      date: new Date(1554415200000),
-      category: 'Groceries',
-      shop: 'Bio Shop',
-      description: null,
-      billId: null,
-      userId: 1,
-      transactionId: 1,
-      username: 'alice',
-      firstName: 'Alice',
-      lastName: 'Cooper',
-      sumAmount: 40.86
-    },
+    paymentId: 'krSe.1554415200000',
+    date: 1554415200000,
+    category: 'Groceries',
+    shop: 'Bio Shop',
+    description: null,
+    billId: null,
+    userId: 1,
+    syncStatus: SyncStatusEnum.Remote,
+    sumAmount: 40.86,
     debits: [
       {
-        debitId: 1,
+        debitId: 'krSe.15544152000234',
         debtorId: 2,
-        debtorName: 'bob',
-        debtorFirstName: 'Bob',
-        debtorLastName: 'Ross',
         amount: 20.43
       },
       {
-        debitId: 2,
+        debitId: 'krSe.15544152000456',
         debtorId: 3,
-        debtorName: 'charlie',
-        debtorFirstName: 'Charlie',
-        debtorLastName: 'Brown',
         amount: 20.43
       }
     ]
