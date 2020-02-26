@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/states/app.state';
 import { UserActions } from './store/actions/user.actions';
 import { PaymentActions } from "./store/actions/payment.actions";
+import { AuthService } from "./shared/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ import { PaymentActions } from "./store/actions/payment.actions";
 export class AppComponent implements OnInit {
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
