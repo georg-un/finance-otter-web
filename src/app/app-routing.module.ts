@@ -6,11 +6,13 @@ import { PaymentViewComponent } from './payment-view/payment-view.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PaymentEditorNewComponent } from './payment-editor/payment-editor-new.component';
 import { PaymentEditorEditComponent } from './payment-editor/payment-editor-edit.component';
+import { AuthGuard } from "./auth.guard";
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
