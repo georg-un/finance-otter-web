@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
+import { AuthService } from "../../shared/auth.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -23,7 +24,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   @ViewChild('sidenav', {static: true}) public sidenav: MatSidenav;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private auth: AuthService
+  ) {
+  }
 
   ngOnInit() {
     this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
@@ -44,6 +49,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if ($event !== this.sidenavOpen) {
       this.store.dispatch(LayoutActions.toggleSidenav());
     }
+  }
+
+  logOut(): void {
+    this.auth.logout();
   }
 
 }
