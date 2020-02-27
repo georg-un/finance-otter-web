@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserCardComponent } from './user-card.component';
 import {MatCardModule} from '@angular/material';
-import {USERS} from '../../core/rest-service/mock-data/users';
+import {USERS} from '../../core/mock/data/users';
 
 describe('UserCardComponent', () => {
   let component: UserCardComponent;

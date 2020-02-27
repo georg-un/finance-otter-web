@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { USERS } from './mock-data/users';
-import { PAYMENT1 } from './mock-data/payment1';
-import { PAYMENTS } from './mock-data/payments';
-import { Payment } from './entity/payment';
-import { User } from './entity/user';
+import { USERS } from './data/users';
+import { PAYMENT1 } from './data/payment1';
+import { PAYMENTS } from './data/payments';
+import { Payment } from '../entity/payment';
+import { User } from '../entity/user';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { User } from '../core/rest-service/entity/user';
+import { User } from '../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { Subject } from 'rxjs';

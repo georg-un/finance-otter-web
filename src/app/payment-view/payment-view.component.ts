@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Payment } from '../core/rest-service/entity/payment';
+import { Payment } from '../core/entity/payment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { Observable } from 'rxjs';
-import { User } from '../core/rest-service/entity/user';
+import { User } from '../core/entity/user';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { PaymentSelectors } from '../store/selectors/payment.selectors';
 import { take } from "rxjs/operators";

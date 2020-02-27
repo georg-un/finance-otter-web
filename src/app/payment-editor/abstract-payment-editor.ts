@@ -1,9 +1,9 @@
 import { OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Payment } from '../core/rest-service/entity/payment';
+import { Payment } from '../core/entity/payment';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { takeUntil } from 'rxjs/operators';
-import { User } from '../core/rest-service/entity/user';
+import { User } from '../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { PaymentEditorService } from './payment-editor.service';

@@ -2,7 +2,7 @@ import { paymentAdapter } from '../states/payment.state';
 import { AppState } from '../states/app.state';
 import { createSelector } from '@ngrx/store';
 import { Dictionary } from '@ngrx/entity';
-import { Payment } from '../../core/rest-service/entity/payment';
+import { Payment } from '../../core/entity/payment';
 import { RouterSelectors } from './router.selectors';
 
 const {

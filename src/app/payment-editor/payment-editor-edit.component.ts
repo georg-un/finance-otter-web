@@ -3,15 +3,15 @@ import { MatSlideToggleChange } from '@angular/material';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-import { Payment } from '../core/rest-service/entity/payment';
+import { Payment } from '../core/entity/payment';
 import { PaymentEditorService } from './payment-editor.service';
 import { PaymentActions } from '../store/actions/payment.actions';
 import { AbstractEditor } from './abstract-payment-editor';
 import { PaymentSelectors } from '../store/selectors/payment.selectors';
 import { UserSelectors } from '../store/selectors/user.selectors';
-import { User } from '../core/rest-service/entity/user';
+import { User } from '../core/entity/user';
 import { combineLatest } from 'rxjs';
-import { Debit } from '../core/rest-service/entity/debit';
+import { Debit } from '../core/entity/debit';
 import { DistributionFragment } from './distribution-fragment';
 
 @Component({

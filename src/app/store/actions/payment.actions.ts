@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Payment } from '../../core/rest-service/entity/payment';
+import { Payment } from '../../core/entity/payment';
 import { Update } from '@ngrx/entity';
 
 export class PaymentActions {

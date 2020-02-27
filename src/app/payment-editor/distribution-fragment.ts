@@ -1,5 +1,5 @@
-import { User } from '../core/rest-service/entity/user';
-import { Debit } from '../core/rest-service/entity/debit';
+import { User } from '../core/entity/user';
+import { Debit } from '../core/entity/debit';
 
 export class DistributionFragment {
   user: User;

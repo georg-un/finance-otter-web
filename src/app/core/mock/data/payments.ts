@@ -1,4 +1,4 @@
-import { Payment, SyncStatusEnum } from '../entity/payment';
+import { Payment, SyncStatusEnum } from '../../entity/payment';
 
 export const PAYMENTS: Payment[] = [
   {

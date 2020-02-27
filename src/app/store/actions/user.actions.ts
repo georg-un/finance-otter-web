@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from '../../core/rest-service/entity/user';
+import { User } from '../../core/entity/user';
 import { Update } from '@ngrx/entity';
 
 export class UserActions {

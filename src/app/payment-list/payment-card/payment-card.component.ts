@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Payment } from '../../core/rest-service/entity/payment';
+import { Payment } from '../../core/entity/payment';
 
 @Component({
   selector: 'app-payment-card',

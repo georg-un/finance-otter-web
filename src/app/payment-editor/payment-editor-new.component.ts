@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../core/rest-service/entity/user';
+import { User } from '../core/entity/user';
 import { MatSlideToggleChange } from '@angular/material';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-import { Payment } from '../core/rest-service/entity/payment';
+import { Payment } from '../core/entity/payment';
 import { IdGeneratorService } from '../core/id-generator.service';
-import { Debit } from '../core/rest-service/entity/debit';
+import { Debit } from '../core/entity/debit';
 import { PaymentEditorService } from './payment-editor.service';
 import { PaymentActions } from '../store/actions/payment.actions';
 import { UserSelectors } from '../store/selectors/user.selectors';

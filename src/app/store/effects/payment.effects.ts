@@ -4,7 +4,7 @@ import { catchError, map, mergeMap, switchMap, take, tap, withLatestFrom } from 
 import { EMPTY, Observable } from 'rxjs';
 import { MockRestService } from '../../core/rest-service/mock-rest.service';
 import { Router } from '@angular/router';
-import { SyncStatusEnum } from '../../core/rest-service/entity/payment';
+import { SyncStatusEnum } from '../../core/entity/payment';
 import { PaymentActions } from '../actions/payment.actions';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../states/app.state';

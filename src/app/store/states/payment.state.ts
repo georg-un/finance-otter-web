@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { Payment } from '../../core/rest-service/entity/payment';
+import { Payment } from '../../core/entity/payment';
 
 export interface PaymentState extends EntityState<Payment> {
   syncJobs: number;
