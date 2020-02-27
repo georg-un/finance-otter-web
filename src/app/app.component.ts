@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/states/app.state';
 import { UserActions } from './store/actions/user.actions';
 import { PaymentActions } from "./store/actions/payment.actions";
-import { AuthService } from "./shared/auth.service";
+import { AuthService } from "./core/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.requestUsers());
-    this.store.dispatch(PaymentActions.requestPayments({offset: 0, limit: 0}));
+    this.store.dispatch(PaymentActions.requestPayments({offset: 0, limit: 15}));
   }
 
 }

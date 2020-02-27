@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, Observable } from 'rxjs';
-import { MockRestService } from '../../core/rest-service/mock-rest.service';
 import { Router } from '@angular/router';
 import { SyncStatusEnum } from '../../core/entity/payment';
 import { PaymentActions } from '../actions/payment.actions';
@@ -10,13 +9,14 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../states/app.state';
 import { RouterSelectors } from '../selectors/router.selectors';
 import { LayoutSelectors } from '../selectors/layout.selectors';
+import { FinOBackendService } from "../../core/fino-backend.service";
 
 @Injectable()
 export class PaymentEffects {
 
   constructor(private actions$: Actions,
               private store: Store<AppState>,
-              private restService: MockRestService,
+              private restService: FinOBackendService,
               private router: Router) {}
 
   loadPayments$ = createEffect(() => this.actions$.pipe(

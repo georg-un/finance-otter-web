@@ -10,12 +10,14 @@ import { PaymentViewModule } from './payment-view/payment-view.module';
 import { PaymentEditorModule } from './payment-editor/payment-editor.module';
 import { AppStoreModule } from './store/app-store.module';
 import { SharedModule } from "./shared/shared.module";
+import { CoreModule } from "./core/core.module";
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    CoreModule,
     SharedModule,
     LayoutModule,
     SummaryModule,
