@@ -6,12 +6,13 @@ import { Payment } from '../entity/payment';
 import { User } from '../entity/user';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { FinOBackendServiceInterface } from "../fino-backend.service.interface";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class MockRestService {
+export class MockRestService implements FinOBackendServiceInterface {
 
   constructor() { }
 
