@@ -7,7 +7,8 @@ export const environment = {
   backendUrl: 'http://localhost:4200/fino',
   auth0: {
     domain: 'fino-test.eu.auth0.com',
-    client_id: '7ZAtqh1hb97Ib2lcQXwSTjn8O2bBUazN'
+    client_id: '7ZAtqh1hb97Ib2lcQXwSTjn8O2bBUazN',
+    audience: 'https://fino-test.eu.auth0.com/api/v2/'
   }
 };
 

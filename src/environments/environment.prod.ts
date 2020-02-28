@@ -3,6 +3,7 @@ export const environment = {
   backendUrl: '',
   auth0: {
     domain: '',
-    client_id: ''
+    client_id: '',
+    audience: ''
   }
 };

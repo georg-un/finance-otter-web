@@ -3,9 +3,9 @@ import { HttpClient, HttpParams, HttpResponse } from "@angular/common/http";
 import { FinOBackendServiceInterface } from "./fino-backend.service.interface";
 import { Observable } from "rxjs";
 import { Payment } from "./entity/payment";
-import { environment } from "../../environments/environment";
-import { User } from "./entity/user";
-import { map } from "rxjs/operators";
+import { environment } from '../../environments/environment';
+import { User } from './entity/user';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
