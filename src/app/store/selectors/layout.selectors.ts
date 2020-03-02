@@ -2,7 +2,7 @@ import { AppState } from '../states/app.state';
 import { createSelector } from '@ngrx/store';
 import { RouterSelectors } from "./router.selectors";
 import { LeftButtonIconEnum, RightButtonIconEnum } from "../../layout/header/button-enums";
-import { PaymentSelectors } from "./payment.selectors";
+import { PurchaseSelectors } from "./purchase.selectors";
 
 const selectLayout = (state: AppState) => state.layout;
 
@@ -38,7 +38,7 @@ export class LayoutSelectors {
 
   static shouldSyncIconRotate = createSelector(
     LayoutSelectors.selectRightHeaderButton,
-    PaymentSelectors.selectSyncJobs,
+    PurchaseSelectors.selectSyncJobs,
     (rightHeaderButton: RightButtonIconEnum, syncJobs: number) => {
       return syncJobs > 0 && rightHeaderButton === RightButtonIconEnum.Sync;
     }
@@ -55,7 +55,7 @@ function deriveLayoutFromUrl(url: string): Layout {
     layout.leftHeaderButton = LeftButtonIconEnum.Menu;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = true;
-  } else if (url.startsWith('/payment')) {
+  } else if (url.startsWith('/purchase')) {
     layout.fab = 'edit';
     layout.fabLink = '/edit/' + url.split('/')[2];
     layout.leftHeaderButton = LeftButtonIconEnum.Back;

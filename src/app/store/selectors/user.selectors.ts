@@ -27,7 +27,7 @@ export class UserSelectors {
   static selectUserById = () => {
     return createSelector(
       UserSelectors.selectUserEntities,
-      (entities: Dictionary<User>, props: { id: number }) => {
+      (entities: Dictionary<User>, props: { id: string }) => {
         return entities[props.id];
       },
     );

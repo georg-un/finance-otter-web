@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/states/app.state';
 import { UserActions } from './store/actions/user.actions';
-import { PaymentActions } from "./store/actions/payment.actions";
+import { PurchaseActions } from "./store/actions/purchase.actions";
 import { AuthService } from "./core/auth.service";
 
 @Component({
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.requestUsers());
-    this.store.dispatch(PaymentActions.requestPayments({offset: 0, limit: 15}));
+    this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 15}));
   }
 
 }

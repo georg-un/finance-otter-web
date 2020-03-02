@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { USERS } from './data/users';
-import { PAYMENT1 } from './data/payment1';
-import { PAYMENTS } from './data/payments';
-import { Payment } from '../entity/payment';
+import { PURCHASE1 } from './data/purchase1';
+import { PURCHASES } from './data/purchases';
+import { Purchase } from '../entity/purchase';
 import { User } from '../entity/user';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -16,34 +16,34 @@ export class MockRestService implements FinOBackendServiceInterface {
 
   constructor() { }
 
-  fetchPayments(offset: number, limit: number): Observable<Payment[]> {
-    return of(PAYMENTS).pipe(delay(1500));
+  fetchPurchases(offset: number, limit: number): Observable<Purchase[]> {
+    return of(PURCHASES).pipe(delay(1500));
   }
 
-  fetchPayment(paymentId: string): Observable<Payment> {
-    return of(PAYMENT1).pipe(delay(1500));
+  fetchPurchase(purchaseId: string): Observable<Purchase> {
+    return of(PURCHASE1).pipe(delay(1500));
   }
 
   fetchUsers(): Observable<User[]> {
     return of(USERS).pipe(delay(1500));
   }
 
-  uploadNewPayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}> {
-    const returnedPayment = Object.assign({}, payment);
-    return of({payment: returnedPayment, code: 200, message: null}).pipe(
+  uploadNewPurchase(purchase: Purchase): Observable<{purchase: Purchase, code: number, message: string}> {
+    const returnedPurchase = Object.assign({}, purchase);
+    return of({purchase: returnedPurchase, code: 200, message: null}).pipe(
       delay(2500)
     );
   }
 
-  updatePayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}> {
-    const returnedPayment = Object.assign({}, payment);
-    return of({payment: returnedPayment, code: 200, message: null}).pipe(
+  updatePurchase(purchase: Purchase): Observable<{purchase: Purchase, code: number, message: string}> {
+    const returnedPurchase = Object.assign({}, purchase);
+    return of({purchase: returnedPurchase, code: 200, message: null}).pipe(
       delay(2500)
     );
   }
 
-  deletePayment(paymentId: string): Observable<{paymentId: string, code: number, message: string}> {
-    return of({paymentId: paymentId, code: 200, message: null}).pipe(
+  deletePurchase(purchaseId: string): Observable<{purchaseId: string, code: number, message: string}> {
+    return of({purchaseId: purchaseId, code: 200, message: null}).pipe(
       delay(2500)
     );
   }

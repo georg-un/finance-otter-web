@@ -1,7 +1,7 @@
 export class User {
-  userId: number;
+  userId: string;
   username: string;
   firstName: string;
   lastName: string;
-  sumDebitAmounts: number;
+  deactivated: boolean;
 }

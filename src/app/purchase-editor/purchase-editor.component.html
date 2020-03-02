@@ -1,0 +1,114 @@
+<div class="editor-wrapper">
+
+  <div class="editor-row">
+    <i class="material-icons editor-symbol-col">euro_symbol</i>
+    <mat-form-field class="editor-input-col">
+      <mat-label>Amount</mat-label>
+      <input
+        [(ngModel)]="sumAmount"
+        matInput type="number" min="0" step="0.01"/>
+    </mat-form-field>
+  </div>
+
+
+  <div class="editor-row">
+    <i class="material-icons editor-symbol-col">store</i>
+    <mat-form-field class="editor-input-col">
+      <mat-label>Shop</mat-label>
+      <input [(ngModel)]="purchase.shop"
+             matInput type="text"/>
+    </mat-form-field>
+  </div>
+
+  <div class="editor-row">
+    <i class="material-icons editor-symbol-col">view_quilt</i>
+    <mat-form-field class="editor-input-col">
+      <mat-label>Category</mat-label>
+      <mat-select
+        [(ngModel)]="purchase.category"
+        id="category" class="browser-default"
+      >
+        <mat-option value="groceries">groceries</mat-option>
+        <mat-option value="transportation">transportation</mat-option>
+        <mat-option value="work">work</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="editor-row">
+    <i class="material-icons editor-symbol-col">today</i>
+    <mat-form-field class="editor-input-col">
+      <input
+        [ngModel]="date ? date : undefined"
+        (ngModelChange)="purchase.date = $event.getTime()"
+        [matDatepicker]="picker"
+        matInput
+        placeholder="Date"
+      >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="editor-row">
+    <i class="material-icons editor-symbol-col">description</i>
+    <mat-form-field class="editor-input-col">
+      <mat-label>Notes</mat-label>
+      <input
+        [(ngModel)]="purchase.description"
+        matInput type="text"
+      />
+    </mat-form-field>
+  </div>
+
+  <br/>
+
+  <mat-slide-toggle
+    labelPosition="before"
+    [checked]="customDistribution"
+    (change)="onDistributionToggleChange($event)"
+  >
+    <p><small>CUSTOM DISTRIBUTION</small></p>
+  </mat-slide-toggle>
+
+  <ng-container *ngIf="customDistribution">
+
+    <button
+      (click)="resetDebits()"
+      mat-icon-button class="delete-sweep"
+    >
+      <mat-icon>delete_sweep</mat-icon>
+    </button>
+
+    <mat-list #debits>
+      <mat-list-item *ngFor="let fragment of distributionFragments" class="debit-row">
+        <mat-checkbox
+          [(ngModel)]="fragment.checked"
+          (click)="fragment.amount = null"
+          class="debit-name-col"
+        >
+          {{fragment.user.firstName}} {{fragment.user.lastName | slice:0:1}}.
+        </mat-checkbox>
+        <mat-form-field class="debit-input-col">
+          <input
+            [(ngModel)]=fragment.amount
+            [disabled]="!fragment.checked"
+            matInput type="number" min="0" step="0.01"
+          />
+        </mat-form-field>
+      </mat-list-item>
+    </mat-list>
+
+    <br/>
+    <button mat-raised-button [matMenuTriggerFor]="distribute_menu" color="accent">
+      <mat-icon>call_split</mat-icon>
+      <span>Distribute Rest</span>
+    </button>
+    <mat-menu #distribute_menu="matMenu">
+      <button mat-menu-item (click)="distributeToAllFields()">On all fields</button>
+      <button mat-menu-item (click)="distributeToEmptyFields()">On empty fields</button>
+    </mat-menu>
+
+  </ng-container>
+
+</div>

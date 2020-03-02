@@ -1,19 +1,19 @@
 import { Observable } from "rxjs";
 import { User } from "./entity/user";
-import { Payment } from "./entity/payment";
+import { Purchase } from "./entity/purchase";
 
 export interface FinOBackendServiceInterface {
 
-  fetchPayments(offset: number, limit: number): Observable<Payment[]>;
+  fetchPurchases(offset: number, limit: number): Observable<Purchase[]>;
 
-  fetchPayment(paymentId: string): Observable<Payment>;
+  fetchPurchase(purchaseId: string): Observable<Purchase>;
 
   fetchUsers(): Observable<User[]>;
 
-  uploadNewPayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}>;
+  uploadNewPurchase(purchase: Purchase): Observable<{purchase: Purchase, code: number, message: string}>;
 
-  updatePayment(payment: Payment): Observable<{payment: Payment, code: number, message: string}>;
+  updatePurchase(purchase: Purchase): Observable<{purchase: Purchase, code: number, message: string}>;
 
-  deletePayment(paymentId: string): Observable<{paymentId: string, code: number, message: string}>;
+  deletePurchase(purchaseId: string): Observable<{purchaseId: string, code: number, message: string}>;
 
 }

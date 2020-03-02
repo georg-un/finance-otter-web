@@ -6,7 +6,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { NavigationActionTiming, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
-import { PaymentEffects } from './effects/payment.effects';
+import { PurchaseEffects } from './effects/purchase.effects';
 import { UserEffects } from './effects/user.effects';
 
 @NgModule({
@@ -24,7 +24,7 @@ import { UserEffects } from './effects/user.effects';
     }),
     StoreRouterConnectingModule.forRoot({navigationActionTiming: NavigationActionTiming.PostActivation}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([PaymentEffects, UserEffects]),
+    EffectsModule.forRoot([PurchaseEffects, UserEffects]),
     StoreRouterConnectingModule.forRoot(),
   ]
 })

@@ -10,21 +10,21 @@ describe('MockRestService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should load mocked payment1', () => {
+  it('should load mocked purchase1', () => {
     const service: MockRestService = TestBed.get(MockRestService);
-    expect(service.fetchPayment(1).transaction.username).toBe('alice');
-    expect(service.fetchPayment(1).debits[0].debtorName).toBe('bob');
+    expect(service.fetchPurchase(1).transaction.username).toBe('alice');
+    expect(service.fetchPurchase(1).debits[0].debtorName).toBe('bob');
   });
 
   it('should load mocked transaction1', () => {
     const service: MockRestService = TestBed.get(MockRestService);
-    expect(service.fetchTransaction(1).username).toBe('alice');
+    expect(service.fetchPurchase(1).username).toBe('alice');
   });
 
   it('should load mocked transactions', () => {
     const service: MockRestService = TestBed.get(MockRestService);
-    expect(service.fetchPayments().length).toBe(3);
-    expect(service.fetchPayments()[0].username).toBe('alice');
+    expect(service.fetchPurchases().length).toBe(3);
+    expect(service.fetchPurchases()[0].username).toBe('alice');
   });
 
   it('should load mocked users', () => {

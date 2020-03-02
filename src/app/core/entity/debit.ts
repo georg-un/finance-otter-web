@@ -1,6 +1,6 @@
 export class Debit {
   debitId: string;
-  debtorId: number;
+  debtorId: string;
   amount: number;
 
   constructor(input?: any) {
