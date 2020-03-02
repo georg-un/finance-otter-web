@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SyncStatusEnum } from "../../core/rest-service/entity/payment";
+import { SyncStatusEnum } from "../../core/entity/purchase";
 
 @Component({
   selector: 'app-sync-indicator',

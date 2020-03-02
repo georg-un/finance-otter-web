@@ -1,0 +1,57 @@
+div, p {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.purchase-card {
+  display: grid;
+  grid-template-columns: 0.1fr 0.6fr 0.4fr;
+  grid-template-rows: 18px auto 18px;
+  grid-column-gap: 16px;
+  grid-row-gap: 2px;
+  background-color: #FFFFFF;
+}
+
+.grid-cell {
+  &__r1-c2 {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  &__r2-c1 {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  &__r2-c2 {
+    grid-row: 2;
+    grid-column: 2;
+  }
+  &__r2-c3 {
+    grid-row: 2;
+    grid-column: 3;
+  }
+  &__r3-c2 {
+    grid-row: 3;
+    grid-column: 2;
+  }
+  &__r3-c3 {
+    grid-row: 3;
+    grid-column: 3;
+  }
+}
+
+.font-large {
+  font-size: 24px;
+}
+
+.purchase-sum {
+  text-align: right;
+}
+
+.sync-status-indicator {
+  float: right;
+  height: 18px
+}

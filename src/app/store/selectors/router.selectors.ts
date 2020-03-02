@@ -13,7 +13,7 @@ const {
 } = fromRouter.getSelectors(selectRouter);
 
 export class RouterSelectors {
-  static selectPaymentId = selectRouteParam('paymentId');
+  static selectPurchaseId = selectRouteParam('purchaseId');
   // static selectStatus = selectQueryParam('status');
   static selectCurrentUrl = selectUrl;
 }

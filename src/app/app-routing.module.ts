@@ -1,16 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PaymentListComponent } from './payment-list/payment-list.component';
+import { PurchaseListComponent } from './purchase-list/purchase-list.component';
 import { SummaryComponent } from './summary/summary.component';
-import { PaymentViewComponent } from './payment-view/payment-view.component';
+import { PurchaseViewComponent } from './purchase-view/purchase-view.component';
 import { LayoutComponent } from './layout/layout.component';
-import { PaymentEditorNewComponent } from './payment-editor/payment-editor-new.component';
-import { PaymentEditorEditComponent } from './payment-editor/payment-editor-edit.component';
+import { PurchaseEditorNewComponent } from './purchase-editor/purchase-editor-new.component';
+import { PurchaseEditorEditComponent } from './purchase-editor/purchase-editor-edit.component';
+import { AuthGuard } from './auth.guard';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from './core/interceptor.service';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -19,7 +23,7 @@ const routes: Routes = [
       },
       {
         path: 'overview',
-        component: PaymentListComponent,
+        component: PurchaseListComponent,
         data: {animation: 'Overview'}
       },
       {
@@ -28,18 +32,18 @@ const routes: Routes = [
         data: {animation: 'Summary'}
       },
       {
-        path: 'payment/:paymentId',
-        component: PaymentViewComponent,
-        data: {animation: 'PaymentView'}
+        path: 'purchase/:purchaseId',
+        component: PurchaseViewComponent,
+        data: {animation: 'PurchaseView'}
       },
       {
         path: 'new',
-        component: PaymentEditorNewComponent,
+        component: PurchaseEditorNewComponent,
         data: {animation: 'Editor'}
       },
       {
-        path: 'edit/:paymentId',
-        component: PaymentEditorEditComponent,
+        path: 'edit/:purchaseId',
+        component: PurchaseEditorEditComponent,
         data: {animation: 'Editor'}
       }
     ]
@@ -48,6 +52,13 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    }
+  ]
 })
 export class AppRoutingModule { }

@@ -170,7 +170,7 @@ export const expandFromFAB =
 
 
     // Expand detail view from bottom
-    transition('Overview => PaymentView', [
+    transition('Overview => PurchaseView', [
       // Set up views
       group([
         // Keep the leave view fixed
@@ -194,7 +194,7 @@ export const expandFromFAB =
           paddingTop: 'var(--header-height)',
           zIndex: 2
         })]),
-        // Set the height of the payment view detail container to 100%
+        // Set the height of the purchase view detail container to 100%
         query('.detail-container', [style({
           marginTop: 0,
           height: '100%'
@@ -207,10 +207,10 @@ export const expandFromFAB =
           height: 'calc(100vh - var(--header-height))',
         }))
       ]),
-      // Move the detail container down to reveal the payment detail header
+      // Move the detail container down to reveal the purchase detail header
       query('.detail-container', [
         animate('250ms ease-out', style({
-          marginTop: 'calc(var(--header-height)/2 + var(--payment-header-height))'
+          marginTop: 'calc(var(--header-height)/2 + var(--purchase-header-height))'
         }))
       ]),
       query(':enter', animateChild()),
@@ -218,7 +218,7 @@ export const expandFromFAB =
 
 
     // Collapse detail view into bottom
-    transition('PaymentView => Overview', [
+    transition('PurchaseView => Overview', [
       // Set up views
       group([
         // Keep the enter view fixed under the leave view

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { User } from '../../core/rest-service/entity/user';
+import { User } from '../../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Observable, Subject } from 'rxjs';
@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
+import { AuthService } from "../../core/auth.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -23,7 +24,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   @ViewChild('sidenav', {static: true}) public sidenav: MatSidenav;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private auth: AuthService
+  ) {
+  }
 
   ngOnInit() {
     this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
@@ -44,6 +49,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if ($event !== this.sidenavOpen) {
       this.store.dispatch(LayoutActions.toggleSidenav());
     }
+  }
+
+  logOut(): void {
+    this.auth.logout();
   }
 
 }

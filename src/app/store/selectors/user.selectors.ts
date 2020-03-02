@@ -2,7 +2,7 @@ import { userAdapter } from '../states/user.state';
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../states/app.state';
 import { Dictionary } from '@ngrx/entity';
-import { User } from '../../core/rest-service/entity/user';
+import { User } from '../../core/entity/user';
 
 const {
   selectIds,
@@ -27,7 +27,7 @@ export class UserSelectors {
   static selectUserById = () => {
     return createSelector(
       UserSelectors.selectUserEntities,
-      (entities: Dictionary<User>, props: { id: number }) => {
+      (entities: Dictionary<User>, props: { id: string }) => {
         return entities[props.id];
       },
     );

@@ -1,0 +1,57 @@
+<div class="purchase-header">
+  <div class="header-content">
+    <div class='grid-cell r1-c1'>
+      <img mat-card-avatar [src]="'assets/otter-avatar.jpg'">
+    </div>
+    <div class='grid-cell r1-c2'>
+      <p>{{ user$ | async | shortName }}</p>
+    </div>
+    <div class="grid-cell r1-c3">
+      <app-sync-indicator [syncStatus]="purchase?.syncStatus"></app-sync-indicator>
+    </div>
+    <div class="font-large grid-cell r3-c2">
+      <p>{{ purchase?.shop | titlecase }}</p>
+    </div>
+    <div class="font-large grid-cell r4-c2">
+      <p>{{ purchase?.sumAmount | currency:'EUR':'€ ':'1.2-2'}}</p>
+    </div>
+    <button mat-icon-button class="grid-cell r6-c1">
+      <mat-icon>photo</mat-icon>
+    </button>
+    <div class="grid-cell r6-c2">
+      <p>{{ purchase?.category | lowercase }}</p>
+    </div>
+    <div class="grid-cell r6-c3">
+    <button mat-icon-button (click)="onDeleteButtonClick()">
+      <mat-icon>delete</mat-icon>
+    </button>
+    </div>
+  </div>
+</div>
+
+<div class="detail-container z-depth-2-reversed">
+
+  <p class="detail-title">DATE</p>
+  <div>
+    <p>{{ purchase?.date | date : "dd.MM.yyyy" }}</p>
+  </div>
+  <br/>
+
+  <ng-container *ngIf="purchase?.description">
+    <p class="detail-title">DESCRIPTION</p>
+    <div>
+      <p>{{ purchase?.description }}</p>
+    </div>
+    <br/>
+  </ng-container>
+
+  <p class="detail-title">DISTRIBUTION</p>
+  <div class="debit-blockquote">
+    <ng-container *ngFor="let debit of purchase?.debits">
+      <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
+        <app-debit-card [debit]="debit" [user]="user"></app-debit-card>
+      </ng-container>
+    </ng-container>
+  </div>
+
+</div>

@@ -4,10 +4,10 @@ import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Location } from '@angular/common';
-import { PaymentEditorService } from '../../payment-editor/payment-editor.service';
+import { PurchaseEditorService } from '../../purchase-editor/purchase-editor.service';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
-import { PaymentActions } from '../../store/actions/payment.actions';
+import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { UserActions } from '../../store/actions/user.actions';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
 import { fadeOnChange, rotateOnChange } from "../layout.animations";
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected rightHeaderButton = 'sync';
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private editorService: PaymentEditorService,
+  constructor(private editorService: PurchaseEditorService,
               private store: Store<AppState>,
               private location: Location) { }
 
@@ -62,10 +62,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onRightButtonClick(): void {
     if (this.rightHeaderButton === RightButtonIconEnum.Done) {
-      this.editorService.emitAddPaymentTrigger();
+      this.editorService.emitAddPurchaseTrigger();
     } else {
       this.store.dispatch(UserActions.requestUsers());
-      this.store.dispatch(PaymentActions.syncPayments());
+      this.store.dispatch(PurchaseActions.syncPurchases());
     }
   }
 

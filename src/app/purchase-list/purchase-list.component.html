@@ -1,0 +1,3 @@
+<ng-container *ngFor="let purchase of purchases">
+  <app-purchase-card [purchase]="purchase" (cardClick)="onCardClick($event)"></app-purchase-card>
+</ng-container>
