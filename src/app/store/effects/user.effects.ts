@@ -4,12 +4,16 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { UserActions } from '../actions/user.actions';
 import { FinOBackendService } from "../../core/fino-backend.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { User } from "../../core/entity/user";
 
 @Injectable()
 export class UserEffects {
 
   constructor(private actions$: Actions,
               private restService: FinOBackendService,
+              private router: Router,
+              private route: ActivatedRoute,
   ) {
   }
 
@@ -18,9 +22,29 @@ export class UserEffects {
     mergeMap(() => this.restService.fetchUsers()
       .pipe(
         map(users => (UserActions.usersReceived({users}))),
-        catchError(() => EMPTY)
+        catchError((err) => {
+          console.error(err);
+          return EMPTY;
+        })
       ))
     )
   );
 
+  isUserActive$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.checkIfUserIsActive),
+    mergeMap(() => this.restService.checkIfUserActive()
+      .pipe(
+        map(result => {
+          if (result === false) {
+            this.router.navigate(['./register'], {relativeTo: this.route});
+          }
+        }),
+        catchError((err) => {
+          console.error(err);
+          return EMPTY;
+        })
+      ))
+    ),
+    {dispatch: false}
+  );
 }

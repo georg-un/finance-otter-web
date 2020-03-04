@@ -12,4 +12,5 @@ export class UserActions {
 
   static requestUsers = createAction('[User] Request Users');
   static usersReceived = createAction('[User] Users Received', props<{users: User[]}>());
+  static checkIfUserIsActive = createAction('[User] Check if user is active');
 }

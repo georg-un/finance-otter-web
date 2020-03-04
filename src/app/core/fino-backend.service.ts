@@ -22,6 +22,10 @@ export class FinOBackendService implements FinOBackendServiceInterface {
   ) {
   }
 
+  checkIfUserActive(): Observable<boolean> {
+    return this.http.get<boolean>(this.endpoints.users + '/current');
+  }
+
   fetchPurchases(offset: number, limit: number): Observable<Purchase[]> {
     let params = new HttpParams();
     params = params.set('offset', offset.toString());

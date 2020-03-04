@@ -14,10 +14,11 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private auth: AuthService
+    private auth: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(UserActions.checkIfUserIsActive());
     this.store.dispatch(UserActions.requestUsers());
     this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 15}));
   }
