@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { UserActions } from '../actions/user.actions';
 import { FinOBackendService } from "../../core/fino-backend.service";
@@ -47,4 +47,18 @@ export class UserEffects {
     ),
     {dispatch: false}
   );
+
+  createNewUser$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.createNewUser),
+    map(action => {
+      this.restService.createNewUser(action.user)
+        .pipe(take(1))
+        .subscribe(result => {
+          console.log(result);
+        })
+      }
+    )),
+    {dispatch: false}
+  );
+
 }

@@ -26,6 +26,19 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     return this.http.get<boolean>(this.endpoints.users + '/current');
   }
 
+  createNewUser(user: User): Observable<{ user: User, code: number, message: string}> {
+    //this.http.post(this.endpoints.users, user).subscribe(result => console.log(result));
+    return this.http.post(this.endpoints.users, user).pipe(
+      map((response: HttpResponse<User>) => {
+        return {
+          user: response.body,
+          code: response.status,
+          message: response.statusText
+        }
+      })
+    );
+  }
+
   fetchPurchases(offset: number, limit: number): Observable<Purchase[]> {
     let params = new HttpParams();
     params = params.set('offset', offset.toString());
