@@ -11,6 +11,7 @@ import { PurchaseEditorModule } from './purchase-editor/purchase-editor.module';
 import { AppStoreModule } from './store/app-store.module';
 import { SharedModule } from "./shared/shared.module";
 import { CoreModule } from "./core/core.module";
+import { RegisterModule } from "./register/register.module";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CoreModule } from "./core/core.module";
     PurchaseListModule,
     PurchaseViewModule,
     PurchaseEditorModule,
+    RegisterModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

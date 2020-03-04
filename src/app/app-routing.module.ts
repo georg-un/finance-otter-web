@@ -9,6 +9,7 @@ import { PurchaseEditorEditComponent } from './purchase-editor/purchase-editor-e
 import { AuthGuard } from './auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './core/interceptor.service';
+import { RegisterComponent } from "./register/register.component";
 
 const routes: Routes = [
   {
@@ -47,6 +48,11 @@ const routes: Routes = [
         data: {animation: 'Editor'}
       }
     ]
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
