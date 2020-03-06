@@ -26,7 +26,9 @@ export class FinOBackendService implements FinOBackendServiceInterface {
   }
 
   checkIfUserActive(): Observable<boolean> {
-    return this.http.get<boolean>(this.endpoints.users + '/current');
+    return this.http.get<boolean>(this.endpoints.users + '/current').pipe(
+      catchError((err) => this.handleError(err))
+    );
   }
 
   createNewUser(user: User): Observable<User> {
@@ -39,50 +41,38 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     let params = new HttpParams();
     params = params.set('offset', offset.toString());
     params = params.set('limit', limit.toString());
-    return this.http.get<Purchase[]>(this.endpoints.purchases, {params: params});
+    return this.http.get<Purchase[]>(this.endpoints.purchases, {params: params}).pipe(
+      catchError((err) => this.handleError(err))
+    );
   }
 
   fetchPurchase(purchaseId: string): Observable<Purchase> {
-    return this.http.get<Purchase>(this.endpoints.purchases + `/${purchaseId}`);  // TODO: check
+    return this.http.get<Purchase>(this.endpoints.purchases + `/${purchaseId}`).pipe(
+      catchError((err) => this.handleError(err))
+    );
   }
 
   fetchUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.endpoints.users);
-  }
-
-  uploadNewPurchase(purchase: Purchase): Observable<{ purchase: Purchase; code: number; message: string; }> {
-    return this.http.post(this.endpoints.purchases, purchase).pipe(
-      map((response: HttpResponse<Purchase>) => {
-        return {
-          purchase: response.body,
-          code: response.status,
-          message: response.statusText
-        };
-      })
+    return this.http.get<User[]>(this.endpoints.users).pipe(
+      catchError((err) => this.handleError(err))
     );
   }
 
-  updatePurchase(purchase: Purchase): Observable<{ purchase: Purchase; code: number; message: string }> {
-    return this.http.put(this.endpoints.purchases, purchase).pipe(
-      map((response: HttpResponse<Purchase>) => {
-        return {
-          purchase: response.body,
-          code: response.status,
-          message: response.statusText
-        };
-      })
+  uploadNewPurchase(purchase: Purchase): Observable<Purchase> {
+    return this.http.post<Purchase>(this.endpoints.purchases, purchase).pipe(
+      catchError((err) => this.handleError(err))
     );
   }
 
-  deletePurchase(purchaseId: string): Observable<{ purchaseId: string; code: number; message: string }> {
+  updatePurchase(purchase: Purchase): Observable<Purchase> {
+    return this.http.put<Purchase>(this.endpoints.purchases, purchase).pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  deletePurchase(purchaseId: string): Observable<Object> {
     return this.http.delete(this.endpoints.purchases + `/${purchaseId}`).pipe(
-      map((response: HttpResponse<string>) => {
-        return {
-          purchaseId: response.body,
-          code: response.status,
-          message: response.statusText
-        };
-      })
+      catchError((err) => this.handleError(err))
     );
   }
 
