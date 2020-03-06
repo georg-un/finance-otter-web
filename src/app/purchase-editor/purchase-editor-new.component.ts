@@ -55,6 +55,9 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
   }
 
   submitPurchase(): void {
+    if (!this.customDistribution) {
+      this.distributeToAllFields();
+    }
     if (!this.isPurchaseValid()) {
       return;
     }

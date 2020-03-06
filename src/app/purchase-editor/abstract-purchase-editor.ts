@@ -60,15 +60,14 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
       this.distributionFragments
         .map(fragment => fragment.amount)
         .reduce((sum, current) => sum + current)) {
-      this.snackBar.openFromComponent(MultilineSnackbarComponent, {data: 'Total amount and debits don\'t match.'});
-      console.error('sumAmount and sum of debit amounts do not match');
+      this.snackBar.open('Total amount and debits don\'t match.');
       return false;
     } else {
       return true;
     }
   }
 
-  resetDebits(): void {
+  resetDistributionFragments(): void {
     this.distributionFragments.forEach(fragment => {
       fragment.amount = null;
     });

@@ -79,6 +79,9 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
   }
 
   submitPurchase(): void {
+    if (!this.customDistribution) {
+      this.distributeToAllFields();
+    }
     if (!this.isPurchaseValid()) {
       return;
     }
