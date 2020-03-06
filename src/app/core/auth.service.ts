@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import createAuth0Client from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
-import { from, of, Observable, BehaviorSubject, combineLatest, throwError } from 'rxjs';
-import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject, combineLatest, from, Observable, of, throwError } from 'rxjs';
+import { catchError, concatMap, map, shareReplay, take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -36,6 +37,8 @@ export class AuthService {
   userProfile$ = this.userProfileSubject$.asObservable();
   // Create a local property for login status
   loggedIn: boolean = null;
+
+  private jwtHelper = new JwtHelperService();
 
   constructor(private router: Router) {
     // On initial load, check authentication state with authorization server
@@ -126,6 +129,37 @@ export class AuthService {
   getTokenSilently$(options?): Observable<string> {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
+    );
+  }
+
+  getKeyId(): Observable<string> {
+    return this.getTokenSilently$().pipe(
+      take(1),
+      map((token: string) => {
+        // see https://github.com/auth0/angular2-jwt/blob/master/projects/angular-jwt/src/lib/jwthelper.service.ts
+        if (!token || token === '') {
+          return null;
+        }
+        // Split token into header, payload & signature
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+          throw new Error(
+            'The inspected token doesn\'t appear to be a JWT. Check to make sure it has three parts and see https://jwt.io for more.'
+          );
+        }
+        // Decode the header
+        const decoded = this.jwtHelper.urlBase64Decode(parts[0]);
+        if (!decoded) {
+          throw new Error('Cannot decode the token.');
+        }
+        // Check if the header contains the KID and return it
+        const header = JSON.parse(decoded);
+        if (!header.hasOwnProperty('kid')) {
+          throw new Error('Header did not contain a key ID.');
+        } else {
+          return header.kid;
+        }
+      })
     );
   }
 

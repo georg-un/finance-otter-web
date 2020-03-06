@@ -56,28 +56,47 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
     if (!this.isPurchaseValid()) {
       return;
     }
-    this.generatePurchase();
-    this.store.dispatch(
-      PurchaseActions.addNewPurchase({
-        purchase: this.purchase
-      })
-    );
+    // this.generatePurchase();
+    this.idGeneratorService.generatePurchaseId()
+      .subscribe((purchaseId: string) => {
+        this.purchase.purchaseId = purchaseId;
+        this.purchase.debits = [];
+        this.distributionFragments.forEach((distributionFragment, index) => {
+          this.purchase.debits.push(
+            new Debit({
+              transactionId: purchaseId,
+              debitId: this.idGeneratorService.generateDebitId(purchaseId, index),
+              debtorId: distributionFragment.user.userId,
+              amount: distributionFragment.amount
+            })
+          );
+        });
+
+        this.store.dispatch(
+          PurchaseActions.addNewPurchase({
+            purchase: this.purchase
+          })
+        );
+
+      });
   }
 
   generatePurchase(): void {
-    const purchaseId = this.idGeneratorService.generateId();
-    this.purchase.purchaseId = purchaseId;
-    this.purchase.debits = [];
-    this.distributionFragments.forEach(distributionFragment => {
-      this.purchase.debits.push(
-        new Debit({
-          transactionId: purchaseId,
-          debitId: this.idGeneratorService.generateId(),
-          debtorId: distributionFragment.user.userId,
-          amount: distributionFragment.amount
-        })
-      );
-    });
+    this.idGeneratorService.generatePurchaseId()
+      .subscribe((purchaseId: string) => {
+        this.purchase.purchaseId = purchaseId;
+        this.purchase.debits = [];
+        this.distributionFragments.forEach((distributionFragment, index) => {
+          this.purchase.debits.push(
+            new Debit({
+              transactionId: purchaseId,
+              debitId: this.idGeneratorService.generateDebitId(purchaseId, index),
+              debtorId: distributionFragment.user.userId,
+              amount: distributionFragment.amount
+            })
+          );
+        });
+      });
   }
 
   onDistributionToggleChange(change: MatSlideToggleChange): void {
