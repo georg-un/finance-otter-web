@@ -27,7 +27,6 @@ export class PurchaseSelectors {
     RouterSelectors.selectPurchaseId,
     (entities: Dictionary<Purchase>, purchaseId: string) => {
       if (!purchaseId) {
-        console.error('No purchase found for id: ', purchaseId);
         return undefined;
       } else if (!entities) {
         console.error('No entities in store.');

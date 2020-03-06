@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Purchase } from '../../core/entity/purchase';
-import { Debit } from "../../core/entity/debit";
+import { Debit } from '../../core/entity/debit';
 
 @Component({
   selector: 'app-purchase-card',
@@ -21,7 +21,7 @@ export class PurchaseCardComponent implements OnInit {
   ngOnInit() {
     this.debitSum = this.purchase.debits
       .map((debit: Debit) => debit.amount)
-      .reduce((sum, current) => sum + current)
+      .reduce((sum, current) => sum + current);
   }
 
   onClick(): void {

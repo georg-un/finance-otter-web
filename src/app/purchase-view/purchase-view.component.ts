@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Purchase } from '../core/entity/purchase';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User } from '../core/entity/user';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { PurchaseSelectors } from '../store/selectors/purchase.selectors';
-import { take } from "rxjs/operators";
-import { PurchaseActions } from "../store/actions/purchase.actions";
+import { takeUntil } from 'rxjs/operators';
+import { PurchaseActions } from '../store/actions/purchase.actions';
+import { Debit } from '../core/entity/debit';
 
 
 @Component({
@@ -15,21 +16,33 @@ import { PurchaseActions } from "../store/actions/purchase.actions";
   templateUrl: './purchase-view.component.html',
   styleUrls: ['./purchase-view.component.scss']
 })
-export class PurchaseViewComponent implements OnInit {
+export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   // FIXME: Load entity data if not present.
-  private purchase: Purchase;
-  private user$: Observable<User>;
+  purchase: Purchase;
+  user$: Observable<User>;
+  debitSum: number;
+  private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store.select(PurchaseSelectors.selectCurrentPurchase)
-      .pipe(take(1))
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((purchase) => {
-      this.purchase = purchase;
-      this.user$ = this.selectUserById(purchase.buyerId);
-    })
+        if (purchase) {
+          this.purchase = purchase;
+          this.user$ = this.selectUserById(purchase.buyerId);
+          this.debitSum = purchase.debits
+            .map((debit: Debit) => debit.amount)
+            .reduce((sum, current) => sum + current);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next(true);
+    this.onDestroy$.complete();
   }
 
   selectUserById(id: string): Observable<User> {
