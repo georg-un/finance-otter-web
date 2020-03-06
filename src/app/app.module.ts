@@ -9,9 +9,11 @@ import { PurchaseListModule } from './purchase-list/purchase-list.module';
 import { PurchaseViewModule } from './purchase-view/purchase-view.module';
 import { PurchaseEditorModule } from './purchase-editor/purchase-editor.module';
 import { AppStoreModule } from './store/app-store.module';
-import { SharedModule } from "./shared/shared.module";
-import { CoreModule } from "./core/core.module";
-import { RegisterModule } from "./register/register.module";
+import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
+import { RegisterModule } from './register/register.module';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
+import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,12 @@ import { RegisterModule } from "./register/register.module";
     BrowserAnimationsModule,
     AppStoreModule
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}
+  ],
+  entryComponents: [
+    MultilineSnackbarComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,14 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShortNamePipe } from "./short-name.pipe";
 import { SyncIndicatorComponent } from './sync-indicator/sync-indicator.component';
-import { MatIconModule } from "@angular/material";
+import { MatIconModule, MatSnackBarModule } from '@angular/material';
+import { MultilineSnackbarComponent } from './multiline-snackbar/multiline-snackbar.component';
 
 
 
 @NgModule({
   declarations: [
     ShortNamePipe,
-    SyncIndicatorComponent
+    SyncIndicatorComponent,
+    MultilineSnackbarComponent
   ],
   exports: [
     ShortNamePipe,
@@ -17,7 +19,8 @@ import { MatIconModule } from "@angular/material";
   ],
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule,
   ]
 })
 export class SharedModule { }
