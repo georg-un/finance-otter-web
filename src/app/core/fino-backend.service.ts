@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from "@angular/common/http";
-import { FinOBackendServiceInterface } from "./fino-backend.service.interface";
-import { Observable } from "rxjs";
-import { Purchase } from "./entity/purchase";
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import { FinOBackendServiceInterface } from './fino-backend.service.interface';
+import { Observable, throwError } from 'rxjs';
+import { Purchase } from './entity/purchase';
 import { environment } from '../../environments/environment';
 import { User } from './entity/user';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   constructor(
     private http: HttpClient,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -26,16 +29,9 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     return this.http.get<boolean>(this.endpoints.users + '/current');
   }
 
-  createNewUser(user: User): Observable<{ user: User, code: number, message: string}> {
-    //this.http.post(this.endpoints.users, user).subscribe(result => console.log(result));
-    return this.http.post(this.endpoints.users, user).pipe(
-      map((response: HttpResponse<User>) => {
-        return {
-          user: response.body,
-          code: response.status,
-          message: response.statusText
-        }
-      })
+  createNewUser(user: User): Observable<User> {
+    return this.http.post<User>(this.endpoints.users, user).pipe(
+      catchError((err) => this.handleError(err))
     );
   }
 
@@ -48,10 +44,10 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   fetchPurchase(purchaseId: string): Observable<Purchase> {
     return this.http.get<Purchase>(this.endpoints.purchases + `/${purchaseId}`);  // TODO: check
-  };
+  }
 
   fetchUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.endpoints.users)
+    return this.http.get<User[]>(this.endpoints.users);
   }
 
   uploadNewPurchase(purchase: Purchase): Observable<{ purchase: Purchase; code: number; message: string; }> {
@@ -61,7 +57,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
           purchase: response.body,
           code: response.status,
           message: response.statusText
-        }
+        };
       })
     );
   }
@@ -73,7 +69,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
           purchase: response.body,
           code: response.status,
           message: response.statusText
-        }
+        };
       })
     );
   }
@@ -85,9 +81,25 @@ export class FinOBackendService implements FinOBackendServiceInterface {
           purchaseId: response.body,
           code: response.status,
           message: response.statusText
-        }
+        };
       })
     );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
+    }
+    // Show a snackbar
+    this.snackBar.openFromComponent(MultilineSnackbarComponent, {
+      data: error.status === 400 ? error.error : null
+    });
+    // return an observable with a user-facing error message
+    return throwError(error.error);
   }
 
 }

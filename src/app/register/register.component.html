@@ -14,10 +14,23 @@
     <div class="flex-row input-wrapper">
       <mat-form-field class="input">
         <mat-label>First name</mat-label>
-        <input [(ngModel)]="firstName"
-               matInput type="text"/>
+        <input #firstNameTempl="ngModel"
+               [(ngModel)]="firstName"
+               matInput type="text"
+               required minlength="2"
+        />
       </mat-form-field>
-      <br/>
+      <div class="validation-error-container">
+        <div *ngIf="firstNameTempl.invalid && (firstNameTempl.dirty || firstNameTempl.touched)"
+             class="validation-error">
+          <div *ngIf="firstNameTempl.errors.required">
+            First name is required.
+          </div>
+          <div *ngIf="firstNameTempl.errors.minlength">
+            First name must be at least 2 characters long.
+          </div>
+        </div>
+      </div>
       <mat-form-field class="input">
         <mat-label>Last name</mat-label>
         <input [(ngModel)]="lastName"
@@ -26,7 +39,7 @@
     </div>
 
     <div class="flex-row">
-      <button mat-raised-button color="primary" class="button" (click)="createUser()">Alright!</button>
+      <button mat-raised-button color="primary" class="button" (click)="createUser()">Let's go!</button>
     </div>
 
   </div>
