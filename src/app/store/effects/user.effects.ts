@@ -3,9 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { UserActions } from '../actions/user.actions';
-import { FinOBackendService } from "../../core/fino-backend.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { User } from "../../core/entity/user";
+import { FinOBackendService } from '../../core/fino-backend.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable()
 export class UserEffects {
@@ -53,8 +52,8 @@ export class UserEffects {
     map(action => {
       this.restService.createNewUser(action.user)
         .pipe(take(1))
-        .subscribe(result => {
-          console.log(result);
+        .subscribe(() => {
+          this.router.navigate(['../'], {relativeTo: this.route});
         });
       }
     )),
