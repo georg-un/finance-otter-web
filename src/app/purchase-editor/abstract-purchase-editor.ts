@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { PurchaseEditorService } from './purchase-editor.service';
 import { DistributionFragment } from './distribution-fragment';
+import { MatSnackBar } from '@angular/material';
+import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 
@@ -21,7 +23,10 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   protected onDestroy$: Subject<boolean> = new Subject();
 
   protected constructor(protected store: Store<AppState>,
-                        protected editorService: PurchaseEditorService) {}
+                        protected editorService: PurchaseEditorService,
+                        protected snackBar: MatSnackBar,
+  ) {
+  }
 
   ngOnInit(): void {
     this.users$ = this.store.select(UserSelectors.selectAllUsers);
@@ -42,19 +47,20 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   isPurchaseValid(): boolean {
     if (!this.purchase.buyerId) {
-      console.error('userId is missing');  // TODO: Display toast messages as well.
+      this.snackBar.openFromComponent(MultilineSnackbarComponent, {data: 'User ID is missing.'});
       return false;
     } else if (!this.purchase.date) {
-      console.error('date is missing');
+      this.snackBar.open('Please enter a date.');
       return false;
     } else if (!this.sumAmount) {
-      console.error('sumAmount is missing');
+      this.snackBar.open('Please enter the amount.');
       return false;
     } else if (
       this.sumAmount !==
       this.distributionFragments
         .map(fragment => fragment.amount)
         .reduce((sum, current) => sum + current)) {
+      this.snackBar.openFromComponent(MultilineSnackbarComponent, {data: 'Total amount and debits don\'t match.'});
       console.error('sumAmount and sum of debit amounts do not match');
       return false;
     } else {
@@ -108,7 +114,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   private distributeByBresenham(rest: number, nFields: number): number[] {
     let result: number[] = [];
-    const assignedValue = Math.floor((rest / nFields) * 100 ) / 100;
+    const assignedValue = Math.floor((rest / nFields) * 100) / 100;
     const remainder = Math.floor((rest * 100) % nFields) / 100;
 
     for (let i = 0; i < nFields; i++) {

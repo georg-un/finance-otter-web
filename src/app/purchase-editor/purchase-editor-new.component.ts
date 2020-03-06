@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../core/entity/user';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -27,8 +27,10 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
 
   constructor(protected store: Store<AppState>,
               protected editorService: PurchaseEditorService,
-              private idGeneratorService: IdGeneratorService) {
-    super(store, editorService);
+              protected snackBar: MatSnackBar,
+              protected idGeneratorService: IdGeneratorService,
+  ) {
+    super(store, editorService, snackBar);
   }
 
   ngOnInit() {
@@ -56,20 +58,20 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
     if (!this.isPurchaseValid()) {
       return;
     }
-    // this.generatePurchase();
     this.idGeneratorService.generatePurchaseId()
       .subscribe((purchaseId: string) => {
         this.purchase.purchaseId = purchaseId;
         this.purchase.debits = [];
         this.distributionFragments.forEach((distributionFragment, index) => {
-          this.purchase.debits.push(
-            new Debit({
-              transactionId: purchaseId,
-              debitId: this.idGeneratorService.generateDebitId(purchaseId, index),
-              debtorId: distributionFragment.user.userId,
-              amount: distributionFragment.amount
-            })
-          );
+          if (distributionFragment.amount) {
+            this.purchase.debits.push(
+              new Debit({
+                debitId: this.idGeneratorService.generateDebitId(purchaseId, index),
+                debtorId: distributionFragment.user.userId,
+                amount: distributionFragment.amount
+              })
+            );
+          }
         });
 
         this.store.dispatch(
@@ -78,24 +80,6 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
           })
         );
 
-      });
-  }
-
-  generatePurchase(): void {
-    this.idGeneratorService.generatePurchaseId()
-      .subscribe((purchaseId: string) => {
-        this.purchase.purchaseId = purchaseId;
-        this.purchase.debits = [];
-        this.distributionFragments.forEach((distributionFragment, index) => {
-          this.purchase.debits.push(
-            new Debit({
-              transactionId: purchaseId,
-              debitId: this.idGeneratorService.generateDebitId(purchaseId, index),
-              debtorId: distributionFragment.user.userId,
-              amount: distributionFragment.amount
-            })
-          );
-        });
       });
   }
 

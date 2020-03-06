@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { User } from '../core/entity/user';
 import { combineLatest } from 'rxjs';
 import { Debit } from '../core/entity/debit';
 import { DistributionFragment } from './distribution-fragment';
+import { IdGeneratorService } from '../core/id-generator.service';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -27,8 +28,11 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
   customDistribution = true;
 
   constructor(protected store: Store<AppState>,
-              protected editorService: PurchaseEditorService) {
-    super(store, editorService);
+              protected editorService: PurchaseEditorService,
+              protected snackBar: MatSnackBar,
+              protected idGeneratorService: IdGeneratorService,
+  ) {
+    super(store, editorService, snackBar);
   }
 
   ngOnInit() {
@@ -63,6 +67,14 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
             )
           );
         });
+        // Generate distribution fragments for all users without a debit
+        allUserIds.filter(userId => !purchaseUserIds.includes(userId)).forEach(
+          (userId) => {
+            this.distributionFragments.push(
+              DistributionFragment.fromUser(users.find(u => u.userId === userId))
+            );
+          }
+        );
       });
   }
 
@@ -70,6 +82,18 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
     if (!this.isPurchaseValid()) {
       return;
     }
+    this.purchase.debits = [];
+    this.distributionFragments.forEach((distributionFragment, index) => {
+      if (distributionFragment.amount) {
+        this.purchase.debits.push(
+          new Debit({
+            debitId: this.idGeneratorService.generateDebitId(this.purchase.purchaseId, index),
+            debtorId: distributionFragment.user.userId,
+            amount: distributionFragment.amount
+          })
+        );
+      }
+    });
     this.store.dispatch(
       PurchaseActions.updatePurchase({
         purchase: this.purchase
