@@ -55,7 +55,7 @@ export class UserEffects {
         .pipe(take(1))
         .subscribe(result => {
           console.log(result);
-        })
+        });
       }
     )),
     {dispatch: false}
