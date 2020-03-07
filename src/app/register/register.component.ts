@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.store.select(UserSelectors.isCurrentUserActivated)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((isActivated: boolean) => {
-        if (!isActivated) {
+        if (isActivated) {
           this.router.navigate(['../'], {relativeTo: this.route});
         }
       });
