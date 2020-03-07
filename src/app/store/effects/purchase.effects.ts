@@ -24,6 +24,10 @@ export class PurchaseEffects {
     ofType(PurchaseActions.requestPurchases),
     mergeMap((action) => this.restService.fetchPurchases(action.offset, action.limit)
       .pipe(
+        map(purchases => {
+          purchases.forEach((purchase: Purchase) => purchase.syncStatus = SyncStatusEnum.Remote);
+          return purchases;
+        }),
         map(purchases => (PurchaseActions.purchasesReceived({purchases}))),
         catchError(() => EMPTY)
       ))
@@ -34,6 +38,10 @@ export class PurchaseEffects {
     ofType(PurchaseActions.requestSinglePurchase),
     mergeMap((action) => this.restService.fetchPurchase(action.purchaseId)
       .pipe(
+        map(purchase => {
+          purchase.syncStatus = SyncStatusEnum.Remote;
+          return purchase;
+        }),
         map(purchase => (PurchaseActions.singlePurchaseReceived({purchase}))),
         catchError(() => EMPTY)
       ))
