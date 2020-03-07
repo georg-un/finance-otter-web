@@ -24,7 +24,7 @@ export class UserSelectors {
     users => users.entities[users.currentUserId]
   );
 
-  static selectCurrentUserActivated = createSelector(selectUsers,
+  static isCurrentUserActivated = createSelector(selectUsers,
     users => users.currentUserActivated
   );
 

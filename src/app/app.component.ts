@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store.select(UserSelectors.selectCurrentUserActivated)
+    this.store.select(UserSelectors.isCurrentUserActivated)
       .subscribe((isActivated: boolean) => {
         if (isActivated) {
           this.store.dispatch(UserActions.requestUsers());
