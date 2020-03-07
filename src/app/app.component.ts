@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/states/app.state';
 import { UserActions } from './store/actions/user.actions';
-import { PurchaseActions } from "./store/actions/purchase.actions";
-import { AuthService } from "./core/auth.service";
+import { PurchaseActions } from './store/actions/purchase.actions';
+import { AuthService } from './core/auth.service';
+import { UserSelectors } from './store/selectors/user.selectors';
 
 @Component({
   selector: 'app-root',
@@ -18,9 +19,15 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(UserActions.checkIfUserIsActive());
-    this.store.dispatch(UserActions.requestUsers());
-    this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 15}));
+    this.store.select(UserSelectors.selectCurrentUserActivated)
+      .subscribe((isActivated: boolean) => {
+        if (isActivated) {
+          this.store.dispatch(UserActions.requestUsers());
+          this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 15}));
+        } else {
+          this.store.dispatch(UserActions.checkIfUserIsActive());
+        }
+      });
   }
 
 }

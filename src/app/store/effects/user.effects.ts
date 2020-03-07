@@ -20,6 +20,7 @@ export class UserEffects {
     ofType(UserActions.requestUsers),
     mergeMap(() => this.restService.fetchUsers()
       .pipe(
+        take(1),
         map(users => (UserActions.usersReceived({users}))),
         catchError((err) => {
           console.error(err);
@@ -29,13 +30,17 @@ export class UserEffects {
     )
   );
 
-  isUserActive$ = createEffect(() => this.actions$.pipe(
+  checkIfUserActive$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.checkIfUserIsActive),
     mergeMap(() => this.restService.checkIfUserActive()
       .pipe(
+        take(1),
         map(result => {
           if (result === false) {
             this.router.navigate(['./register'], {relativeTo: this.route});
+            return UserActions.setActivationState({activated: false});
+          } else {
+            return UserActions.setActivationState({activated: true});
           }
         }),
         catchError((err) => {
@@ -43,21 +48,23 @@ export class UserEffects {
           return EMPTY;
         })
       ))
-    ),
-    {dispatch: false}
+    )
   );
 
-  createNewUser$ = createEffect(() => this.actions$.pipe(
-    ofType(UserActions.createNewUser),
-    map(action => {
-      this.restService.createNewUser(action.user)
-        .pipe(take(1))
-        .subscribe(() => {
-          this.router.navigate(['../'], {relativeTo: this.route});
-        });
-      }
-    )),
-    {dispatch: false}
+  registerCurrentUser$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.registerCurrentUser),
+    mergeMap(action => this.restService.createNewUser(action.user).pipe(
+      take(1),
+      map(() => {
+        this.router.navigate(['../'], {relativeTo: this.route});
+        return UserActions.setActivationState({activated: true});
+      }),
+      catchError((err) => {
+        console.error(err);
+        return EMPTY;
+      })
+      )
+    ))
   );
 
 }

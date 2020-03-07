@@ -24,6 +24,9 @@ const userReducer = createReducer(
   }),
   on(UserActions.usersReceived, (state, {users}) => {
     return userAdapter.upsertMany(users, state);
+  }),
+  on(UserActions.setActivationState, (state, {activated}) => {
+    return {...state, currentUserActivated: activated};
   })
 );
 

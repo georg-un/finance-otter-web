@@ -3,6 +3,7 @@ import { User } from '../../core/entity/user';
 
 export interface UserState extends EntityState<User> {
   currentUserId: string;
+  currentUserActivated: boolean;
 }
 
 export const userAdapter: EntityAdapter<User> = createEntityAdapter<User>({
@@ -15,5 +16,6 @@ export function sortByFirstName(a: User, b: User): number {
 
 export const initialState: UserState = userAdapter.getInitialState({
   currentUserId: 'user1',
+  currentUserActivated: false,
   sortComparer: sortByFirstName,
 });

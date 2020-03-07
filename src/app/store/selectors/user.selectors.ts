@@ -24,6 +24,10 @@ export class UserSelectors {
     users => users.entities[users.currentUserId]
   );
 
+  static selectCurrentUserActivated = createSelector(selectUsers,
+    users => users.currentUserActivated
+  );
+
   static selectUserById = () => {
     return createSelector(
       UserSelectors.selectUserEntities,
@@ -34,6 +38,3 @@ export class UserSelectors {
   }
 
 }
-
-
-

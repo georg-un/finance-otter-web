@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
     const user = new User();
     user.firstName = this.firstName;
     user.lastName = this.lastName;
-    this.store.dispatch(UserActions.createNewUser({user: user}));
+    this.store.dispatch(UserActions.registerCurrentUser({user: user}));
   }
 
 }

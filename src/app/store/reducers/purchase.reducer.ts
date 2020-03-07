@@ -42,7 +42,7 @@ const purchaseReducer = createReducer(
     return {...state, syncJobs: state.syncJobs + 1};
   }),
   on(PurchaseActions.deletePurchase, (state, { purchase }) => {
-    return purchaseAdapter.removeOne(purchase.purchaseId, {...state, syncJobs: state.syncJobs + 1})
+    return purchaseAdapter.removeOne(purchase.purchaseId, {...state, syncJobs: state.syncJobs + 1});
   }),
   on(PurchaseActions.purchaseUploadSuccessful, (state, { purchase }) => {
     return {...state, syncJobs: state.syncJobs - 1};
