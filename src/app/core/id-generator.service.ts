@@ -29,8 +29,8 @@ export class IdGeneratorService {
     }
     // Add a 0 at the beginning of the debit-index if it has only one digit
     return debitIndex < 10 ?
-      `D.${purchaseId.substring(1, purchaseId.length - 3)}.0${debitIndex}` :
-      `D.${purchaseId.substring(1, purchaseId.length - 3)}.${debitIndex}`;
+      `D.${purchaseId.substring(2, purchaseId.length - 3)}.0${debitIndex}` :
+      `D.${purchaseId.substring(2, purchaseId.length - 3)}.${debitIndex}`;
   }
 
 }

@@ -10,7 +10,7 @@ import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { UserActions } from '../../store/actions/user.actions';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
-import { fadeOnChange, rotateOnChange } from "../layout.animations";
+import { fadeOnChange, rotateOnChange } from '../layout.animations';
 
 @Component({
   selector: 'app-header',

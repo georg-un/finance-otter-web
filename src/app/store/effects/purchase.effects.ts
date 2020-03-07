@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { Purchase, SyncStatusEnum } from '../../core/entity/purchase';
 import { PurchaseActions } from '../actions/purchase.actions';
 import { Action, Store } from '@ngrx/store';
@@ -17,7 +18,9 @@ export class PurchaseEffects {
   constructor(private actions$: Actions,
               private store: Store<AppState>,
               private restService: FinOBackendService,
-              private router: Router) {
+              private router: Router,
+              private location: Location
+  ) {
   }
 
   loadPurchases$ = createEffect(() => this.actions$.pipe(
@@ -50,7 +53,7 @@ export class PurchaseEffects {
 
   uploadPurchase$ = createEffect(() => this.actions$.pipe(
     ofType(PurchaseActions.addNewPurchase),
-    tap((action) => this.router.navigateByUrl('purchase/' + action.purchase.purchaseId)),
+    tap((action) => this.router.navigateByUrl('purchase/' + action.purchase.purchaseId, {replaceUrl: true})),
     switchMap((action) => new Observable<Action>((observer) => {
       // Update sync-status of purchase to 'syncing'
       const setSyncStatusAction = PurchaseActions.updatePurchaseEntity({
@@ -72,7 +75,7 @@ export class PurchaseEffects {
 
   updatePurchase$ = createEffect(() => this.actions$.pipe(
     ofType(PurchaseActions.updatePurchase),
-    tap((action) => this.router.navigateByUrl('purchase/' + action.purchase.purchaseId)),
+    tap(() => this.location.back()),
     switchMap((action) => new Observable<Action>((observer) => {
       // Update sync-status of purchase to 'syncing'
       const setSyncStatusAction = PurchaseActions.updatePurchaseEntity({
