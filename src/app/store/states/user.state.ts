@@ -15,7 +15,7 @@ export function sortByFirstName(a: User, b: User): number {
 }
 
 export const initialState: UserState = userAdapter.getInitialState({
-  currentUserId: 'user1',
+  currentUserId: null,
   currentUserActivated: false,
   sortComparer: sortByFirstName,
 });

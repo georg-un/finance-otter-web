@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, take } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, take } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { UserActions } from '../actions/user.actions';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from "../../core/auth.service";
 
 @Injectable()
 export class UserEffects {
 
   constructor(private actions$: Actions,
               private restService: FinOBackendService,
+              private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
   ) {
@@ -32,11 +34,11 @@ export class UserEffects {
 
   checkIfUserActive$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.checkIfUserIsActive),
-    mergeMap(() => this.restService.checkIfUserActive()
-      .pipe(
+    switchMap(() => {
+      return this.restService.checkIfUserActive().pipe(
         take(1),
-        map(result => {
-          if (result === false) {
+        map(isActive => {
+          if (isActive === false) {
             this.router.navigate(['./register'], {relativeTo: this.route});
             return UserActions.setActivationState({activated: false});
           } else {
@@ -47,7 +49,8 @@ export class UserEffects {
           console.error(err);
           return EMPTY;
         })
-      ))
+      );
+    })
     )
   );
 
@@ -66,5 +69,18 @@ export class UserEffects {
       )
     ))
   );
+
+  setActivationState$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.setActivationState),
+    switchMap((action) => {
+      if (action.activated) {
+        return this.auth.getUser$().pipe(
+          map(user => UserActions.setCurrentUser({userId: user.sub}))
+        )
+      } else {
+        return EMPTY;
+      }
+    })
+  ))
 
 }

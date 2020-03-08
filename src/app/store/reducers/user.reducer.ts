@@ -27,6 +27,9 @@ const userReducer = createReducer(
   }),
   on(UserActions.setActivationState, (state, {activated}) => {
     return {...state, currentUserActivated: activated};
+  }),
+  on(UserActions.setCurrentUser, (state, {userId}) => {
+    return {...state, currentUserId: userId};
   })
 );
 
