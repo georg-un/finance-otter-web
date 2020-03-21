@@ -5,6 +5,7 @@ import { AppState } from '../store/states/app.state';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserSelectors } from '../store/selectors/user.selectors';
+import { SummaryActions } from "../store/actions/summary.actions";
 
 @Component({
   selector: 'app-summary',
@@ -19,6 +20,10 @@ export class SummaryComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    this.store.dispatch(SummaryActions.requestBalances());
+    this.store.dispatch(SummaryActions.requestCategorySummary({months: 6}));
+    this.store.dispatch(SummaryActions.requestCategoryMonthSummary({months: 6}));
+
     this.store.select(UserSelectors.selectAllUsers)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((users: User[]) => {

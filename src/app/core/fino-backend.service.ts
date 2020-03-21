@@ -8,6 +8,8 @@ import { User } from './entity/user';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
+import { ChartSeries } from "./entity/chart-series";
+import { ChartData } from "./entity/chart-data";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   private endpoints = {
     users: environment.backendUrl + '/users',
-    purchases: environment.backendUrl + '/purchases'
+    purchases: environment.backendUrl + '/purchases',
+    summary: environment.backendUrl + '/summary'
   };
 
   constructor(
@@ -72,6 +75,28 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   deletePurchase(purchaseId: string): Observable<Object> {
     return this.http.delete(this.endpoints.purchases + `/${purchaseId}`).pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  fetchBalances(): Observable<Object> {
+    return this.http.get<Object>(this.endpoints.summary + '/balance').pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  fetchCategoryMonthSummary(months: number): Observable<ChartSeries[]> {
+    let params = new HttpParams();
+    params = params.set('offset', months.toString());
+    return this.http.get<ChartSeries[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  fetchCategorySummary(months: number): Observable<ChartData[]> {
+    let params = new HttpParams();
+    params = params.set('offset', months.toString());
+    return this.http.get<ChartData[]>(this.endpoints.summary + '/category', {params: params}).pipe(
       catchError((err) => this.handleError(err))
     );
   }
