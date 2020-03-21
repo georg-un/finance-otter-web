@@ -49,7 +49,7 @@
   <div class="debit-blockquote">
     <ng-container *ngFor="let debit of purchase?.debits">
       <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
-        <app-debit-card [debit]="debit" [user]="user"></app-debit-card>
+        <app-debit-card [amount]="debit.amount" [user]="user"></app-debit-card>
       </ng-container>
     </ng-container>
   </div>

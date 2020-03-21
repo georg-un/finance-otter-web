@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Debit } from '../../core/entity/debit';
-import { User } from '../../core/entity/user';
+import { Debit } from '../core/entity/debit';
+import { User } from '../core/entity/user';
 
 @Component({
   selector: 'app-debit-card',
@@ -9,7 +9,7 @@ import { User } from '../../core/entity/user';
 })
 export class DebitCardComponent implements OnInit {
 
-  @Input() debit: Debit;
+  @Input() amount: number;
   @Input() user: User;
 
   constructor() { }

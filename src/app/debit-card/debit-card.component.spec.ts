@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DebitCardComponent } from './debit-card.component';
-import {PURCHASE1} from '../../core/mock/data/purchase1';
-import {Debit} from '../../core/entity/debit';
+import {PURCHASE1} from '../core/mock/data/purchase1';
+import {Debit} from '../core/entity/debit';
 
 describe('DebitCardComponent', () => {
   let component: DebitCardComponent;

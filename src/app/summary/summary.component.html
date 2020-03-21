@@ -1,3 +1,11 @@
-<ng-container *ngFor="let user of users">
-  <app-user-card [user]="user"></app-user-card>
-</ng-container>
+<div>
+  <p class="title">BALANCE</p>
+  <div class="debit-blockquote">
+    <ng-container *ngFor="let balance of (balances$ | async)">
+      <ng-container *ngIf="selectUserById(balance[0]) | async as user">
+        <app-debit-card [amount]="balance[1]" [user]="user"></app-debit-card>
+      </ng-container>
+    </ng-container>
+  </div>
+
+</div>

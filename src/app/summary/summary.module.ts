@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SummaryComponent } from './summary.component';
-import { UserCardComponent } from './user-card/user-card.component';
 import { MatCardModule } from '@angular/material';
+import { DebitCardModule } from "../debit-card/debit-card.module";
 
 @NgModule({
   declarations: [
     SummaryComponent,
-    UserCardComponent
   ],
   imports: [
     CommonModule,
-    MatCardModule
+    MatCardModule,
+    DebitCardModule
   ]
 })
 export class SummaryModule { }

@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { SummaryActions } from "../store/actions/summary.actions";
+import { SummarySelectors } from "../store/selectors/summary.selectors";
 
 @Component({
   selector: 'app-summary',
@@ -14,7 +15,7 @@ import { SummaryActions } from "../store/actions/summary.actions";
 })
 export class SummaryComponent implements OnInit, OnDestroy {
 
-  users: User[];
+  balances$: Observable<object[]>;
   private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private store: Store<AppState>) { }
@@ -24,16 +25,18 @@ export class SummaryComponent implements OnInit, OnDestroy {
     this.store.dispatch(SummaryActions.requestCategorySummary({months: 6}));
     this.store.dispatch(SummaryActions.requestCategoryMonthSummary({months: 6}));
 
-    this.store.select(UserSelectors.selectAllUsers)
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((users: User[]) => {
-      this.users = users;
-    });
+    this.balances$ = this.store.select(SummarySelectors.selectBalances)
+      .pipe(map(balances => balances ? Object.entries(balances) : undefined));
+
   }
 
   ngOnDestroy(): void {
     this.onDestroy$.next(true);
     this.onDestroy$.complete();
+  }
+
+  selectUserById(id: string): Observable<User> {
+    return this.store.select(UserSelectors.selectUserById(), {id: id});
   }
 
 }

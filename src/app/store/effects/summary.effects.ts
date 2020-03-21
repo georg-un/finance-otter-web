@@ -20,7 +20,7 @@ export class SummaryEffects {
     ofType(SummaryActions.requestBalances),
     mergeMap((action) => this.restService.fetchBalances()
       .pipe(
-        map(balances => (SummaryActions.balancesReceived({balances: balances}))),
+        map(balances => (SummaryActions.balancesReceived({balances: balances['balances']}))),
         catchError(() => EMPTY)
       ))
     )

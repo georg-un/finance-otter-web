@@ -1,21 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PurchaseViewComponent } from './purchase-view.component';
+import { DebitCardComponent } from './debit-card.component';
 import { MatButtonModule, MatCardModule, MatIconModule } from "@angular/material";
 import { SharedModule } from "../shared/shared.module";
-import { DebitCardModule } from "../debit-card/debit-card.module";
 
 @NgModule({
   declarations: [
-    PurchaseViewComponent
+    DebitCardComponent
+  ],
+  exports: [
+    DebitCardComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    SharedModule,
-    DebitCardModule,
+    SharedModule
   ]
 })
-export class PurchaseViewModule { }
+export class DebitCardModule { }
