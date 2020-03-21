@@ -3,10 +3,12 @@ import { User } from '../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { SummaryActions } from "../store/actions/summary.actions";
 import { SummarySelectors } from "../store/selectors/summary.selectors";
+import { ChartData } from "../core/entity/chart-data";
+import { ChartSeries } from "../core/entity/chart-series";
 
 @Component({
   selector: 'app-summary',
@@ -16,9 +18,14 @@ import { SummarySelectors } from "../store/selectors/summary.selectors";
 export class SummaryComponent implements OnInit, OnDestroy {
 
   balances$: Observable<object[]>;
+  categorySummary$: Observable<ChartData[]>;
+  categoryMonthSummary$: Observable<ChartSeries[]>;
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private store: Store<AppState>) { }
+  view: any[] = [400, 300];  // FIXME: temporary
+
+  constructor(private store: Store<AppState>) {
+  }
 
   ngOnInit(): void {
     this.store.dispatch(SummaryActions.requestBalances());
@@ -27,6 +34,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
     this.balances$ = this.store.select(SummarySelectors.selectBalances)
       .pipe(map(balances => balances ? Object.entries(balances) : undefined));
+
+    this.categorySummary$ = this.store.select(SummarySelectors.selectCategorySummary);
+    this.categoryMonthSummary$ = this.store.select(SummarySelectors.selectCategoryMonthSummary);
 
   }
 
