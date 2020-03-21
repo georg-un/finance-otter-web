@@ -7,6 +7,7 @@ export class Purchase {
   category: string;
   shop: string;
   description: string;
+  isCompensation: boolean;
   syncStatus: SyncStatusEnum;
   debits: Debit[];
 }

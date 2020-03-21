@@ -8,6 +8,7 @@ export const PURCHASES: Purchase[] = [
     category: 'groceries',
     shop: 'Bio Shop',
     description: 'Needed stuff',
+    isCompensation: false,
     syncStatus: SyncStatusEnum.Remote,
     debits: [
       {
@@ -34,6 +35,7 @@ export const PURCHASES: Purchase[] = [
     category: 'pets',
     shop: 'Pet Store',
     description: 'Bought new dog food',
+    isCompensation: false,
     syncStatus: SyncStatusEnum.Syncing,
     debits: [
       {
@@ -55,6 +57,7 @@ export const PURCHASES: Purchase[] = [
     category: 'hygiene',
     shop: 'Drugstore',
     description: null,
+    isCompensation: false,
     syncStatus: SyncStatusEnum.LocalDelete,
     debits: [
       {
