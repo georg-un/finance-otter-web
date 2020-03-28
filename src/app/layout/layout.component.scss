@@ -5,7 +5,7 @@
 }
 
 .main-content {
-  height: stretch;
+  min-height: calc(100vh - 56px);
   z-index: 1;
   background-color: $light-primary;
   padding-top: var(--header-height)

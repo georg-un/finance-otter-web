@@ -1,10 +1,12 @@
 <div class='debit-card' style='padding-bottom: 4px'>
   <div class='debit-card-user'>
-    <p class='large'>
+    <p>
       {{user?.firstName}} {{user?.lastName}}
     </p>
   </div>
   <div class='debit-card-amount'>
-    <p class='large'>€ {{amount}}</p>
+    <p>
+      {{amount | number:'1.2-2'}} €
+    </p>
   </div>
 </div>

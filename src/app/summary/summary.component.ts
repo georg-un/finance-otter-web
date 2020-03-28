@@ -22,7 +22,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   categoryMonthSummary$: Observable<ChartSeries[]>;
   private onDestroy$: Subject<boolean> = new Subject();
 
-  view: any[] = [400, 300];  // FIXME: temporary
+  chartSize: any[];
 
   constructor(private store: Store<AppState>) {
   }
@@ -38,6 +38,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
     this.categorySummary$ = this.store.select(SummarySelectors.selectCategorySummary);
     this.categoryMonthSummary$ = this.store.select(SummarySelectors.selectCategoryMonthSummary);
 
+    const chartWidth = Math.min(window.innerWidth - 48, 500);
+    const chartHeight = Math.floor(chartWidth * 0.75);
+    this.chartSize = [chartWidth, chartHeight];
   }
 
   ngOnDestroy(): void {
