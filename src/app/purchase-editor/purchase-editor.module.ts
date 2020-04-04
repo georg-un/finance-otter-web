@@ -15,6 +15,13 @@ import {
   MatSlideToggleModule
 } from '@angular/material';
 import { PurchaseEditorEditComponent } from './purchase-editor-edit.component';
+import { NgxDocumentScannerModule, OpenCVConfig } from 'ngx-document-scanner';
+
+
+const openCVConfig: OpenCVConfig = {
+  openCVDirPath: '/assets'
+};
+
 
 @NgModule({
   declarations: [
@@ -34,7 +41,8 @@ import { PurchaseEditorEditComponent } from './purchase-editor-edit.component';
     MatListModule,
     MatMenuModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    NgxDocumentScannerModule.forRoot(openCVConfig)
   ]
 })
 export class PurchaseEditorModule { }
