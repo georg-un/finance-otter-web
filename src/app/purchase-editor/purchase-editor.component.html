@@ -1,4 +1,17 @@
-<div class="editor-wrapper">
+<input type="file" accept="image/*" #fileInput style="visibility: hidden" (change)="onImageCapture($event)">
+
+<div [hidden]="editedImage">
+  <ngx-doc-scanner
+    [file]="rawImage"
+    [config]="config"
+    (editResult)="onEditResult($event)"
+    (exitEditor)="onExitEditor($event)"
+    (processing)="editorState($event)">
+  </ngx-doc-scanner>
+</div>
+
+
+<div class="editor-wrapper" *ngIf="!rawImage">
 
   <div class="editor-row">
     <i class="material-icons editor-symbol-col">euro_symbol</i>
