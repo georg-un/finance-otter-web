@@ -2,6 +2,11 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { DocScannerConfig, NgxDocScannerComponent } from 'ngx-document-scanner';
 import { MatSnackBar } from '@angular/material';
 import { PurchaseEditorService } from '../purchase-editor/purchase-editor.service';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/states/app.state';
+import { RouterSelectors } from '../store/selectors/router.selectors';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-receipt-scanner',
@@ -24,17 +29,23 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
+    private router: Router,
+    private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private purchaseEditorService: PurchaseEditorService
   ) { }
 
   ngOnInit() {
+    // Make sure all previously captured images are cleared from the service
+    this.purchaseEditorService.receipt = undefined;
   }
 
   ngAfterViewInit() {
-    // Overwrite private ngx-doc-scanner properties
-    this.docScanner['selectedFilter'] = 'original';  // set default image-filter
-    this.docScanner['editorButtons'].find(button => button.name === 'exit').icon = 'clear';  // set exit icon
+    setTimeout(() => {
+      // Overwrite private ngx-doc-scanner properties
+      this.docScanner['selectedFilter'] = 'original';  // set default image-filter
+      this.docScanner['editorButtons'].find(button => button.name === 'exit').icon = 'clear';  // set exit icon
+    }, 0);
 
     // Prompt user for receipt image
     this.promptImageCapture();
@@ -51,6 +62,7 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
 
   onEditResult($event) {
     this.purchaseEditorService.receipt = $event;
+    this.navigateToEditor();
   }
 
   onExitEditor($event) {
@@ -63,6 +75,15 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
 
   isProcessing(): boolean {
     return this.rawImage && !this.docScanner.imageLoaded;
+  }
+
+  navigateToEditor(): void {
+    this.store.select(RouterSelectors.selectPurchaseId)
+      .pipe(take(1))
+      .subscribe((purchaseId: string) => {
+        const commands = purchaseId ? ['edit', purchaseId] : ['new'];
+        this.router.navigate(commands);
+      });
   }
 
 }

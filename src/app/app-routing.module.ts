@@ -52,6 +52,11 @@ const routes: Routes = [
         path: 'scan-receipt',
         component: ReceiptScannerComponent,
         data: {animation: 'Editor'}
+      },
+      {
+        path: 'scan-receipt/:purchaseId',
+        component: ReceiptScannerComponent,
+        data: {animation: 'Editor'}
       }
     ]
   },

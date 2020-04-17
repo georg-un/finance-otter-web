@@ -1,8 +1,9 @@
 import { AppState } from '../states/app.state';
 import { createSelector } from '@ngrx/store';
-import { RouterSelectors } from "./router.selectors";
-import { LeftButtonIconEnum, RightButtonIconEnum } from "../../layout/header/button-enums";
-import { PurchaseSelectors } from "./purchase.selectors";
+import { RouterSelectors } from './router.selectors';
+import { LeftButtonIconEnum, RightButtonIconEnum } from '../../layout/header/button-enums';
+import { PurchaseSelectors } from './purchase.selectors';
+import { NavigationExtras } from '@angular/router';
 
 const selectLayout = (state: AppState) => state.layout;
 
@@ -16,9 +17,9 @@ export class LayoutSelectors {
     (url: string) => deriveLayoutFromUrl(url).fab
   );
 
-  static selectFABLink = createSelector(
+  static selectFabRoute = createSelector(
     RouterSelectors.selectCurrentUrl,
-    (url: string) => deriveLayoutFromUrl(url).fabLink
+    (url: string) => deriveLayoutFromUrl(url).fabRoute
   );
 
   static selectLeftHeaderButton = createSelector(
@@ -42,7 +43,7 @@ export class LayoutSelectors {
     (rightHeaderButton: RightButtonIconEnum, syncJobs: number) => {
       return syncJobs > 0 && rightHeaderButton === RightButtonIconEnum.Sync;
     }
-  )
+  );
 
 }
 
@@ -51,25 +52,25 @@ function deriveLayoutFromUrl(url: string): Layout {
   const layout = new Layout();
   if (url.startsWith('/overview') || url.startsWith('/summary')) {
     layout.fab = 'add';
-    layout.fabLink = '/scan-receipt';
+    layout.fabRoute = {commands: ['scan-receipt'], extras: {skipLocationChange: true}};
     layout.leftHeaderButton = LeftButtonIconEnum.Menu;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = true;
   } else if (url.startsWith('/purchase')) {
     layout.fab = 'edit';
-    layout.fabLink = '/edit/' + url.split('/')[2];
+    layout.fabRoute = {commands: ['edit', url.split('/')[2]], extras: null};
     layout.leftHeaderButton = LeftButtonIconEnum.Back;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = false;
   } else if (url.startsWith('/new') || url.startsWith('/edit')) {
     layout.fab = null;
-    layout.fabLink = '/';
+    layout.fabRoute = {commands: ['/'], extras: null};
     layout.leftHeaderButton = LeftButtonIconEnum.Clear;
     layout.rightHeaderButton = RightButtonIconEnum.Done;
     layout.showLogo = false;
   } else {  // fallback
     layout.fab = null;
-    layout.fabLink = '/';
+    layout.fabRoute = {commands: ['/'], extras: null};
     layout.leftHeaderButton = LeftButtonIconEnum.Menu;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = true;
@@ -79,8 +80,13 @@ function deriveLayoutFromUrl(url: string): Layout {
 
 class Layout {
   fab: string;
-  fabLink: string;
+  fabRoute: RouterParams;
   leftHeaderButton: LeftButtonIconEnum;
   rightHeaderButton: RightButtonIconEnum;
   showLogo: boolean;
+}
+
+export class RouterParams {
+  commands: string[];
+  extras: NavigationExtras;
 }
