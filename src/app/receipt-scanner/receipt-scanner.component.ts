@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { DocScannerConfig, NgxDocScannerComponent } from 'ngx-document-scanner';
 import { MatSnackBar } from '@angular/material';
 import { PurchaseEditorService } from '../purchase-editor/purchase-editor.service';
@@ -29,6 +29,7 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
+    private ngZone: NgZone,
     private router: Router,
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
@@ -82,7 +83,9 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
       .pipe(take(1))
       .subscribe((purchaseId: string) => {
         const commands = purchaseId ? ['edit', purchaseId] : ['new'];
-        this.router.navigate(commands);
+        this.ngZone.run(() => {
+          this.router.navigate(commands);
+        });
       });
   }
 
