@@ -1,0 +1,37 @@
+<div>
+
+  <button
+    *ngIf="!rawImage"
+    (click)="promptImageCapture()"
+    mat-raised-button
+    class="capture-button"
+  >
+    <mat-icon>camera_alt</mat-icon>
+    Capture Image
+  </button>
+
+  <mat-spinner
+    *ngIf="isProcessing()"
+    class="spinner"
+  >
+  </mat-spinner>
+
+  <input
+    #fileInput
+    type="file"
+    accept="image/*"
+    (change)="onImageCapture($event)"
+    style="visibility: hidden"
+  />
+  <div [hidden]="!rawImage || isProcessing()">
+    <ngx-doc-scanner
+      #docScanner
+      [file]="rawImage"
+      [config]="config"
+      (editResult)="onEditResult($event)"
+      (exitEditor)="onExitEditor($event)"
+    >
+    </ngx-doc-scanner>
+  </div>
+
+</div>

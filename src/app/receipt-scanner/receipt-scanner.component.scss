@@ -1,0 +1,18 @@
+ngx-doc-scanner {
+  ::ng-deep div.editor-actions {
+    padding: 12px 12px 24px 12px !important;
+  }
+}
+
+.capture-button {
+  position: absolute;
+  top: calc((100vh - 56px) * 0.5);
+  left:50%;
+  transform: translateX(-50%);
+}
+
+.spinner {
+  position: absolute;
+  top: calc((100vh - 56px) * 0.5);
+  left: calc(50% - 50px)
+}

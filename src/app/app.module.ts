@@ -14,6 +14,7 @@ import { CoreModule } from './core/core.module';
 import { RegisterModule } from './register/register.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
+import { ReceiptScannerModule } from './receipt-scanner/receipt-scanner.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multilin
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AppStoreModule
+    AppStoreModule,
+    ReceiptScannerModule
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}

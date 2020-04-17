@@ -6,7 +6,8 @@ import { Subject } from 'rxjs';
 })
 export class PurchaseEditorService {
 
-  addPurchaseTrigger: Subject<boolean> = new Subject();
+  addPurchaseTrigger: Subject<boolean> = new Subject();  // TODO: Replace this by an ngrx action
+  receipt;
 
   constructor() { }
 

@@ -9,7 +9,8 @@ import { PurchaseEditorEditComponent } from './purchase-editor/purchase-editor-e
 import { AuthGuard } from './auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './core/interceptor.service';
-import { RegisterComponent } from "./register/register.component";
+import { RegisterComponent } from './register/register.component';
+import { ReceiptScannerComponent } from './receipt-scanner/receipt-scanner.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,11 @@ const routes: Routes = [
         path: 'edit/:purchaseId',
         component: PurchaseEditorEditComponent,
         data: {animation: 'Editor'}
+      },
+      {
+        path: 'scan-receipt',
+        component: ReceiptScannerComponent,
+        data: {animation: 'Editor'}
       }
     ]
   },
@@ -67,4 +73,5 @@ const routes: Routes = [
     }
   ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

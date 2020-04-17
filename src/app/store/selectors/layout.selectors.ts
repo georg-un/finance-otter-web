@@ -51,7 +51,7 @@ function deriveLayoutFromUrl(url: string): Layout {
   const layout = new Layout();
   if (url.startsWith('/overview') || url.startsWith('/summary')) {
     layout.fab = 'add';
-    layout.fabLink = '/new';
+    layout.fabLink = '/scan-receipt';
     layout.leftHeaderButton = LeftButtonIconEnum.Menu;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = true;
