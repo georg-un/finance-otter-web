@@ -62,27 +62,31 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
       return;
     }
     this.idGeneratorService.generatePurchaseId()
+      .pipe(take(1))
       .subscribe((purchaseId: string) => {
-        this.purchase.purchaseId = purchaseId;
-        this.purchase.debits = [];
-        this.distributionFragments.forEach((distributionFragment, index) => {
-          if (distributionFragment.amount) {
-            this.purchase.debits.push(
-              new Debit({
-                debitId: this.idGeneratorService.generateDebitId(purchaseId, index),
-                debtorId: distributionFragment.user.userId,
-                amount: distributionFragment.amount
-              })
-            );
-          }
-        });
-
-        this.store.dispatch(
-          PurchaseActions.addNewPurchase({
-            purchase: this.purchase
-          })
-        );
-
+        if (purchaseId) {
+          this.purchase.purchaseId = purchaseId;
+          this.purchase.debits = [];
+          this.distributionFragments.forEach((distributionFragment, index) => {
+            if (distributionFragment.amount) {
+              this.purchase.debits.push(
+                new Debit({
+                  debitId: this.idGeneratorService.generateDebitId(purchaseId, index),  // TODO: Check if debitId is truthy
+                  debtorId: distributionFragment.user.userId,
+                  amount: distributionFragment.amount
+                })
+              );
+            }
+          });
+          this.store.dispatch(
+            PurchaseActions.addNewPurchase({
+              purchase: this.purchase,
+              receipt: this.editorService.receipt
+            })
+          );
+        } else {
+          this.snackBar.open('Ooops, something went wrong.');
+        }
       });
   }
 

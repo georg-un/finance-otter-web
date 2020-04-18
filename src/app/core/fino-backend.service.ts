@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { FinOBackendServiceInterface } from './fino-backend.service.interface';
 import { Observable, throwError } from 'rxjs';
 import { Purchase } from './entity/purchase';
 import { environment } from '../../environments/environment';
 import { User } from './entity/user';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
-import { ChartSeries } from "./entity/chart-series";
-import { ChartData } from "./entity/chart-data";
+import { ChartSeries } from './entity/chart-series';
+import { ChartData } from './entity/chart-data';
 
 @Injectable({
   providedIn: 'root'
@@ -61,8 +61,11 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
   }
 
-  uploadNewPurchase(purchase: Purchase): Observable<Purchase> {
-    return this.http.post<Purchase>(this.endpoints.purchases, purchase).pipe(
+  uploadNewPurchase(purchase: Purchase, receipt: Blob): Observable<Purchase> {
+    const uploadForm = new FormData();
+    uploadForm.append('purchase', JSON.stringify(purchase));
+    uploadForm.append('receipt', receipt);
+    return this.http.post<Purchase>(this.endpoints.purchases, uploadForm).pipe(
       catchError((err) => this.handleError(err))
     );
   }

@@ -10,7 +10,7 @@ export interface FinOBackendServiceInterface {
 
   fetchUsers(): Observable<User[]>;
 
-  uploadNewPurchase(purchase: Purchase): Observable<Purchase>;
+  uploadNewPurchase(purchase: Purchase, receipt: Blob): Observable<Purchase>;
 
   updatePurchase(purchase: Purchase): Observable<Purchase>;
 

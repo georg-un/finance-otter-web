@@ -63,8 +63,8 @@ export class PurchaseEffects {
         }
       });
       observer.next(setSyncStatusAction);
-      // Upload purchase and dispatch action according to upload result
-      this.restService.uploadNewPurchase(action.purchase)
+      // Upload purchase & receipt and dispatch action according to upload result
+      this.restService.uploadNewPurchase(action.purchase, action.receipt)
         .pipe(take(1))
         .subscribe(
           (result: Purchase) => observer.next(PurchaseActions.purchaseUploadSuccessful({purchase: result})),

@@ -28,7 +28,7 @@ export class MockRestService implements FinOBackendServiceInterface {
     return of(USERS).pipe(delay(1500));
   }
 
-  uploadNewPurchase(purchase: Purchase): Observable<Purchase> {
+  uploadNewPurchase(purchase: Purchase, receipt: Blob): Observable<Purchase> {
     return of(Object.assign({}, purchase)).pipe(
       delay(2500)
     );

@@ -14,7 +14,7 @@ export class PurchaseActions {
   static purchasesReceived = createAction('[Purchase] Purchases Received', props<{purchases: Purchase[]}>());
   static requestSinglePurchase = createAction('[Purchase] Request Single Purchase', props<{purchaseId: string}>());
   static singlePurchaseReceived = createAction('[Purchase] Single Purchase Received', props<{purchase: Purchase}>());
-  static addNewPurchase = createAction('[Purchase] Add New Purchase', props<{purchase: Purchase}>());
+  static addNewPurchase = createAction('[Purchase] Add New Purchase', props<{purchase: Purchase, receipt: Blob}>());
   static updatePurchase = createAction('[Purchase] Update Purchase', props<{purchase: Purchase}>());
   static deletePurchase = createAction('[Purchase] Delete Purchase', props<{purchase: Purchase}>());
   static purchaseUploadSuccessful = createAction('[Purchase] Purchase Upload Successful', props<{purchase: Purchase}>());
