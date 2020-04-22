@@ -10,10 +10,9 @@ import { PurchaseEditorService } from './purchase-editor.service';
 import { DistributionFragment } from './distribution-fragment';
 import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
+import { BigNumber } from "bignumber.js";
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
-
-  // FIXME: 12.56€ does not work.
 
   purchase: Purchase;
   sumAmount: number;
@@ -55,11 +54,12 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
     } else if (!this.sumAmount) {
       this.snackBar.open('Please enter the amount.');
       return false;
-    } else if (
-      this.sumAmount !==
+    } else if (!new BigNumber(this.sumAmount).isEqualTo(
       this.distributionFragments
-        .map(fragment => fragment.amount)
-        .reduce((sum, current) => sum + current)) {
+        .filter(fragment => fragment.checked)
+        .map(fragment => new BigNumber(fragment.amount))
+        .reduce((sum, current) => sum.plus(current), new BigNumber(0)))
+      ) {
       this.snackBar.open('Total amount and debits don\'t match.');
       return false;
     } else {
@@ -74,65 +74,66 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   }
 
   distributeToAllFields(): void {
-    const rest = this.getRest(
-      this.sumAmount,
-      this.distributionFragments.map(fragment => fragment.amount)
+    this.distributeToFields(
+      this.distributionFragments.filter(fragment => fragment.checked)
     );
-    const nCheckedFields = this.distributionFragments.filter(fragment => fragment.checked).length;
-
-    const assignedValues = this.distributeByBresenham(rest, nCheckedFields);
-
-    this.distributionFragments
-      .filter(fragment => fragment.checked)
-      .forEach(fragment => {
-        fragment.amount = Math.round((fragment.amount + assignedValues.pop()) * 100) / 100;
-      });
   }
 
   distributeToEmptyFields(): void {
-    const rest = this.getRest(
-      this.sumAmount,
-      this.distributionFragments.map(fragment => fragment.amount)
+    this.distributeToFields(
+      this.distributionFragments.filter(fragment => fragment.checked && !fragment.amount)
     );
-    const nCheckedAndEmptyFields = this.distributionFragments
-      .filter(fragment => fragment.checked && !fragment.amount)
-      .length;
-
-    const assignedValues = this.distributeByBresenham(rest, nCheckedAndEmptyFields);
-
-    this.distributionFragments
-      .filter(fragment => fragment.checked && !fragment.amount)
-      .forEach(fragment => {
-        fragment.amount = Math.round((fragment.amount + assignedValues.pop()) * 100) / 100;
-      });
   }
 
-  private getRest(totalAmount: number, amounts: number[]): number {
-    return totalAmount - amounts.reduce((a, b) => a + b, 0);
+  private distributeToFields(relevantFields: DistributionFragment[]): void {
+    // Get the remaining value
+    const rest = this.getRest(
+      new BigNumber(this.sumAmount),
+      this.distributionFragments
+        .filter(fragment => fragment.checked)
+        .map(fragment => new BigNumber(fragment.amount || 0))
+    );
+    if (rest.isLessThan(0)) {
+      console.error(`Sum of distribution fragments (${rest.toNumber()}) is larger than total amount (${this.sumAmount})`);
+      this.snackBar.open("Sum of custom distribution is larger than amount.");
+      return;
+    }
+    // Distribute the rest by the Bresenham Algorithm
+    const assignedValues: BigNumber[] = this.distributeByBresenham(
+      rest,
+      new BigNumber(relevantFields.length)
+    );
+    // Assign the calculated values to the distribution-fragments
+    relevantFields.forEach(field => {
+      field.amount = assignedValues.pop().plus(field.amount || 0).toNumber();
+    });
   }
 
-  private distributeByBresenham(rest: number, nFields: number): number[] {
-    let result: number[] = [];
-    const assignedValue = Math.floor((rest / nFields) * 100) / 100;
-    const remainder = Math.floor((rest * 100) % nFields) / 100;
+  private getRest(totalAmount: BigNumber, amounts: BigNumber[]): BigNumber {
+    return totalAmount.minus(
+      amounts.reduce((a, b) => a.plus(b), new BigNumber(0))
+    );
+  }
 
-    for (let i = 0; i < nFields; i++) {
+  private distributeByBresenham(rest: BigNumber, nFields: BigNumber): BigNumber[] {
+    let result: BigNumber[] = [];
+    // Distribute the rest evenly
+    const assignedValue = rest.dividedBy(nFields).decimalPlaces(2, BigNumber.ROUND_DOWN);
+    for (let i = 0; i < nFields.toNumber(); i++) {
       result.push(assignedValue);
     }
-
-    let j = 0;
-    for (let i = 0; i < remainder * 100; i++) {
-      if (j >= nFields) {
-        j = 0;
+    // Calculate the remained that could not be evenly distributed
+    let remainder = rest.minus(assignedValue.times(nFields.toNumber()));
+    // Distribute the rest to all fields cent by cent
+    let resultIdx = 0;
+    while (remainder.isGreaterThan(0)) {
+      if (resultIdx >= result.length) {
+        resultIdx = 0;  // reset index
       }
-      result[j] += 0.01;
-      j += 1;
+      result[resultIdx] = result[resultIdx].plus(0.01);
+      remainder = remainder.minus(0.01);
+      resultIdx += 1;
     }
-
-    result = result.map(value => {
-      return Math.round(value * 100) / 100;
-    });
-
     return result;
   }
 
