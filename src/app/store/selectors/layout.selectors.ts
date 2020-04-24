@@ -58,19 +58,19 @@ function deriveLayoutFromUrl(url: string): Layout {
     layout.showLogo = true;
   } else if (url.startsWith('/purchase')) {
     layout.fab = 'edit';
-    layout.fabRoute = {commands: ['edit', url.split('/')[2]], extras: null};
+    layout.fabRoute = {commands: ['edit', url.split('/')[2]], extras: {}};
     layout.leftHeaderButton = LeftButtonIconEnum.Back;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = false;
   } else if (url.startsWith('/new') || url.startsWith('/edit')) {
     layout.fab = null;
-    layout.fabRoute = {commands: ['/'], extras: null};
+    layout.fabRoute = {commands: ['/'], extras: {}};
     layout.leftHeaderButton = LeftButtonIconEnum.Clear;
     layout.rightHeaderButton = RightButtonIconEnum.Done;
     layout.showLogo = false;
   } else {  // fallback
     layout.fab = null;
-    layout.fabRoute = {commands: ['/'], extras: null};
+    layout.fabRoute = {commands: ['/'], extras: {}};
     layout.leftHeaderButton = LeftButtonIconEnum.Menu;
     layout.rightHeaderButton = RightButtonIconEnum.Sync;
     layout.showLogo = true;
