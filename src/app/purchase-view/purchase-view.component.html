@@ -15,9 +15,11 @@
     <div class="font-large grid-cell r4-c2">
       <p>{{ debitSum | currency:'EUR':'€ ':'1.2-2'}}</p>
     </div>
-    <button mat-icon-button class="grid-cell r6-c1">
-      <mat-icon>photo</mat-icon>
-    </button>
+    <div class="grid-cell r6-c1">
+      <button mat-icon-button (click)="onImageButtonClick()">
+        <mat-icon>photo</mat-icon>
+      </button>
+    </div>
     <div class="grid-cell r6-c2">
       <p>{{ purchase?.category | lowercase }}</p>
     </div>

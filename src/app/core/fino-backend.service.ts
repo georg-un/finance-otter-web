@@ -61,6 +61,14 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
   }
 
+  fetchReceipt(purchaseId: string): Observable<Blob> {
+    return this.http.get(
+      `${this.endpoints.purchases}/${purchaseId}/receipt`,
+      {responseType: 'blob'}).pipe(
+      catchError((err => this.handleError(err)))
+    );
+  }
+
   uploadNewPurchase(purchase: Purchase, receipt: Blob): Observable<Purchase> {
     const uploadForm = new FormData();
     uploadForm.append('purchase', JSON.stringify(purchase));

@@ -11,8 +11,14 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './core/interceptor.service';
 import { RegisterComponent } from './register/register.component';
 import { ReceiptScannerComponent } from './receipt-scanner/receipt-scanner.component';
+import { ReceiptViewComponent } from './receipt-view/receipt-view.component';
 
 const routes: Routes = [
+  {
+    path: 'receipt/:purchaseId',
+    component: ReceiptViewComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: '',
     component: LayoutComponent,

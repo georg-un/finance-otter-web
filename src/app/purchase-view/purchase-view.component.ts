@@ -9,6 +9,7 @@ import { PurchaseSelectors } from '../store/selectors/purchase.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { PurchaseActions } from '../store/actions/purchase.actions';
 import { Debit } from '../core/entity/debit';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,11 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   debitSum: number;
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private store: Store<AppState>) { }
+  constructor(
+    private store: Store<AppState>,
+    private router: Router
+  ) {
+  }
 
   ngOnInit(): void {
     this.store.select(PurchaseSelectors.selectCurrentPurchase)
@@ -47,6 +52,10 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   selectUserById(id: string): Observable<User> {
     return this.store.select(UserSelectors.selectUserById(), {id: id});
+  }
+
+  onImageButtonClick(): void {
+    this.router.navigate(['receipt', this.purchase.purchaseId]);
   }
 
   onDeleteButtonClick(): void {
