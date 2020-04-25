@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
-import { AuthService } from "../../core/auth.service";
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -20,7 +20,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private currentUser$: Observable<User>;
   private sidenavOpen: boolean;
   private onDestroy$: Subject<boolean> = new Subject();
-  avatar = 'assets/otter-avatar.jpg';
 
   @ViewChild('sidenav', {static: true}) public sidenav: MatSidenav;
 

@@ -1,7 +1,7 @@
 <div class="purchase-header">
   <div class="header-content">
     <div class='grid-cell r1-c1'>
-      <img mat-card-avatar [src]="'assets/otter-avatar.jpg'">
+      <img mat-card-avatar [src]="(user$ | async).avatarUrl" alt="avatar">
     </div>
     <div class='grid-cell r1-c2'>
       <p>{{ user$ | async | shortName }}</p>

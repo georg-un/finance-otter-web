@@ -5,7 +5,7 @@ import { EMPTY } from 'rxjs';
 import { UserActions } from '../actions/user.actions';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from "../../core/auth.service";
+import { AuthService } from '../../core/auth.service';
 
 @Injectable()
 export class UserEffects {
@@ -23,7 +23,7 @@ export class UserEffects {
     mergeMap(() => this.restService.fetchUsers()
       .pipe(
         take(1),
-        map(users => (UserActions.usersReceived({users}))),
+        map(users => UserActions.usersReceived({users})),
         catchError((err) => {
           console.error(err);
           return EMPTY;
@@ -76,11 +76,11 @@ export class UserEffects {
       if (action.activated) {
         return this.auth.getUser$().pipe(
           map(user => UserActions.setCurrentUser({userId: user.sub}))
-        )
+        );
       } else {
         return EMPTY;
       }
     })
-  ))
+  ));
 
 }

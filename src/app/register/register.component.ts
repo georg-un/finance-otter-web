@@ -5,8 +5,9 @@ import { User } from '../core/entity/user';
 import { UserActions } from '../store/actions/user.actions';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +23,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: AuthService,
   ) {
   }
 
@@ -43,10 +45,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   createUser() {
-    const user = new User();
-    user.firstName = this.firstName;
-    user.lastName = this.lastName;
-    this.store.dispatch(UserActions.registerCurrentUser({user: user}));
+    this.auth.userProfile$
+      .pipe(take(1))
+      .subscribe((profile) => {
+        const user = new User();
+        user.firstName = this.firstName;
+        user.lastName = this.lastName;
+        user.avatarUrl = profile ? profile['picture'] : undefined;
+        this.store.dispatch(UserActions.registerCurrentUser({user: user}));
+      });
   }
 
 }
