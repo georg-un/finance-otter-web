@@ -4,7 +4,7 @@ import { User } from '../../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
@@ -30,7 +30,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
+    this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser).pipe(filter(user => !!user));
     this.store.select(LayoutSelectors.isSidenavOpen)
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((isOpen: boolean) => {

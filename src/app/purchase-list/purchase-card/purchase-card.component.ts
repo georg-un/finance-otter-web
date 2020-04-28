@@ -5,7 +5,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Observable } from 'rxjs';
 import { UserSelectors } from '../../store/selectors/user.selectors';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+import { User } from '../../core/entity/user';
 
 @Component({
   selector: 'app-purchase-card',
@@ -34,11 +35,17 @@ export class PurchaseCardComponent implements OnInit {
       .reduce((sum, current) => sum + current);
     // Get buyer avatar
     this.buyerAvatarUrl$ = this.store.select(UserSelectors.selectUserById(), {id: this.purchase.buyerId})
-      .pipe(map(user => user.avatarUrl));
+      .pipe(
+        filter(Boolean),
+        map((user: User) => user.avatarUrl)
+      );
     // If transaction is a compensation, get receiver avatar
     if (this.purchase.isCompensation) {
       this.receiverAvatarUrl$ = this.store.select(UserSelectors.selectUserById(), {id: this.purchase.debits[0].debtorId})
-        .pipe(map(user => user.avatarUrl));
+        .pipe(
+          filter(Boolean),
+          map((user: User) => user.avatarUrl)
+        );
     }
   }
 

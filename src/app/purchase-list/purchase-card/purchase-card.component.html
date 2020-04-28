@@ -1,8 +1,8 @@
 <mat-card (click)="onClick()">
   <mat-card-content>
     <div class='purchase-card'>
-      <div class='grid-cell__r2-c1'>
-          <img mat-card-avatar [src]='buyerAvatarUrl$ | async'>
+      <div *ngIf="buyerAvatarUrl$ | async" class='grid-cell__r2-c1'>
+          <img mat-card-avatar [src]="buyerAvatarUrl$ | async">
       </div>
 
       <div class='grid-cell__r1-c2'>
@@ -25,7 +25,8 @@
 
         <div class='grid-cell__r2-c2 font-large'>
           <mat-icon class="compensation_arrow">arrow_right_alternative</mat-icon>
-          <img mat-card-avatar [src]='receiverAvatarUrl$ | async' class="receiver-avatar">
+          <img *ngIf="receiverAvatarUrl$ | async" mat-card-avatar
+               [src]="receiverAvatarUrl$ | async" class="receiver-avatar">
         </div>
 
         <div class='grid-cell__r3-c2'>

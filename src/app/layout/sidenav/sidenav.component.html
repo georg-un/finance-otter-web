@@ -6,8 +6,8 @@
     opened="false"
     (openedChange)="onOpenedChange($event)"
   >
-    <div class="account-card">
-      <img mat-card-avatar [src]='(currentUser$ | async).avatarUrl'>
+    <div *ngIf="(currentUser$ | async)" class="account-card">
+      <img mat-card-avatar [src]='(currentUser$ | async)?.avatarUrl'>
       <p>{{(currentUser$ | async)?.firstName}} {{(currentUser$ | async)?.lastName}}</p>
     </div>
 
