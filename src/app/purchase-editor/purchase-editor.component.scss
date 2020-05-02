@@ -6,10 +6,11 @@
   }
 }
 
-mat-list-item {
+.debit-row {
   ::ng-deep {
     .mat-list-item-content {
       width: 100%;
+      padding: 0 0 0 4px;
     }
   }
 }
@@ -17,8 +18,12 @@ mat-list-item {
 .editor-wrapper {
   height: stretch;
   background-color: $light-primary;
-  padding: 36px 24px 16px 24px;
+  padding: 16px 24px 16px 24px;
   flex: 1;
+}
+
+.editor-group {
+  margin-top: 16px;
 }
 
 .editor-row {
@@ -51,4 +56,10 @@ mat-list-item {
 .debit-input-col {
   width: 25vw;
   margin-right: 8vw;
+}
+
+.debit-actions {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 16px 0 0;
 }

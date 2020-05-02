@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Purchase } from '../core/entity/purchase';
 import { PurchaseEditorService } from './purchase-editor.service';
 import { PurchaseActions } from '../store/actions/purchase.actions';

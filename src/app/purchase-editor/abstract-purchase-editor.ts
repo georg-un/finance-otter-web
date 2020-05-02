@@ -10,7 +10,7 @@ import { PurchaseEditorService } from './purchase-editor.service';
 import { DistributionFragment } from './distribution-fragment';
 import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
-import { BigNumber } from "bignumber.js";
+import { BigNumber } from 'bignumber.js';
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 
@@ -23,7 +23,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   protected constructor(protected store: Store<AppState>,
                         protected editorService: PurchaseEditorService,
-                        protected snackBar: MatSnackBar,
+                        protected snackBar: MatSnackBar
   ) {
   }
 
