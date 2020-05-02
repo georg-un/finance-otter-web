@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReceiptViewComponent } from './receipt-view.component';
+import { MatButtonModule, MatIconModule, MatToolbarModule } from '@angular/material';
 
 
 
@@ -9,7 +10,10 @@ import { ReceiptViewComponent } from './receipt-view.component';
     ReceiptViewComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule
   ]
 })
 export class ReceiptViewModule { }

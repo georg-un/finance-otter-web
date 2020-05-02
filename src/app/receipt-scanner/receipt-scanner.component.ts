@@ -7,6 +7,7 @@ import { AppState } from '../store/states/app.state';
 import { RouterSelectors } from '../store/selectors/router.selectors';
 import { take } from 'rxjs/operators';
 import { ReceiptScannerService } from './receipt-scanner.service';
+import { PurchaseActions } from '../store/actions/purchase.actions';
 
 @Component({
   selector: 'app-receipt-scanner',
@@ -64,7 +65,7 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
 
   onEditResult($event) {
     this.receiptScannerService.receipt = $event;
-    this.navigateToEditor();
+    this.dispatchAndLeave();
   }
 
   onExitEditor($event) {
@@ -79,13 +80,24 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
     return this.rawImage && !this.docScanner.imageLoaded;
   }
 
-  navigateToEditor(): void {
+  dispatchAndLeave(): void {
     this.store.select(RouterSelectors.selectPurchaseId)
       .pipe(take(1))
       .subscribe((purchaseId: string) => {
-        const commands = purchaseId ? ['edit', purchaseId] : ['new'];
+        const routerCommands = [];
+        if (purchaseId) {
+          // If the purchase already exists, update the receipt and navigate to the purchase-viewer
+          this.store.dispatch(PurchaseActions.updateReceipt({
+            receipt: this.receiptScannerService.receipt,
+            purchaseId: purchaseId
+          }));
+          routerCommands.push('purchase', purchaseId);
+        } else {
+          // If the purchase does not exist yet, navigate to the editor-new
+          routerCommands.push('new');
+        }
         this.ngZone.run(() => {
-          this.router.navigate(commands);
+          this.router.navigate(routerCommands);
         });
       });
   }
