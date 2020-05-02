@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { DocScannerConfig, NgxDocScannerComponent } from 'ngx-document-scanner';
 import { MatSnackBar } from '@angular/material';
-import { PurchaseEditorService } from '../purchase-editor/purchase-editor.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { RouterSelectors } from '../store/selectors/router.selectors';
 import { take } from 'rxjs/operators';
+import { ReceiptScannerService } from './receipt-scanner.service';
 
 @Component({
   selector: 'app-receipt-scanner',
@@ -33,12 +33,13 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
     private router: Router,
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private purchaseEditorService: PurchaseEditorService
-  ) { }
+    private receiptScannerService: ReceiptScannerService
+  ) {
+  }
 
   ngOnInit() {
     // Make sure all previously captured images are cleared from the service
-    this.purchaseEditorService.receipt = undefined;
+    this.receiptScannerService.receipt = undefined;
   }
 
   ngAfterViewInit() {
@@ -62,7 +63,7 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   }
 
   onEditResult($event) {
-    this.purchaseEditorService.receipt = $event;
+    this.receiptScannerService.receipt = $event;
     this.navigateToEditor();
   }
 

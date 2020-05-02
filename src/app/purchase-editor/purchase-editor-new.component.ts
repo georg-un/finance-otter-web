@@ -12,6 +12,7 @@ import { PurchaseActions } from '../store/actions/purchase.actions';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { AbstractEditor } from './abstract-purchase-editor';
 import { DistributionFragment } from './distribution-fragment';
+import { ReceiptScannerService } from '../receipt-scanner/receipt-scanner.service';
 
 @Component({
   selector: 'app-editor-new',
@@ -29,6 +30,7 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
               protected editorService: PurchaseEditorService,
               protected snackBar: MatSnackBar,
               protected idGeneratorService: IdGeneratorService,
+              private receiptScannerService: ReceiptScannerService,
   ) {
     super(store, editorService, snackBar);
   }
@@ -81,7 +83,7 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
           this.store.dispatch(
             PurchaseActions.addNewPurchase({
               purchase: this.purchase,
-              receipt: this.editorService.receipt
+              receipt: this.receiptScannerService.receipt
             })
           );
         } else {
