@@ -16,4 +16,8 @@ export interface FinOBackendServiceInterface {
 
   deletePurchase(purchaseId: string): Observable<Object>;
 
+  updateReceipt(purchaseId: string, receipt: Blob): Observable<Object>;
+
+  deleteReceipt(purchaseId: string): Observable<Object>;
+
 }

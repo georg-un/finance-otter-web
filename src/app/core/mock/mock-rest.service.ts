@@ -46,4 +46,16 @@ export class MockRestService implements FinOBackendServiceInterface {
     );
   }
 
+  updateReceipt(purchaseId: string, receipt: Blob): Observable<Object> {
+    return of(undefined).pipe(
+      delay(2500)
+    );
+  }
+
+  deleteReceipt(purchaseId: string): Observable<Object> {
+    return of(undefined).pipe(
+      delay(2500)
+    );
+  }
+
 }

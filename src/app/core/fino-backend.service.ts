@@ -85,7 +85,21 @@ export class FinOBackendService implements FinOBackendServiceInterface {
   }
 
   deletePurchase(purchaseId: string): Observable<Object> {
-    return this.http.delete(this.endpoints.purchases + `/${purchaseId}`).pipe(
+    return this.http.delete(`${this.endpoints.purchases}/${purchaseId}`).pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  updateReceipt(purchaseId: string, receipt: Blob): Observable<Object> {
+    const uploadForm = new FormData();
+    uploadForm.append('receipt', receipt);
+    return this.http.put(`${this.endpoints.purchases}/${purchaseId}/receipt`, uploadForm).pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  deleteReceipt(purchaseId: string): Observable<Object> {
+    return this.http.delete(`${this.endpoints.purchases}/${purchaseId}/receipt`).pipe(
       catchError((err) => this.handleError(err))
     );
   }
