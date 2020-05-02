@@ -37,13 +37,9 @@ export class PurchaseSelectors {
     }
   );
 
-  static selectPurchaseById = () => {
-    return createSelector(
-      PurchaseSelectors.selectPurchaseEntities,
-      (entities: Dictionary<Purchase>, props: { id: string }) => {
-        return entities[props.id];
-      },
-    );
-  }
+  static selectPurchaseById = (id: string) => createSelector(
+    PurchaseSelectors.selectPurchaseEntities,
+    entities => entities[id]
+  );
 
 }

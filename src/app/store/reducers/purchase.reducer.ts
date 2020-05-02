@@ -44,6 +44,12 @@ const purchaseReducer = createReducer(
   on(PurchaseActions.deletePurchase, (state, { purchase }) => {
     return purchaseAdapter.removeOne(purchase.purchaseId, {...state, syncJobs: state.syncJobs + 1});
   }),
+  on(PurchaseActions.updateReceipt, (state, {receipt, purchaseId}) => {
+    return {...state, syncJobs: state.syncJobs + 1};
+  }),
+  on(PurchaseActions.deleteReceipt, (state, {purchaseId}) => {
+    return {...state, syncJobs: state.syncJobs + 1};
+  }),
   on(PurchaseActions.purchaseUploadSuccessful, (state, { purchase }) => {
     return {...state, syncJobs: state.syncJobs - 1};
   }),
@@ -60,6 +66,12 @@ const purchaseReducer = createReducer(
     return {...state, syncJobs: state.syncJobs - 1};
   }),
   on(PurchaseActions.purchaseDeleteFailed, (state, { purchase }) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PurchaseActions.receiptUpdateSuccessful, (state, {purchaseId}) => {
+    return {...state, syncJobs: state.syncJobs - 1};
+  }),
+  on(PurchaseActions.receiptUpdateFailed, (state, {purchaseId}) => {
     return {...state, syncJobs: state.syncJobs - 1};
   }),
 );

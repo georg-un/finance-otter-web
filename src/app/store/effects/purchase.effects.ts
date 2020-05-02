@@ -11,6 +11,7 @@ import { AppState } from '../states/app.state';
 import { RouterSelectors } from '../selectors/router.selectors';
 import { LayoutSelectors } from '../selectors/layout.selectors';
 import { FinOBackendService } from '../../core/fino-backend.service';
+import { PurchaseSelectors } from '../selectors/purchase.selectors';
 
 @Injectable()
 export class PurchaseEffects {
@@ -107,6 +108,36 @@ export class PurchaseEffects {
     )
   );
 
+  updateOrDeleteReceipt$ = createEffect(() => this.actions$.pipe(
+    ofType(PurchaseActions.updateReceipt, PurchaseActions.deleteReceipt),
+    mergeMap((action) => new Observable<Action>((observer) => {
+      // Update sync-status of purchase to 'syncing'
+      const setSyncStatusAction = PurchaseActions.updatePurchaseEntity({
+        purchase: {
+          id: action.purchaseId,
+          changes: {syncStatus: SyncStatusEnum.Syncing}
+        }
+      });
+      observer.next(setSyncStatusAction);
+      // Update or delete receipt and dispatch action according to result
+      if (action.type === PurchaseActions.deleteReceipt.type) {
+        this.restService.deleteReceipt(action.purchaseId)
+          .pipe(take(1))
+          .subscribe(
+            () => observer.next(PurchaseActions.receiptUpdateSuccessful({purchaseId: action.purchaseId})),
+            () => observer.next(PurchaseActions.receiptUpdateFailed({purchaseId: action.purchaseId}))
+          );
+      } else {
+        this.restService.updateReceipt(action.purchaseId, action.receipt)
+          .pipe(take(1))
+          .subscribe(
+            () => observer.next(PurchaseActions.receiptUpdateSuccessful({purchaseId: action.purchaseId})),
+            () => observer.next(PurchaseActions.receiptUpdateFailed({purchaseId: action.purchaseId}))
+          );
+      }
+    }))
+  ));
+
   syncPurchase$ = createEffect(() => this.actions$.pipe(  // TODO: What to do with local purchases? What to do with purchases that are already syncing?
     ofType(PurchaseActions.syncPurchases),
     withLatestFrom(
@@ -162,6 +193,27 @@ export class PurchaseEffects {
       {purchase: {...action.purchase, syncStatus: SyncStatusEnum.LocalDelete}}
     ))
     )
+  );
+
+  receiptUpdateResult$ = createEffect(() => this.actions$.pipe(
+    ofType(PurchaseActions.receiptUpdateSuccessful, PurchaseActions.receiptUpdateFailed),
+    switchMap((action) => {
+      return this.store.select(PurchaseSelectors.selectPurchaseById(action.purchaseId)).pipe(
+        take(1),
+        map((purchase: Purchase) => {
+          return PurchaseActions.updatePurchaseEntity({
+            purchase: {
+              id: action.purchaseId,
+              changes: {
+                ...purchase,
+                syncStatus: action.type === PurchaseActions.receiptUpdateSuccessful.type ?
+                  SyncStatusEnum.Remote :
+                  SyncStatusEnum.Local
+              }
+            }
+          });
+        }));
+    }))
   );
 
 }
