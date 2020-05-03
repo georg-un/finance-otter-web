@@ -17,7 +17,7 @@ import { AuthService } from '../../core/auth.service';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
 
-  private currentUser$: Observable<User>;
+  currentUser$: Observable<User>;
   private sidenavOpen: boolean;
   private onDestroy$: Subject<boolean> = new Subject();
 

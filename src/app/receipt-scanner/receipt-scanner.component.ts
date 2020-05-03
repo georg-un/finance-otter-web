@@ -19,7 +19,7 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   @ViewChild('fileInput', {static: false}) fileInput: ElementRef;
   @ViewChild('docScanner', {static: false}) docScanner: NgxDocScannerComponent;
 
-  private rawImage;
+  rawImage;
 
   config: DocScannerConfig = {
     editorBackgroundColor: '#e3f2fd',

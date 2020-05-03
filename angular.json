@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "accounting-otter-web": {
+    "finance-otter-web": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/accounting-otter-web",
+            "outputPath": "dist/finance-otter-web",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,20 +61,20 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "accounting-otter-web:build",
+            "browserTarget": "finance-otter-web:build",
             "proxyConfig": "src/proxy.conf.json",
             "ssl": true
           },
           "configurations": {
             "production": {
-              "browserTarget": "accounting-otter-web:build:production"
+              "browserTarget": "finance-otter-web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "accounting-otter-web:build"
+            "browserTarget": "finance-otter-web:build"
           }
         },
         "test": {
@@ -108,7 +108,7 @@
         }
       }
     },
-    "accounting-otter-web-e2e": {
+    "finance-otter-web-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -117,11 +117,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "accounting-otter-web:serve"
+            "devServerTarget": "finance-otter-web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "accounting-otter-web:serve:production"
+              "devServerTarget": "finance-otter-web:serve:production"
             }
           }
         },
@@ -137,5 +137,5 @@
       }
     }
   },
-  "defaultProject": "accounting-otter-web"
+  "defaultProject": "finance-otter-web"
 }

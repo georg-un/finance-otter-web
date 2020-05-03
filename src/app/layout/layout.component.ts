@@ -15,7 +15,7 @@ import { expandFromFAB, rotateOnChange } from './layout.animations';
 })
 export class LayoutComponent implements OnInit, OnDestroy {
 
-  protected showFAB = true;
+  showFAB = true;
   protected fabIcon = 'add';
   private onDestroy$: Subject<boolean> = new Subject();
 

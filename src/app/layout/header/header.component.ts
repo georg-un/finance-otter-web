@@ -20,10 +20,10 @@ import { fadeOnChange, rotateOnChange } from '../layout.animations';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  protected showLogo$: Observable<boolean>;
-  protected shouldSyncIconRotate$: Observable<boolean>;
-  protected leftHeaderButton = 'menu';
-  protected rightHeaderButton = 'sync';
+  showLogo$: Observable<boolean>;
+  shouldSyncIconRotate$: Observable<boolean>;
+  leftHeaderButton = 'menu';
+  rightHeaderButton = 'sync';
   private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(private editorService: PurchaseEditorService,
