@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material';
 
 
 const openCVConfig: OpenCVConfig = {
-  openCVDirPath: '/assets'
+  openCVDirPath: './assets'
 };
 
 
