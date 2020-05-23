@@ -132,7 +132,8 @@ export class FinOBackendService implements FinOBackendServiceInterface {
       console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
-      console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
+      console.error(`Backend returned code ${error.status}, ` + `body was:`);
+      console.error(error.error);
     }
     // Show a snackbar
     this.snackBar.openFromComponent(MultilineSnackbarComponent, {
