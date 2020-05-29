@@ -1,4 +1,4 @@
-<div class="purchase-header">
+<div class="purchase-header" [style.background-color]="(category$ | async)?.color">
   <div class="header-content">
     <div class='grid-cell r1-c1'>
       <img mat-card-avatar [src]="(user$ | async).avatarUrl" alt="avatar">
@@ -48,7 +48,7 @@
   </ng-container>
 
   <p class="detail-title">DISTRIBUTION</p>
-  <div class="debit-blockquote">
+  <div class="debit-blockquote" [style.border-left]="'4px solid ' + (category$ | async)?.color">
     <ng-container *ngFor="let debit of purchase?.debits">
       <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
         <app-debit-card [amount]="debit.amount" [user]="user"></app-debit-card>

@@ -1,4 +1,4 @@
-<mat-card (click)="onClick()">
+<mat-card (click)="onClick()" [style.border-left]="'4px solid ' + (category$ | async)?.color">
   <mat-card-content>
     <div class='purchase-card'>
       <div *ngIf="buyerAvatarUrl$ | async" class='grid-cell__r2-c1'>
