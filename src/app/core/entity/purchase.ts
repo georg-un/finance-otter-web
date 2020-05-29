@@ -4,7 +4,7 @@ export class Purchase {
   purchaseId: string;
   buyerId: string;
   date: number;
-  category: string;
+  categoryId: number;
   shop: string;
   description: string;
   isCompensation: boolean;

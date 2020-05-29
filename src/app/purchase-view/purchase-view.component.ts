@@ -10,6 +10,8 @@ import { takeUntil } from 'rxjs/operators';
 import { PurchaseActions } from '../store/actions/purchase.actions';
 import { Debit } from '../core/entity/debit';
 import { Router } from '@angular/router';
+import { Category } from '../core/entity/category';
+import { CategorySelectors } from '../store/selectors/category.selectors';
 
 
 @Component({
@@ -22,6 +24,7 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   // FIXME: Load entity data if not present.
   purchase: Purchase;
   user$: Observable<User>;
+  category$: Observable<Category>;
   debitSum: number;
   private onDestroy$: Subject<boolean> = new Subject();
 
@@ -38,6 +41,7 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
         if (purchase) {
           this.purchase = purchase;
           this.user$ = this.selectUserById(purchase.buyerId);
+          this.category$ = this.store.select(CategorySelectors.selectCategoryById(purchase.categoryId));
           this.debitSum = purchase.debits
             .map((debit: Debit) => debit.amount)
             .reduce((sum, current) => sum + current);

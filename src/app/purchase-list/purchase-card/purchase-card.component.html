@@ -16,7 +16,7 @@
         </div>
 
         <div class='grid-cell__r3-c2'>
-          <p>{{purchase.category | lowercase}}</p>
+          <p>{{(category$ | async)?.label | lowercase}}</p>
         </div>
 
       </ng-container>
@@ -24,7 +24,7 @@
       <ng-template #isCompensation>
 
         <div class='grid-cell__r2-c2 font-large'>
-          <mat-icon class="compensation_arrow">arrow_right_alternative</mat-icon>
+          <mat-icon class="compensation_arrow">arrow_right_alt</mat-icon>
           <img *ngIf="receiverAvatarUrl$ | async" mat-card-avatar
                [src]="receiverAvatarUrl$ | async" class="receiver-avatar">
         </div>

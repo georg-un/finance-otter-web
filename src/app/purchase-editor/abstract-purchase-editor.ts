@@ -11,12 +11,15 @@ import { DistributionFragment } from './distribution-fragment';
 import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 import { BigNumber } from 'bignumber.js';
+import { Category } from '../core/entity/category';
+import { CategorySelectors } from '../store/selectors/category.selectors';
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   purchase: Purchase;
   sumAmount: number;
   users$: Observable<User[]>;
+  categories$: Observable<Category[]>;
   date: Date;
   distributionFragments: DistributionFragment[] = [];
   protected onDestroy$: Subject<boolean> = new Subject();
@@ -29,6 +32,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.users$ = this.store.select(UserSelectors.selectAllUsers);
+    this.categories$ = this.store.select(CategorySelectors.selectAllCategories);
 
     this.editorService.addPurchaseTrigger
       .pipe(takeUntil(this.onDestroy$))
@@ -95,7 +99,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
     );
     if (rest.isLessThan(0)) {
       console.error(`Sum of distribution fragments (${rest.toNumber()}) is larger than total amount (${this.sumAmount})`);
-      this.snackBar.open("Sum of custom distribution is larger than amount.");
+      this.snackBar.open('Sum of custom distribution is larger than amount.');
       return;
     }
     // Distribute the rest by the Bresenham Algorithm
@@ -116,7 +120,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   }
 
   private distributeByBresenham(rest: BigNumber, nFields: BigNumber): BigNumber[] {
-    let result: BigNumber[] = [];
+    const result: BigNumber[] = [];
     // Distribute the rest evenly
     const assignedValue = rest.dividedBy(nFields).decimalPlaces(2, BigNumber.ROUND_DOWN);
     for (let i = 0; i < nFields.toNumber(); i++) {

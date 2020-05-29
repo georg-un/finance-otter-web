@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 import { ChartSeries } from './entity/chart-series';
 import { ChartData } from './entity/chart-data';
+import { Category } from './entity/category';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
   private endpoints = {
     users: environment.backendUrl + '/users',
     purchases: environment.backendUrl + '/purchases',
+    categories: environment.backendUrl + '/categories',
     summary: environment.backendUrl + '/summary'
   };
 
@@ -57,6 +59,12 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   fetchUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.endpoints.users).pipe(
+      catchError((err) => this.handleError(err))
+    );
+  }
+
+  fetchCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.endpoints.categories).pipe(
       catchError((err) => this.handleError(err))
     );
   }

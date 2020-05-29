@@ -3,7 +3,7 @@ import { Purchase, SyncStatusEnum } from '../../entity/purchase';
 export const PURCHASE1: Purchase = {
   purchaseId: 'krSe.1554415200000',
   date: 1554415200000,
-  category: 'Groceries',
+  categoryId: 0,
   shop: 'Bio Shop',
   description: null,
   isCompensation: false,

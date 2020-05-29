@@ -21,7 +21,7 @@
       </button>
     </div>
     <div class="grid-cell r6-c2">
-      <p>{{ purchase?.category | lowercase }}</p>
+      <p>{{ (category$ | async)?.label  | lowercase }}</p>
     </div>
     <div class="grid-cell r6-c3">
     <button mat-icon-button (click)="onDeleteButtonClick()">

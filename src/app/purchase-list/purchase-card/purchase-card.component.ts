@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { filter, map } from 'rxjs/operators';
 import { User } from '../../core/entity/user';
+import { Category } from '../../core/entity/category';
+import { CategorySelectors } from '../../store/selectors/category.selectors';
 
 @Component({
   selector: 'app-purchase-card',
@@ -18,6 +20,7 @@ export class PurchaseCardComponent implements OnInit {
   @Input() purchase: Purchase;
   buyerAvatarUrl$: Observable<string>;
   receiverAvatarUrl$?: Observable<string>;
+  category$: Observable<Category>;
 
   @Output() cardClick: EventEmitter<string> = new EventEmitter();
 
@@ -47,6 +50,8 @@ export class PurchaseCardComponent implements OnInit {
           map((user: User) => user.avatarUrl)
         );
     }
+    // Get the category
+    this.category$ = this.store.select(CategorySelectors.selectCategoryById(this.purchase.categoryId));
   }
 
   onClick(): void {

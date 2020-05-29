@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { reducers, metaReducers } from './index';
+import { metaReducers, reducers } from './index';
 import { environment } from '../../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { NavigationActionTiming, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { PurchaseEffects } from './effects/purchase.effects';
+import { CategoryEffects } from './effects/category.effects';
 import { UserEffects } from './effects/user.effects';
-import { SummaryEffects } from "./effects/summary.effects";
+import { SummaryEffects } from './effects/summary.effects';
 
 @NgModule({
   declarations: [],
@@ -25,7 +26,7 @@ import { SummaryEffects } from "./effects/summary.effects";
     }),
     StoreRouterConnectingModule.forRoot({navigationActionTiming: NavigationActionTiming.PostActivation}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([PurchaseEffects, UserEffects, SummaryEffects]),
+    EffectsModule.forRoot([PurchaseEffects, CategoryEffects, UserEffects, SummaryEffects]),
     StoreRouterConnectingModule.forRoot(),
   ]
 })

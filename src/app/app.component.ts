@@ -5,6 +5,7 @@ import { UserActions } from './store/actions/user.actions';
 import { PurchaseActions } from './store/actions/purchase.actions';
 import { AuthService } from './core/auth.service';
 import { UserSelectors } from './store/selectors/user.selectors';
+import { CategoryActions } from './store/actions/category.actions';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
       .subscribe((isActivated: boolean) => {
         if (isActivated) {
           this.store.dispatch(UserActions.requestUsers());
+          this.store.dispatch(CategoryActions.requestCategories());
           this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 15}));
         } else {
           this.store.dispatch(UserActions.checkIfUserIsActive());
