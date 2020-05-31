@@ -1,0 +1,6 @@
+@import '../../assets/variables';
+
+.purchase-list-container {
+  height: calc(100vh - #{$header-height});
+  overflow: scroll;
+}

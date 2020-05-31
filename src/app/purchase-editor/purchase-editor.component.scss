@@ -15,10 +15,12 @@
   }
 }
 
-.editor-wrapper {
-  height: stretch;
+.editor-container {
+  $padding-top-bottom: 16px;
+  height: calc(100vh - #{$header-height} - (#{$padding-top-bottom} * 2));
+  overflow: scroll;
   background-color: $light-primary;
-  padding: 16px 24px 16px 24px;
+  padding: $padding-top-bottom 24px $padding-top-bottom 24px;
   flex: 1;
 }
 

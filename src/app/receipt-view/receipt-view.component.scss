@@ -17,6 +17,15 @@ mat-toolbar {
 .receipt-view-container {
   height: 100vh;
   width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.receipt-container {
+  height: calc(100vh - #{$header-height});
+  width: 100%;
+  align-items: center;
+  display: flex;
 }
 
 .close-button {
@@ -26,14 +35,9 @@ mat-toolbar {
 }
 
 .receipt-unavailable-msg {
-  text-align: center;
-  margin-top: 45vh;
-  color: slategrey;
-}
-
-.receipt-wrapper {
-  height: calc(100vh - 56px);
   width: 100%;
+  text-align: center;
+  color: slategrey;
 }
 
 .receipt {

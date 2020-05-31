@@ -4,6 +4,10 @@ mat-sidenav {
   width: 62vw;
 }
 
+::ng-deep mat-sidenav-content {
+  overflow: hidden !important;
+}
+
 .sidenav-container {
   height: 100%;
   background-color: inherit;

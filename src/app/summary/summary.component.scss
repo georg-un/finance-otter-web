@@ -1,7 +1,10 @@
 @import "../../assets/variables";
 
 .summary-container {
-  margin: 36px 24px 0 24px;
+  $padding-top: 18px;
+  height: calc(100vh - #{$header-height} - #{$padding-top});
+  overflow: scroll;
+  padding: $padding-top 24px 0 24px;
   display: flex;
   flex-direction: column;
 }

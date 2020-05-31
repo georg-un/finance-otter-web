@@ -5,14 +5,10 @@
           (click)="onCloseButtonClick()">
     <mat-icon>close</mat-icon>
   </button>
-  <ng-container *ngIf="receiptUnavailable; else receiptAvailable;">
-    <p class="receipt-unavailable-msg">No receipt found.</p>
-  </ng-container>
-  <ng-template #receiptAvailable>
-    <div *ngIf="encodedImage" class="receipt-wrapper">
-      <img [src]="encodedImage" alt="Receipt" class="receipt"/>
+    <div class="receipt-container">
+      <img *ngIf="encodedImage" [src]="encodedImage" alt="Receipt" class="receipt"/>
+      <p *ngIf="receiptUnavailable" class="receipt-unavailable-msg">No receipt found.</p>
     </div>
-  </ng-template>
   <mat-toolbar color="primary" class="toolbar">
     <button mat-raised-button
             (click)="onUploadNewButtonClick()">
