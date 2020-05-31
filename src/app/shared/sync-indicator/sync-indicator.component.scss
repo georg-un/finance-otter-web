@@ -1,5 +1,10 @@
 @import "../../../assets/variables";
 
+mat-icon {
+  display: block;
+  margin: auto;
+}
+
 .success {
   color: $indicator-green;
 }
