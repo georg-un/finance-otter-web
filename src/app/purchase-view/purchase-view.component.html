@@ -7,7 +7,15 @@
       <p>{{ user$ | async | shortName }}</p>
     </div>
     <div class="grid-cell r1-c3">
-      <app-sync-indicator [syncStatus]="purchase?.syncStatus"></app-sync-indicator>
+      <button
+        mat-icon-button
+        #tooltip="matTooltip"
+        (click)="onSyncIndicatorClick()"
+        [matTooltip]="getSyncIndicatorTooltipMessage()"
+        matTooltipPosition="left"
+      >
+        <app-sync-indicator [syncStatus]="purchase?.syncStatus"></app-sync-indicator>
+      </button>
     </div>
     <div class="font-large grid-cell r3-c2">
       <p>{{ purchase?.shop | titlecase }}</p>

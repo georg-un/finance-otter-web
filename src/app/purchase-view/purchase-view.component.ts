@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Purchase } from '../core/entity/purchase';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Purchase, SyncStatusEnum } from '../core/entity/purchase';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { Observable, Subject } from 'rxjs';
@@ -12,6 +12,7 @@ import { Debit } from '../core/entity/debit';
 import { Router } from '@angular/router';
 import { Category } from '../core/entity/category';
 import { CategorySelectors } from '../store/selectors/category.selectors';
+import { MatDialog, MatTooltip } from '@angular/material';
 
 
 @Component({
@@ -27,6 +28,14 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   category$: Observable<Category>;
   debitSum: number;
   private onDestroy$: Subject<boolean> = new Subject();
+
+  @ViewChild('tooltip', {static: false}) tooltip: MatTooltip;
+
+  private readonly syncIndicatorTooltipContent = {
+    syncIndicatorRemote: 'Transaction is synced.',
+    syncIndicatorSyncing: 'Syncing transaction...',
+    syncIndicatorError: 'Synchronization error!'
+  };
 
   constructor(
     private store: Store<AppState>,
@@ -64,6 +73,30 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   onDeleteButtonClick(): void {
     this.store.dispatch(PurchaseActions.deletePurchase({purchase: this.purchase}));
+  }
+
+  onSyncIndicatorClick(): void {
+    this.tooltip.show();
+    setTimeout(() => {
+      this.tooltip.hide(2500);
+    }, 0);
+  }
+
+  getSyncIndicatorTooltipMessage(): string {
+    if (this.purchase) {
+      switch (this.purchase.syncStatus) {
+        case SyncStatusEnum.Remote:
+          return this.syncIndicatorTooltipContent.syncIndicatorRemote;
+        case SyncStatusEnum.Syncing:
+          return this.syncIndicatorTooltipContent.syncIndicatorSyncing;
+        case SyncStatusEnum.Local:
+        case SyncStatusEnum.LocalDelete:
+        case SyncStatusEnum.LocalUpdate:
+          return this.syncIndicatorTooltipContent.syncIndicatorError;
+        default:
+          return null;
+      }
+    }
   }
 
 }

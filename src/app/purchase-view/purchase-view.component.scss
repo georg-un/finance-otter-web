@@ -2,6 +2,10 @@
 
 $purchase-header-height: 31vh;
 
+::ng-deep .mat-tooltip {
+  background-color: slategrey;
+}
+
 .purchase-header {
   position: fixed;
   width: calc(100% - 36px);

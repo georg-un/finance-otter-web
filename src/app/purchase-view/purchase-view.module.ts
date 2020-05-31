@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PurchaseViewComponent } from './purchase-view.component';
-import { MatButtonModule, MatCardModule, MatIconModule } from "@angular/material";
-import { SharedModule } from "../shared/shared.module";
-import { DebitCardModule } from "../debit-card/debit-card.module";
+import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatTooltipModule } from '@angular/material';
+import { SharedModule } from '../shared/shared.module';
+import { DebitCardModule } from '../debit-card/debit-card.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +16,8 @@ import { DebitCardModule } from "../debit-card/debit-card.module";
     MatCardModule,
     SharedModule,
     DebitCardModule,
+    MatDialogModule,
+    MatTooltipModule,
   ]
 })
 export class PurchaseViewModule { }
