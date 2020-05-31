@@ -5,17 +5,26 @@
           (click)="onCloseButtonClick()">
     <mat-icon>close</mat-icon>
   </button>
-  <div *ngIf="encodedImage" class="receipt-wrapper">
-    <img [src]="encodedImage" alt="Receipt" class="receipt"/>
-  </div>
+  <ng-container *ngIf="receiptUnavailable; else receiptAvailable;">
+    <p class="receipt-unavailable-msg">No receipt found.</p>
+  </ng-container>
+  <ng-template #receiptAvailable>
+    <div *ngIf="encodedImage" class="receipt-wrapper">
+      <img [src]="encodedImage" alt="Receipt" class="receipt"/>
+    </div>
+  </ng-template>
   <mat-toolbar color="primary" class="toolbar">
     <button mat-raised-button
             (click)="onUploadNewButtonClick()">
       <mat-icon>add_a_photo</mat-icon>
       Upload new
     </button>
-    <button mat-raised-button aria-label="Delete receipt"
-            (click)="onDeleteButtonClick()">
+    <button
+      mat-raised-button
+      aria-label="Delete receipt"
+      [disabled]="receiptUnavailable"
+      (click)="onDeleteButtonClick()"
+    >
       <mat-icon>delete</mat-icon>
       Delete
     </button>

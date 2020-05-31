@@ -25,6 +25,12 @@ mat-toolbar {
   right: 24px;
 }
 
+.receipt-unavailable-msg {
+  text-align: center;
+  margin-top: 45vh;
+  color: slategrey;
+}
+
 .receipt-wrapper {
   height: calc(100vh - 56px);
   width: 100%;

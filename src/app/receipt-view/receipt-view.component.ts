@@ -19,6 +19,7 @@ export class ReceiptViewComponent implements OnInit {
 
   private purchaseId: string;
   encodedImage: any;
+  receiptUnavailable = false;
 
   constructor(
     private store: Store<AppState>,
@@ -34,15 +35,19 @@ export class ReceiptViewComponent implements OnInit {
     this.store.select(RouterSelectors.selectPurchaseId).pipe(
       mergeMap((purchaseId: string) => {
         this.purchaseId = purchaseId;
-        return this.restService.fetchReceipt(purchaseId)
+        return this.restService.fetchReceipt(purchaseId);
       }),
       take(1)
     ).subscribe((img: Blob) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        this.encodedImage = reader.result;
-      };
-      reader.readAsDataURL(img);
+      if (img) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          this.encodedImage = reader.result;
+        };
+        reader.readAsDataURL(img);
+      } else {
+        this.receiptUnavailable = true;
+      }
     });
   }
 
@@ -55,7 +60,7 @@ export class ReceiptViewComponent implements OnInit {
       this.store.dispatch(PurchaseActions.deleteReceipt({purchaseId: this.purchaseId}));
       this.router.navigate(['purchase', this.purchaseId]);
     } else {
-      console.error("No purchase ID.");
+      console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');
     }
   }
@@ -64,7 +69,7 @@ export class ReceiptViewComponent implements OnInit {
     if (this.purchaseId) {
       this.router.navigate(['scan-receipt', this.purchaseId]);
     } else {
-      console.error("No purchase ID.");
+      console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');
     }
   }
