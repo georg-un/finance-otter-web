@@ -1,6 +1,21 @@
 @import '../../assets/variables';
 
+mat-spinner {
+  margin: 16px 0;
+}
+
 .purchase-list-container {
   height: calc(100vh - #{$header-height});
   overflow: scroll;
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: center;
+  margin: 2px 0;
+}
+
+.end-dot {
+  margin: 0;
+  color: slategrey;
 }

@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
         if (isActivated) {
           this.store.dispatch(UserActions.requestUsers());
           this.store.dispatch(CategoryActions.requestCategories());
-          this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 15}));
+          this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 10}));
         } else {
           this.store.dispatch(UserActions.checkIfUserIsActive());
         }
