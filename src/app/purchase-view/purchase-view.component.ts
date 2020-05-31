@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 import { Category } from '../core/entity/category';
 import { CategorySelectors } from '../store/selectors/category.selectors';
 import { MatDialog, MatTooltip } from '@angular/material';
-
+import { DynamicDialogButton, DynamicDialogData } from '../shared/dynamic-dialog/dynamic-dialog-data.model';
+import { DynamicDialogComponent } from '../shared/dynamic-dialog/dynamic-dialog.component';
 
 @Component({
   selector: 'app-purchase-view',
@@ -37,9 +38,31 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
     syncIndicatorError: 'Synchronization error!'
   };
 
+  private readonly deletePurchaseDialogData = <DynamicDialogData>{
+    bodyHTML: `
+    Delete this transaction?
+    <br/><br/>
+    <b>Warning:</b> This action cannot be undone.
+    <br/><br/>
+    `,
+    buttons: [
+      <DynamicDialogButton>{
+        index: 0,
+        label: 'Cancel',
+        result: false
+      },
+      <DynamicDialogButton>{
+        index: 1,
+        label: 'Yes, delete!',
+        result: true
+      }
+    ]
+  };
+
   constructor(
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
   }
 
@@ -72,7 +95,14 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   }
 
   onDeleteButtonClick(): void {
-    this.store.dispatch(PurchaseActions.deletePurchase({purchase: this.purchase}));
+    const dialogref = this.dialog.open(DynamicDialogComponent, {
+      data: this.deletePurchaseDialogData
+    });
+    dialogref.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        this.store.dispatch(PurchaseActions.deletePurchase({purchase: this.purchase}));
+      }
+    });
   }
 
   onSyncIndicatorClick(): void {

@@ -7,8 +7,9 @@ import { RouterSelectors } from '../store/selectors/router.selectors';
 import { FinOBackendService } from '../core/fino-backend.service';
 import { PurchaseActions } from '../store/actions/purchase.actions';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
-import { PurchaseSelectors } from '../store/selectors/purchase.selectors';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { DynamicDialogComponent } from '../shared/dynamic-dialog/dynamic-dialog.component';
+import { DynamicDialogButton, DynamicDialogData } from '../shared/dynamic-dialog/dynamic-dialog-data.model';
 
 @Component({
   selector: 'app-receipt-view',
@@ -21,12 +22,55 @@ export class ReceiptViewComponent implements OnInit {
   encodedImage: any;
   receiptUnavailable = false;
 
+  private readonly deleteReceiptDialogData = <DynamicDialogData>{
+    bodyHTML: `
+    Delete this receipt?
+    <br/><br/>
+    <b>Warning:</b> This action cannot be undone.
+    <br/><br/>
+    `,
+    buttons: [
+      <DynamicDialogButton>{
+        index: 0,
+        label: 'Cancel',
+        result: false
+      },
+      <DynamicDialogButton>{
+        index: 1,
+        label: 'Yes, delete!',
+        result: true
+      }
+    ]
+  };
+
+  private readonly updateReceiptDialogData = <DynamicDialogData>{
+    bodyHTML: `
+    Upload another receipt?
+    <br/><br/>
+    <b>Warning:</b> This will delete the previous receipt for this purchase.
+    <br/><br/>
+    `,
+    buttons: [
+      <DynamicDialogButton>{
+        index: 0,
+        label: 'Cancel',
+        result: false
+      },
+      <DynamicDialogButton>{
+        index: 1,
+        label: 'Yes, upload!',
+        result: true
+      }
+    ]
+  };
+
   constructor(
     private store: Store<AppState>,
     private restService: FinOBackendService,
     private router: Router,
     private location: Location,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
   }
 
@@ -56,18 +100,46 @@ export class ReceiptViewComponent implements OnInit {
   }
 
   onDeleteButtonClick() {
+    // Request user confirmation
+    const dialogref = this.dialog.open(DynamicDialogComponent, {
+      data: this.deleteReceiptDialogData
+    });
+    dialogref.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        this.deleteReceipt();
+      }
+    });
+  }
+
+  onUploadNewButtonClick() {
+    if (this.receiptUnavailable) {
+      this.uploadNewReceipt();
+    } else {
+      // Request user confirmation
+      const dialogref = this.dialog.open(DynamicDialogComponent, {
+        data: this.updateReceiptDialogData
+      });
+      dialogref.afterClosed().subscribe((result: boolean) => {
+        if (result === true) {
+          this.uploadNewReceipt();
+        }
+      });
+    }
+  }
+
+  private uploadNewReceipt(): void {
     if (this.purchaseId) {
-      this.store.dispatch(PurchaseActions.deleteReceipt({purchaseId: this.purchaseId}));
-      this.router.navigate(['purchase', this.purchaseId]);
+      this.router.navigate(['scan-receipt', this.purchaseId]);
     } else {
       console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');
     }
   }
 
-  onUploadNewButtonClick() {
+  private deleteReceipt(): void {
     if (this.purchaseId) {
-      this.router.navigate(['scan-receipt', this.purchaseId]);
+      this.store.dispatch(PurchaseActions.deleteReceipt({purchaseId: this.purchaseId}));
+      this.router.navigate(['purchase', this.purchaseId]);
     } else {
       console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');

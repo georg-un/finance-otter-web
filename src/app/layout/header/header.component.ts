@@ -11,6 +11,9 @@ import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { UserActions } from '../../store/actions/user.actions';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
 import { fadeOnChange, rotateOnChange } from '../layout.animations';
+import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
+import { MatDialog } from '@angular/material';
+import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -26,9 +29,33 @@ export class HeaderComponent implements OnInit, OnDestroy {
   rightHeaderButton = 'sync';
   private onDestroy$: Subject<boolean> = new Subject();
 
+  private readonly exitDialogData = <DynamicDialogData>{
+    bodyHTML: `
+    Exit the editor?
+    <br/><br/>
+    <b>Warning:</b> All unsaved progress will be lost.
+    <br/><br/>
+    `,
+    buttons: [
+      <DynamicDialogButton>{
+        index: 0,
+        label: 'Cancel',
+        result: false
+      },
+      <DynamicDialogButton>{
+        index: 1,
+        label: 'Yes, leave!',
+        result: true
+      }
+    ]
+  };
+
   constructor(private editorService: PurchaseEditorService,
               private store: Store<AppState>,
-              private location: Location) { }
+              private location: Location,
+              private dialog: MatDialog
+  ) {
+  }
 
   ngOnInit() {
     this.showLogo$ = this.store.select(LayoutSelectors.showLogo);
@@ -53,10 +80,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLeftButtonClick(): void {
-    if (this.leftHeaderButton !== LeftButtonIconEnum.Menu) {
+    if (this.leftHeaderButton === LeftButtonIconEnum.Menu) {
+      this.store.dispatch(LayoutActions.toggleSidenav());
+    } else if (this.leftHeaderButton === LeftButtonIconEnum.Back) {
       this.location.back();
     } else {
-      this.store.dispatch(LayoutActions.toggleSidenav());
+      const dialogref = this.dialog.open(DynamicDialogComponent, {
+        data: this.exitDialogData
+      });
+      dialogref.afterClosed().subscribe((result: boolean) => {
+        if (result === true) {
+          this.location.back();
+        }
+      });
     }
   }
 
