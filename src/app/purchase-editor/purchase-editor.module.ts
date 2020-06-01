@@ -15,6 +15,8 @@ import {
   MatSlideToggleModule
 } from '@angular/material';
 import { PurchaseEditorEditComponent } from './purchase-editor-edit.component';
+import { QrScannerComponent } from '../qr-scanner/qr-scanner.component';
+import { QrScannerModule } from '../qr-scanner/qr-scanner.module';
 
 
 @NgModule({
@@ -36,6 +38,10 @@ import { PurchaseEditorEditComponent } from './purchase-editor-edit.component';
     MatMenuModule,
     MatInputModule,
     MatButtonModule,
+    QrScannerModule
+  ],
+  entryComponents: [
+    QrScannerComponent
   ]
 })
 export class PurchaseEditorModule { }

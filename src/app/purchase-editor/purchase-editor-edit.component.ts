@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSlideToggleChange, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -30,9 +30,10 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
   constructor(protected store: Store<AppState>,
               protected editorService: PurchaseEditorService,
               protected snackBar: MatSnackBar,
+              protected dialog: MatDialog,
               protected idGeneratorService: IdGeneratorService,
   ) {
-    super(store, editorService, snackBar);
+    super(store, editorService, snackBar, dialog);
   }
 
   ngOnInit() {

@@ -8,11 +8,12 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
 import { PurchaseEditorService } from './purchase-editor.service';
 import { DistributionFragment } from './distribution-fragment';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 import { BigNumber } from 'bignumber.js';
 import { Category } from '../core/entity/category';
 import { CategorySelectors } from '../store/selectors/category.selectors';
+import { QrScannerComponent } from '../qr-scanner/qr-scanner.component';
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 
@@ -24,9 +25,19 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   distributionFragments: DistributionFragment[] = [];
   protected onDestroy$: Subject<boolean> = new Subject();
 
+  private readonly fullscreenDialogConfig: MatDialogConfig = <MatDialogConfig>{
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    maxHeight: '100vh',
+    hasBackdrop: false,
+    panelClass: 'fullscreen-dialog'
+  };
+
   protected constructor(protected store: Store<AppState>,
                         protected editorService: PurchaseEditorService,
-                        protected snackBar: MatSnackBar
+                        protected snackBar: MatSnackBar,
+                        protected dialog: MatDialog
   ) {
   }
 
@@ -48,6 +59,31 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   abstract submitPurchase(): void;
 
+  onScanQrCodeClick(): void {
+    const dialogRef = this.dialog.open(QrScannerComponent, this.fullscreenDialogConfig);
+    dialogRef.componentInstance.scanSuccess
+      .pipe(
+        takeUntil(dialogRef.afterClosed()),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe((result: { date: Date, amount: BigNumber }) => {
+        if (result) {
+          dialogRef.close();
+          setTimeout(() => {
+            this.sumAmount = result.amount.toNumber();
+            this.date = result.date;
+            this.purchase.date = result.date.getTime();
+          }, 200);
+        }
+      });
+    dialogRef.componentInstance.close
+      .pipe(
+        takeUntil(dialogRef.afterClosed()),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe(() => dialogRef.close());
+  }
+
   isPurchaseValid(): boolean {
     if (!this.purchase.buyerId) {
       this.snackBar.openFromComponent(MultilineSnackbarComponent, {data: 'User ID is missing.'});
@@ -63,7 +99,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
         .filter(fragment => fragment.checked)
         .map(fragment => new BigNumber(fragment.amount))
         .reduce((sum, current) => sum.plus(current), new BigNumber(0)))
-      ) {
+    ) {
       this.snackBar.open('Total amount and debits don\'t match.');
       return false;
     } else {

@@ -64,6 +64,23 @@
     </div>
   </div>
 
+  <div class="editor-group" style="display: flex; justify-content: space-between">
+    <button
+      mat-flat-button
+    >
+      <mat-icon>image</mat-icon>
+      View receipt
+    </button>
+
+    <button
+      mat-flat-button
+      (click)="onScanQrCodeClick()"
+    >
+      <mat-icon>qr_code</mat-icon>
+      Scan QR Code
+    </button>
+  </div>
+
   <div class="editor-group">
     <mat-slide-toggle
       labelPosition="before"
@@ -95,7 +112,10 @@
       </mat-list>
 
       <div class="debit-actions">
-        <button mat-flat-button [matMenuTriggerFor]="distribute_menu" color="accent">
+        <button
+          mat-flat-button
+          [matMenuTriggerFor]="distribute_menu"
+        >
           <mat-icon>call_split</mat-icon>
           <span>Distribute Rest</span>
         </button>
