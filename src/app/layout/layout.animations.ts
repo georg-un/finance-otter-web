@@ -1,12 +1,12 @@
-import { animate, animateChild, group, query, style, transition, trigger } from "@angular/animations";
+import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
 
 
 export const rotateOnChange = trigger('rotateOnChange', [
-  transition('* => *',[
+  transition('* => *', [
     style({transform: 'rotate(-90deg)'}),
     animate('200ms')
   ])
-  ]);
+]);
 
 
 export const fadeOnChange = trigger('fadeOnChange', [
@@ -50,7 +50,7 @@ export const expandFromFAB =
           left: 0,
           width: '100%',
           paddingTop: 'var(--header-height)'
-        })],{
+        })], {
           limit: 1
         }),
         // Remove the FAB-icon
@@ -149,7 +149,7 @@ export const expandFromFAB =
             height: '56px',
             width: '56px',
             borderRadius: '50%',
-            backgroundColor: '#e53935'
+            backgroundColor: '#FF8F00'
           }))
         ]),
         query(':leave', [
@@ -180,7 +180,7 @@ export const expandFromFAB =
           left: 0,
           width: '100%',
           paddingTop: 'var(--header-height)'
-        })],{
+        })], {
           limit: 1
         }),
         // Place the enter view at the bottom with a height of 0
@@ -228,7 +228,7 @@ export const expandFromFAB =
           left: 0,
           width: '100%',
           paddingTop: 'var(--header-height)'
-        })],{
+        })], {
           limit: 1
         }),
         query(':leave', [style({
@@ -241,13 +241,13 @@ export const expandFromFAB =
           // z-depth 2 reversed:
           '-webkit-box-shadow': '0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12)',
           'box-shadow': '0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12)'
-        })],{
+        })], {
           limit: 1
         }),
         // Set height of detail container to 100% for later
-        query('.detail-container', [ style({
-            height: '100%'
-          })
+        query('.detail-container', [style({
+          height: '100%'
+        })
         ]),
       ]),
       query(':leave', animateChild()),
@@ -278,7 +278,7 @@ export const expandFromFAB =
           left: 0,
           width: '100%',
           paddingTop: 'var(--header-height)'
-        })],{
+        })], {
           limit: 1
         }),
       ]),
@@ -290,7 +290,7 @@ export const expandFromFAB =
         width: '100%',
         paddingTop: 'var(--header-height)',
         opacity: 0
-      })],{
+      })], {
         limit: 1
       }),
       query(':leave', animateChild()),
@@ -308,5 +308,5 @@ export const expandFromFAB =
       ]),
       query(':enter', animateChild())
     ])
-    
+
   ]);
