@@ -5,6 +5,7 @@ import { SyncIndicatorComponent } from './sync-indicator/sync-indicator.componen
 import { MatButtonModule, MatDialogModule, MatIconModule, MatSnackBarModule } from '@angular/material';
 import { MultilineSnackbarComponent } from './multiline-snackbar/multiline-snackbar.component';
 import { DynamicDialogComponent } from './dynamic-dialog/dynamic-dialog.component';
+import { CircleCheckmarkLoaderComponent } from './circle-checkmark-loader/circle-checkmark-loader.component';
 
 
 @NgModule({
@@ -12,11 +13,13 @@ import { DynamicDialogComponent } from './dynamic-dialog/dynamic-dialog.componen
     ShortNamePipe,
     SyncIndicatorComponent,
     MultilineSnackbarComponent,
-    DynamicDialogComponent
+    DynamicDialogComponent,
+    CircleCheckmarkLoaderComponent
   ],
   exports: [
     ShortNamePipe,
-    SyncIndicatorComponent
+    SyncIndicatorComponent,
+    CircleCheckmarkLoaderComponent
   ],
   imports: [
     CommonModule,
@@ -26,4 +29,5 @@ import { DynamicDialogComponent } from './dynamic-dialog/dynamic-dialog.componen
     MatButtonModule,
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+}

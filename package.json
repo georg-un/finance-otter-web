@@ -30,6 +30,8 @@
     "@ngrx/store": "^8.5.2",
     "@ngrx/store-devtools": "^8.5.2",
     "@swimlane/ngx-charts": "^13.0.2",
+    "@zxing/library": "^0.17.0",
+    "@zxing/ngx-scanner": "^2.0.1",
     "bignumber.js": "^9.0.0",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",

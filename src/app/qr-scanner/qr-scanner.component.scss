@@ -1,0 +1,58 @@
+@import "../../assets/variables";
+
+zxing-scanner {
+  margin-top: 12px;
+}
+
+app-circle-checkmark-loader {
+  margin-bottom: 12px;
+}
+
+.scanner-container {
+  min-height: 100%;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.close-button {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+.state-container {
+  min-height: 20vh;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.state-msg {
+  font-size: 20px;
+}
+
+.done {
+  color: $indicator-green;
+}
+
+.description {
+  color: slategrey;
+}
+
+.error-container {
+  position: absolute;
+  width: 100vw;
+  left: 0;
+  text-align: center;
+}
+
+.warn-icon {
+  font-size: 48px;
+  margin-right: 24px;
+  margin-bottom: 48px;
+}
