@@ -6,5 +6,6 @@ export class DynamicDialogData {
 export class DynamicDialogButton {
   index: number;
   label: string;
+  color: string;
   result: any;
 }

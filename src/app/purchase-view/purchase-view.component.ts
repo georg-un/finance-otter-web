@@ -40,9 +40,9 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   private readonly deletePurchaseDialogData = <DynamicDialogData>{
     bodyHTML: `
-    Delete this transaction?
+    Are you sure you want to delete this transaction?
     <br/><br/>
-    <b>Warning:</b> This action cannot be undone.
+    This action cannot be undone.
     <br/><br/>
     `,
     buttons: [
@@ -53,7 +53,8 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
       },
       <DynamicDialogButton>{
         index: 1,
-        label: 'Yes, delete!',
+        label: 'Delete',
+        color: 'warn',
         result: true
       }
     ]

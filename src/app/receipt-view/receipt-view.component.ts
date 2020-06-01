@@ -24,9 +24,9 @@ export class ReceiptViewComponent implements OnInit {
 
   private readonly deleteReceiptDialogData = <DynamicDialogData>{
     bodyHTML: `
-    Delete this receipt?
+    Are you sure you want to delete this receipt?
     <br/><br/>
-    <b>Warning:</b> This action cannot be undone.
+    This action cannot be undone.
     <br/><br/>
     `,
     buttons: [
@@ -37,7 +37,8 @@ export class ReceiptViewComponent implements OnInit {
       },
       <DynamicDialogButton>{
         index: 1,
-        label: 'Yes, delete!',
+        label: 'Delete',
+        color: 'warn',
         result: true
       }
     ]
@@ -45,9 +46,9 @@ export class ReceiptViewComponent implements OnInit {
 
   private readonly updateReceiptDialogData = <DynamicDialogData>{
     bodyHTML: `
-    Upload another receipt?
+    <b>Warning:</b> Uploading a new receipt will delete the previous receipt for this purchase.
     <br/><br/>
-    <b>Warning:</b> This will delete the previous receipt for this purchase.
+    Do you want to continue?
     <br/><br/>
     `,
     buttons: [
@@ -58,7 +59,8 @@ export class ReceiptViewComponent implements OnInit {
       },
       <DynamicDialogButton>{
         index: 1,
-        label: 'Yes, upload!',
+        label: 'Upload new',
+        color: 'accent',
         result: true
       }
     ]

@@ -10,13 +10,17 @@
       <p *ngIf="receiptUnavailable" class="receipt-unavailable-msg">No receipt found.</p>
     </div>
   <mat-toolbar color="primary" class="toolbar">
-    <button mat-raised-button
-            (click)="onUploadNewButtonClick()">
+    <button
+      mat-raised-button
+      class="receipt-action-button"
+      (click)="onUploadNewButtonClick()"
+    >
       <mat-icon>add_a_photo</mat-icon>
       Upload new
     </button>
     <button
       mat-raised-button
+      class="receipt-action-button"
       aria-label="Delete receipt"
       [disabled]="receiptUnavailable"
       (click)="onDeleteButtonClick()"

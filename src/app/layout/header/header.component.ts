@@ -31,9 +31,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private readonly exitDialogData = <DynamicDialogData>{
     bodyHTML: `
-    Exit the editor?
+    Are you sure you want to exit the editor?
     <br/><br/>
-    <b>Warning:</b> All unsaved progress will be lost.
+    All unsaved progress will be lost.
     <br/><br/>
     `,
     buttons: [
@@ -44,7 +44,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
       <DynamicDialogButton>{
         index: 1,
-        label: 'Yes, leave!',
+        label: 'Leave',
+        color: 'accent',
         result: true
       }
     ]
