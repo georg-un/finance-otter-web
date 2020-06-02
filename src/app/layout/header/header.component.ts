@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { Location } from '@angular/common';
-import { PurchaseEditorService } from '../../purchase-editor/purchase-editor.service';
+import { PurchaseEditorService } from '../../pages/purchase-editor/purchase-editor.service';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LeftButtonIconEnum, RightButtonIconEnum } from './button-enums';
 import { PurchaseActions } from '../../store/actions/purchase.actions';

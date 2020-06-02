@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
-import { ReceiptViewComponent } from '../../receipt-view/receipt-view.component';
+import { ReceiptViewComponent } from '../../pages/receipt-view/receipt-view.component';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import BigNumber from 'bignumber.js';
-import { QrScannerComponent } from '../../qr-scanner/qr-scanner.component';
+import { QrScannerComponent } from '../../pages/qr-scanner/qr-scanner.component';
 import { AbstractFullscreenDialog } from './abstract-fullscreen-dialog';
 
 @Injectable({

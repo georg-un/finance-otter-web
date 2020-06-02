@@ -1,0 +1,82 @@
+@import "../../../assets/variables";
+
+:host {
+  mat-slide-toggle {
+    height: 42px;
+  }
+}
+
+.debit-row {
+  ::ng-deep {
+    .mat-list-item-content {
+      width: 100%;
+      padding: 0 0 0 4px;
+    }
+  }
+}
+
+.editor-container {
+  $padding-top-bottom: 16px;
+  height: calc(100vh - #{$header-height} - (#{$padding-top-bottom} * 2));
+  overflow: scroll;
+  background-color: $light-primary;
+  padding: $padding-top-bottom 24px $padding-top-bottom 24px;
+  flex: 1;
+}
+
+.editor-group {
+  margin: 8px 0 16px 0;
+  padding-right: 6vw;
+}
+
+.editor-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.editor-symbol-col {
+  flex: 1;
+  margin: auto;
+}
+
+.editor-input-col {
+  flex: 9;
+}
+
+.delete-sweep {
+  position: absolute;
+  right: 50px;
+}
+
+.debit-row {
+  display: flex;
+}
+
+.debit-name-col {
+  flex: 1;
+}
+
+.debit-input-col {
+  width: 25vw;
+}
+
+.debit-actions {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0 0 0;
+}
+
+.stroked-button {
+  min-width: 148px;
+}
+
+.autofilled {
+  ::ng-deep .mat-form-field-wrapper {
+    .mat-form-field-flex {
+      .mat-form-field-infix {
+        background-color: lightgray;
+        border-color: $light-primary;
+      }
+    }
+  }
+}
