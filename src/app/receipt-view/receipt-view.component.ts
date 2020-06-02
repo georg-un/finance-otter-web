@@ -1,26 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/states/app.state';
-import { mergeMap, take } from 'rxjs/operators';
-import { RouterSelectors } from '../store/selectors/router.selectors';
 import { FinOBackendService } from '../core/fino-backend.service';
 import { PurchaseActions } from '../store/actions/purchase.actions';
 import { Router } from '@angular/router';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DynamicDialogComponent } from '../shared/dynamic-dialog/dynamic-dialog.component';
 import { DynamicDialogButton, DynamicDialogData } from '../shared/dynamic-dialog/dynamic-dialog-data.model';
+import { Observable } from 'rxjs';
+import { AbstractFullscreenDialog } from '../shared/fullscreen-dialog/abstract-fullscreen-dialog';
 
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
   styleUrls: ['./receipt-view.component.scss']
 })
-export class ReceiptViewComponent implements OnInit {
+export class ReceiptViewComponent extends AbstractFullscreenDialog implements OnInit {
 
-  private purchaseId: string;
   encodedImage: any;
   receiptUnavailable = false;
+
+  @Input()
+  receipt: Observable<Blob>;
+
+  @Input()
+  purchaseId: string;
+
+  @Input()
+  enableEditButtons: boolean;
 
   private readonly deleteReceiptDialogData = <DynamicDialogData>{
     bodyHTML: `
@@ -74,31 +82,23 @@ export class ReceiptViewComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
+    super();
   }
 
   ngOnInit() {
-    // Load receipt via service & convert it to a base64 string to feed it into the <img> element
-    this.store.select(RouterSelectors.selectPurchaseId).pipe(
-      mergeMap((purchaseId: string) => {
-        this.purchaseId = purchaseId;
-        return this.restService.fetchReceipt(purchaseId);
-      }),
-      take(1)
-    ).subscribe((img: Blob) => {
-      if (img) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          this.encodedImage = reader.result;
-        };
-        reader.readAsDataURL(img);
-      } else {
-        this.receiptUnavailable = true;
-      }
-    });
-  }
-
-  onCloseButtonClick() {
-    this.location.back();
+    // Convert image to a base64 string to feed it into the <img> element
+    this.receipt
+      .subscribe((img: Blob) => {
+        if (img) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            this.encodedImage = reader.result;
+          };
+          reader.readAsDataURL(img);
+        } else {
+          this.receiptUnavailable = true;
+        }
+      });
   }
 
   onDeleteButtonClick() {
@@ -109,6 +109,7 @@ export class ReceiptViewComponent implements OnInit {
     dialogref.afterClosed().subscribe((result: boolean) => {
       if (result === true) {
         this.deleteReceipt();
+        this.close.next();
       }
     });
   }
@@ -116,6 +117,7 @@ export class ReceiptViewComponent implements OnInit {
   onUploadNewButtonClick() {
     if (this.receiptUnavailable) {
       this.uploadNewReceipt();
+      this.close.next();
     } else {
       // Request user confirmation
       const dialogref = this.dialog.open(DynamicDialogComponent, {
@@ -124,6 +126,7 @@ export class ReceiptViewComponent implements OnInit {
       dialogref.afterClosed().subscribe((result: boolean) => {
         if (result === true) {
           this.uploadNewReceipt();
+          this.close.next();
         }
       });
     }
@@ -141,7 +144,6 @@ export class ReceiptViewComponent implements OnInit {
   private deleteReceipt(): void {
     if (this.purchaseId) {
       this.store.dispatch(PurchaseActions.deleteReceipt({purchaseId: this.purchaseId}));
-      this.router.navigate(['purchase', this.purchaseId]);
     } else {
       console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');

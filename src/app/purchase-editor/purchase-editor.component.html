@@ -77,6 +77,8 @@
       <button
         class="stroked-button"
         mat-stroked-button
+        [disabled]="!(receipt$ | async)"
+        (click)="onViewReceiptClick()"
       >
         <mat-icon>image</mat-icon>
         View receipt

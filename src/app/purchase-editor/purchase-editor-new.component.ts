@@ -13,6 +13,8 @@ import { UserSelectors } from '../store/selectors/user.selectors';
 import { AbstractEditor } from './abstract-purchase-editor';
 import { DistributionFragment } from './distribution-fragment';
 import { ReceiptScannerService } from '../receipt-scanner/receipt-scanner.service';
+import { FullscreenDialogService } from '../shared/fullscreen-dialog/fullscreen-dialog.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-editor-new',
@@ -30,10 +32,11 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
               protected editorService: PurchaseEditorService,
               protected snackBar: MatSnackBar,
               protected dialog: MatDialog,
+              protected fullscreenDialog: FullscreenDialogService,
               protected idGeneratorService: IdGeneratorService,
-              private receiptScannerService: ReceiptScannerService,
+              private receiptScannerService: ReceiptScannerService
   ) {
-    super(store, editorService, snackBar, dialog);
+    super(store, editorService, fullscreenDialog, snackBar, dialog);
   }
 
   ngOnInit() {
@@ -55,6 +58,14 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
           );
         });
       });
+
+    this.receipt$ = of(this.receiptScannerService.receipt);
+  }
+
+  onViewReceiptClick(): void {
+    if (this.receiptScannerService.receipt) {
+      this.fullscreenDialog.openReceiptViewDialog(this.receipt$, false);
+    }
   }
 
   submitPurchase(): void {

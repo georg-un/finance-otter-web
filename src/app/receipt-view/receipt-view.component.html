@@ -9,9 +9,13 @@
       <img *ngIf="encodedImage" [src]="encodedImage" alt="Receipt" class="receipt"/>
       <p *ngIf="receiptUnavailable" class="receipt-unavailable-msg">No receipt found.</p>
     </div>
-  <mat-toolbar color="primary" class="toolbar">
+  <mat-toolbar
+    color="primary"
+    class="receipt-toolbar"
+    *ngIf="enableEditButtons"
+  >
     <button
-      mat-raised-button
+      mat-flat-button
       class="receipt-action-button"
       (click)="onUploadNewButtonClick()"
     >
@@ -19,7 +23,7 @@
       Upload new
     </button>
     <button
-      mat-raised-button
+      mat-flat-button
       class="receipt-action-button"
       aria-label="Delete receipt"
       [disabled]="receiptUnavailable"

@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { User } from '../core/entity/user';
 import { UserSelectors } from '../store/selectors/user.selectors';
 import { PurchaseSelectors } from '../store/selectors/purchase.selectors';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { PurchaseActions } from '../store/actions/purchase.actions';
 import { Debit } from '../core/entity/debit';
 import { Router } from '@angular/router';
@@ -15,6 +15,8 @@ import { CategorySelectors } from '../store/selectors/category.selectors';
 import { MatDialog, MatTooltip } from '@angular/material';
 import { DynamicDialogButton, DynamicDialogData } from '../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { DynamicDialogComponent } from '../shared/dynamic-dialog/dynamic-dialog.component';
+import { FinOBackendService } from '../core/fino-backend.service';
+import { FullscreenDialogService } from '../shared/fullscreen-dialog/fullscreen-dialog.service';
 
 @Component({
   selector: 'app-purchase-view',
@@ -62,8 +64,10 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
+    private restService: FinOBackendService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private fullscreenDialog: FullscreenDialogService
   ) {
   }
 
@@ -92,7 +96,9 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   }
 
   onImageButtonClick(): void {
-    this.router.navigate(['receipt', this.purchase.purchaseId]);
+    const receipt: Observable<Blob> = this.restService.fetchReceipt(this.purchase.purchaseId)
+      .pipe(take(1));
+    this.fullscreenDialog.openReceiptViewDialog(receipt, true, this.purchase.purchaseId);
   }
 
   onDeleteButtonClick(): void {

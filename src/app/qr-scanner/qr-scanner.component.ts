@@ -2,13 +2,14 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { BigNumber } from 'bignumber.js';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { AbstractFullscreenDialog } from '../shared/fullscreen-dialog/abstract-fullscreen-dialog';
 
 @Component({
   selector: 'app-qr-scanner',
   templateUrl: './qr-scanner.component.html',
   styleUrls: ['./qr-scanner.component.scss']
 })
-export class QrScannerComponent implements OnInit {
+export class QrScannerComponent extends AbstractFullscreenDialog implements OnInit {
 
   readonly allowedFormats = [BarcodeFormat.QR_CODE];
   complete = false;
@@ -17,12 +18,12 @@ export class QrScannerComponent implements OnInit {
   noPermission = false;
 
   @Output() scanSuccess: EventEmitter<{ date: Date, amount: BigNumber }> = new EventEmitter();
-  @Output() close: EventEmitter<void> = new EventEmitter();
 
   private snackBarRef: MatSnackBarRef<any>;
 
   constructor(private snackBar: MatSnackBar
   ) {
+    super();
   }
 
   ngOnInit() {
@@ -38,10 +39,6 @@ export class QrScannerComponent implements OnInit {
 
   onScannerAutostarted() {
     this.scannerStarted = true;
-  }
-
-  onCloseClick() {
-    this.close.emit();
   }
 
   onScanSuccess($event: string) {

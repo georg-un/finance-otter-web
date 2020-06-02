@@ -14,6 +14,8 @@ import { combineLatest } from 'rxjs';
 import { Debit } from '../core/entity/debit';
 import { DistributionFragment } from './distribution-fragment';
 import { IdGeneratorService } from '../core/id-generator.service';
+import { FinOBackendService } from '../core/fino-backend.service';
+import { FullscreenDialogService } from '../shared/fullscreen-dialog/fullscreen-dialog.service';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -32,8 +34,10 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
               protected snackBar: MatSnackBar,
               protected dialog: MatDialog,
               protected idGeneratorService: IdGeneratorService,
+              protected fullscreenDialog: FullscreenDialogService,
+              private restService: FinOBackendService,
   ) {
-    super(store, editorService, snackBar, dialog);
+    super(store, editorService, fullscreenDialog, snackBar, dialog);
   }
 
   ngOnInit() {
@@ -77,6 +81,13 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
           }
         );
       });
+
+    // Fetch receipt
+    this.receipt$ = this.restService.fetchReceipt(this.purchase.purchaseId);
+  }
+
+  onViewReceiptClick(): void {
+    this.fullscreenDialog.openReceiptViewDialog(this.receipt$, false);
   }
 
   submitPurchase(): void {
