@@ -156,7 +156,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
     // Calculate the remained that could not be evenly distributed
     let remainder = rest.minus(assignedValue.times(nFields.toNumber()));
     // Distribute the rest to all fields cent by cent
-    let resultIdx = 0;
+    let resultIdx = Math.floor(Math.random() * result.length);  // randomly pick a starting position
     while (remainder.isGreaterThan(0)) {
       if (resultIdx >= result.length) {
         resultIdx = 0;  // reset index
