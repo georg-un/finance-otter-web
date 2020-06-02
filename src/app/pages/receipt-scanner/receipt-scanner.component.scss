@@ -6,9 +6,13 @@ ngx-doc-scanner {
 
 .capture-button {
   position: absolute;
-  top: calc((100vh - 56px) * 0.5);
+  top: calc((100vh - 56px) * 0.33);
   left:50%;
   transform: translateX(-50%);
+  min-height: 33vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .spinner {

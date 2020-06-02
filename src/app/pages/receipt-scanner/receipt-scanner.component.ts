@@ -8,6 +8,7 @@ import { RouterSelectors } from '../../store/selectors/router.selectors';
 import { take } from 'rxjs/operators';
 import { ReceiptScannerService } from './receipt-scanner.service';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-receipt-scanner',
@@ -17,17 +18,20 @@ import { PurchaseActions } from '../../store/actions/purchase.actions';
 export class ReceiptScannerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('fileInput', {static: false}) fileInput: ElementRef;
+  @ViewChild('cameraInput', {static: false}) cameraInput: ElementRef;
   @ViewChild('docScanner', {static: false}) docScanner: NgxDocScannerComponent;
 
   rawImage;
 
-  config: DocScannerConfig = {
+  readonly config: DocScannerConfig = {
     editorBackgroundColor: '#e3f2fd',
     buttonThemeColor: 'primary',
     cropToolColor: '#f44336',
     cropToolShape: 'circle',
     exportImageIcon: 'done'
   };
+
+  private purchaseId$: Observable<string>;
 
   constructor(
     private ngZone: NgZone,
@@ -41,6 +45,8 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     // Make sure all previously captured images are cleared from the service
     this.receiptScannerService.receipt = undefined;
+
+    this.purchaseId$ = this.store.select(RouterSelectors.selectPurchaseId);
   }
 
   ngAfterViewInit() {
@@ -50,8 +56,8 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
       this.docScanner['editorButtons'].find(button => button.name === 'exit').icon = 'clear';  // set exit icon
     }, 0);
 
-    // Prompt user for receipt image
-    this.promptImageCapture();
+    // Prompt user for receipt image (disabled for now)
+    // this.promptImageCapture();
   }
 
   onImageCapture($event) {
@@ -73,6 +79,10 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   }
 
   promptImageCapture(): void {
+    this.cameraInput.nativeElement.click();
+  }
+
+  promptStorageSelection(): void {
     this.fileInput.nativeElement.click();
   }
 
@@ -81,11 +91,16 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
   }
 
   dispatchAndLeave(): void {
-    this.store.select(RouterSelectors.selectPurchaseId)
+    this.purchaseId$
       .pipe(take(1))
       .subscribe((purchaseId: string) => {
         const routerCommands = [];
         if (purchaseId) {
+          // Show snack message & exit method, if editor is in editing mode but there is no receipt
+          if (!this.receiptScannerService.receipt) {
+            this.snackBar.open('Did not get a receipt.');
+            return;
+          }
           // If the purchase already exists, update the receipt and navigate to the purchase-viewer
           this.store.dispatch(PurchaseActions.updateReceipt({
             receipt: this.receiptScannerService.receipt,

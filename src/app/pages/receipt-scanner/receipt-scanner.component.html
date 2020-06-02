@@ -1,14 +1,33 @@
 <div>
 
-  <button
+  <div
     *ngIf="!rawImage"
-    (click)="promptImageCapture()"
-    mat-raised-button
     class="capture-button"
   >
-    <mat-icon>camera_alt</mat-icon>
-    Capture Image
-  </button>
+    <button
+      (click)="promptImageCapture()"
+      mat-flat-button
+    >
+      <mat-icon>camera_alt</mat-icon>
+      Capture receipt
+    </button>
+    <button
+      (click)="promptStorageSelection()"
+      mat-flat-button
+    >
+      <mat-icon>storage</mat-icon>
+      Select from storage
+    </button>
+    <button
+      *ngIf="!(purchaseId$ | async)"
+      (click)="dispatchAndLeave()"
+      mat-flat-button
+    >
+      <mat-icon>skip_next</mat-icon>
+      Continue without receipt
+    </button>
+  </div>
+
 
   <mat-spinner
     *ngIf="isProcessing()"
@@ -17,12 +36,21 @@
   </mat-spinner>
 
   <input
+    #cameraInput
+    type="file"
+    accept="image/*"
+    capture="environment"
+    (change)="onImageCapture($event)"
+    style="visibility: hidden"
+  />
+  <input
     #fileInput
     type="file"
     accept="image/*"
     (change)="onImageCapture($event)"
     style="visibility: hidden"
   />
+
   <div [hidden]="!rawImage || isProcessing()">
     <ngx-doc-scanner
       #docScanner
