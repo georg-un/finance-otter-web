@@ -15,11 +15,12 @@
     (hasDevices)="onScannerHasDevices($event)"
     (permissionResponse)="onScannerPermissionResponse($event)"
   ></zxing-scanner>
-  <div *ngIf="scannerStarted" class="state-container">
+  <div *ngIf="scannerStarted" class="message-container">
     <app-circle-checkmark-loader [complete]="complete"></app-circle-checkmark-loader>
     <p *ngIf="!complete" class="state-msg">Scanning...</p>
     <p *ngIf="complete" class="state-msg done">Done!</p>
-    <br><br>
+  </div>
+  <div *ngIf="scannerStarted" class="message-container">
     <p class="description">Point the camera to the QR code on the receipt to extract the amount and the date.</p>
   </div>
   <div class="error-container" *ngIf="noDevices || noPermission">
@@ -32,4 +33,3 @@
     </div>
   </div>
 </div>
-

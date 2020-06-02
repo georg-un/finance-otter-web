@@ -1,7 +1,9 @@
 @import "../../assets/variables";
 
 zxing-scanner {
-  margin-top: 12px;
+  ::ng-deep video {
+    max-height: 50vh;
+  }
 }
 
 app-circle-checkmark-loader {
@@ -9,7 +11,9 @@ app-circle-checkmark-loader {
 }
 
 .scanner-container {
-  min-height: 100%;
+  $padding-top: 30px;
+  padding-top: $padding-top;
+  min-height: calc(100% - #{$padding-top});
   min-width: 100%;
   display: flex;
   flex-direction: column;
@@ -22,8 +26,7 @@ app-circle-checkmark-loader {
   right: 24px;
 }
 
-.state-container {
-  min-height: 20vh;
+.message-container {
   min-width: 100%;
   display: flex;
   flex-direction: column;
@@ -32,16 +35,16 @@ app-circle-checkmark-loader {
   text-align: center;
 }
 
+.description {
+  color: slategrey;
+}
+
 .state-msg {
   font-size: 20px;
 }
 
 .done {
   color: $indicator-green;
-}
-
-.description {
-  color: slategrey;
 }
 
 .error-container {
