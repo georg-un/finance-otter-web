@@ -17,7 +17,7 @@ import { Category } from './entity/category';
 })
 export class FinOBackendService implements FinOBackendServiceInterface {
 
-  private endpoints = {
+  private readonly endpoints = {
     users: environment.backendUrl + '/users',
     purchases: environment.backendUrl + '/purchases',
     categories: environment.backendUrl + '/categories',
@@ -79,7 +79,11 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   uploadNewPurchase(purchase: Purchase, receipt: Blob): Observable<Purchase> {
     const uploadForm = new FormData();
-    uploadForm.append('purchase', JSON.stringify(purchase));
+    uploadForm.append(
+      'purchase',
+      // Convert purchase to a Blob, since JSON is not supported by multipart/form-data
+      new Blob([JSON.stringify(purchase)], {type: 'application/json;'})
+    );
     uploadForm.append('receipt', receipt);
     return this.http.post<Purchase>(this.endpoints.purchases, uploadForm).pipe(
       catchError((err) => this.handleError(err))
