@@ -34,6 +34,11 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
     panelClass: 'fullscreen-dialog'
   };
 
+  private readonly autofilledState = {
+    amount: false,
+    date: false
+  };
+
   protected constructor(protected store: Store<AppState>,
                         protected editorService: PurchaseEditorService,
                         protected snackBar: MatSnackBar,
@@ -73,6 +78,8 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
             this.sumAmount = result.amount.toNumber();
             this.date = result.date;
             this.purchase.date = result.date.getTime();
+            this.autofilledState.amount = true;
+            this.autofilledState.date = true;
           }, 200);
         }
       });

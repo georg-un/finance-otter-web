@@ -31,6 +31,7 @@
 
 .editor-row {
   display: flex;
+  justify-content: space-between;
 }
 
 .editor-symbol-col {
@@ -65,9 +66,17 @@
   margin: 16px 0 0 0;
 }
 
-::ng-deep .fullscreen-dialog {
-  .mat-dialog-container {
-    border-radius: 0;
-    background-color: $light-primary;
+.stroked-button {
+  min-width: 148px;
+}
+
+.autofilled {
+  ::ng-deep .mat-form-field-wrapper {
+    .mat-form-field-flex {
+      .mat-form-field-infix {
+        background-color: lightgray;
+        border-color: $light-primary;
+      }
+    }
   }
 }
