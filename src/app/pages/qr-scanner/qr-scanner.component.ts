@@ -68,7 +68,8 @@ export class QrScannerComponent extends AbstractFullscreenDialog implements OnIn
       amount: parts
         .slice(5, 10) // Extract all amounts
         .map(part => part.replace(/,/g, '.'))  // replace commas with points in case the numbers have a German format
-        .reduce((acc: BigNumber, curr: string) => acc.plus(new BigNumber(curr)), new BigNumber(0)) // calculate the sum of all amounts
+        .map(part => new BigNumber(part))
+        .reduce((acc: BigNumber, curr: BigNumber) => acc.plus(curr), new BigNumber(0)) // calculate the sum of all amounts
     };
   }
 

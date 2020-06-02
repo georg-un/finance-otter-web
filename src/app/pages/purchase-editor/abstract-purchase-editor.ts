@@ -89,7 +89,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
       this.distributionFragments
         .filter(fragment => fragment.checked)
         .map(fragment => new BigNumber(fragment.amount))
-        .reduce((sum, current) => sum.plus(current), new BigNumber(0)))
+        .reduce((sum, curr) => sum.plus(curr), new BigNumber(0)))
     ) {
       this.snackBar.open('Total amount and debits don\'t match.');
       return false;

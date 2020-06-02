@@ -16,6 +16,7 @@ import { DistributionFragment } from './distribution-fragment';
 import { IdGeneratorService } from '../../core/id-generator.service';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
+import { BigNumber } from 'bignumber.js';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -55,7 +56,9 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
         // Set sumAmount from debits
         this.sumAmount = this.purchase.debits
           .map(debit => debit.amount)
-          .reduce((sum, current) => sum + current);
+          .map(amount => new BigNumber(amount))
+          .reduce((sum: BigNumber, curr: BigNumber) => sum.plus(curr), new BigNumber(0))
+          .toNumber();
         // Check if purchase contains debits from inexistent users
         const purchaseUserIds = this.purchase.debits.map(debit => debit.debtorId);
         const allUserIds = users.map(user => user.userId);
