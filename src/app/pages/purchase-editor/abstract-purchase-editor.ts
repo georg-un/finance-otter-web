@@ -26,7 +26,7 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   distributionFragments: DistributionFragment[] = [];
   protected onDestroy$: Subject<boolean> = new Subject();
 
-  private readonly autofilledState = {
+  readonly autofilledState = {
     amount: false,
     date: false
   };
