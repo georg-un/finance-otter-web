@@ -5,37 +5,37 @@
           <img mat-card-avatar [src]="buyerAvatarUrl$ | async">
       </div>
 
-      <div class='grid-cell__r1-c2'>
+      <div class='grid-cell grid-cell__r1-c2'>
         <p>{{purchase.date | date : "dd.MM.yyyy"}}</p>
       </div>
 
       <ng-container *ngIf="!purchase.isCompensation; else isCompensation">
 
-        <div class='grid-cell__r2-c2 font-large'>
-          <p>{{purchase.shop | titlecase}}</p>
+        <div class='grid-cell grid-cell__r2-c2 font-large'>
+          <p class="truncate-text">{{purchase.shop | titlecase}}</p>
         </div>
 
-        <div class='grid-cell__r3-c2'>
-          <p>{{(category$ | async)?.label | lowercase}}</p>
+        <div class='grid-cell grid-cell__r3-c2'>
+          <p class="truncate-text">{{(category$ | async)?.label | lowercase}}</p>
         </div>
 
       </ng-container>
 
       <ng-template #isCompensation>
 
-        <div class='grid-cell__r2-c2 font-large'>
+        <div class='grid-cell grid-cell__r2-c2 font-large'>
           <mat-icon class="compensation_arrow">arrow_right_alt</mat-icon>
           <img *ngIf="receiverAvatarUrl$ | async" mat-card-avatar
                [src]="receiverAvatarUrl$ | async" class="receiver-avatar">
         </div>
 
-        <div class='grid-cell__r3-c2'>
-          <p>{{'compensation' | lowercase}}</p>
+        <div class='grid-cell grid-cell__r3-c2'>
+          <p class="truncate-text">{{'compensation' | lowercase}}</p>
         </div>
 
       </ng-template>
 
-      <div class='grid-cell__r2-c3 font-large purchase-sum'>
+      <div class='grid-cell grid-cell__r2-c3 font-large purchase-sum'>
         <p *ngIf="debitSum">
           {{debitSum | currency:'EUR':'€ ':'1.2-2'}}
         </p>
@@ -44,7 +44,7 @@
         </p>
       </div>
 
-      <div class="grid-cell__r3-c3">
+      <div class="grid-cell grid-cell__r3-c3">
         <app-sync-indicator [syncStatus]="purchase.syncStatus"
                             [size]="'18px'"
                             class="sync-status-indicator"

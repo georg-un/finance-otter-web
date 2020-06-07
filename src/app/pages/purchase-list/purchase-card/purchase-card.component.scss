@@ -24,6 +24,7 @@ img {
 }
 
 .grid-cell {
+  min-width: 0;
   &__r1-c2 {
     grid-row: 1;
     grid-column: 2;
@@ -71,4 +72,10 @@ img {
 .compensation_arrow {
   vertical-align: middle;
   margin-right: 8px;
+}
+
+.truncate-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
