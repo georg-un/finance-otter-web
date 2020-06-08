@@ -16,6 +16,8 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
 import { ReceiptScannerModule } from './pages/receipt-scanner/receipt-scanner.module';
 import { ReceiptViewModule } from './pages/receipt-view/receipt-view.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { ReceiptViewModule } from './pages/receipt-view/receipt-view.module';
     BrowserAnimationsModule,
     AppStoreModule,
     ReceiptScannerModule,
-    ReceiptViewModule
+    ReceiptViewModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}
