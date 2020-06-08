@@ -3,7 +3,7 @@ import { User } from '../../core/entity/user';
 import { MatDialog, MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../../store/states/app.state';
 import { Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { Purchase } from '../../core/entity/purchase';
 import { IdGeneratorService } from '../../core/id-generator.service';
 import { Debit } from '../../core/entity/debit';
@@ -44,13 +44,20 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
     this.purchase = new Purchase();
 
     this.store.select(UserSelectors.selectCurrentUser)
-      .pipe(takeUntil(this.onDestroy$))
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.onDestroy$)
+      )
       .subscribe((currentUser: User) => {
         this.purchase.buyerId = currentUser.userId;
       });
 
     this.users$
-      .pipe(take(1))
+      .pipe(
+        filter(Boolean),
+        distinctUntilChanged(),
+        takeUntil(this.onDestroy$)
+      )
       .subscribe((users: User[]) => {
         users.forEach((user: User) => {
           this.distributionFragments.push(

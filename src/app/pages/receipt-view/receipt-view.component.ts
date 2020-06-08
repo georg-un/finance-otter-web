@@ -89,7 +89,7 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
     // Convert image to a base64 string to feed it into the <img> element
     this.receipt
       .subscribe((img: Blob) => {
-        if (img) {
+        if (img && img.size > 32) {
           const reader = new FileReader();
           reader.onloadend = () => {
             this.encodedImage = reader.result;

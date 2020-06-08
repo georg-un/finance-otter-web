@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { User } from '../../core/entity/user';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { Debit } from '../../core/entity/debit';
 import { Router } from '@angular/router';
@@ -73,8 +73,11 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.select(PurchaseSelectors.selectCurrentPurchase)
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((purchase) => {
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe((purchase: Purchase) => {
         if (purchase) {
           this.purchase = purchase;
           this.user$ = this.selectUserById(purchase.buyerId);
@@ -92,7 +95,7 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   }
 
   selectUserById(id: string): Observable<User> {
-    return this.store.select(UserSelectors.selectUserById(), {id: id});
+    return this.store.select(UserSelectors.selectUserById(), {id: id}).pipe(filter(u => !!u));
   }
 
   onImageButtonClick(): void {
