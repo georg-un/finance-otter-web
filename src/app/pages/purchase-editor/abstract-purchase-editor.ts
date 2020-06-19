@@ -117,16 +117,17 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   }
 
   private distributeToFields(relevantFields: DistributionFragment[]): void {
+    const sum = new BigNumber(this.sumAmount);
     // Get the remaining value
     const rest = this.getRest(
-      new BigNumber(this.sumAmount),
+      sum,
       this.distributionFragments
         .filter(fragment => fragment.checked)
         .map(fragment => new BigNumber(fragment.amount || 0))
     );
-    if (rest.isLessThan(0)) {
-      console.error(`Sum of distribution fragments (${rest.toNumber()}) is larger than total amount (${this.sumAmount})`);
-      this.snackBar.open('Sum of custom distribution is larger than amount.');
+    if ((sum.isPositive() && rest.isLessThan(0)) || (sum.isNegative() && rest.isGreaterThan(0))) {
+      console.error(`A remainder (${rest.toNumber()}) was left over on when distributing the total amount (${this.sumAmount}).`);
+      this.snackBar.open('Could not distribute the amount.');
       return;
     }
     // Distribute the rest by the Bresenham Algorithm
