@@ -18,6 +18,9 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@fino-ngx-doc-scanner": ["libs/fino-ngx-doc-scanner/projects/ngx-document-scanner/src/public_api"]
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
-import { DocScannerConfig, NgxDocScannerComponent } from 'ngx-document-scanner';
+import { DocScannerConfig, NgxDocScannerComponent } from '@fino-ngx-doc-scanner';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReceiptScannerComponent } from './receipt-scanner.component';
-import { NgxDocumentScannerModule, OpenCVConfig } from 'ngx-document-scanner';
+import { NgxDocumentScannerModule, OpenCVConfig } from '@fino-ngx-doc-scanner';
 import { MatProgressSpinnerModule } from '@angular/material';
 
 
