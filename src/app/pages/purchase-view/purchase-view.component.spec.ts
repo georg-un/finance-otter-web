@@ -1,7 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PurchaseViewComponent } from './purchase-view.component';
-import {DebitCardComponent} from '../../shared/debit-card/debit-card.component';
+import { DebitCardComponent } from '../../shared/debit-card/debit-card.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
+import { SharedModule } from '../../shared/shared.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PurchaseViewComponent', () => {
   let component: PurchaseViewComponent;
@@ -9,6 +13,12 @@ describe('PurchaseViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        MaterialTestingModule,
+        HttpClientTestingModule,
+        SharedModule
+      ],
       declarations: [
         PurchaseViewComponent,
         DebitCardComponent,

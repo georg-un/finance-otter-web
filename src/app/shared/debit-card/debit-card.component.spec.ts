@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DebitCardComponent } from './debit-card.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 
 describe('DebitCardComponent', () => {
   let component: DebitCardComponent;
@@ -8,6 +10,10 @@ describe('DebitCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        MaterialTestingModule
+      ],
       declarations: [ DebitCardComponent ]
     })
     .compileComponents();

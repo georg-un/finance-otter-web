@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SyncIndicatorComponent } from './sync-indicator.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 
 describe('SyncIndicatorComponent', () => {
   let component: SyncIndicatorComponent;
@@ -8,6 +10,10 @@ describe('SyncIndicatorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        MaterialTestingModule
+      ],
       declarations: [ SyncIndicatorComponent ]
     })
     .compileComponents();

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PurchaseEditorNewComponent } from './purchase-editor-new.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
+import { FormsModule } from '@angular/forms';
 
 describe('PurchaseEditorNewComponent', () => {
   let component: PurchaseEditorNewComponent;
@@ -8,6 +11,11 @@ describe('PurchaseEditorNewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        MaterialTestingModule,
+        FormsModule,
+      ],
       declarations: [ PurchaseEditorNewComponent ]
     })
     .compileComponents();

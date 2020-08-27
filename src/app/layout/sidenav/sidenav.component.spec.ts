@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidenavComponent } from './sidenav.component';
-import { MatIconModule, MatListModule, MatSidenavModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 
 describe('SidenavComponent', () => {
   let component: SidenavComponent;
@@ -11,10 +12,9 @@ describe('SidenavComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        BrowserAnimationsModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
+        TestingModule,
+        MaterialTestingModule,
+        BrowserAnimationsModule
       ],
       declarations: [ SidenavComponent ]
     })

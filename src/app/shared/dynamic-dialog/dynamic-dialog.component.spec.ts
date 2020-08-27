@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DynamicDialogComponent } from './dynamic-dialog.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { DynamicDialogData } from './dynamic-dialog-data.model';
 
 describe('DynamicDialogComponent', () => {
   let component: DynamicDialogComponent;
@@ -8,7 +12,14 @@ describe('DynamicDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicDialogComponent ]
+      imports: [
+        TestingModule,
+        MaterialTestingModule
+      ],
+      declarations: [ DynamicDialogComponent ],
+      providers: [
+        {provide: MAT_DIALOG_DATA, useValue: {bodyHTML: '<div>foo</div>', buttons: []} as DynamicDialogData}
+      ]
     })
     .compileComponents();
   }));

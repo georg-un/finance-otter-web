@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QrScannerComponent } from './qr-scanner.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { SharedModule } from '../../shared/shared.module';
 
 describe('QrScannerComponent', () => {
   let component: QrScannerComponent;
@@ -8,6 +12,12 @@ describe('QrScannerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        TestingModule,
+        MaterialTestingModule,
+        ZXingScannerModule,
+        SharedModule
+      ],
       declarations: [ QrScannerComponent ]
     })
     .compileComponents();

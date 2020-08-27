@@ -1,7 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SummaryComponent } from './summary.component';
-import {MatCardModule} from '@angular/material';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
+import { DebitCardModule } from '../../shared/debit-card/debit-card.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 describe('SummaryComponent', () => {
   let component: SummaryComponent;
@@ -10,7 +13,10 @@ describe('SummaryComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MatCardModule,
+        TestingModule,
+        MaterialTestingModule,
+        DebitCardModule,
+        NgxChartsModule
       ],
       declarations: [
         SummaryComponent,

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MultilineSnackbarComponent } from './multiline-snackbar.component';
+import { TestingModule } from '../../core/testing/testing.module';
+import { MaterialTestingModule } from '../../core/testing/material-testing.module';
+import { MAT_SNACK_BAR_DATA } from '@angular/material';
 
 describe('MultilineSnackbarComponent', () => {
   let component: MultilineSnackbarComponent;
@@ -8,7 +11,14 @@ describe('MultilineSnackbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MultilineSnackbarComponent ]
+      imports: [
+        TestingModule,
+        MaterialTestingModule,
+      ],
+      declarations: [ MultilineSnackbarComponent ],
+      providers: [
+        {provide: MAT_SNACK_BAR_DATA, useValue: 'foo'}
+      ]
     })
     .compileComponents();
   }));
