@@ -12,7 +12,7 @@ import { AppStoreModule } from './store/app-store.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { RegisterModule } from './pages/register/register.module';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
+import { MAT_DATE_LOCALE, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
 import { ReceiptScannerModule } from './pages/receipt-scanner/receipt-scanner.module';
 import { ReceiptViewModule } from './pages/receipt-view/receipt-view.module';
@@ -41,7 +41,8 @@ import { environment } from '../environments/environment';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
   ],
   entryComponents: [
     MultilineSnackbarComponent
