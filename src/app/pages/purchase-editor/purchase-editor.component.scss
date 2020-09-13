@@ -29,14 +29,10 @@
   padding-right: 6vw;
 }
 
-.editor-row {
-  display: flex;
-  justify-content: space-between;
-}
-
 .editor-symbol-col {
   flex: 1;
   margin: auto;
+  min-width: 32px
 }
 
 .editor-input-col {
@@ -61,13 +57,26 @@
 }
 
 .debit-actions {
-  display: flex;
-  justify-content: space-between;
   margin: 16px 0 0 0;
 }
 
 .stroked-button {
   min-width: 148px;
+}
+
+.input-button {
+  height: 34px;
+  margin-left: 8px;
+  align-self: center;
+}
+
+.justify-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .autofilled {

@@ -59,6 +59,12 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
 
   abstract onViewReceiptClick(): void;
 
+  onSetDateNowClick(): void {
+    const date = new Date();
+    this.date = date;
+    this.purchase.date = date.getTime();
+  }
+
   onScanQrCodeClick(): void {
     this.fullscreenDialog.openQrScannerDialog()
       .pipe(takeUntil(this.onDestroy$))
