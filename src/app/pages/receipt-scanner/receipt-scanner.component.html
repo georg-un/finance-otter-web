@@ -1,4 +1,4 @@
-<div>
+<div class="receipt-scanner-container">
 
   <div
     *ngIf="!rawImage"
@@ -29,11 +29,11 @@
   </div>
 
 
-  <mat-spinner
-    *ngIf="isProcessing()"
-    class="spinner"
-  >
-  </mat-spinner>
+  <div class="spinner" *ngIf="isProcessing()">
+    <mat-spinner></mat-spinner>
+    <span class="spinner-message" *ngIf="!docScannerReady">Downloading OpenCV library...</span>
+    <span class="spinner-message" *ngIf="docScannerReady">Processing image...</span>
+  </div>
 
   <input
     #cameraInput
@@ -58,6 +58,7 @@
       [config]="config"
       (editResult)="onEditResult($event)"
       (exitEditor)="onExitEditor($event)"
+      (ready)="onDocScannerReady($event)"
     >
     </ngx-doc-scanner>
   </div>

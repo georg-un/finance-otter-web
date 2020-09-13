@@ -31,6 +31,7 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
     exportImageIcon: 'done'
   };
 
+  public docScannerReady: boolean = false;
   private purchaseId$: Observable<string>;
 
   constructor(
@@ -58,6 +59,10 @@ export class ReceiptScannerComponent implements OnInit, AfterViewInit {
 
     // Prompt user for receipt image (disabled for now)
     // this.promptImageCapture();
+  }
+
+  onDocScannerReady($event: boolean) {
+    this.docScannerReady = $event;
   }
 
   onImageCapture($event) {
