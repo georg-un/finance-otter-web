@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { User } from "../core/entity/user";
+import { User } from '../../core/entity/user';
 
 @Pipe({name: 'shortName'})
 export class ShortNamePipe implements PipeTransform {

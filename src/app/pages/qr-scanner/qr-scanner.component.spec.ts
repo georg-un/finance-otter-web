@@ -4,7 +4,7 @@ import { QrScannerComponent } from './qr-scanner.component';
 import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { SharedModule } from '../../shared/shared.module';
+import { CircleCheckmarkLoaderModule } from '../../shared/circle-checkmark-loader/circle-checkmark-loader.module';
 
 describe('QrScannerComponent', () => {
   let component: QrScannerComponent;
@@ -16,7 +16,7 @@ describe('QrScannerComponent', () => {
         TestingModule,
         MaterialTestingModule,
         ZXingScannerModule,
-        SharedModule
+        CircleCheckmarkLoaderModule
       ],
       declarations: [ QrScannerComponent ]
     })

@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { QrScannerComponent } from './qr-scanner.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MatButtonModule, MatIconModule } from '@angular/material';
-import { SharedModule } from '../../shared/shared.module';
-
+import { CircleCheckmarkLoaderModule } from '../../shared/circle-checkmark-loader/circle-checkmark-loader.module';
 
 
 @NgModule({
@@ -14,7 +13,7 @@ import { SharedModule } from '../../shared/shared.module';
     ZXingScannerModule,
     MatButtonModule,
     MatIconModule,
-    SharedModule
+    CircleCheckmarkLoaderModule
   ]
 })
 export class QrScannerModule { }

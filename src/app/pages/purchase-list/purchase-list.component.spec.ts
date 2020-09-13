@@ -5,7 +5,7 @@ import { PurchaseCardComponent } from './purchase-card/purchase-card.component';
 import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { SharedModule } from '../../shared/shared.module';
+import { SyncIndicatorModule } from '../../shared/sync-indicator/sync-indicator.module';
 
 describe('PurchaseListComponent', () => {
   let component: PurchaseListComponent;
@@ -17,7 +17,7 @@ describe('PurchaseListComponent', () => {
         TestingModule,
         MaterialTestingModule,
         InfiniteScrollModule,
-        SharedModule
+        SyncIndicatorModule
       ],
       declarations: [
         PurchaseListComponent,

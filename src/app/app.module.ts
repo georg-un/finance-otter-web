@@ -9,7 +9,6 @@ import { PurchaseListModule } from './pages/purchase-list/purchase-list.module';
 import { PurchaseViewModule } from './pages/purchase-view/purchase-view.module';
 import { PurchaseEditorModule } from './pages/purchase-editor/purchase-editor.module';
 import { AppStoreModule } from './store/app-store.module';
-import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { RegisterModule } from './pages/register/register.module';
 import { MAT_DATE_LOCALE, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
@@ -18,6 +17,7 @@ import { ReceiptScannerModule } from './pages/receipt-scanner/receipt-scanner.mo
 import { ReceiptViewModule } from './pages/receipt-view/receipt-view.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { MultilineSnackbarModule } from './shared/multiline-snackbar/multiline-snackbar.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,6 @@ import { environment } from '../environments/environment';
   ],
   imports: [
     CoreModule,
-    SharedModule,
     LayoutModule,
     SummaryModule,
     PurchaseListModule,
@@ -38,6 +37,7 @@ import { environment } from '../environments/environment';
     AppStoreModule,
     ReceiptScannerModule,
     ReceiptViewModule,
+    MultilineSnackbarModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [

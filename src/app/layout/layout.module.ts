@@ -4,7 +4,15 @@ import { LayoutComponent } from './layout.component';
 import { HeaderComponent } from './header/header.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AppRoutingModule } from '../app-routing.module';
-import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatListModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
+import { DynamicDialogModule } from '../shared/dynamic-dialog/dynamic-dialog.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +28,8 @@ import { MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSidena
     MatListModule,
     MatSidenavModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    DynamicDialogModule
   ]
 })
 export class LayoutModule { }
