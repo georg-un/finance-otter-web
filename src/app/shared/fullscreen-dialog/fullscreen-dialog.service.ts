@@ -42,7 +42,7 @@ export class FullscreenDialogService {
     );
   }
 
-  private handleClose(dialogRef: MatDialogRef<AbstractFullscreenDialog>) {
+  private handleClose(dialogRef: MatDialogRef<AbstractFullscreenDialog>): void {
     dialogRef.componentInstance.close
       .pipe(take(1))
       .subscribe(() => dialogRef.close());

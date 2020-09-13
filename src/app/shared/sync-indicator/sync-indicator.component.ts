@@ -19,7 +19,7 @@ export class SyncIndicatorComponent implements OnInit, OnChanges {
     this.setIcon();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(_: SimpleChanges) {
     this.setIcon();
   }
 
