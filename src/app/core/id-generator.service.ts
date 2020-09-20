@@ -14,7 +14,7 @@ export class IdGeneratorService {
 
   generatePurchaseId(): Observable<string> {
     return this.auth.getKeyId().pipe(
-      map((kid) => `P.${kid}.${new Date().getTime().toString()}.00`)
+      map(kid => kid ? `P.${kid}.${new Date().getTime().toString()}.00` : undefined)
     );
   }
 
