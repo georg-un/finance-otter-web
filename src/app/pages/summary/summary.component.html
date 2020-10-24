@@ -16,7 +16,7 @@
       <ngx-charts-pie-chart
         [view]="chartSize"
         [scheme]="'vivid'"
-        [results]="(categorySummary$ | async)"
+        [results]="(categorySummaryChartData$ | async)"
         [legend]="false"
         [labels]="true"
         [doughnut]="true"
@@ -29,7 +29,7 @@
       <ngx-charts-bar-vertical-stacked
         [view]="chartSize"
         [scheme]="'vivid'"
-        [results]="(categoryMonthSummary$ | async)"
+        [results]="(categoryMonthSummaryChartSeries$ | async)"
       >
       </ngx-charts-bar-vertical-stacked>
     </div>
