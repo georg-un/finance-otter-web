@@ -124,7 +124,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   fetchCategoryMonthSummary(months: number): Observable<ChartSeries[]> {
     let params = new HttpParams();
-    params = params.set('offset', months.toString());
+    params = params.set('months', months.toString());
     return this.http.get<ChartSeries[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
       this.handleRequestFailure()
     );
@@ -132,7 +132,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
 
   fetchCategorySummary(months: number): Observable<ChartData[]> {
     let params = new HttpParams();
-    params = params.set('offset', months.toString());
+    params = params.set('months', months.toString());
     return this.http.get<ChartData[]>(this.endpoints.summary + '/category', {params: params}).pipe(
       this.handleRequestFailure()
     );
