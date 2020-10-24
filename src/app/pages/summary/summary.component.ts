@@ -23,6 +23,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   balances$: Observable<object[]>;
   categorySummaryChartData$: Observable<ChartData[]>;
   categoryMonthSummaryChartSeries$: Observable<ChartSeries[]>;
+  categoryColorMap$: Observable<ChartData[]>;
   private categories$: Observable<Category[]>;
   private categorySummaries$: Observable<CategorySummary[]>;
   private categoryMonthSummaries$: Observable<CategoryMonthSummary[]>;
@@ -66,6 +67,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
       })
     );
 
+    this.categoryColorMap$ = this.categories$.pipe(map(categories => this.toCategoryColorMap(categories)));
+
     const chartWidth = Math.min(window.innerWidth - 48, 500);
     const chartHeight = Math.floor(chartWidth * 0.75);
     this.chartSize = [chartWidth, chartHeight];
@@ -80,8 +83,17 @@ export class SummaryComponent implements OnInit, OnDestroy {
     return this.store.select(UserSelectors.selectUserById(), {id: id});
   }
 
-  private toCategorySummaryChartData(categorySummaries: CategorySummary[], allCategories: Category[]): ChartData[] {
-    return allCategories.map(category => {
+  private toCategoryColorMap(categories: Category[]): ChartData[] {
+    return categories.map(category => {
+      return {
+        name: category.label,
+        value: category.color
+      } as ChartData;
+    })
+  }
+
+  private toCategorySummaryChartData(categorySummaries: CategorySummary[], categories: Category[]): ChartData[] {
+    return categories.map(category => {
       const categorySummary = categorySummaries.find(summary => summary.categoryId === category.id);
       return {
         name: category.label,
@@ -90,11 +102,11 @@ export class SummaryComponent implements OnInit, OnDestroy {
     });
   }
 
-  private toCategoryMonthSummaryChartSeries(categoryMonthSummaries: CategoryMonthSummary[], allCategories: Category[]): ChartSeries[] {
+  private toCategoryMonthSummaryChartSeries(categoryMonthSummaries: CategoryMonthSummary[], categories: Category[]): ChartSeries[] {
     return categoryMonthSummaries.map(categoryMonthSummary => {
       return {
         name: categoryMonthSummary.name,
-        series: this.toCategorySummaryChartData(categoryMonthSummary.series, allCategories)
+        series: this.toCategorySummaryChartData(categoryMonthSummary.series, categories)
       } as ChartSeries;
     });
   }
