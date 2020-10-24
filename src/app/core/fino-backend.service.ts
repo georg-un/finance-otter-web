@@ -8,9 +8,8 @@ import { User } from './entity/user';
 import { catchError, retry } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
-import { ChartSeries } from './entity/chart-series';
-import { ChartData } from './entity/chart-data';
 import { Category } from './entity/category';
+import { CategoryMonthSummary, CategorySummary } from './entity/summaries';
 
 @Injectable({
   providedIn: 'root'
@@ -122,18 +121,18 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
   }
 
-  fetchCategoryMonthSummary(months: number): Observable<ChartSeries[]> {
+  fetchCategoryMonthSummary(months: number): Observable<CategoryMonthSummary[]> {
     let params = new HttpParams();
     params = params.set('months', months.toString());
-    return this.http.get<ChartSeries[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
+    return this.http.get<CategoryMonthSummary[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
       this.handleRequestFailure()
     );
   }
 
-  fetchCategorySummary(months: number): Observable<ChartData[]> {
+  fetchCategorySummary(months: number): Observable<CategorySummary[]> {
     let params = new HttpParams();
     params = params.set('months', months.toString());
-    return this.http.get<ChartData[]>(this.endpoints.summary + '/category', {params: params}).pipe(
+    return this.http.get<CategorySummary[]>(this.endpoints.summary + '/category', {params: params}).pipe(
       this.handleRequestFailure()
     );
   }

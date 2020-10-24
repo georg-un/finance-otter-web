@@ -1,10 +1,9 @@
-import { ChartSeries } from "../../core/entity/chart-series";
-import { ChartData } from "../../core/entity/chart-data";
+import { CategoryMonthSummary, CategorySummary } from '../../core/entity/summaries';
 
 export interface SummaryState {
   balances: object;
-  categorySummary: ChartData[],
-  categoryMonthSummary: ChartSeries[],
+  categorySummary: CategorySummary[],
+  categoryMonthSummary: CategoryMonthSummary[],
   syncJobs: number
 }
 
