@@ -21,6 +21,7 @@
         [legend]="false"
         [labels]="true"
         [doughnut]="true"
+        [maxLabelLength]="24"
       >
       </ngx-charts-pie-chart>
     </div>
@@ -32,6 +33,8 @@
         [scheme]="'vivid'"
         [results]="categoryMonthSummaryChartSeries$ | async"
         [customColors]="categoryColorMap$ | async"
+        [xAxis]="true"
+        [yAxis]="true"
       >
       </ngx-charts-bar-vertical-stacked>
     </div>
