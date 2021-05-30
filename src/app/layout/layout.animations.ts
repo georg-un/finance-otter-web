@@ -75,7 +75,7 @@ export const expandFromFAB =
       group([
         // Expand the FAB over the whole view, switch the background-color and increase the opacity
         query('.fab-button', [
-          animate('300ms ease-out', style({
+          animate('200ms ease-out', style({
             bottom: 0,
             right: 0,
             height: 'calc(100vh - var(--header-height))',
@@ -87,7 +87,7 @@ export const expandFromFAB =
         ]),
         // Expand the enter view and increase the opacity
         query(':enter', [
-          animate('300ms ease-out', style({
+          animate('200ms ease-out', style({
             bottom: 0,
             right: 0,
             height: 'calc(100vh - var(--header-height))',
@@ -143,7 +143,7 @@ export const expandFromFAB =
       group([
         // Expand the FAB over the whole view, switch the background-color and increase the opacity
         query('.fab-button', [
-          animate('250ms ease-in', style({
+          animate('200ms ease-in', style({
             bottom: '25px',
             right: '25px',
             height: '56px',
@@ -153,7 +153,7 @@ export const expandFromFAB =
           }))
         ]),
         query(':leave', [
-          animate('250ms ease-in', style({
+          animate('200ms ease-in', style({
             overflowY: 'hidden',
             overflowX: 'hidden',
             bottom: '25px',
