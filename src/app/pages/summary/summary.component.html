@@ -12,31 +12,50 @@
     </div>
 
     <div class="chart">
-      <p class="title">LAST 6 MONTHS EXPENSES BY CATEGORY</p>
-      <ngx-charts-pie-chart
-        [view]="chartSize"
-        [scheme]="'vivid'"
-        [results]="categorySummaryChartData$ | async"
-        [customColors]="categoryColorMap$ | async"
-        [legend]="false"
-        [labels]="true"
-        [doughnut]="true"
-        [maxLabelLength]="24"
-      >
-      </ngx-charts-pie-chart>
+      <p class="title">
+        LAST
+        <mat-form-field class="category-summary-months-form">
+          <input matInput
+                 type="number"
+                 min="1"
+                 [(ngModel)]="categorySummaryMonths"
+                 (ngModelChange)="onCategorySummaryMonthsChange($event)"
+          />
+        </mat-form-field>
+        MONTHS EXPENSES BY CATEGORY</p>
+      <ng-container *ngIf="!areAllChartDataValuesZero(categorySummaryChartData$ | async); else noDataTemplate">
+        <ngx-charts-pie-chart
+                [view]="chartSize"
+                [scheme]="'vivid'"
+                [results]="categorySummaryChartData$ | async"
+                [customColors]="categoryColorMap$ | async"
+                [legend]="false"
+                [labels]="true"
+                [doughnut]="true"
+                [maxLabelLength]="24"
+        ></ngx-charts-pie-chart>
+      </ng-container>
     </div>
 
     <div class="chart">
       <p class="title">MONTHLY EXPENSES BY CATEGORY</p>
-      <ngx-charts-bar-vertical-stacked
-        [view]="chartSize"
-        [scheme]="'vivid'"
-        [results]="categoryMonthSummaryChartSeries$ | async"
-        [customColors]="categoryColorMap$ | async"
-        [xAxis]="true"
-        [yAxis]="true"
-      >
-      </ngx-charts-bar-vertical-stacked>
+      <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryMonthSummaryChartSeries$ | async); else noDataTemplate">
+        <ngx-charts-bar-vertical-stacked
+                [view]="chartSize"
+                [scheme]="'vivid'"
+                [results]="categoryMonthSummaryChartSeries$ | async"
+                [customColors]="categoryColorMap$ | async"
+                [xAxis]="true"
+                [yAxis]="true"
+        ></ngx-charts-bar-vertical-stacked>
+      </ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #noDataTemplate>
+  <div class="no-data-template">
+    <p>No data for this period.</p>
+  </div>
+
+</ng-template>

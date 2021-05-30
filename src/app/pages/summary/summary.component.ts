@@ -30,21 +30,25 @@ export class SummaryComponent implements OnInit, OnDestroy {
   private onDestroy$: Subject<boolean> = new Subject();
 
   chartSize: any[];
+  categorySummaryMonths = 6;
 
   constructor(private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
     this.store.dispatch(SummaryActions.requestBalances());
-    this.store.dispatch(SummaryActions.requestCategorySummary({months: 12}));
-    this.store.dispatch(SummaryActions.requestCategoryMonthSummary({months: 12}));
+    this.store.dispatch(SummaryActions.requestCategorySummary({months: this.categorySummaryMonths}));
+    this.store.dispatch(SummaryActions.requestCategoryMonthSummary({months: 6}));
 
-    this.categories$ = this.store.select(CategorySelectors.selectAllCategories)
-      .pipe(filter(this.isFilledArray));
-    this.categorySummaries$ = this.store.select(SummarySelectors.selectCategorySummary)
-      .pipe(filter(this.isFilledArray));
-    this.categoryMonthSummaries$ = this.store.select(SummarySelectors.selectCategoryMonthSummary)
-      .pipe(filter(this.isFilledArray));
+    this.categories$ = this.store.select(CategorySelectors.selectAllCategories).pipe(
+      filter(this.isFilledArray)
+    );
+    this.categorySummaries$ = this.store.select(SummarySelectors.selectCategorySummary).pipe(
+      map(cs => this.isFilledArray(cs) ? cs : [])
+    );
+    this.categoryMonthSummaries$ = this.store.select(SummarySelectors.selectCategoryMonthSummary).pipe(
+      map(cms => this.isFilledArray(cms) ? cms : [])
+    );
 
     this.balances$ = this.store.select(SummarySelectors.selectBalances)
       .pipe(map(balances => balances ? Object.entries(balances) : undefined));
@@ -81,6 +85,21 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   selectUserById(id: string): Observable<User> {
     return this.store.select(UserSelectors.selectUserById(), {id: id});
+  }
+
+  onCategorySummaryMonthsChange($event: number) {
+    if ($event) {
+      this.categorySummaryMonths = $event;
+      this.store.dispatch(SummaryActions.requestCategorySummary({months: this.categorySummaryMonths}));
+    }
+  }
+
+  areAllChartDataValuesZero(chartData: ChartData[]): boolean {
+    return chartData.every(data => data.value === 0);
+  }
+
+  areAllChartSeriesValuesZero(chartSeries: ChartSeries[]): boolean {
+    return chartSeries.every(series => this.areAllChartDataValuesZero(series.series));
   }
 
   private toCategoryColorMap(categories: Category[]): ChartData[] {
