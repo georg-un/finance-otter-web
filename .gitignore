@@ -43,3 +43,4 @@ testem.log
 Thumbs.db
 
 docker/ssl/
+env/
