@@ -5,7 +5,7 @@
     </p>
   </div>
   <div class='debit-card-amount'>
-    <p>
+    <p [ngClass]="amount >= 0 ? 'amount-positive' : 'amount-negative'">
       {{amount | number:'1.2-2'}} €
     </p>
   </div>

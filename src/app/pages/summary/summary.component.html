@@ -26,7 +26,7 @@
       <ng-container *ngIf="!areAllChartDataValuesZero(categorySummaryChartData$ | async); else noDataTemplate">
         <ngx-charts-pie-chart
                 [view]="chartSize"
-                [scheme]="'vivid'"
+                scheme="vivid"
                 [results]="categorySummaryChartData$ | async"
                 [customColors]="categoryColorMap$ | async"
                 [legend]="false"
@@ -42,7 +42,7 @@
       <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryMonthSummaryChartSeries$ | async); else noDataTemplate">
         <ngx-charts-bar-vertical-stacked
                 [view]="chartSize"
-                [scheme]="'vivid'"
+                scheme="vivid"
                 [results]="categoryMonthSummaryChartSeries$ | async"
                 [customColors]="categoryColorMap$ | async"
                 [xAxis]="true"
