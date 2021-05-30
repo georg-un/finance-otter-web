@@ -68,7 +68,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([categoryMonthSummaries, categories]: [CategoryMonthSummary[], Category[]]) => {
         return this.toCategoryMonthSummaryChartSeries(categoryMonthSummaries, categories);
-      })
+      }),
+      map(cms => cms.sort(this.compareCategorySummaryMonths))
     );
 
     this.categoryColorMap$ = this.categories$.pipe(map(categories => this.toCategoryColorMap(categories)));
@@ -100,6 +101,16 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   areAllChartSeriesValuesZero(chartSeries: ChartSeries[]): boolean {
     return !chartSeries || chartSeries.length === 0 || chartSeries.every(series => this.areAllChartDataValuesZero(series.series));
+  }
+
+  private compareCategorySummaryMonths(a: ChartSeries, b: ChartSeries): 0 | -1 | 1 {
+    if (a.name < b.name) {
+      return -1;
+    } else if (a.name > b.name) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   private toCategoryColorMap(categories: Category[]): ChartData[] {
