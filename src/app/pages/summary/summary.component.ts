@@ -95,11 +95,11 @@ export class SummaryComponent implements OnInit, OnDestroy {
   }
 
   areAllChartDataValuesZero(chartData: ChartData[]): boolean {
-    return chartData.every(data => data.value === 0);
+    return !chartData || chartData.length === 0 || chartData.every(data => data.value === 0);
   }
 
   areAllChartSeriesValuesZero(chartSeries: ChartSeries[]): boolean {
-    return chartSeries.every(series => this.areAllChartDataValuesZero(series.series));
+    return !chartSeries || chartSeries.length === 0 || chartSeries.every(series => this.areAllChartDataValuesZero(series.series));
   }
 
   private toCategoryColorMap(categories: Category[]): ChartData[] {

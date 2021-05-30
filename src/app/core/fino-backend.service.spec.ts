@@ -197,7 +197,7 @@ describe('FinOBackendService', () => {
     const callback = testHttpCall('fetchCategoryMonthSummary');
     callback.call.subscribe(() => {
       expect(callback.httpSpy.calls.mostRecent().args.length).toEqual(2);
-      expect(callback.httpSpy.calls.mostRecent().args[1]['params'].get('offset')).toEqual('3');
+      expect(callback.httpSpy.calls.mostRecent().args[1]['params'].get('months')).toEqual('3');
     });
   });
 
@@ -205,7 +205,7 @@ describe('FinOBackendService', () => {
     const callback = testHttpCall('fetchCategorySummary');
     callback.call.subscribe(() => {
       expect(callback.httpSpy.calls.mostRecent().args.length).toEqual(2);
-      expect(callback.httpSpy.calls.mostRecent().args[1]['params'].get('offset')).toEqual('3');
+      expect(callback.httpSpy.calls.mostRecent().args[1]['params'].get('months')).toEqual('3');
     });
   });
 
