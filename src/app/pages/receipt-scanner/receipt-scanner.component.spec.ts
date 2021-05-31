@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReceiptScannerComponent } from './receipt-scanner.component';
 import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
-import { NgxDocumentScannerModule } from 'ngx-document-scanner';
+import { NgxDocumentScannerModule } from '@fino-ngx-doc-scanner';
 
 describe('ReceiptScannerComponent', () => {
   let component: ReceiptScannerComponent;
