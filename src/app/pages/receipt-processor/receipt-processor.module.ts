@@ -18,7 +18,8 @@ const openCVConfig: OpenCVConfig = {
   imports: [
     CommonModule,
     NgxDocumentScannerModule.forRoot(openCVConfig),
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RouterModule
   ]
 })
 export class ReceiptProcessorModule { }

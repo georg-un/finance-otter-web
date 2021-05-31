@@ -85,7 +85,7 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
     if (!this.customDistribution) {
       this.distributeToAllFields();
     }
-    if (!this.isPurchaseValid()) {
+    if (!this.isPurchaseValid(true)) {
       return;
     }
     this.idGeneratorService.generatePurchaseId()

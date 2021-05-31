@@ -81,7 +81,7 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
   ) {
     this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.location.back());
-    this.layoutService.registerRightHeaderButtonClickCallback(() => this.router.navigate(['edit', this.purchase.purchaseId]));
+    this.layoutService.registerRightHeaderButtonClickCallback(() => this.router.navigate(['edit-purchase', this.purchase.purchaseId]));
   }
 
   ngOnInit(): void {
