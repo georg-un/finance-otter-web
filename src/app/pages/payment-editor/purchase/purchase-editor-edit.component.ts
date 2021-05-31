@@ -31,7 +31,6 @@ import { Location } from '@angular/common';
 })
 export class PurchaseEditorEditComponent extends AbstractPaymentEditor implements OnInit {
 
-  // TODO: Add animation to slide custom debit fields in and out
   // TODO: Add validation before upload
   // FIXME: If this page is opened as first page, the user data is not yet loaded and an error is thrown
   customDistribution = true;
@@ -104,7 +103,7 @@ export class PurchaseEditorEditComponent extends AbstractPaymentEditor implement
     if (!this.customDistribution) {
       this.distributeToAllFields();
     }
-    if (!this.isPurchaseValid()) {
+    if (!this.isPurchaseValid(true)) {
       return;
     }
     this.purchase.debits = [];

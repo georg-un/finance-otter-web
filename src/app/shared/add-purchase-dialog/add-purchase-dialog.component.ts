@@ -25,11 +25,11 @@ export class AddPurchaseDialogComponent extends AddReceiptDialog {
 
   public addPurchaseWithoutReceipt(): void {
     this.receiptProcessorService.receipt = undefined;
-    this.router.navigate(['new']).then(() => this.dialogRef.close(true));
+    this.router.navigate(['new-purchase']).then(() => this.dialogRef.close(true));
   }
 
   public addCompensation(): void {
     this.receiptProcessorService.receipt = undefined;
-    alert('TBD');
+    this.router.navigate(['new-compensation']).then(() => this.dialogRef.close(true));
   }
 }
