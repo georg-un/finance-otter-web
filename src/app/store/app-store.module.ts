@@ -4,7 +4,7 @@ import { metaReducers, reducers } from './index';
 import { environment } from '../../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { NavigationActionTiming, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { NavigationActionTiming, StoreRouterConnectingModule, DefaultRouterStateSerializer } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { PurchaseEffects } from './effects/purchase.effects';
 import { CategoryEffects } from './effects/category.effects';
@@ -24,10 +24,10 @@ import { SummaryEffects } from './effects/summary.effects';
         strictActionImmutability: true,
       }
     }),
-    StoreRouterConnectingModule.forRoot({navigationActionTiming: NavigationActionTiming.PostActivation}),
+    StoreRouterConnectingModule.forRoot({ serializer: DefaultRouterStateSerializer,navigationActionTiming: NavigationActionTiming.PostActivation}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([PurchaseEffects, CategoryEffects, UserEffects, SummaryEffects]),
-    StoreRouterConnectingModule.forRoot(),
+    StoreRouterConnectingModule.forRoot({ serializer: DefaultRouterStateSerializer }),
   ]
 })
 export class AppStoreModule { }

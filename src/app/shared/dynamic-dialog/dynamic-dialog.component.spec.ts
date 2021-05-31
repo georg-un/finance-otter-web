@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DynamicDialogComponent } from './dynamic-dialog.component';
 import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DynamicDialogButton, DynamicDialogData } from './dynamic-dialog-data.model';
 
 const HTML: string = '<div>foo</div>';

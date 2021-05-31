@@ -8,12 +8,13 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { PurchaseEditorService } from './purchase-editor.service';
 import { DistributionFragment } from './distribution-fragment';
-import { MatDialog, MatSnackBar } from '@angular/material';
 import { MultilineSnackbarComponent } from '../../shared/multiline-snackbar/multiline-snackbar.component';
 import { BigNumber } from 'bignumber.js';
 import { Category } from '../../core/entity/category';
 import { CategorySelectors } from '../../store/selectors/category.selectors';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 

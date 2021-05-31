@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ReceiptViewComponent } from '../../pages/receipt-view/receipt-view.component';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';

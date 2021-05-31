@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DynamicDialogButton, DynamicDialogData } from './dynamic-dialog-data.model';
 
 @Component({

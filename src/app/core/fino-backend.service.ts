@@ -6,7 +6,7 @@ import { Purchase } from './entity/purchase';
 import { environment } from '../../environments/environment';
 import { User } from './entity/user';
 import { catchError, retry } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 import { Category } from './entity/category';
 import { CategoryMonthSummary, CategorySummary } from './entity/summaries';

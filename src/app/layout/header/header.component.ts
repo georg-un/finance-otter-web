@@ -12,7 +12,7 @@ import { UserActions } from '../../store/actions/user.actions';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
 import { fadeOnChange, rotateOnChange } from '../layout.animations';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 
 @Component({

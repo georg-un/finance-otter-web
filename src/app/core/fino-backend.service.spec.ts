@@ -11,7 +11,7 @@ import { Purchase } from './entity/purchase';
 import { Category } from './entity/category';
 import { ChartSeries } from './entity/chart-series';
 import { ChartData } from './entity/chart-data';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import Spy = jasmine.Spy;
 
 type Parameters<T> = T extends (... args: infer T) => any ? T : never;

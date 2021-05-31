@@ -12,11 +12,12 @@ import { Debit } from '../../core/entity/debit';
 import { Router } from '@angular/router';
 import { Category } from '../../core/entity/category';
 import { CategorySelectors } from '../../store/selectors/category.selectors';
-import { MatDialog, MatTooltip } from '@angular/material';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-purchase-view',

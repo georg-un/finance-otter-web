@@ -5,8 +5,9 @@ import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 import { DebitCardModule } from '../../shared/debit-card/debit-card.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 describe('SummaryComponent', () => {
   let component: SummaryComponent;

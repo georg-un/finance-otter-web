@@ -2,9 +2,12 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import {HeaderComponent} from './layout/header/header.component';
 import {SidenavComponent} from './layout/sidenav/sidenav.component';
-import {MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TestingModule } from './core/testing/testing.module';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
