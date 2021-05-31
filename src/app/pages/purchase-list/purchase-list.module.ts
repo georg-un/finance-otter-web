@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PurchaseListComponent } from './purchase-list.component';
 import { PurchaseCardComponent } from './purchase-card/purchase-card.component';
-import { MatCardModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SyncIndicatorModule } from '../../shared/sync-indicator/sync-indicator.module';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [

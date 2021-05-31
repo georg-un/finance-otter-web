@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -17,6 +16,9 @@ import { IdGeneratorService } from '../../core/id-generator.service';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { BigNumber } from 'bignumber.js';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-purchase-editor-edit',

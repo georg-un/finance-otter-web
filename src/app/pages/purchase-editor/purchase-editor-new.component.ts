@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../core/entity/user';
-import { MatDialog, MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import { AppState } from '../../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
@@ -15,6 +14,9 @@ import { DistributionFragment } from './distribution-fragment';
 import { ReceiptScannerService } from '../receipt-scanner/receipt-scanner.service';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-editor-new',

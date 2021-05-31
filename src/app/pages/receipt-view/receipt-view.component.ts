@@ -5,11 +5,12 @@ import { AppState } from '../../store/states/app.state';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { Router } from '@angular/router';
-import { MatDialog, MatSnackBar } from '@angular/material';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { Observable } from 'rxjs';
 import { AbstractFullscreenDialog } from '../../shared/fullscreen-dialog/abstract-fullscreen-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-receipt-view',

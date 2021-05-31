@@ -11,13 +11,14 @@ import { PurchaseEditorModule } from './pages/purchase-editor/purchase-editor.mo
 import { AppStoreModule } from './store/app-store.module';
 import { CoreModule } from './core/core.module';
 import { RegisterModule } from './pages/register/register.module';
-import { MAT_DATE_LOCALE, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
 import { ReceiptScannerModule } from './pages/receipt-scanner/receipt-scanner.module';
 import { ReceiptViewModule } from './pages/receipt-view/receipt-view.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MultilineSnackbarModule } from './shared/multiline-snackbar/multiline-snackbar.module';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [

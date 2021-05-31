@@ -1,8 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { BigNumber } from 'bignumber.js';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { AbstractFullscreenDialog } from '../../shared/fullscreen-dialog/abstract-fullscreen-dialog';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-qr-scanner',
