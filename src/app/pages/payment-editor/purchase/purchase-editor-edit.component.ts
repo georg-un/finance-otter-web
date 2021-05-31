@@ -1,33 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from '../../store/states/app.state';
+import { AppState } from '../../../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
-import { Purchase } from '../../core/entity/purchase';
-import { PurchaseActions } from '../../store/actions/purchase.actions';
-import { AbstractEditor } from './abstract-purchase-editor';
-import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
-import { UserSelectors } from '../../store/selectors/user.selectors';
-import { User } from '../../core/entity/user';
+import { Purchase } from '../../../core/entity/purchase';
+import { PurchaseActions } from '../../../store/actions/purchase.actions';
+import { AbstractPaymentEditor } from '../abstract-payment-editor';
+import { PurchaseSelectors } from '../../../store/selectors/purchase.selectors';
+import { UserSelectors } from '../../../store/selectors/user.selectors';
+import { User } from '../../../core/entity/user';
 import { combineLatest } from 'rxjs';
-import { Debit } from '../../core/entity/debit';
-import { DistributionFragment } from './distribution-fragment';
-import { IdGeneratorService } from '../../core/id-generator.service';
-import { FinOBackendService } from '../../core/fino-backend.service';
-import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
+import { Debit } from '../../../core/entity/debit';
+import { DistributionFragment } from '../distribution-fragment';
+import { IdGeneratorService } from '../../../core/id-generator.service';
+import { FinOBackendService } from '../../../core/fino-backend.service';
+import { FullscreenDialogService } from '../../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { BigNumber } from 'bignumber.js';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { LayoutService } from '../../layout/layout.service';
+import { LayoutService } from '../../../layout/layout.service';
 import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-purchase-editor-edit',
   templateUrl: './purchase-editor.component.html',
-  styleUrls: ['./purchase-editor.component.scss']
+  styleUrls: [
+    '../payment-editor.component.scss',
+    './purchase-editor.component.scss'
+  ]
 })
-export class PurchaseEditorEditComponent extends AbstractEditor implements OnInit {
+export class PurchaseEditorEditComponent extends AbstractPaymentEditor implements OnInit {
 
+  // TODO: Add animation to slide custom debit fields in and out
   // TODO: Add validation before upload
   // FIXME: If this page is opened as first page, the user data is not yet loaded and an error is thrown
   customDistribution = true;
@@ -125,4 +129,5 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
   onDistributionToggleChange(change: MatSlideToggleChange): void {
     this.customDistribution = change.checked;
   }
+
 }

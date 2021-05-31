@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://localhost:4200/fino',
-  deployUrl: 'https://localhost:4200/fino/',
+  backendUrl: 'https://honeypot:4200/fino',
+  deployUrl: 'https://honeypot:4200',
   auth0: {
     domain: 'fino-test.eu.auth0.com',
     client_id: '7ZAtqh1hb97Ib2lcQXwSTjn8O2bBUazN',

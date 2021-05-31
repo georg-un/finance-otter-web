@@ -47,7 +47,7 @@ const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
 };
 
 
-export abstract class AbstractEditor implements OnInit, OnDestroy {
+export abstract class AbstractPaymentEditor implements OnInit, OnDestroy {
 
   purchase: Purchase;
   receipt$: Observable<Blob>;
