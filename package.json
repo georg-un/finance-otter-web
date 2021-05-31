@@ -42,7 +42,9 @@
     "ngx-opencv": "^1.0.6",
     "rxjs": "~6.5.5",
     "tslib": "^1.13.0",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.10.3",
+    "angular2-draggable": "^2.3.2",
+    "@angular/flex-layout": "^9.0.0-beta.31"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.901.7",
