@@ -21,3 +21,7 @@ a {
   text-decoration: none;
   color: black;
 }
+
+.cdk-overlay-backdrop {
+  backdrop-filter: blur(4px);
+}
