@@ -6,7 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 import { User } from '../../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { PurchaseEditorService } from './purchase-editor.service';
 import { DistributionFragment } from './distribution-fragment';
 import { MultilineSnackbarComponent } from '../../shared/multiline-snackbar/multiline-snackbar.component';
 import { BigNumber } from 'bignumber.js';
@@ -15,6 +14,36 @@ import { CategorySelectors } from '../../store/selectors/category.selectors';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
+import { LayoutActions } from '../../store/actions/layout.actions';
+import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
+import { LayoutService } from '../../layout/layout.service';
+import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
+import { Location } from '@angular/common';
+
+const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
+const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
+  bodyHTML: `
+    Are you sure you want to exit the editor?
+    <br/><br/>
+    All unsaved progress will be lost.
+    <br/><br/>
+    `,
+  buttons: [
+    {
+      index: 0,
+      label: 'Cancel',
+      result: false
+    } as DynamicDialogButton,
+    {
+      index: 1,
+      label: 'Leave',
+      color: 'accent',
+      result: true
+    } as DynamicDialogButton
+  ]
+};
+
 
 export abstract class AbstractEditor implements OnInit, OnDestroy {
 
@@ -33,22 +62,20 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
   };
 
   protected constructor(protected store: Store<AppState>,
-                        protected editorService: PurchaseEditorService,
                         protected fullscreenDialog: FullscreenDialogService,
                         protected snackBar: MatSnackBar,
-                        protected dialog: MatDialog
+                        protected dialog: MatDialog,
+                        protected layoutService: LayoutService,
+                        protected location: Location
   ) {
+    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.closeEditorAfterConfirmation());
+    this.layoutService.registerRightHeaderButtonClickCallback(() => this.submitPurchase());
   }
 
   ngOnInit(): void {
     this.users$ = this.store.select(UserSelectors.selectAllUsers);
     this.categories$ = this.store.select(CategorySelectors.selectAllCategories);
-
-    this.editorService.addPurchaseTrigger
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe(() => {
-        this.submitPurchase();
-      });
   }
 
   ngOnDestroy(): void {
@@ -176,4 +203,14 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
     return result;
   }
 
+  private closeEditorAfterConfirmation(): void {
+    const dialogref = this.dialog.open(DynamicDialogComponent, {
+      data: EXIT_EDITOR_DIALOG_DATA
+    });
+    dialogref.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        this.location.back();
+      }
+    });
+  }
 }

@@ -6,7 +6,6 @@ import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { Purchase } from '../../core/entity/purchase';
 import { IdGeneratorService } from '../../core/id-generator.service';
 import { Debit } from '../../core/entity/debit';
-import { PurchaseEditorService } from './purchase-editor.service';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { AbstractEditor } from './abstract-purchase-editor';
@@ -17,6 +16,8 @@ import { of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { LayoutService } from '../../layout/layout.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-editor-new',
@@ -31,14 +32,15 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
   customDistribution = false;
 
   constructor(protected store: Store<AppState>,
-              protected editorService: PurchaseEditorService,
               protected snackBar: MatSnackBar,
               protected dialog: MatDialog,
               protected fullscreenDialog: FullscreenDialogService,
               protected idGeneratorService: IdGeneratorService,
+              protected layoutService: LayoutService,
+              protected location: Location,
               private receiptScannerService: ReceiptScannerService
   ) {
-    super(store, editorService, fullscreenDialog, snackBar, dialog);
+    super(store, fullscreenDialog, snackBar, dialog, layoutService, location);
   }
 
   ngOnInit() {

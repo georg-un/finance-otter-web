@@ -23,9 +23,3 @@ mat-toolbar {
   animation: rotate 2s linear infinite;
   transform-origin: center center;
 }
-
-@keyframes rotate {
-  100% {
-    transform: rotate(-360deg);
-  }
-}
