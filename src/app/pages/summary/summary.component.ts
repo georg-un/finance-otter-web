@@ -12,6 +12,12 @@ import { ChartSeries } from '../../core/entity/chart-series';
 import { Category } from '../../core/entity/category';
 import { CategorySelectors } from '../../store/selectors/category.selectors';
 import { CategoryMonthSummary, CategorySummary } from '../../core/entity/summaries';
+import { LayoutActions } from '../../store/actions/layout.actions';
+import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
+import { LayoutService } from '../../layout/layout.service';
+
+const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true };
+
 
 @Component({
   selector: 'app-summary',
@@ -32,7 +38,13 @@ export class SummaryComponent implements OnInit, OnDestroy {
   chartSize: any[];
   categorySummaryMonths = 6;
 
-  constructor(private store: Store<AppState>) {
+  constructor(
+    private store: Store<AppState>,
+    private layoutService: LayoutService
+  ) {
+    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG))
+    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
+    this.layoutService.registerRightHeaderButtonClickCallback(() => {});
   }
 
   ngOnInit(): void {

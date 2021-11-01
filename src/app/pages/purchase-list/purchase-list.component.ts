@@ -7,6 +7,11 @@ import { Router } from '@angular/router';
 import { Purchase } from '../../core/entity/purchase';
 import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
+import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
+import { LayoutActions } from '../../store/actions/layout.actions';
+import { LayoutService } from '../../layout/layout.service';
+
+const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, rightButton: HeaderButtonOptions.Add, showLogo: true };
 
 @Component({
   selector: 'app-purchase-list',
@@ -19,8 +24,15 @@ export class PurchaseListComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   private onDestroy$: Subject<boolean> = new Subject();
 
-  constructor(private store: Store<AppState>,
-              private router: Router) { }
+  constructor(
+    private store: Store<AppState>,
+    private layoutService: LayoutService,
+    private router: Router
+  ) {
+    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG))
+    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
+    this.layoutService.registerRightHeaderButtonClickCallback(() => this.router.navigate(['scan-receipt'], {skipLocationChange: true}));
+  }
 
   ngOnInit() {
     this.store.select(PurchaseSelectors.selectAllPurchases)

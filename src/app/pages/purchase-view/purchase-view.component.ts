@@ -18,6 +18,12 @@ import { FinOBackendService } from '../../core/fino-backend.service';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
+import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
+import { LayoutActions } from '../../store/actions/layout.actions';
+import { LayoutService } from '../../layout/layout.service';
+import { Location } from '@angular/common';
+
+const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Back, rightButton: HeaderButtonOptions.Edit, showLogo: false };
 
 @Component({
   selector: 'app-purchase-view',
@@ -67,9 +73,14 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private restService: FinOBackendService,
     private router: Router,
+    private location: Location,
     private dialog: MatDialog,
-    private fullscreenDialog: FullscreenDialogService
+    private fullscreenDialog: FullscreenDialogService,
+    private layoutService: LayoutService
   ) {
+    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.location.back());
+    this.layoutService.registerRightHeaderButtonClickCallback(() => this.router.navigate(['edit', this.purchase.purchaseId]));
   }
 
   ngOnInit(): void {
@@ -97,6 +108,10 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   selectUserById(id: string): Observable<User> {
     return this.store.select(UserSelectors.selectUserById(), {id: id}).pipe(filter(u => !!u));
+  }
+
+  onBackButtonClick(): void {
+    this.router.navigate(['list']);
   }
 
   onImageButtonClick(): void {

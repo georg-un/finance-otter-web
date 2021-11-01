@@ -3,7 +3,6 @@ import { AppState } from '../../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { Purchase } from '../../core/entity/purchase';
-import { PurchaseEditorService } from './purchase-editor.service';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { AbstractEditor } from './abstract-purchase-editor';
 import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
@@ -19,6 +18,8 @@ import { BigNumber } from 'bignumber.js';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { LayoutService } from '../../layout/layout.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -33,14 +34,15 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
   customDistribution = true;
 
   constructor(protected store: Store<AppState>,
-              protected editorService: PurchaseEditorService,
               protected snackBar: MatSnackBar,
               protected dialog: MatDialog,
               protected idGeneratorService: IdGeneratorService,
               protected fullscreenDialog: FullscreenDialogService,
+              protected layoutService: LayoutService,
+              protected location: Location,
               private restService: FinOBackendService,
   ) {
-    super(store, editorService, fullscreenDialog, snackBar, dialog);
+    super(store, fullscreenDialog, snackBar, dialog, layoutService, location);
   }
 
   ngOnInit() {
