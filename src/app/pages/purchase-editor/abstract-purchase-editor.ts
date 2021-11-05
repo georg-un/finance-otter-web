@@ -24,6 +24,7 @@ import { Location } from '@angular/common';
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
 const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
   bodyHTML: `
+    <h4>Discard changes?</h4>
     Are you sure you want to exit the editor?
     <br/><br/>
     All unsaved progress will be lost.
