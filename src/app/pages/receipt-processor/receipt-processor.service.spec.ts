@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReceiptScannerService } from './receipt-scanner.service';
+import { ReceiptProcessorService } from './receipt-processor.service';
 import { TestingModule } from '../../core/testing/testing.module';
 
-describe('ReceiptScannerService', () => {
+describe('ReceiptProcessorService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       TestingModule
@@ -11,7 +11,7 @@ describe('ReceiptScannerService', () => {
   }));
 
   it('should be created', () => {
-    const service: ReceiptScannerService = TestBed.get(ReceiptScannerService);
+    const service: ReceiptProcessorService = TestBed.get(ReceiptProcessorService);
     expect(service).toBeTruthy();
   });
 });

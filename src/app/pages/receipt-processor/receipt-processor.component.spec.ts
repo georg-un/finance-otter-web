@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReceiptScannerComponent } from './receipt-scanner.component';
+import { ReceiptProcessorComponent } from './receipt-processor.component';
 import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 import { NgxDocumentScannerModule } from '@fino-ngx-doc-scanner';
 
 describe('ReceiptScannerComponent', () => {
-  let component: ReceiptScannerComponent;
-  let fixture: ComponentFixture<ReceiptScannerComponent>;
+  let component: ReceiptProcessorComponent;
+  let fixture: ComponentFixture<ReceiptProcessorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -18,13 +18,13 @@ describe('ReceiptScannerComponent', () => {
           openCVDirPath: './assets'
         })
       ],
-      declarations: [ ReceiptScannerComponent ]
+      declarations: [ ReceiptProcessorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReceiptScannerComponent);
+    fixture = TestBed.createComponent(ReceiptProcessorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

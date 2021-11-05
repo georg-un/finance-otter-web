@@ -7,6 +7,7 @@ import { SyncIndicatorModule } from '../../shared/sync-indicator/sync-indicator.
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AddPurchaseDialogModule } from '../../shared/add-purchase-dialog/add-purchase-dialog.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     SyncIndicatorModule,
+    AddPurchaseDialogModule
   ]
 })
 export class PurchaseListModule { }
