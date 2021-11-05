@@ -1,11 +1,11 @@
+@use "assets/variables" as vars;
 // @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import "~material-design-icons/iconfont/material-icons.css";
 @import '~@angular/material/theming';
-@import "assets/variables";
 
 @include mat-core();
-@include angular-material-theme($theme);
+@include angular-material-theme(vars.$theme);
 
 body {
   margin: 0;
@@ -23,5 +23,9 @@ a {
 }
 
 .cdk-overlay-backdrop {
-  backdrop-filter: blur(4px);
+  backdrop-filter: vars.$backdrop-blur;
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  backdrop-filter: vars.$backdrop-blur;
 }

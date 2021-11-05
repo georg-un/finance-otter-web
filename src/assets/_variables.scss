@@ -20,6 +20,8 @@ $header-font-color: mat-color(mat-palette($mat-purple), default-contrast);
 
 $header-height: 56px;
 
+$backdrop-blur: blur(4px);
+
 * {
   --header-height: 56px;
   --purchase-header-height: 31vh;
