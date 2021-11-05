@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { AbstractFullscreenDialog } from '../../shared/fullscreen-dialog/abstract-fullscreen-dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { AddReceiptDialog, AddReceiptDialogData } from '../../shared/add-purchase-dialog/add-receipt-dialog.component';
 
 @Component({
   selector: 'app-receipt-view',
@@ -78,7 +79,6 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
   constructor(
     private store: Store<AppState>,
     private restService: FinOBackendService,
-    private router: Router,
     private location: Location,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -110,7 +110,6 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
     dialogref.afterClosed().subscribe((result: boolean) => {
       if (result === true) {
         this.deleteReceipt();
-        this.close.next();
       }
     });
   }
@@ -118,7 +117,6 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
   onUploadNewButtonClick() {
     if (this.receiptUnavailable) {
       this.uploadNewReceipt();
-      this.close.next();
     } else {
       // Request user confirmation
       const dialogref = this.dialog.open(DynamicDialogComponent, {
@@ -127,7 +125,6 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
       dialogref.afterClosed().subscribe((result: boolean) => {
         if (result === true) {
           this.uploadNewReceipt();
-          this.close.next();
         }
       });
     }
@@ -135,7 +132,12 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
 
   private uploadNewReceipt(): void {
     if (this.purchaseId) {
-      this.router.navigate(['scan-receipt', this.purchaseId]);
+      this.dialog.open(AddReceiptDialog, { data: {purchaseId: this.purchaseId} as AddReceiptDialogData }).afterClosed()
+        .subscribe(result => {
+          if (result) {
+            this.close.next();
+          }
+      });
     } else {
       console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');
@@ -145,6 +147,7 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
   private deleteReceipt(): void {
     if (this.purchaseId) {
       this.store.dispatch(PurchaseActions.deleteReceipt({purchaseId: this.purchaseId}));
+      this.close.next();
     } else {
       console.error('No purchase ID.');
       this.snackBar.open('Ooops, something went wrong');

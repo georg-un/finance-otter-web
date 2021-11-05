@@ -1,0 +1,12 @@
+.action-button-container {
+  button {
+    width: 100%;
+    &:not(:last-child) {  // all except last child
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.action-button-secondary {
+  background-color: #e0e0e0;
+}

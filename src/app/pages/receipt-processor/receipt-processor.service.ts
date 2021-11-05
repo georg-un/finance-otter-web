@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class ReceiptScannerService {
+export class ReceiptProcessorService {
 
-  receipt: Blob;
+  receipt: Blob | File;
 
   constructor() { }
 }

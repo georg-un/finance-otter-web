@@ -29,3 +29,7 @@ a {
 .mat-drawer-backdrop.mat-drawer-shown {
   backdrop-filter: vars.$backdrop-blur;
 }
+
+button.mat-flat-button {
+  line-height: 48px;
+}

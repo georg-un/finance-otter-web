@@ -12,7 +12,7 @@ import { AppStoreModule } from './store/app-store.module';
 import { CoreModule } from './core/core.module';
 import { RegisterModule } from './pages/register/register.module';
 import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
-import { ReceiptScannerModule } from './pages/receipt-scanner/receipt-scanner.module';
+import { ReceiptProcessorModule } from './pages/receipt-processor/receipt-processor.module';
 import { ReceiptViewModule } from './pages/receipt-view/receipt-view.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -36,7 +36,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     AppRoutingModule,
     BrowserAnimationsModule,
     AppStoreModule,
-    ReceiptScannerModule,
+    ReceiptProcessorModule,
     ReceiptViewModule,
     MultilineSnackbarModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

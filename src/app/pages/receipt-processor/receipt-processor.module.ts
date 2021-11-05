@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReceiptScannerComponent } from './receipt-scanner.component';
+import { ReceiptProcessorComponent } from './receipt-processor.component';
 import { NgxDocumentScannerModule, OpenCVConfig } from '@fino-ngx-doc-scanner';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RouterModule } from '@angular/router';
 
 
 const openCVConfig: OpenCVConfig = {
@@ -12,7 +13,7 @@ const openCVConfig: OpenCVConfig = {
 
 @NgModule({
   declarations: [
-    ReceiptScannerComponent
+    ReceiptProcessorComponent
   ],
   imports: [
     CommonModule,
@@ -20,4 +21,4 @@ const openCVConfig: OpenCVConfig = {
     MatProgressSpinnerModule
   ]
 })
-export class ReceiptScannerModule { }
+export class ReceiptProcessorModule { }

@@ -1,0 +1,15 @@
+<input
+    #cameraInput
+    type="file"
+    accept="image/*"
+    capture="environment"
+    (change)="onImageCapture($any($event))"
+    style="visibility: hidden"
+/>
+<input
+    #fileInput
+    type="file"
+    accept="image/*"
+    (change)="onImageCapture($any($event))"
+    style="visibility: hidden"
+/>

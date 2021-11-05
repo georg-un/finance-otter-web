@@ -10,8 +10,10 @@ import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LayoutService } from '../../layout/layout.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddPurchaseDialogComponent } from '../../shared/add-purchase-dialog/add-purchase-dialog.component';
 
-const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, rightButton: HeaderButtonOptions.Add, showLogo: true };
+const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: HeaderButtonOptions.Add, showLogo: true};
 
 @Component({
   selector: 'app-purchase-list',
@@ -27,11 +29,12 @@ export class PurchaseListComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private layoutService: LayoutService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG))
+    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
-    this.layoutService.registerRightHeaderButtonClickCallback(() => this.router.navigate(['scan-receipt'], {skipLocationChange: true}));
+    this.layoutService.registerRightHeaderButtonClickCallback(() => this.showAddPurchaseDialog());
   }
 
   ngOnInit() {
@@ -58,7 +61,10 @@ export class PurchaseListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((count: number) => {
         this.store.dispatch(PurchaseActions.requestPurchases({offset: count, limit: 10}));
-    });
+      });
   }
 
+  private showAddPurchaseDialog(): void {
+    this.dialog.open(AddPurchaseDialogComponent);
+  }
 }

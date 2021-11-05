@@ -10,7 +10,7 @@ import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { AbstractEditor } from './abstract-purchase-editor';
 import { DistributionFragment } from './distribution-fragment';
-import { ReceiptScannerService } from '../receipt-scanner/receipt-scanner.service';
+import { ReceiptProcessorService } from '../receipt-processor/receipt-processor.service';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -38,7 +38,7 @@ export class PurchaseEditorNewComponent extends AbstractEditor implements OnInit
               protected idGeneratorService: IdGeneratorService,
               protected layoutService: LayoutService,
               protected location: Location,
-              private receiptScannerService: ReceiptScannerService
+              private receiptScannerService: ReceiptProcessorService
   ) {
     super(store, fullscreenDialog, snackBar, dialog, layoutService, location);
   }

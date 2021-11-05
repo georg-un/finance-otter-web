@@ -10,10 +10,10 @@ import { AuthGuard } from './auth.guard';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './core/interceptor.service';
 import { RegisterComponent } from './pages/register/register.component';
-import { ReceiptScannerComponent } from './pages/receipt-scanner/receipt-scanner.component';
+import { ReceiptProcessorComponent } from './pages/receipt-processor/receipt-processor.component';
 import { ReceiptViewComponent } from './pages/receipt-view/receipt-view.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'receipt/:purchaseId',
     component: ReceiptViewComponent,
@@ -56,12 +56,12 @@ const routes: Routes = [
       },
       {
         path: 'scan-receipt',
-        component: ReceiptScannerComponent,
+        component: ReceiptProcessorComponent,
         data: {animation: 'Editor'}
       },
       {
         path: 'scan-receipt/:purchaseId',
-        component: ReceiptScannerComponent,
+        component: ReceiptProcessorComponent,
         data: {animation: 'Editor'}
       }
     ]
