@@ -1,12 +1,8 @@
-<div class='debit-card' style='padding-bottom: 4px'>
-  <div class='debit-card-user'>
-    <p>
-      {{user?.firstName}} {{user?.lastName}}
-    </p>
-  </div>
-  <div class='debit-card-amount'>
-    <p [ngClass]="amount >= 0 ? 'amount-positive' : 'amount-negative'">
-      {{amount | number:'1.2-2'}} €
-    </p>
-  </div>
+<div class="debit-card">
+    <img mat-card-avatar class="mat-card-avatar avatar" [src]="user?.avatarUrl" alt="avatar">
+    <div class="user-info">
+        <span class="user-name">{{user?.firstName}} {{user?.lastName}}</span>
+        <span class="user-amount" [ngClass]="amount >= 0 ? 'amount-positive' : 'amount-negative'">
+          {{amount | number:'1.2-2'}} €
+        </span>
 </div>

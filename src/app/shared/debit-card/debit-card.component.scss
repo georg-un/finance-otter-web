@@ -1,20 +1,38 @@
-@import "../../../assets/variables";
+@use "../../../assets/variables" as vars;
+
+$avatar-diameter: 1.5em;
+$column-gap: 0.5em;
 
 .debit-card {
-  display: grid;
-  grid-template-columns: 0.6fr 0.4fr;
-  grid-gap: 2vh;
-  margin: 16px 0 16px 0;
-  font-size: large
+  display: flex;
+  justify-content: space-between;
+  font-size: large;
+  margin: 16px 0;
 }
 
-.debit-card-user {
-  grid-column: 1;
+.avatar {
+  height: $avatar-diameter;
+  width: $avatar-diameter;
+  margin-right: $column-gap;
 }
 
-.debit-card-amount {
-  grid-column: 2;
-  text-align: end;
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - (#{$avatar-diameter} + #{$column-gap}));
+}
+
+.user-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.user-amount {
+  white-space: nowrap;
+  margin-left: $column-gap
+;
 }
 
 .amount-positive {
