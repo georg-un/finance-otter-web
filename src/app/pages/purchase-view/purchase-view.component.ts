@@ -49,7 +49,7 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
 
   private readonly deletePurchaseDialogData = <DynamicDialogData>{
     bodyHTML: `
-    <h4>Delete purchase?</h4>
+    <h3>Delete purchase?</h3>
     Are you sure you want to delete this purchase?
     <br/><br/>
     This action cannot be undone.

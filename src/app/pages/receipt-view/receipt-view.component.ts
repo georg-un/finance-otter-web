@@ -34,7 +34,7 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
 
   private readonly deleteReceiptDialogData = <DynamicDialogData>{
     bodyHTML: `
-    <h4>Delete receipt?</h4>
+    <h3>Delete receipt?</h3>
     Are you sure you want to delete this receipt?
     <br/><br/>
     This action cannot be undone.
@@ -57,8 +57,8 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
 
   private readonly updateReceiptDialogData = <DynamicDialogData>{
     bodyHTML: `
-    <h4>Upload new receipt?</h4>
-    <b>Warning:</b> Uploading a new receipt will delete the previous receipt for this purchase.
+    <h3>Upload new receipt?</h3>
+    Uploading a new receipt will delete the previous receipt for this purchase.
     <br/><br/>
     Do you want to continue?
     <br/><br/>
