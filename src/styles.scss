@@ -32,4 +32,9 @@ a {
 
 button.mat-flat-button {
   line-height: 48px;
+  background-color: vars.$button-grey;
+}
+
+mat-dialog-actions.mat-dialog-actions {
+  margin-bottom: 12px;
 }
