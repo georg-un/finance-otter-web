@@ -2,8 +2,7 @@
  * Slightly modified version of the code provided by Scott Galloway (@scottloway on codepen.io)
  * https://codepen.io/scottloway/pen/zqoLyQ
  */
-
-@import "../../../assets/variables";
+@use "../../../assets/variables" as vars;
 
 
 $loader-size: 5em;
@@ -11,7 +10,7 @@ $check-height: $loader-size/2;
 $check-width: $check-height/2;
 $check-left: ($loader-size/6 + $loader-size/12);
 $check-thickness: 4px;
-$check-color: $indicator-green;
+$check-color: vars.$primary-default;
 
 .circle-loader {
   border: 2px solid rgba(0, 0, 0, 0.2);
