@@ -1,5 +1,6 @@
 <input
     #cameraInput
+    id="cameraInput"
     type="file"
     accept="image/*"
     capture="environment"
@@ -8,6 +9,7 @@
 />
 <input
     #fileInput
+    id="fileInput"
     type="file"
     accept="image/*"
     (change)="onImageCapture($any($event))"
