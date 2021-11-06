@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 
-interface HTMLInputEvent extends Event {
+export interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
 }
 
