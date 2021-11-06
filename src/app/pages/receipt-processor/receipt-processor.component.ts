@@ -98,10 +98,14 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
         receipt: this.receiptProcessorService.receipt,
         purchaseId: this.purchaseId
       }));
-      this.router.navigate(['purchase', this.purchaseId]);
+      this.ngZone.run(() => {
+        this.router.navigate(['purchase', this.purchaseId]);
+      });
     } else {
       // If the purchase does not exist yet, navigate to the editor-new
-      this.router.navigate(['new']);
+      this.ngZone.run(() => {
+        this.router.navigate(['new']);
+      });
     }
   }
 }
