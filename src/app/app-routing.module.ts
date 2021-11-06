@@ -31,38 +31,31 @@ export const routes: Routes = [
       },
       {
         path: 'overview',
-        component: PurchaseListComponent,
-        data: {animation: 'Overview'}
+        component: PurchaseListComponent
       },
       {
         path: 'summary',
-        component: SummaryComponent,
-        data: {animation: 'Summary'}
+        component: SummaryComponent
       },
       {
         path: 'purchase/:purchaseId',
-        component: PurchaseViewComponent,
-        data: {animation: 'PurchaseView'}
+        component: PurchaseViewComponent
       },
       {
         path: 'new',
-        component: PurchaseEditorNewComponent,
-        data: {animation: 'Editor'}
+        component: PurchaseEditorNewComponent
       },
       {
         path: 'edit/:purchaseId',
-        component: PurchaseEditorEditComponent,
-        data: {animation: 'Editor'}
+        component: PurchaseEditorEditComponent
       },
       {
         path: 'scan-receipt',
-        component: ReceiptProcessorComponent,
-        data: {animation: 'Editor'}
+        component: ReceiptProcessorComponent
       },
       {
         path: 'scan-receipt/:purchaseId',
-        component: ReceiptProcessorComponent,
-        data: {animation: 'Editor'}
+        component: ReceiptProcessorComponent
       }
     ]
   },

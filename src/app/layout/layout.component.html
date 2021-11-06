@@ -7,8 +7,8 @@
             (leftButtonClicked)="onLeftHeaderButtonClicked()"
             (rightButtonClicked)="onRightHeaderButtonClicked()"
     ></app-header>
-    <div class="main-content" [@routeAnimations]="prepareRoute(outlet)">
-      <router-outlet class='outlet' #outlet="outlet"></router-outlet>
+    <div class="main-content">
+      <router-outlet class='outlet'></router-outlet>
     </div>
     </app-sidenav>
 </div>
