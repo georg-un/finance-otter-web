@@ -19,6 +19,7 @@ import { environment } from '../environments/environment';
 import { MultilineSnackbarModule } from './shared/multiline-snackbar/multiline-snackbar.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     ReceiptProcessorModule,
     ReceiptViewModule,
     MultilineSnackbarModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    MatCardModule
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},

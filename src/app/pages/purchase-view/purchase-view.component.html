@@ -1,70 +1,59 @@
 <div class="purchase-header" [style.background-color]="(category$ | async)?.color">
   <div class="header-content">
-    <div class='grid-cell r1-c1' *ngIf="(user$ | async)">
-      <!-- The following mat-card block needs to be here, in order
-      for the mat-card-avatar to render correctly on initial page load -->
-      <mat-card style="display:none"></mat-card>
-        <img mat-card-avatar class="mat-card-avatar" [src]="(user$ | async)?.avatarUrl" alt="avatar">
-    </div>
-    <div class='grid-cell r1-c2' *ngIf="(user$ | async)">
-      <p>{{ user$ | async | shortName }}</p>
-    </div>
-    <div class="grid-cell r1-c3">
+    <div class="upper-row">
+      <img mat-card-avatar class="mat-card-avatar" [src]="(user$ | async)?.avatarUrl" alt="avatar">
+      <span *ngIf="user$ | async as user" class="buyer-name">{{ user.firstName }} {{ user.lastName }}</span>
       <button
-        mat-icon-button
-        #tooltip="matTooltip"
-        (click)="onSyncIndicatorClick()"
-        [matTooltip]="getSyncIndicatorTooltipMessage()"
-        matTooltipPosition="left"
-      >
+              mat-icon-button
+              #tooltip="matTooltip"
+              (click)="onSyncIndicatorClick()"
+              [matTooltip]="getSyncIndicatorTooltipMessage()"
+              matTooltipPosition="left">
         <app-sync-indicator [syncStatus]="purchase?.syncStatus"></app-sync-indicator>
       </button>
     </div>
-    <div class="font-large grid-cell r3-c2">
-      <p>{{ purchase?.shop | titlecase }}</p>
-    </div>
-    <div class="font-large grid-cell r4-c2">
+    <div class="font-large shop_and_amount">
+      <p>{{ purchase?.isCompensation ? 'Compensation' : purchase?.shop | titlecase }}</p>
       <p>{{ debitSum | currency:'EUR':'€ ':'1.2-2'}}</p>
     </div>
-    <div class="grid-cell r6-c1">
-      <button mat-icon-button (click)="onImageButtonClick()">
-        <mat-icon>photo</mat-icon>
-      </button>
-    </div>
-    <div class="grid-cell r6-c2">
-      <p>{{ (category$ | async)?.label  | lowercase }}</p>
-    </div>
-    <div class="grid-cell r6-c3">
-    <button mat-icon-button (click)="onDeleteButtonClick()">
-      <mat-icon>delete</mat-icon>
+  </div>
+  <div class="header-actions">
+    <button *ngIf="!purchase?.isCompensation" mat-flat-button (click)="onImageButtonClick()">
+      <mat-icon>photo</mat-icon>
+      Receipt
     </button>
-    </div>
+    <button mat-flat-button (click)="onDeleteButtonClick()">
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
   </div>
 </div>
 
-<div class="detail-container z-depth-2-reversed">
+<div class="detail-container">
 
   <p class="detail-title">DATE</p>
-  <div>
-    <p>{{ purchase?.date | date : "dd.MM.yyyy" }}</p>
-  </div>
+  <p>{{ purchase?.date | date : "dd.MM.yyyy" }}</p>
+  <br/>
+
+  <p class="detail-title">CATEGORY</p>
+  <span>
+    {{purchase?.isCompensation ? 'compensation' : ((category$ | async)?.label || 'uncategorized') | lowercase}}
+  </span>
+  <div class="category-color-dot" [style.background-color]="(category$ | async)?.color"></div>
+  <br/>
   <br/>
 
   <ng-container *ngIf="purchase?.description">
     <p class="detail-title">DESCRIPTION</p>
-    <div>
-      <p>{{ purchase?.description }}</p>
-    </div>
+    <p>{{ purchase?.description }}</p>
     <br/>
   </ng-container>
 
   <p class="detail-title">DISTRIBUTION</p>
-  <div class="debit-blockquote" [style.border-left]="'4px solid ' + (category$ | async)?.color">
-    <ng-container *ngFor="let debit of purchase?.debits">
-      <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
-        <app-debit-card [amount]="debit.amount" [user]="user"></app-debit-card>
-      </ng-container>
+  <ng-container *ngFor="let debit of purchase?.debits">
+    <ng-container *ngIf="selectUserById(debit.debtorId) | async as user">
+      <app-debit-card [amount]="debit.amount" [user]="user"></app-debit-card>
     </ng-container>
-  </div>
+  </ng-container>
 
 </div>
