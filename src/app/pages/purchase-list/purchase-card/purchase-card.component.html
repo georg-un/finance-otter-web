@@ -33,7 +33,7 @@
       </div>
       <div class="row small-row">
         <span>
-          {{purchase.isCompensation ? 'compensation' : (category$ | async)?.label | lowercase}}
+          {{purchase.isCompensation ? 'compensation' : ((category$ | async)?.label || 'uncategorized') | lowercase}}
         </span>
         <app-sync-indicator [syncStatus]="purchase.syncStatus"
                             size="18px"
