@@ -1,84 +1,71 @@
-@import "../../../../assets/variables";
+@use "../../../../assets/variables" as vars;
+
+$avatar-diameter: 40px;
+$receiver-avater-diameter: 30px;
+$small-row-height: 18px;
+$column-gap: 16px;
 
 :host {
   mat-card {
     margin: 4px 4px 0 4px;
-    border-left: 4px solid $accent-default;
+    border-left: 4px solid vars.$accent-default;
     padding: 16px 16px 16px 12px;
   }
+}
 
-  div, p {
-    margin-top: auto;
-    margin-bottom: auto;
-  }
+.card-content {
+  display: flex;
+}
 
-  img {
-    vertical-align: middle;
+.avatar-column {
+  width: $avatar-diameter;
+  margin-right: $column-gap;
+  display: flex;
+  align-items: center;
+}
+
+.purchase-details {
+  width: calc(100% - (#{$avatar-diameter} + #{$column-gap}));
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.small-row {
+  height: $small-row-height;
+  .sync-status-indicator {
+    float: right;
+    height: $small-row-height
   }
 }
 
-.purchase-card {
-  display: grid;
-  grid-template-columns: 0.1fr 0.6fr 0.4fr;
-  grid-template-rows: 18px auto 18px;
-  grid-column-gap: 16px;
-  grid-row-gap: 2px;
-  background-color: #FFFFFF;
-}
-
-.grid-cell {
-  min-width: 0;
-  &__r1-c2 {
-    grid-row: 1;
-    grid-column: 2;
-  }
-  &__r2-c1 {
-    grid-row: 2;
-    grid-column: 1;
-  }
-  &__r2-c2 {
-    grid-row: 2;
-    grid-column: 2;
-  }
-  &__r2-c3 {
-    grid-row: 2;
-    grid-column: 3;
-  }
-  &__r3-c2 {
-    grid-row: 3;
-    grid-column: 2;
-  }
-  &__r3-c3 {
-    grid-row: 3;
-    grid-column: 3;
-  }
-}
-
-.font-large {
+.large-row {
+  display: inline-flex;
+  min-height: $avatar-diameter;
   font-size: 24px;
-}
-
-.purchase-sum {
-  text-align: right;
-}
-
-.sync-status-indicator {
-  float: right;
-  height: 18px
-}
-
-.receiver-avatar {
-  height:30px;
-  width: 30px;
-}
-
-.compensation_arrow {
-  vertical-align: middle;
-  margin-right: 8px;
-}
-
-.truncate-text {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  margin: 2px 0;
+  .truncate-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .amount {
+    white-space: nowrap;
+    margin-left: calc(#{$column-gap / 2});
+  }
+  .compensation-icons {
+    display: flex;
+    align-items: center;
+    :first-child {
+      margin-right: calc(#{$column-gap / 2});
+    }
+    .receiver-avatar {
+      height:$receiver-avater-diameter;
+      width: $receiver-avater-diameter;
+    }
+  }
 }
