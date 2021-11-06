@@ -1,4 +1,4 @@
-@import "../../../assets/variables";
+@use "../../../assets/variables" as vars;
 
 zxing-scanner {
   ::ng-deep video {
@@ -44,7 +44,7 @@ app-circle-checkmark-loader {
 }
 
 .done {
-  color: $indicator-green;
+  color: vars.$primary-default;
 }
 
 .error-container {
