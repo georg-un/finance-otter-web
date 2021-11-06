@@ -50,6 +50,9 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
   ) {
     if (!this.receiptProcessorService.receipt) {
       console.error('Receipt processor did not receive a receipt.');
+      this.router.navigate(['/']).then(() => {
+        this.showErrorSnackMessage();
+      });
     }
     this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
     this.layoutService.registerLeftHeaderButtonClickCallback(() => {});
@@ -90,7 +93,7 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
     if (this.purchaseId) {
       // Show snack message & exit method, if editor is in editing mode but there is no receipt
       if (!this.receiptProcessorService.receipt) {
-        this.snackBar.open('Did not get a receipt.');
+        this.showErrorSnackMessage();
         return;
       }
       // If the purchase already exists, update the receipt and navigate to the purchase-viewer
@@ -107,5 +110,9 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
         this.router.navigate(['new'], { replaceUrl: true });
       });
     }
+  }
+
+  private showErrorSnackMessage(): void {
+    this.snackBar.open('Error: Did not get a receipt');
   }
 }
