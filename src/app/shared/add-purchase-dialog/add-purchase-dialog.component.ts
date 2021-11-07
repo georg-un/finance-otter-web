@@ -17,19 +17,19 @@ export class AddPurchaseDialogComponent extends AddReceiptDialog {
     dialogRef: MatDialogRef<AddPurchaseDialogComponent>,
     router: Router,
     snackBar: MatSnackBar,
-    receiptScannerService: ReceiptProcessorService,
+    receiptProcessorService: ReceiptProcessorService,
     @Inject(MAT_DIALOG_DATA) data: AddReceiptDialogData
   ) {
-    super(dialogRef, router, snackBar, receiptScannerService, data);
+    super(dialogRef, router, snackBar, receiptProcessorService, data);
   }
 
   public addPurchaseWithoutReceipt(): void {
-    this.receiptScannerService.receipt = undefined;
+    this.receiptProcessorService.receipt = undefined;
     this.router.navigate(['new']).then(() => this.dialogRef.close(true));
   }
 
   public addCompensation(): void {
-    this.receiptScannerService.receipt = undefined;
+    this.receiptProcessorService.receipt = undefined;
     alert('TBD');
   }
 }
