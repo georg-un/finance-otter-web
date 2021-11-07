@@ -21,7 +21,7 @@ export class AddReceiptDialog {
     protected dialogRef: MatDialogRef<AddReceiptDialog>,
     protected router: Router,
     protected snackBar: MatSnackBar,
-    protected receiptScannerService: ReceiptProcessorService,
+    protected receiptProcessorService: ReceiptProcessorService,
     @Inject(MAT_DIALOG_DATA) public data: AddReceiptDialogData
   ) {
   }
@@ -30,9 +30,9 @@ export class AddReceiptDialog {
     if (files.length > 1) {
       this.snackBar.open('Multiple files selected. Only the first one will be used.');
     }
-    this.receiptScannerService.receipt = files[0];
+    this.receiptProcessorService.receipt = files[0];
     const isUpdateMode = !!this.data?.purchaseId;
-    const queryParams = isUpdateMode ? {[ReceiptProcessorUrlParams.PURCHASE_ID]: this.data?.purchaseId} : {};
+    const queryParams = isUpdateMode ? {[ReceiptProcessorUrlParams.PURCHASE_ID]: this.data?.purchaseId} : undefined;
     this.router.navigate(['scan-receipt'], {queryParams: queryParams, replaceUrl: isUpdateMode})
       .then(() => this.dialogRef.close(true));
   }
