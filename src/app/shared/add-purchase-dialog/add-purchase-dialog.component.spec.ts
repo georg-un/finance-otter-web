@@ -106,7 +106,7 @@ describe('AddPurchaseDialogComponent', () => {
       component.addPurchaseWithoutReceipt();
       expect(receiptProcessorService.receipt).toBeUndefined();
       expect(routerNavigateSpy).toHaveBeenCalledTimes(1);
-      expect(routerNavigateSpy.calls.mostRecent().args[0]).toEqual(['new']);
+      expect(routerNavigateSpy.calls.mostRecent().args[0]).toEqual(['new-purchase']);
     });
 
     it('should close the dialog after navigation', fakeAsync(() => {
