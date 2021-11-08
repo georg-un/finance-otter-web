@@ -28,7 +28,6 @@ import { Location } from '@angular/common';
 })
 export class PurchaseEditorEditComponent extends AbstractEditor implements OnInit {
 
-  // TODO: Add animation to slide custom debit fields in and out
   // TODO: Add validation before upload
   // FIXME: If this page is opened as first page, the user data is not yet loaded and an error is thrown
   customDistribution = true;
@@ -126,5 +125,4 @@ export class PurchaseEditorEditComponent extends AbstractEditor implements OnIni
   onDistributionToggleChange(change: MatSlideToggleChange): void {
     this.customDistribution = change.checked;
   }
-
 }

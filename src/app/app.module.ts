@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,8 +18,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MultilineSnackbarModule } from './shared/multiline-snackbar/multiline-snackbar.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
+import localeDe from '@angular/common/locales/de';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeDe, 'de-AT');
 
 @NgModule({
   declarations: [
@@ -45,11 +48,12 @@ import { MatCardModule } from '@angular/material/card';
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}
+    {provide: LOCALE_ID, useValue: 'de-AT'}
   ],
   entryComponents: [
     MultilineSnackbarComponent
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

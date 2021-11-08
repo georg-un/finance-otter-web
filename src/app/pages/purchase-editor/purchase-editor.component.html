@@ -45,7 +45,7 @@
       <div class="editor-input-col justify-space-between">
         <mat-form-field class="full-width" [class.autofilled]="autofilledState.date">
           <input [ngModel]="date ? date : undefined"
-                 (ngModelChange)="purchase.date = $event.getTime(); autofilledState.date = false"
+                 (ngModelChange)="onDateInput($event)"
                  [matDatepicker]="picker"
                  matInput
                  placeholder="Date"

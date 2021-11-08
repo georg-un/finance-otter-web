@@ -20,6 +20,7 @@ import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dia
 import { LayoutService } from '../../layout/layout.service';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { Location } from '@angular/common';
+import { Moment } from 'moment';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
 const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
@@ -92,6 +93,11 @@ export abstract class AbstractEditor implements OnInit, OnDestroy {
     const date = new Date();
     this.date = date;
     this.purchase.date = date.getTime();
+  }
+
+  onDateInput($event: Moment) {
+    this.purchase.date = $event?.valueOf();
+    this.autofilledState.date = false;
   }
 
   onScanQrCodeClick(): void {
