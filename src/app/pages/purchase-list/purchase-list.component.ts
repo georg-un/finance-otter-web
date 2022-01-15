@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppState } from '../../store/states/app.state';
 import { Store } from '@ngrx/store';
 import { map, take, takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Purchase } from '../../core/entity/purchase';
 import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
@@ -12,6 +12,7 @@ import { LayoutActions } from '../../store/actions/layout.actions';
 import { LayoutService } from '../../layout/layout.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPurchaseDialogComponent } from '../../shared/add-purchase-dialog/add-purchase-dialog.component';
+import { DestroyableComponent } from '../../shared/destroyable.component';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: HeaderButtonOptions.Add, showLogo: true};
 
@@ -20,11 +21,10 @@ const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, right
   templateUrl: './purchase-list.component.html',
   styleUrls: ['./purchase-list.component.scss']
 })
-export class PurchaseListComponent implements OnInit, OnDestroy {
+export class PurchaseListComponent extends DestroyableComponent implements OnInit {
 
   purchases: Purchase[];
   isLoading$: Observable<boolean>;
-  private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(
     private store: Store<AppState>,
@@ -32,6 +32,7 @@ export class PurchaseListComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog
   ) {
+    super();
     this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
     this.layoutService.registerRightHeaderButtonClickCallback(() => this.showAddPurchaseDialog());
@@ -45,11 +46,6 @@ export class PurchaseListComponent implements OnInit, OnDestroy {
       });
     this.isLoading$ = this.store.select(PurchaseSelectors.selectSyncJobs)
       .pipe(map((nJobs: number) => nJobs > 0));
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
   }
 
   onCardClick($event: string): void {

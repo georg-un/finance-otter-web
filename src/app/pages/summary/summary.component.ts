@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { combineLatest, Observable, Subject } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { SummaryActions } from '../../store/actions/summary.actions';
@@ -15,6 +15,7 @@ import { CategoryMonthSummary, CategorySummary } from '../../core/entity/summari
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
 import { LayoutService } from '../../layout/layout.service';
+import { DestroyableComponent } from '../../shared/destroyable.component';
 
 const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true };
 
@@ -24,7 +25,7 @@ const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, righ
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss']
 })
-export class SummaryComponent implements OnInit, OnDestroy {
+export class SummaryComponent extends DestroyableComponent implements OnInit {
 
   balances$: Observable<object[]>;
   categorySummaryChartData$: Observable<ChartData[]>;
@@ -33,7 +34,6 @@ export class SummaryComponent implements OnInit, OnDestroy {
   private categories$: Observable<Category[]>;
   private categorySummaries$: Observable<CategorySummary[]>;
   private categoryMonthSummaries$: Observable<CategoryMonthSummary[]>;
-  private onDestroy$: Subject<boolean> = new Subject();
 
   chartSize: any[];
   categorySummaryMonths = 6;
@@ -42,6 +42,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private layoutService: LayoutService
   ) {
+    super();
     this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG))
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
     this.layoutService.registerRightHeaderButtonClickCallback(() => {});
@@ -89,11 +90,6 @@ export class SummaryComponent implements OnInit, OnDestroy {
     const chartWidth = Math.min(window.innerWidth - 48, 500);
     const chartHeight = Math.floor(chartWidth * 0.75);
     this.chartSize = [chartWidth, chartHeight];
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
   }
 
   selectUserById(id: string): Observable<User> {
