@@ -5,19 +5,17 @@ import { Store } from '@ngrx/store';
 import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { Purchase } from '../../../core/entity/purchase';
 import { IdGeneratorService } from '../../../core/id-generator.service';
-import { Debit } from '../../../core/entity/debit';
 import { PurchaseActions } from '../../../store/actions/purchase.actions';
 import { UserSelectors } from '../../../store/selectors/user.selectors';
-import { AbstractPaymentEditor } from '../abstract-payment-editor';
 import { DistributionFragment } from '../distribution-fragment';
 import { FullscreenDialogService } from '../../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { LayoutService } from '../../../layout/layout.service';
 import { Location } from '@angular/common';
 import { ReceiptProcessorService } from '../../receipt-processor/receipt-processor.service';
+import { AbstractPurchaseEditor } from './abstract-purchase-editor';
 
 @Component({
   selector: 'app-editor-new',
@@ -27,22 +25,22 @@ import { ReceiptProcessorService } from '../../receipt-processor/receipt-process
     './purchase-editor.component.scss'
   ]
 })
-export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements OnInit {
+export class PurchaseEditorNewComponent extends AbstractPurchaseEditor implements OnInit {
 
   // TODO: Add validation before upload
   // FIXME: If this page is opened as first page, the user data is not yet loaded and an error is thrown
-  customDistribution = false;
 
-  constructor(protected store: Store<AppState>,
-              protected snackBar: MatSnackBar,
-              protected dialog: MatDialog,
-              protected fullscreenDialog: FullscreenDialogService,
-              protected idGeneratorService: IdGeneratorService,
-              protected layoutService: LayoutService,
-              protected location: Location,
-              private receiptProcessorService: ReceiptProcessorService
+  constructor(
+    store: Store<AppState>,
+    fullscreenDialog: FullscreenDialogService,
+    snackBar: MatSnackBar,
+    dialog: MatDialog,
+    layoutService: LayoutService,
+    location: Location,
+    idGeneratorService: IdGeneratorService,
+    private receiptProcessorService: ReceiptProcessorService
   ) {
-    super(store, fullscreenDialog, snackBar, dialog, layoutService, location);
+    super(store, fullscreenDialog, snackBar, dialog, layoutService, location, idGeneratorService);
   }
 
   ngOnInit() {
@@ -93,18 +91,7 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
       .subscribe((purchaseId: string) => {
         if (purchaseId) {
           this.purchase.purchaseId = purchaseId;
-          this.purchase.debits = [];
-          this.distributionFragments.forEach((distributionFragment, index) => {
-            if (distributionFragment.amount) {
-              this.purchase.debits.push(
-                new Debit({
-                  debitId: this.idGeneratorService.generateDebitId(purchaseId, index),  // TODO: Check if debitId is truthy
-                  debtorId: distributionFragment.user.userId,
-                  amount: distributionFragment.amount
-                })
-              );
-            }
-          });
+          this.mapDistributionFragmentsToPurchaseDebits();
           this.store.dispatch(
             PurchaseActions.addNewPurchase({
               purchase: this.purchase,
@@ -115,9 +102,5 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
           this.snackBar.open('Ooops, something went wrong.');
         }
       });
-  }
-
-  onDistributionToggleChange(change: MatSlideToggleChange): void {
-    this.customDistribution = change.checked;
   }
 }
