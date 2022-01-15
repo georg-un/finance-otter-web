@@ -18,14 +18,14 @@
           <input matInput
                  type="number"
                  min="1"
-                 [(ngModel)]="categorySummaryMonths"
+                 [ngModel]="categorySummaryMonths$ | async"
                  (ngModelChange)="onCategorySummaryMonthsChange($event)"
           />
         </mat-form-field>
         MONTHS EXPENSES BY CATEGORY</p>
       <ng-container *ngIf="!areAllChartDataValuesZero(categorySummaryChartData$ | async); else noDataTemplate">
         <ngx-charts-pie-chart
-                [view]="chartSize"
+                [view]="chartSize$ | async"
                 scheme="vivid"
                 [results]="categorySummaryChartData$ | async"
                 [customColors]="categoryColorMap$ | async"
@@ -41,7 +41,7 @@
       <p class="title">MONTHLY EXPENSES BY CATEGORY</p>
       <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryMonthSummaryChartSeries$ | async); else noDataTemplate">
         <ngx-charts-bar-vertical-stacked
-                [view]="chartSize"
+                [view]="chartSize$ | async"
                 scheme="vivid"
                 [results]="categoryMonthSummaryChartSeries$ | async"
                 [customColors]="categoryColorMap$ | async"

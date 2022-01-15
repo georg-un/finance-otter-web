@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { User } from '../../core/entity/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subscriber } from 'rxjs';
+import { filter, map, shareReplay } from 'rxjs/operators';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { SummaryActions } from '../../store/actions/summary.actions';
 import { SummarySelectors } from '../../store/selectors/summary.selectors';
@@ -23,20 +23,57 @@ const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, righ
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss']
+  styleUrls: ['./summary.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SummaryComponent extends DestroyableComponent implements OnInit {
 
-  balances$: Observable<object[]>;
-  categorySummaryChartData$: Observable<ChartData[]>;
-  categoryMonthSummaryChartSeries$: Observable<ChartSeries[]>;
-  categoryColorMap$: Observable<ChartData[]>;
-  private categories$: Observable<Category[]>;
-  private categorySummaries$: Observable<CategorySummary[]>;
-  private categoryMonthSummaries$: Observable<CategoryMonthSummary[]>;
+  private categories$: Observable<Category[]> = this.store.select(CategorySelectors.selectAllCategories).pipe(
+    filter(this.isFilledArray)
+  );
 
-  chartSize: any[];
-  categorySummaryMonths = 6;
+  private categorySummaries$: Observable<CategorySummary[]> = this.store.select(SummarySelectors.selectCategorySummary).pipe(
+    map(cs => this.isFilledArray(cs) ? cs : [])
+  );
+
+  private categoryMonthSummaries$: Observable<CategoryMonthSummary[]> = this.store.select(SummarySelectors.selectCategoryMonthSummary).pipe(
+    map(cms => this.isFilledArray(cms) ? cms : [])
+  );
+
+  public balances$: Observable<object[]> = this.store.select(SummarySelectors.selectBalances).pipe(
+    map(balances => balances ? Object.entries(balances) : undefined)
+  );
+
+  public categorySummaryChartData$: Observable<ChartData[]> = combineLatest([
+    this.categorySummaries$,
+    this.categories$
+  ]).pipe(
+    map(([categorySummaries, categories]: [CategorySummary[], Category[]]) => {
+      return this.toCategorySummaryChartData(categorySummaries, categories);
+    })
+  );
+
+  public categoryMonthSummaryChartSeries$: Observable<ChartSeries[]> = combineLatest([
+    this.categoryMonthSummaries$,
+    this.categories$
+  ]).pipe(
+    map(([categoryMonthSummaries, categories]: [CategoryMonthSummary[], Category[]]) => {
+      return this.toCategoryMonthSummaryChartSeries(categoryMonthSummaries, categories);
+    }),
+    map(cms => cms.sort(this.compareCategorySummaryMonths))
+  );
+
+  public categoryColorMap$: Observable<ChartData[]> = this.categories$.pipe(map(categories => this.toCategoryColorMap(categories)));
+
+  public chartSize$: Observable<[number, number]> = new Observable((observer: Subscriber<[number, number]>) => {
+    const chartWidth = Math.min(window.innerWidth - 48, 500);
+    const chartHeight = Math.floor(chartWidth * 0.75);
+    observer.next([chartWidth, chartHeight]);
+    observer.complete();
+  }).pipe(shareReplay(1))
+
+  private _categorySummaryMonths: BehaviorSubject<number> = new BehaviorSubject<number>(6);
+  public categorySummaryMonths$: Observable<number> = this._categorySummaryMonths.asObservable();
 
   constructor(
     private store: Store<AppState>,
@@ -48,66 +85,28 @@ export class SummaryComponent extends DestroyableComponent implements OnInit {
     this.layoutService.registerRightHeaderButtonClickCallback(() => {});
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.store.dispatch(SummaryActions.requestBalances());
-    this.store.dispatch(SummaryActions.requestCategorySummary({months: this.categorySummaryMonths}));
+    this.store.dispatch(SummaryActions.requestCategorySummary({months: this._categorySummaryMonths.value}));
     this.store.dispatch(SummaryActions.requestCategoryMonthSummary({months: 6}));
-
-    this.categories$ = this.store.select(CategorySelectors.selectAllCategories).pipe(
-      filter(this.isFilledArray)
-    );
-    this.categorySummaries$ = this.store.select(SummarySelectors.selectCategorySummary).pipe(
-      map(cs => this.isFilledArray(cs) ? cs : [])
-    );
-    this.categoryMonthSummaries$ = this.store.select(SummarySelectors.selectCategoryMonthSummary).pipe(
-      map(cms => this.isFilledArray(cms) ? cms : [])
-    );
-
-    this.balances$ = this.store.select(SummarySelectors.selectBalances)
-      .pipe(map(balances => balances ? Object.entries(balances) : undefined));
-
-    this.categorySummaryChartData$ = combineLatest([
-      this.categorySummaries$,
-      this.categories$
-    ]).pipe(
-      map(([categorySummaries, categories]: [CategorySummary[], Category[]]) => {
-        return this.toCategorySummaryChartData(categorySummaries, categories);
-      })
-    );
-
-    this.categoryMonthSummaryChartSeries$ = combineLatest([
-      this.categoryMonthSummaries$,
-      this.categories$
-    ]).pipe(
-      map(([categoryMonthSummaries, categories]: [CategoryMonthSummary[], Category[]]) => {
-        return this.toCategoryMonthSummaryChartSeries(categoryMonthSummaries, categories);
-      }),
-      map(cms => cms.sort(this.compareCategorySummaryMonths))
-    );
-
-    this.categoryColorMap$ = this.categories$.pipe(map(categories => this.toCategoryColorMap(categories)));
-
-    const chartWidth = Math.min(window.innerWidth - 48, 500);
-    const chartHeight = Math.floor(chartWidth * 0.75);
-    this.chartSize = [chartWidth, chartHeight];
   }
 
-  selectUserById(id: string): Observable<User> {
+  public selectUserById(id: string): Observable<User> {
     return this.store.select(UserSelectors.selectUserById(), {id: id});
   }
 
-  onCategorySummaryMonthsChange($event: number) {
+  public onCategorySummaryMonthsChange($event: number) {
     if ($event) {
-      this.categorySummaryMonths = $event;
-      this.store.dispatch(SummaryActions.requestCategorySummary({months: this.categorySummaryMonths}));
+      this._categorySummaryMonths.next($event);
+      this.store.dispatch(SummaryActions.requestCategorySummary({months: $event}));
     }
   }
 
-  areAllChartDataValuesZero(chartData: ChartData[]): boolean {
+  public areAllChartDataValuesZero(chartData: ChartData[]): boolean {
     return !chartData || chartData.length === 0 || chartData.every(data => data.value === 0);
   }
 
-  areAllChartSeriesValuesZero(chartSeries: ChartSeries[]): boolean {
+  public areAllChartSeriesValuesZero(chartSeries: ChartSeries[]): boolean {
     return !chartSeries || chartSeries.length === 0 || chartSeries.every(series => this.areAllChartDataValuesZero(series.series));
   }
 
