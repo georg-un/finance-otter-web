@@ -17,13 +17,15 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { PurchaseEditorNewComponent } from './purchase/purchase-editor-new.component';
 import { PurchaseEditorEditComponent } from './purchase/purchase-editor-edit.component';
 import { CompensationEditorNewComponent } from './compensation/compensation-editor-new.component';
+import { CompensationEditorEditComponent } from './compensation/compensation-editor-edit.component';
 
 
 @NgModule({
   declarations: [
     PurchaseEditorNewComponent,
     PurchaseEditorEditComponent,
-    CompensationEditorNewComponent
+    CompensationEditorNewComponent,
+    CompensationEditorEditComponent
   ],
   imports: [
     CommonModule,
