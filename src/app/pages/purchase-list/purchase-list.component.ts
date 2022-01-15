@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AppState } from '../../store/states/app.state';
 import { Store } from '@ngrx/store';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, shareReplay, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Purchase } from '../../core/entity/purchase';
@@ -19,12 +19,19 @@ const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, right
 @Component({
   selector: 'app-purchase-list',
   templateUrl: './purchase-list.component.html',
-  styleUrls: ['./purchase-list.component.scss']
+  styleUrls: ['./purchase-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PurchaseListComponent extends DestroyableComponent implements OnInit {
+export class PurchaseListComponent extends DestroyableComponent {
 
-  purchases: Purchase[];
-  isLoading$: Observable<boolean>;
+  public purchases$: Observable<Purchase[]> = this.store.select(PurchaseSelectors.selectAllPurchases).pipe(
+    shareReplay(1)
+  );
+
+  public isLoading$: Observable<boolean> = this.store.select(PurchaseSelectors.selectSyncJobs).pipe(
+    map((nJobs: number) => nJobs > 0),
+    shareReplay(1)
+  );
 
   constructor(
     private store: Store<AppState>,
@@ -38,21 +45,11 @@ export class PurchaseListComponent extends DestroyableComponent implements OnIni
     this.layoutService.registerRightHeaderButtonClickCallback(() => this.showAddPurchaseDialog());
   }
 
-  ngOnInit() {
-    this.store.select(PurchaseSelectors.selectAllPurchases)
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((purchases: Purchase[]) => {
-        this.purchases = purchases;
-      });
-    this.isLoading$ = this.store.select(PurchaseSelectors.selectSyncJobs)
-      .pipe(map((nJobs: number) => nJobs > 0));
-  }
-
-  onCardClick($event: string): void {
+  public onCardClick($event: string): void {
     this.router.navigateByUrl('/purchase/' + $event);
   }
 
-  onScrolledDown() {
+  public onScrolledDown(): void {
     this.store.select(PurchaseSelectors.selectPurchaseCount)
       .pipe(take(1))
       .subscribe((count: number) => {

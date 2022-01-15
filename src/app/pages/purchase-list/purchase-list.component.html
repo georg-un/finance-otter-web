@@ -5,7 +5,7 @@
   [scrollWindow]="false"
 >
   <app-purchase-card
-    *ngFor="let purchase of purchases"
+    *ngFor="let purchase of (purchases$ | async)"
     [purchase]="purchase"
     (cardClick)="onCardClick($event)"
   ></app-purchase-card>
