@@ -2,9 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { FinOBackendService } from '../../core/fino-backend.service';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
-import { Router } from '@angular/router';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { Observable } from 'rxjs';
@@ -81,7 +79,6 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
 
   constructor(
     private store: Store<AppState>,
-    private restService: FinOBackendService,
     private location: Location,
     private snackBar: MatSnackBar,
     private dialog: MatDialog

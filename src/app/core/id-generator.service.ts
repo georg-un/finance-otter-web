@@ -8,29 +8,27 @@ import { map } from 'rxjs/operators';
 })
 export class IdGeneratorService {
 
-  constructor(private auth: AuthService
+  constructor(
+    private auth: AuthService,
   ) {
   }
 
-  generatePurchaseId(): Observable<string> {
+  public generatePurchaseId(): Observable<string> {
     return this.auth.getKeyId().pipe(
       map(kid => kid ? `P.${kid}.${new Date().getTime().toString()}.00` : undefined)
     );
   }
 
-  generateDebitId(purchaseId: string, debitIndex: number): string {
+  public generateDebitId(purchaseId: string, debitIndex: number): string {
     if (!purchaseId || debitIndex === null || debitIndex === undefined) {
-      console.error(`Unable to generate debit ID with purchaseID: ${purchaseId} and debitIndex: ${debitIndex}`);
-      return undefined;
+      throw new Error(`Unable to generate debit ID with purchaseID: ${purchaseId} and debitIndex: ${debitIndex}`)
     }
     if (debitIndex < 0 || debitIndex > 99) {
-      console.error(`Debit index must be between 0 and 99 but was ${debitIndex}`);
-      return undefined;
+      throw new Error(`Debit index must be between 0 and 99 but was ${debitIndex}`);
     }
     // Add a 0 at the beginning of the debit-index if it has only one digit
     return debitIndex < 10 ?
       `D.${purchaseId.substring(2, purchaseId.length - 3)}.0${debitIndex}` :
       `D.${purchaseId.substring(2, purchaseId.length - 3)}.${debitIndex}`;
   }
-
 }

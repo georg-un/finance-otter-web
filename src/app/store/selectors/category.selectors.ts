@@ -3,10 +3,8 @@ import { createSelector } from '@ngrx/store';
 import { categoryAdapter } from '../states/category.state';
 
 const {
-  selectIds,
   selectEntities,
   selectAll,
-  selectTotal,
 } = categoryAdapter.getSelectors();
 
 const selectCategories = (state: AppState) => state.categories;
