@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { LayoutService } from '../../../layout/layout.service';
 import { Location } from '@angular/common';
+import { cloneDeep } from 'lodash-es';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -57,7 +58,7 @@ export class PurchaseEditorEditComponent extends AbstractPaymentEditor implement
       .pipe(take(1))
       .subscribe(([purchase, users]: [Purchase, User[]]) => {
         // Set purchase from store
-        this.purchase = Object.assign({}, purchase);
+        this.purchase = cloneDeep(purchase);
         this.date = new Date(this.purchase.date);
         // Set sumAmount from debits
         this.sumAmount = this.purchase.debits
