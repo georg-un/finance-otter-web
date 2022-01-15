@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FullscreenDialogService } from '../../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { IdGeneratorService } from '../../../core/id-generator.service';
-import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { Debit } from '../../../core/entity/debit';
 import { PurchaseActions } from '../../../store/actions/purchase.actions';
 import { Purchase } from '../../../core/entity/purchase';
@@ -26,8 +26,8 @@ import { Location } from '@angular/common';
 })
 export class CompensationEditorNewComponent extends AbstractPaymentEditor implements OnInit {
 
-  public receivers$: Observable<User[]>;
-  public receiverId: string;
+  public recipients$: Observable<User[]>;
+  public recipientId: string;
   private currentUser$: Observable<User>;
 
   constructor(protected store: Store<AppState>,
@@ -52,7 +52,7 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
     ).subscribe((currentUser: User) => {
       this.purchase.buyerId = currentUser.userId;
     });
-    this.receivers$ = combineLatest([this.users$, this.currentUser$]).pipe(
+    this.recipients$ = combineLatest([this.users$, this.currentUser$]).pipe(
       map(([users, currentUser]) => users.filter(u => u.userId !== currentUser.userId))
     );
   }
@@ -63,16 +63,20 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
     if (!this.isPurchaseValid(false)) {
       return;
     }
+    if (!this.recipientId) {
+      this.snackBar.open('Please select a recipient.');
+      return;
+    }
     this.idGeneratorService.generatePurchaseId()
       .pipe(take(1))
       .subscribe((purchaseId: string) => {
         if (purchaseId) {
           this.purchase.purchaseId = purchaseId;
-          this.purchase.isCompensation = true
+          this.purchase.isCompensation = true;
           this.purchase.debits = [
             new Debit({
               debitId: this.idGeneratorService.generateDebitId(purchaseId, 0),
-              debtorId: this.receiverId,
+              debtorId: this.recipientId,
               amount: this.sumAmount
             })
           ];
