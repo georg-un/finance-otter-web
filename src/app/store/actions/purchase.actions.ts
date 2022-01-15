@@ -4,11 +4,7 @@ import { Update } from '@ngrx/entity';
 
 export class PurchaseActions {
   static addPurchaseEntity = createAction('[Purchase] Add Purchase Entity', props<{ purchase: Purchase }>());
-  static addPurchaseEntities = createAction('[Purchase] Add Purchase Entities', props<{ purchases: Purchase[] }>());
-  static replacePurchaseEntities = createAction('[Purchase] Replace Purchase Entities', props<{ purchases: Purchase[] }>());
   static updatePurchaseEntity = createAction('[Purchase] Update Purchase Entity', props<{ purchase: Update<Purchase> }>());
-  static updatePurchaseEntities = createAction('[Purchase] Update Purchase Entities', props<{ purchases: Update<Purchase>[] }>());
-  static clearPurchaseEntities = createAction('[Purchase] Remove Purchase Entity');
 
   static requestPurchases = createAction('[Purchase] Request Purchases', props<{offset: number, limit: number}>());
   static purchasesReceived = createAction('[Purchase] Purchases Received', props<{purchases: Purchase[]}>());
@@ -27,5 +23,4 @@ export class PurchaseActions {
   static purchaseDeleteFailed = createAction('[Purchase] Purchase Delete Failed', props<{purchase: Purchase}>());
   static receiptUpdateSuccessful = createAction('[Purchase] Receipt Update Successful', props<{purchaseId: string}>());
   static receiptUpdateFailed = createAction('[Purchase] Receipt Update Failed', props<{purchaseId: string}>());
-  static syncPurchases = createAction('[Purchase] Sync Purchase');
 }

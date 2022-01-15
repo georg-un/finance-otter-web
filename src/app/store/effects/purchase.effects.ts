@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { EMPTY, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -8,8 +8,6 @@ import { Purchase, SyncStatusEnum } from '../../core/entity/purchase';
 import { PurchaseActions } from '../actions/purchase.actions';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../states/app.state';
-import { RouterSelectors } from '../selectors/router.selectors';
-import { LayoutSelectors } from '../selectors/layout.selectors';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { PurchaseSelectors } from '../selectors/purchase.selectors';
 
@@ -136,24 +134,6 @@ export class PurchaseEffects {
           );
       }
     }))
-  ));
-
-  syncPurchase$ = createEffect(() => this.actions$.pipe(  // TODO: What to do with local purchases? What to do with purchases that are already syncing?
-    ofType(PurchaseActions.syncPurchases),
-    withLatestFrom(
-      this.store.select(LayoutSelectors.selectPagination),
-      this.store.select(RouterSelectors.selectCurrentUrl)),
-    mergeMap(([action, pagination, currentUrl]) => {
-      const actions = [];
-      // If purchase details are displayed, look if there is an updated version on the server
-      if (currentUrl.startsWith('/purchase')) {
-        const purchaseId = currentUrl.split('/')[1];
-        actions.push(PurchaseActions.requestSinglePurchase({purchaseId: purchaseId}));
-      }
-      // Update all purchases in the current pagination
-      actions.push(PurchaseActions.requestPurchases(pagination));
-      return actions;
-    })
   ));
 
   purchaseUploadOrUpdateSuccessful$ = createEffect(() => this.actions$.pipe(
