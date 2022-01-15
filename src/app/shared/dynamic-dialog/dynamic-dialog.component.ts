@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, SecurityContext } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DynamicDialogButton, DynamicDialogData } from './dynamic-dialog-data.model';
@@ -6,19 +6,20 @@ import { DynamicDialogButton, DynamicDialogData } from './dynamic-dialog-data.mo
 @Component({
   selector: 'app-dynamic-dialog',
   templateUrl: './dynamic-dialog.component.html',
-  styleUrls: ['./dynamic-dialog.component.scss']
+  styleUrls: ['./dynamic-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicDialogComponent implements OnInit {
 
-  bodyHTML: string;
-  buttons: DynamicDialogButton[];
+  public bodyHTML: string;
+  public buttons: DynamicDialogButton[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: DynamicDialogData,
     private dom: DomSanitizer
   ) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     if (this.data) {
       if (this.data.bodyHTML) {
         this.bodyHTML = this.dom.sanitize(SecurityContext.HTML, this.data.bodyHTML);
@@ -39,5 +40,4 @@ export class DynamicDialogComponent implements OnInit {
       return 0;
     }
   }
-
 }

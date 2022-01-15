@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 
 export interface HTMLInputEvent extends Event {
@@ -7,7 +7,8 @@ export interface HTMLInputEvent extends Event {
 
 @Component({
   selector: 'app-image-input',
-  templateUrl: './image-input.component.html'
+  templateUrl: './image-input.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageInputComponent {
 
