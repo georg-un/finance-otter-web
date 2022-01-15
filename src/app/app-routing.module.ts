@@ -13,6 +13,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ReceiptProcessorComponent } from './pages/receipt-processor/receipt-processor.component';
 import { ReceiptViewComponent } from './pages/receipt-view/receipt-view.component';
 import { CompensationEditorNewComponent } from './pages/payment-editor/compensation/compensation-editor-new.component';
+import { CompensationEditorEditComponent } from './pages/payment-editor/compensation/compensation-editor-edit.component';
 
 export const routes: Routes = [
   {
@@ -53,6 +54,10 @@ export const routes: Routes = [
       {
         path: 'new-compensation',
         component: CompensationEditorNewComponent
+      },
+      {
+        path: 'edit-compensation/:purchaseId',
+        component: CompensationEditorEditComponent
       },
       {
         path: 'scan-receipt',
