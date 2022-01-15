@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Purchase } from '../../../core/entity/purchase';
 import { Debit } from '../../../core/entity/debit';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/states/app.state';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { UserSelectors } from '../../../store/selectors/user.selectors';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { User } from '../../../core/entity/user';
 import { Category } from '../../../core/entity/category';
 import { CategorySelectors } from '../../../store/selectors/category.selectors';
@@ -13,49 +13,59 @@ import { CategorySelectors } from '../../../store/selectors/category.selectors';
 @Component({
   selector: 'app-purchase-card',
   templateUrl: './purchase-card.component.html',
-  styleUrls: ['./purchase-card.component.scss']
+  styleUrls: ['./purchase-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PurchaseCardComponent implements OnInit {
+export class PurchaseCardComponent {
 
-  @Input() purchase: Purchase;
-  buyerAvatarUrl$: Observable<string>;
-  receiverAvatarUrl$?: Observable<string>;
-  category$: Observable<Category>;
+  private _purchase: ReplaySubject<Purchase> = new ReplaySubject<Purchase>(1);
+  @Input()
+  public set purchase(val: Purchase) {
+    this._purchase.next(val);
+  }
 
-  @Output() cardClick: EventEmitter<string> = new EventEmitter();
+  @Output()
+  public cardClick: EventEmitter<string> = new EventEmitter();
 
-  debitSum: number;
+  public purchase$: Observable<Purchase> = this._purchase.asObservable();
+
+  public buyerAvatarUrl$: Observable<string> = this.purchase$.pipe(
+    filter(Boolean),
+    switchMap((purchase: Purchase) => this.store.select(UserSelectors.selectUserById(), {id: purchase.buyerId})),
+    filter(Boolean),
+    map((user: User) => user.avatarUrl),
+    shareReplay(1)
+  );
+
+  public receiverAvatarUrl$?: Observable<string> = this.purchase$.pipe(
+    filter((purchase: Purchase) => purchase?.isCompensation),
+    switchMap((purchase: Purchase) => this.store.select(UserSelectors.selectUserById(), {id: purchase.debits[0].debtorId})),
+    filter(Boolean),
+    map((user: User) => user.avatarUrl),
+    shareReplay(1)
+  );
+
+  public category$: Observable<Category> = this.purchase$.pipe(
+    filter(Boolean),
+    switchMap((purchase: Purchase) => this.store.select(CategorySelectors.selectCategoryById(purchase.categoryId)))
+  );
+
+  public debitSum$: Observable<number> = this.purchase$.pipe(
+    map(purchase => purchase.debits
+      .map((debit: Debit) => debit.amount)
+      .reduce((sum, current) => sum + current)
+    ));
 
   constructor(
     private store: Store<AppState>
   ) {
   }
 
-  ngOnInit() {
-    // Calculate total amount
-    this.debitSum = this.purchase.debits
-      .map((debit: Debit) => debit.amount)
-      .reduce((sum, current) => sum + current);
-    // Get buyer avatar
-    this.buyerAvatarUrl$ = this.store.select(UserSelectors.selectUserById(), {id: this.purchase.buyerId})
-      .pipe(
-        filter(Boolean),
-        map((user: User) => user.avatarUrl)
-      );
-    // If transaction is a compensation, get receiver avatar
-    if (this.purchase.isCompensation) {
-      this.receiverAvatarUrl$ = this.store.select(UserSelectors.selectUserById(), {id: this.purchase.debits[0].debtorId})
-        .pipe(
-          filter(Boolean),
-          map((user: User) => user.avatarUrl)
-        );
-    }
-    // Get the category
-    this.category$ = this.store.select(CategorySelectors.selectCategoryById(this.purchase.categoryId));
-  }
-
   onClick(): void {
-    this.cardClick.emit(this.purchase.purchaseId);
+    this._purchase
+      .pipe((take(1)))
+      .subscribe((purchase: Purchase) => {
+        this.cardClick.emit(purchase.purchaseId);
+      });
   }
-
 }

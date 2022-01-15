@@ -1,5 +1,5 @@
 <mat-card (click)="onClick()" [style.border-left]="'4px solid ' + (category$ | async)?.color">
-  <mat-card-content class="card-content">
+  <mat-card-content class="card-content" *ngIf="(purchase$ | async) as purchase">
 
     <div class="avatar-column">
       <div *ngIf="buyerAvatarUrl$ | async" class='grid-cell__r2-c1'>
@@ -23,13 +23,14 @@
           </div>
         </ng-template>
 
-        <span *ngIf="debitSum" class="amount">
-          {{debitSum | currency:'EUR':'€ ':'1.2-2'}}
+        <span *ngIf="(debitSum$ | async) as debitSum" class="amount">
+          <ng-container *ngIf="(debitSum$ | async) as debitSum; else noDebitSum">
+            {{debitSum | currency:'EUR':'€ ':'1.2-2'}}
+          </ng-container>
+          <ng-template #noDebitSum>
+            N/A
+          </ng-template>
         </span>
-        <span *ngIf="!debitSum" class="amount">
-          N/A
-        </span>
-
       </div>
       <div class="row small-row">
         <span>
