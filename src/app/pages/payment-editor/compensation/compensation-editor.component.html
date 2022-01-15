@@ -19,12 +19,13 @@
     <div class="justify-space-between">
       <i class="material-icons editor-symbol-col">view_quilt</i>
       <mat-form-field class="editor-input-col">
-        <mat-label>Receiver</mat-label>
+        <mat-label>Recipient</mat-label>
         <mat-select
-          [(ngModel)]="receiverId"
+          [(ngModel)]="recipientId"
           id="category" class="browser-default"
+          required
         >
-          <mat-option *ngFor="let receiver of receivers$ | async" [value]="receiver.userId">
+          <mat-option *ngFor="let receiver of recipients$ | async" [value]="receiver.userId">
             {{receiver.firstName}} {{receiver.lastName}}
           </mat-option>
         </mat-select>
@@ -36,7 +37,7 @@
       <div class="editor-input-col justify-space-between">
         <mat-form-field class="full-width" [class.autofilled]="autofilledState.date">
           <input [ngModel]="date ? date : undefined"
-                 (ngModelChange)="purchase.date = $event.getTime(); autofilledState.date = false"
+                 (ngModelChange)="onDateInput($event)"
                  [matDatepicker]="picker"
                  matInput
                  placeholder="Date"
