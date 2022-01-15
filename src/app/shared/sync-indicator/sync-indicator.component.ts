@@ -1,29 +1,37 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SyncStatusEnum } from '../../core/entity/purchase';
 
 @Component({
   selector: 'app-sync-indicator',
   templateUrl: './sync-indicator.component.html',
-  styleUrls: ['./sync-indicator.component.scss']
+  styleUrls: ['./sync-indicator.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SyncIndicatorComponent implements OnInit, OnChanges {
 
-  @Input() syncStatus: SyncStatusEnum;
-  @Input() size: string;
-  icon: string;
-  colorClass: string;
+  @Input()
+  public syncStatus: SyncStatusEnum;
+  @Input()
+  public size: string;
 
-  constructor() { }
+  public icon: string;
 
-  ngOnInit() {
+  public colorClass: string;
+
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+  }
+
+  public ngOnInit(): void {
     this.setIcon();
   }
 
-  ngOnChanges(_: SimpleChanges) {
+  public ngOnChanges(_: SimpleChanges): void {
     this.setIcon();
   }
 
-  private setIcon() {
+  private setIcon(): void {
     switch (this.syncStatus) {
       case SyncStatusEnum.Remote:
         this.icon = 'done';
@@ -40,6 +48,7 @@ export class SyncIndicatorComponent implements OnInit, OnChanges {
         this.colorClass = 'error';
         break;
     }
+    this.changeDetectorRef.markForCheck();
   }
 
 }
