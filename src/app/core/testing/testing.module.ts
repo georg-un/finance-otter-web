@@ -5,6 +5,9 @@ import { metaReducers, reducers } from '../../store';
 import { EffectsModule } from '@ngrx/effects';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthService } from '../auth.service';
+import { AUTH_SERVICE_MOCK } from '../../mock/auth-service.mock';
 
 
 
@@ -14,6 +17,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     NoopAnimationsModule,
     RouterTestingModule,
+    HttpClientTestingModule,
     StoreModule.forRoot(
       reducers,
       {
@@ -27,6 +31,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
   ],
   exports: [
     RouterTestingModule,
+  ],
+  providers: [
+    { provide: AuthService, useValue: AUTH_SERVICE_MOCK }
   ]
 })
 export class TestingModule { }

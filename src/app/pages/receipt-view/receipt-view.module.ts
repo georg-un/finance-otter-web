@@ -16,6 +16,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatButtonModule,
     MatIconModule,
     MatToolbarModule
+  ],
+  entryComponents: [
+    ReceiptViewComponent
   ]
 })
 export class ReceiptViewModule { }

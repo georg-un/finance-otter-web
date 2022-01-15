@@ -40,7 +40,7 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
               protected idGeneratorService: IdGeneratorService,
               protected layoutService: LayoutService,
               protected location: Location,
-              private receiptScannerService: ReceiptProcessorService
+              private receiptProcessorService: ReceiptProcessorService
   ) {
     super(store, fullscreenDialog, snackBar, dialog, layoutService, location);
   }
@@ -72,11 +72,11 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
         });
       });
 
-    this.receipt$ = of(this.receiptScannerService.receipt);
+    this.receipt$ = of(this.receiptProcessorService.receipt);
   }
 
   onViewReceiptClick(): void {
-    if (this.receiptScannerService.receipt) {
+    if (this.receiptProcessorService.receipt) {
       this.fullscreenDialog.openReceiptViewDialog(this.receipt$, false);
     }
   }
@@ -108,7 +108,7 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
           this.store.dispatch(
             PurchaseActions.addNewPurchase({
               purchase: this.purchase,
-              receipt: this.receiptScannerService.receipt
+              receipt: this.receiptProcessorService.receipt
             })
           );
         } else {
@@ -120,5 +120,4 @@ export class PurchaseEditorNewComponent extends AbstractPaymentEditor implements
   onDistributionToggleChange(change: MatSlideToggleChange): void {
     this.customDistribution = change.checked;
   }
-
 }
