@@ -5,7 +5,6 @@ import { DebitCardComponent } from '../../shared/debit-card/debit-card.component
 import { TestingModule } from '../../core/testing/testing.module';
 import { MaterialTestingModule } from '../../core/testing/material-testing.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ShortNamePipeModule } from '../../shared/short-name-pipe/short-name-pipe.module';
 import { SyncIndicatorModule } from '../../shared/sync-indicator/sync-indicator.module';
 
 describe('PurchaseViewComponent', () => {
@@ -18,7 +17,6 @@ describe('PurchaseViewComponent', () => {
         TestingModule,
         MaterialTestingModule,
         HttpClientTestingModule,
-        ShortNamePipeModule,
         SyncIndicatorModule,
       ],
       declarations: [
