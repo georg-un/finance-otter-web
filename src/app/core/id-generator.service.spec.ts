@@ -18,8 +18,8 @@ describe('IdGeneratorService', () => {
   }));
 
   beforeEach(() => {
-    auth = TestBed.get(AuthService);
-    service = TestBed.get(IdGeneratorService);
+    auth = TestBed.inject(AuthService);
+    service = TestBed.inject(IdGeneratorService);
   });
 
   it('should be created', () => {
@@ -53,34 +53,20 @@ describe('IdGeneratorService', () => {
     expect(debitId).toEqual('D.mock.0000.20');
   });
 
-  it('should return undefined on a negative debit index', () => {
-    const spy = spyOn(console, 'error').and.stub();
-    const debitId = service.generateDebitId('P.mock.0000.00', -2);
-    expect(debitId).toBeUndefined();
-    expect(spy).toHaveBeenCalled();
+  it('should throw an error on a negative debit index', () => {
+    expect(() => service.generateDebitId('P.mock.0000.00', -2)).toThrow();
   });
 
-  it('should return undefined on a debit index > 99', () => {
-    const spy = spyOn(console, 'error').and.stub();
-    const debitId = service.generateDebitId('P.mock.0000.00', 100);
-    expect(debitId).toBeUndefined();
-    expect(spy).toHaveBeenCalled();
+  it('should throw an Error on a debit index > 99', () => {
+    expect(() => service.generateDebitId('P.mock.0000.00', 100)).toThrow();
   });
 
-  it('should return undefined without a purchase id', () => {
-    const spy = spyOn(console, 'error').and.stub();
-    const debitId = service.generateDebitId(undefined, 2);
-    expect(debitId).toBeUndefined();
-    expect(spy).toHaveBeenCalled();
+  it('should throw an Error without a purchase id', () => {
+    expect(() => service.generateDebitId(undefined, 2)).toThrow();
   });
 
-  it('should return undefined if debit index is nil', () => {
-    const spy = spyOn(console, 'error').and.stub();
-    let debitId = service.generateDebitId('P.mock.0000.00', undefined);
-    expect(debitId).toBeUndefined();
-    expect(spy).toHaveBeenCalledTimes(1);
-    debitId = service.generateDebitId('P.mock.0000.00', null);
-    expect(debitId).toBeUndefined();
-    expect(spy).toHaveBeenCalledTimes(2);
+  it('should throw an Error if the debit index is nil', () => {
+    expect(() => service.generateDebitId('P.mock.0000.00', undefined)).toThrow();
+    expect(() => service.generateDebitId('P.mock.0000.00', null)).toThrow();
   });
 });
