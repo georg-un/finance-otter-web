@@ -15,7 +15,7 @@ import { CategoryMonthSummary, CategorySummary } from '../../core/entity/summari
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
 import { LayoutService } from '../../layout/layout.service';
-import { DestroyableComponent } from '../../shared/destroyable.component';
+import { Destroyable } from '../../shared/destroyable';
 
 const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true };
 
@@ -26,7 +26,7 @@ const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, righ
   styleUrls: ['./summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SummaryComponent extends DestroyableComponent implements OnInit {
+export class SummaryComponent extends Destroyable implements OnInit {
 
   private categories$: Observable<Category[]> = this.store.select(CategorySelectors.selectAllCategories).pipe(
     filter(this.isFilledArray)

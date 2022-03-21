@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-circle-checkmark-loader',
   templateUrl: './circle-checkmark-loader.component.html',
-  styleUrls: ['./circle-checkmark-loader.component.scss']
+  styleUrls: ['./circle-checkmark-loader.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CircleCheckmarkLoaderComponent {
 

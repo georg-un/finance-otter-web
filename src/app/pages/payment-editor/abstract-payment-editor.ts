@@ -21,7 +21,7 @@ import { LayoutService } from '../../layout/layout.service';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { Location } from '@angular/common';
 import { Moment } from 'moment';
-import { DestroyableComponent } from '../../shared/destroyable.component';
+import { Destroyable } from '../../shared/destroyable';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
 const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
@@ -48,7 +48,7 @@ const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
 };
 
 
-export abstract class AbstractPaymentEditor extends DestroyableComponent implements OnInit {
+export abstract class AbstractPaymentEditor extends Destroyable implements OnInit {
 
   purchase: Purchase;
   receipt$: Observable<Blob>;

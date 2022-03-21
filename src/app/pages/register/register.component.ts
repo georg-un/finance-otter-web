@@ -7,14 +7,14 @@ import { UserSelectors } from '../../store/selectors/user.selectors';
 import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
-import { DestroyableComponent } from '../../shared/destroyable.component';
+import { Destroyable } from '../../shared/destroyable';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent extends DestroyableComponent implements OnInit {
+export class RegisterComponent extends Destroyable implements OnInit {
 
   firstName: string;
   lastName: string;

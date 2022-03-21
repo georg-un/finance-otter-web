@@ -12,7 +12,7 @@ import { LayoutActions } from '../../store/actions/layout.actions';
 import { LayoutService } from '../../layout/layout.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPurchaseDialogComponent } from '../../shared/add-purchase-dialog/add-purchase-dialog.component';
-import { DestroyableComponent } from '../../shared/destroyable.component';
+import { Destroyable } from '../../shared/destroyable';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: HeaderButtonOptions.Add, showLogo: true};
 
@@ -22,7 +22,7 @@ const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, right
   styleUrls: ['./purchase-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PurchaseListComponent extends DestroyableComponent {
+export class PurchaseListComponent extends Destroyable {
 
   public purchases$: Observable<Purchase[]> = this.store.select(PurchaseSelectors.selectAllPurchases).pipe(
     shareReplay(1)

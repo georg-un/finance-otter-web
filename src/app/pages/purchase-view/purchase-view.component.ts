@@ -22,7 +22,7 @@ import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-co
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LayoutService } from '../../layout/layout.service';
 import { Location } from '@angular/common';
-import { DestroyableComponent } from '../../shared/destroyable.component';
+import { Destroyable } from '../../shared/destroyable';
 
 const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Back, rightButton: HeaderButtonOptions.Edit, showLogo: false };
 
@@ -31,7 +31,7 @@ const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Back, righ
   templateUrl: './purchase-view.component.html',
   styleUrls: ['./purchase-view.component.scss']
 })
-export class PurchaseViewComponent extends DestroyableComponent implements OnInit {
+export class PurchaseViewComponent extends Destroyable implements OnInit {
 
   // FIXME: Load entity data if not present.
   purchase: Purchase;
