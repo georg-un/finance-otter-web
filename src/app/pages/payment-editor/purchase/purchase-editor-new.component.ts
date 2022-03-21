@@ -30,6 +30,8 @@ export class PurchaseEditorNewComponent extends AbstractPurchaseEditor implement
   // TODO: Add validation before upload
   // FIXME: If this page is opened as first page, the user data is not yet loaded and an error is thrown
 
+  public customDistribution = false;
+
   constructor(
     store: Store<AppState>,
     fullscreenDialog: FullscreenDialogService,

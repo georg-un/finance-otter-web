@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
 
 export abstract class AbstractPurchaseEditor extends AbstractPaymentEditor {
 
-  public customDistribution = true;
+  public abstract customDistribution: boolean;
 
   protected constructor(
     store: Store<AppState>,
