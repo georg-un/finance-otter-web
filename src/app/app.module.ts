@@ -21,8 +21,25 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 registerLocaleData(localeDe, 'de-AT');
+
+const APP_MODULES = [
+  AppRoutingModule,
+  AppStoreModule,
+  LayoutModule,
+  SummaryModule,
+  PurchaseListModule,
+  PurchaseViewModule,
+  PurchaseEditorModule,
+  RegisterModule,
+  ReceiptProcessorModule,
+  ReceiptViewModule,
+  MultilineSnackbarModule // TODO: is this needed here?
+]
+
 
 @NgModule({
   declarations: [
@@ -30,25 +47,28 @@ registerLocaleData(localeDe, 'de-AT');
   ],
   imports: [
     CoreModule,
-    LayoutModule,
-    SummaryModule,
-    PurchaseListModule,
-    PurchaseViewModule,
-    PurchaseEditorModule,
-    RegisterModule,
+    AuthModule.forRoot({
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.client_id,
+      redirect_uri: environment.deployUrl,
+      audience: environment.auth0.audience,
+      httpInterceptor: {
+        allowedList: [
+          `${environment.backendUrl}/*`
+        ]
+      }
+    }),
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
-    AppStoreModule,
-    ReceiptProcessorModule,
-    ReceiptViewModule,
-    MultilineSnackbarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-    MatCardModule
+
+    MatCardModule,  // TODO: ?
+    ...APP_MODULES
   ],
   providers: [
+    {provide: LOCALE_ID, useValue: 'de-AT'},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true},
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},
-    {provide: LOCALE_ID, useValue: 'de-AT'}
   ],
   entryComponents: [
     MultilineSnackbarComponent
