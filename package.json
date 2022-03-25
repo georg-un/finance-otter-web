@@ -27,6 +27,7 @@
     "@angular/router": "~9.1.9",
     "@angular/service-worker": "^9.1.9",
     "@auth0/angular-jwt": "^4.0.0",
+    "@auth0/auth0-angular": "^1.9.0",
     "@auth0/auth0-spa-js": "^1.6.4",
     "@ngrx/effects": "^9.2.1",
     "@ngrx/entity": "^9.2.1",
