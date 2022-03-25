@@ -1,17 +1,26 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-circle-checkmark-loader',
   templateUrl: './circle-checkmark-loader.component.html',
-  styleUrls: ['./circle-checkmark-loader.component.scss']
+  styleUrls: ['./circle-checkmark-loader.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CircleCheckmarkLoaderComponent implements OnInit {
+export class CircleCheckmarkLoaderComponent {
 
-  @Input() complete: boolean;
-
-  constructor() { }
-
-  ngOnInit() {
+  private _complete: boolean;
+  @Input()
+  public set complete(val: boolean) {
+    this._complete = val;
+    this.changeDetectorRef.markForCheck();
   }
 
+  public get complete(): boolean {
+    return this._complete;
+  }
+
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+  }
 }

@@ -2,9 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { FinOBackendService } from '../../core/fino-backend.service';
 import { PurchaseActions } from '../../store/actions/purchase.actions';
-import { Router } from '@angular/router';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { Observable } from 'rxjs';
@@ -12,6 +10,7 @@ import { AbstractFullscreenDialog } from '../../shared/fullscreen-dialog/abstrac
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AddReceiptDialog, AddReceiptDialogData } from '../../shared/add-purchase-dialog/add-receipt-dialog.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-receipt-view',
@@ -80,7 +79,6 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
 
   constructor(
     private store: Store<AppState>,
-    private restService: FinOBackendService,
     private location: Location,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -91,6 +89,7 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
   ngOnInit() {
     // Convert image to a base64 string to feed it into the <img> element
     this.receipt
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((img: Blob) => {
         if (img && img.size > 32) {
           const reader = new FileReader();

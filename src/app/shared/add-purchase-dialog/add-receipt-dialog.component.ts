@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReceiptProcessorService } from '../../pages/receipt-processor/receipt-processor.service';
@@ -13,7 +13,8 @@ export interface AddReceiptDialogData {
 @Component({
   selector: 'app-add-receipt-dialog',
   templateUrl: './add-receipt-dialog.component.html',
-  styleUrls: ['add-purchase-dialog.component.scss']
+  styleUrls: ['add-purchase-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddReceiptDialog {
 

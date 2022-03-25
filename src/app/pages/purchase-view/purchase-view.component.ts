@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Purchase, SyncStatusEnum } from '../../core/entity/purchase';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from '../../core/entity/user';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
@@ -22,6 +22,7 @@ import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-co
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { LayoutService } from '../../layout/layout.service';
 import { Location } from '@angular/common';
+import { Destroyable } from '../../shared/destroyable';
 
 const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Back, rightButton: HeaderButtonOptions.Edit, showLogo: false };
 
@@ -30,14 +31,13 @@ const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Back, righ
   templateUrl: './purchase-view.component.html',
   styleUrls: ['./purchase-view.component.scss']
 })
-export class PurchaseViewComponent implements OnInit, OnDestroy {
+export class PurchaseViewComponent extends Destroyable implements OnInit {
 
   // FIXME: Load entity data if not present.
   purchase: Purchase;
   user$: Observable<User>;
   category$: Observable<Category>;
   debitSum: number;
-  private onDestroy$: Subject<boolean> = new Subject();
 
   @ViewChild('tooltip', {static: false}) tooltip: MatTooltip;
 
@@ -79,6 +79,7 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
     private fullscreenDialog: FullscreenDialogService,
     private layoutService: LayoutService
   ) {
+    super();
     this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.location.back());
   }
@@ -101,11 +102,6 @@ export class PurchaseViewComponent implements OnInit, OnDestroy {
             .reduce((sum, current) => sum + current);
         }
       });
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
   }
 
   selectUserById(id: string): Observable<User> {

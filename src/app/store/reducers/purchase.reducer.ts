@@ -8,20 +8,8 @@ const purchaseReducer = createReducer(
   on(PurchaseActions.addPurchaseEntity, (state, { purchase }) => {
     return purchaseAdapter.addOne(purchase, state);
   }),
-  on(PurchaseActions.addPurchaseEntities, (state, { purchases }) => {
-    return purchaseAdapter.addMany(purchases, state);
-  }),
   on(PurchaseActions.updatePurchaseEntity, (state, { purchase }) => {
     return purchaseAdapter.updateOne(purchase, state);
-  }),
-  on(PurchaseActions.updatePurchaseEntities, (state, { purchases }) => {
-    return purchaseAdapter.updateMany(purchases, state);
-  }),
-  on(PurchaseActions.replacePurchaseEntities, (state, { purchases }) => {
-    return purchaseAdapter.addAll(purchases, state);
-  }),
-  on(PurchaseActions.clearPurchaseEntities, state => {
-    return purchaseAdapter.removeAll(state);
   }),
   on(PurchaseActions.requestPurchases, state => {
     return  {...state, syncJobs: state.syncJobs + 1};

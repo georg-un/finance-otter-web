@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { BigNumber } from 'bignumber.js';
 import { AbstractFullscreenDialog } from '../../shared/fullscreen-dialog/abstract-fullscreen-dialog';
@@ -9,7 +9,7 @@ import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
   templateUrl: './qr-scanner.component.html',
   styleUrls: ['./qr-scanner.component.scss']
 })
-export class QrScannerComponent extends AbstractFullscreenDialog implements OnInit {
+export class QrScannerComponent extends AbstractFullscreenDialog {
 
   readonly allowedFormats = [BarcodeFormat.QR_CODE];
   complete = false;
@@ -24,9 +24,6 @@ export class QrScannerComponent extends AbstractFullscreenDialog implements OnIn
   constructor(private snackBar: MatSnackBar
   ) {
     super();
-  }
-
-  ngOnInit() {
   }
 
   onScannerHasDevices($event) {

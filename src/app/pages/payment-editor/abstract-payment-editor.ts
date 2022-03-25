@@ -1,5 +1,5 @@
-import { OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Purchase } from '../../core/entity/purchase';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { takeUntil } from 'rxjs/operators';
@@ -21,6 +21,7 @@ import { LayoutService } from '../../layout/layout.service';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { Location } from '@angular/common';
 import { Moment } from 'moment';
+import { Destroyable } from '../../shared/destroyable';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
 const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
@@ -47,7 +48,7 @@ const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
 };
 
 
-export abstract class AbstractPaymentEditor implements OnInit, OnDestroy {
+export abstract class AbstractPaymentEditor extends Destroyable implements OnInit {
 
   purchase: Purchase;
   receipt$: Observable<Blob>;
@@ -56,7 +57,6 @@ export abstract class AbstractPaymentEditor implements OnInit, OnDestroy {
   categories$: Observable<Category[]>;
   date: Date;
   distributionFragments: DistributionFragment[] = [];
-  protected onDestroy$: Subject<boolean> = new Subject();
 
   readonly autofilledState = {
     amount: false,
@@ -70,6 +70,7 @@ export abstract class AbstractPaymentEditor implements OnInit, OnDestroy {
                         protected layoutService: LayoutService,
                         protected location: Location
   ) {
+    super();
     this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.closeEditorAfterConfirmation());
     this.layoutService.registerRightHeaderButtonClickCallback(() => this.submitPurchase());
@@ -78,11 +79,6 @@ export abstract class AbstractPaymentEditor implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.users$ = this.store.select(UserSelectors.selectAllUsers);
     this.categories$ = this.store.select(CategorySelectors.selectAllCategories);
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
   }
 
   abstract submitPurchase(): void;

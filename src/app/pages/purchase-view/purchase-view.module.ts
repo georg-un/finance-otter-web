@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { PurchaseViewComponent } from './purchase-view.component';
 import { DebitCardModule } from '../../shared/debit-card/debit-card.module';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
-import { ShortNamePipeModule } from '../../shared/short-name-pipe/short-name-pipe.module';
 import { SyncIndicatorModule } from '../../shared/sync-indicator/sync-indicator.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +22,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     DebitCardModule,
     MatDialogModule,
     MatTooltipModule,
-    ShortNamePipeModule,
     SyncIndicatorModule,
   ],
   entryComponents: [

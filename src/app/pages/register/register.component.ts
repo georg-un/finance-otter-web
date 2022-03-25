@@ -1,24 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
 import { User } from '../../core/entity/user';
 import { UserActions } from '../../store/actions/user.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
-import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
+import { Destroyable } from '../../shared/destroyable';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent extends Destroyable implements OnInit {
 
   firstName: string;
   lastName: string;
-  private onDestroy$: Subject<boolean> = new Subject();
 
   constructor(
     private store: Store<AppState>,
@@ -26,6 +25,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private auth: AuthService,
   ) {
+    super();
   }
 
   ngOnInit() {
@@ -37,11 +37,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.router.navigate(['../'], {relativeTo: this.route});
         }
       });
-  }
-
-  ngOnDestroy() {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
   }
 
   createUser() {
