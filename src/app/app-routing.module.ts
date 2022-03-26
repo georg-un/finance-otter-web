@@ -6,14 +6,12 @@ import { PurchaseViewComponent } from './pages/purchase-view/purchase-view.compo
 import { LayoutComponent } from './layout/layout.component';
 import { PurchaseEditorNewComponent } from './pages/payment-editor/purchase/purchase-editor-new.component';
 import { PurchaseEditorEditComponent } from './pages/payment-editor/purchase/purchase-editor-edit.component';
-import { AuthGuard } from './auth.guard';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { InterceptorService } from './core/interceptor.service';
 import { RegisterComponent } from './pages/register/register.component';
 import { ReceiptProcessorComponent } from './pages/receipt-processor/receipt-processor.component';
 import { ReceiptViewComponent } from './pages/receipt-view/receipt-view.component';
 import { CompensationEditorNewComponent } from './pages/payment-editor/compensation/compensation-editor-new.component';
 import { CompensationEditorEditComponent } from './pages/payment-editor/compensation/compensation-editor-edit.component';
+import { AuthGuard } from '@auth0/auth0-angular';
 
 export const routes: Routes = [
   {
@@ -80,11 +78,6 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
-      multi: true
-    }
   ]
 })
 export class AppRoutingModule {

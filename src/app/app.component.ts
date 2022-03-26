@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/states/app.state';
 import { UserActions } from './store/actions/user.actions';
 import { PurchaseActions } from './store/actions/purchase.actions';
-import { AuthService } from './core/auth.service';
 import { UserSelectors } from './store/selectors/user.selectors';
 import { CategoryActions } from './store/actions/category.actions';
 
@@ -15,8 +14,7 @@ import { CategoryActions } from './store/actions/category.actions';
 export class AppComponent implements OnInit {
 
   constructor(
-    private store: Store<AppState>,
-    private auth: AuthService,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {

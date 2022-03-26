@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { UserActions } from '../actions/user.actions';
 import { FinOBackendService } from '../../core/fino-backend.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../core/auth.service';
+import { AuthService, User as Auth0User } from '@auth0/auth0-angular';
 
 @Injectable()
 export class UserEffects {
@@ -74,8 +74,8 @@ export class UserEffects {
     ofType(UserActions.setActivationState),
     switchMap((action) => {
       if (action.activated) {
-        return this.auth.getUser$().pipe(
-          map(user => UserActions.setCurrentUser({userId: user.sub}))
+        return this.auth.user$.pipe(
+          map((user: Auth0User) => UserActions.setCurrentUser({userId: user.sub}))
         );
       } else {
         return EMPTY;
