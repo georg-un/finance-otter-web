@@ -43,10 +43,11 @@ export class RegisterComponent extends Destroyable implements OnInit {
     this.auth.user$
       .pipe(take(1))
       .subscribe((profile: Auth0User) => {
-        const user = new User();
-        user.firstName = this.firstName;
-        user.lastName = this.lastName;
-        user.avatarUrl = profile?.picture;
+        const user = {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          avatarUrl: profile?.picture
+        } as User;
         this.store.dispatch(UserActions.registerCurrentUser({user: user}));
       });
   }
