@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 
 import { IdGeneratorService } from './id-generator.service';
 import { TestingModule } from './testing/testing.module';
-import { AuthService } from './auth.service';
 import { of } from 'rxjs';
 import stringMatching = jasmine.stringMatching;
+import { AUTH_TOKEN_KEY_ID } from '../mock/auth-service.mock';
+import { AuthService } from '@auth0/auth0-angular';
 
 describe('IdGeneratorService', () => {
 
@@ -27,17 +28,15 @@ describe('IdGeneratorService', () => {
   });
 
   it('should generate the purchase id', () => {
-    const keyId = 'mock';
-    spyOn(auth, 'getKeyId').and.returnValue(of(keyId));
     service.generatePurchaseId().subscribe(id => {
-      expect(id.length).toEqual(keyId.length + new Date().getTime().toString().length + 6);
+      expect(id.length).toEqual(AUTH_TOKEN_KEY_ID.length + new Date().getTime().toString().length + 6);
       expect(id).toEqual(stringMatching('^(.*?)\.00'));
       expect(id).toEqual(stringMatching('P.(.*?)'));
     });
   });
 
   it('should return undefined without key id', () => {
-    spyOn(auth, 'getKeyId').and.returnValue(of(undefined));
+    spyOn(auth, 'getAccessTokenSilently').and.returnValue(of(undefined));
     service.generatePurchaseId().subscribe(id => {
       expect(id).toBeUndefined();
     });

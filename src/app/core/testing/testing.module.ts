@@ -6,9 +6,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AuthService } from '../auth.service';
-import { AUTH_SERVICE_MOCK } from '../../mock/auth-service.mock';
-
+import { AuthModule, AuthService } from '@auth0/auth0-angular';
+import { AuthServiceMock } from '../../mock/auth-service.mock';
 
 
 @NgModule({
@@ -27,13 +26,15 @@ import { AUTH_SERVICE_MOCK } from '../../mock/auth-service.mock';
           strictActionImmutability: true,
         }
       }),
-    EffectsModule.forRoot([])
+    EffectsModule.forRoot([]),
+    AuthModule.forRoot({domain: 'foo', clientId: 'bar'})
   ],
   exports: [
     RouterTestingModule,
   ],
   providers: [
-    { provide: AuthService, useValue: AUTH_SERVICE_MOCK }
+    { provide: AuthService, useClass: AuthServiceMock }
   ]
 })
-export class TestingModule { }
+export class TestingModule {
+}
