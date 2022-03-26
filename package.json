@@ -34,6 +34,7 @@
     "@ngrx/router-store": "^9.2.1",
     "@ngrx/store": "^9.2.1",
     "@ngrx/store-devtools": "^9.2.1",
+    "@ngxs/store": "^3.7.3",
     "@swimlane/ngx-charts": "^13.0.2",
     "@zxing/library": "^0.17.0",
     "@zxing/ngx-scanner": "^2.0.1",
