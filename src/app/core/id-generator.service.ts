@@ -17,7 +17,7 @@ export class IdGeneratorService {
   }
 
   public generatePurchaseId(): Observable<string> {
-    return this.getKeyId().pipe(
+    return this._getKeyIdFromAccessToken().pipe(
       map(kid => kid ? `P.${kid}.${new Date().getTime().toString()}.00` : undefined)
     );
   }
@@ -35,13 +35,13 @@ export class IdGeneratorService {
       `D.${purchaseId.substring(2, purchaseId.length - 3)}.${debitIndex}`;
   }
 
-  private getKeyId(): Observable<string> {
+  public _getKeyIdFromAccessToken(): Observable<string> {
     return this.auth.getAccessTokenSilently().pipe(
       take(1),
       map((token: string) => {
         // see https://github.com/auth0/angular2-jwt/blob/master/projects/angular-jwt/src/lib/jwthelper.service.ts
-        if (!token || token === '') {
-          return null;
+        if (!token) {
+          throw new Error('Did not receive a token.');
         }
         // Split token into header, payload & signature
         const parts = token.split('.');
