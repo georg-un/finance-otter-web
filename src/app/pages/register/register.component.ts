@@ -6,8 +6,8 @@ import { UserActions } from '../../store/actions/user.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../core/auth.service';
 import { Destroyable } from '../../shared/destroyable';
+import { AuthService, User as Auth0User } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-register',
@@ -40,13 +40,13 @@ export class RegisterComponent extends Destroyable implements OnInit {
   }
 
   createUser() {
-    this.auth.userProfile$
+    this.auth.user$
       .pipe(take(1))
-      .subscribe((profile) => {
+      .subscribe((profile: Auth0User) => {
         const user = new User();
         user.firstName = this.firstName;
         user.lastName = this.lastName;
-        user.avatarUrl = profile ? profile['picture'] : undefined;
+        user.avatarUrl = profile?.picture;
         this.store.dispatch(UserActions.registerCurrentUser({user: user}));
       });
   }

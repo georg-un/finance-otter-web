@@ -8,7 +8,8 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { UserSelectors } from '../../store/selectors/user.selectors';
 import { LayoutSelectors } from '../../store/selectors/layout.selectors';
-import { AuthService } from '../../core/auth.service';
+import { AuthService } from '@auth0/auth0-angular';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sidenav',
@@ -51,7 +52,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   logOut(): void {
-    this.auth.logout();
+    this.auth.logout({
+      returnTo: environment.deployUrl
+    });
   }
-
 }
