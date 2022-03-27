@@ -5,13 +5,13 @@ import { User } from '../../core/entity/user';
 import * as UserActions from './user.actions';
 import { Observable } from 'rxjs';
 import { FinOBackendService } from '../../core/fino-backend.service';
-import { getClonedState } from '../store.utils';
+import { getClonedState } from '../utils/store.utils';
 import { AuthService, User as Auth0User } from '@auth0/auth0-angular';
 import { filter, map, take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Dictionary } from '@ngrx/entity';
 
-export const USER_STATE_TOKEN = new StateToken<UserStateModel>('USERS');
+export const USER_STATE_TOKEN = new StateToken<UserStateModel>('USER');
 
 @State<UserStateModel>({
   name: USER_STATE_TOKEN,

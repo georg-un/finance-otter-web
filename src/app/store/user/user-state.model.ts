@@ -1,11 +1,9 @@
-import { Dictionary } from '@ngrx/entity/src/models';
 import { User } from '../../core/entity/user';
+import { EntityStateModel } from '../utils/entity-state.model';
 
-export interface UserStateModel {
+export interface UserStateModel extends EntityStateModel<User> {
   currentUserId: string;
   currentUserActivated: boolean;
-  entities: Dictionary<User>;
-  entityIds: string[];
 }
 
 export const DEFAULT_USER_STATE: UserStateModel = {
