@@ -69,11 +69,11 @@ export class CompensationEditorEditComponent extends AbstractPaymentEditor imple
       return;
     }
     this.purchase.debits = [
-      new Debit({
+      {
         debitId: this.idGeneratorService.generateDebitId(this.purchase.purchaseId, 0),
         debtorId: this.recipientId,
         amount: this.sumAmount
-      })
+      } as Debit
     ];
     this.store.dispatch(
       PurchaseActions.updatePurchase({

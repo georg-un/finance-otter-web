@@ -35,11 +35,11 @@ export abstract class AbstractPurchaseEditor extends AbstractPaymentEditor {
     this.distributionFragments.forEach((distributionFragment, index) => {
       if (distributionFragment.amount) {
         this.purchase.debits.push(
-          new Debit({
+          {
             debitId: this.idGeneratorService.generateDebitId(this.purchase.purchaseId, index),  // TODO: Check if debitId is truthy
             debtorId: distributionFragment.user.userId,
             amount: distributionFragment.amount
-          })
+          } as Debit
         );
       }
     });

@@ -43,7 +43,7 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
 
   ngOnInit() {
     super.ngOnInit();
-    this.purchase = new Purchase();
+    this.purchase = {} as Purchase;
 
     this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
     this.currentUser$.pipe(
@@ -74,11 +74,11 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
           this.purchase.purchaseId = purchaseId;
           this.purchase.isCompensation = true;
           this.purchase.debits = [
-            new Debit({
+            {
               debitId: this.idGeneratorService.generateDebitId(purchaseId, 0),
               debtorId: this.recipientId,
               amount: this.sumAmount
-            })
+            } as Debit
           ];
           this.store.dispatch(
             PurchaseActions.addNewPurchase({

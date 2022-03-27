@@ -1,6 +1,6 @@
 import { Debit } from './debit';
 
-export class Purchase {
+export interface Purchase {
   purchaseId: string;
   buyerId: string;
   date: number;

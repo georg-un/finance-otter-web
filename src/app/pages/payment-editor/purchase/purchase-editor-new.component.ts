@@ -47,7 +47,7 @@ export class PurchaseEditorNewComponent extends AbstractPurchaseEditor implement
 
   ngOnInit() {
     super.ngOnInit();
-    this.purchase = new Purchase();
+    this.purchase = {} as Purchase;
 
     this.store.select(UserSelectors.selectCurrentUser)
       .pipe(
