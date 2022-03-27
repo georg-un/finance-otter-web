@@ -5,11 +5,10 @@ import { User } from '../../core/entity/user';
 import * as UserActions from './user.actions';
 import { Observable } from 'rxjs';
 import { FinOBackendService } from '../../core/fino-backend.service';
-import { getClonedState, updateSingleStateProperty } from '../utils/store.utils';
+import { setEntityState, setSingleStateProperty } from '../utils/store.utils';
 import { AuthService, User as Auth0User } from '@auth0/auth0-angular';
 import { filter, map, take, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Dictionary } from '@ngrx/entity';
 
 export const USER_STATE_TOKEN = new StateToken<UserStateModel>('USER');
 
@@ -54,7 +53,7 @@ export class UserState {
     return this.finoBackendService.createNewUser(action.payload.user).pipe(
       tap(() => ctx.dispatch(new UserActions.FetchUsers())),
       tap(() => this.ngZone.run(() => this.router.navigate(['/']))),
-      map(() => updateSingleStateProperty(ctx, 'currentUserActivated', true))
+      map(() => setSingleStateProperty(ctx, 'currentUserActivated', true))
     );
   }
 
@@ -62,7 +61,7 @@ export class UserState {
   public _checkIfCurrentUserIsActivated(ctx: StateContext<UserStateModel>): Observable<UserStateModel> {
     return this.finoBackendService.checkIfUserActive().pipe(
       take(1),
-      map(isActivated => updateSingleStateProperty(ctx, 'currentUserActivated', isActivated))
+      map(isActivated => setSingleStateProperty(ctx, 'currentUserActivated', isActivated))
     );
   }
 
@@ -70,12 +69,7 @@ export class UserState {
   public _fetchUsers(ctx: StateContext<UserStateModel>): Observable<UserStateModel> {
     return this.finoBackendService.fetchUsers().pipe(
       map(users => users.sort(this.sortUsers)),
-      map(users => {
-        const newState = getClonedState(ctx);
-        newState.entityIds = users.map(u => u.userId);
-        newState.entities = users.reduce((acc: Dictionary<User>, cur: User) => ({...acc, [cur.userId]: cur}), {});
-        return ctx.setState(newState);
-      })
+      map(users => setEntityState(ctx, users, 'userId'))
     );
   }
 
@@ -84,7 +78,7 @@ export class UserState {
     ctx: StateContext<UserStateModel>,
     action: UserActions.SetCurrentUserId
   ): UserStateModel {
-    return updateSingleStateProperty(ctx, 'currentUserId', action.payload.userId);
+    return setSingleStateProperty(ctx, 'currentUserId', action.payload.userId);
   }
 
   public ngxsOnInit(ctx?: StateContext<UserStateModel>): void {

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as SummaryActions from './summary.actions';
 import { Observable } from 'rxjs';
 import { FinOBackendService } from '../../core/fino-backend.service';
-import { updateSingleStateProperty } from '../utils/store.utils';
+import { setSingleStateProperty } from '../utils/store.utils';
 import { map } from 'rxjs/operators';
 import { DEFAULT_SUMMARY_STATE, SummaryStateModel } from './summary-state.model';
 import { Balances, CategoryByMonthSummary, CategorySummary } from '../../core/entity/summaries';
@@ -39,7 +39,7 @@ export class SummaryState {
   @Action(SummaryActions.FetchBalances)
   public _fetchBalances(ctx: StateContext<SummaryStateModel>): Observable<SummaryStateModel> {
     return this.finoBackendService.fetchBalances().pipe(
-      map(balances => updateSingleStateProperty(ctx, 'balances', balances))
+      map(balances => setSingleStateProperty(ctx, 'balances', balances))
     );
   }
 
@@ -49,7 +49,7 @@ export class SummaryState {
     action: SummaryActions.FetchCategorySummary
   ): Observable<SummaryStateModel> {
     return this.finoBackendService.fetchCategorySummary(action.payload.months).pipe(
-      map(categorySummary => updateSingleStateProperty(ctx, 'categorySummary', categorySummary))
+      map(categorySummary => setSingleStateProperty(ctx, 'categorySummary', categorySummary))
     );
   }
 
@@ -59,7 +59,7 @@ export class SummaryState {
     action: SummaryActions.FetchCategoryByMonthSummary
   ): Observable<SummaryStateModel> {
     return this.finoBackendService.fetchCategoryByMonthSummary(action.payload.months).pipe(
-      map(categoryByMonthSummary => updateSingleStateProperty(ctx, 'categoryByMonthSummary', categoryByMonthSummary))
+      map(categoryByMonthSummary => setSingleStateProperty(ctx, 'categoryByMonthSummary', categoryByMonthSummary))
     );
   }
 }
