@@ -64,7 +64,7 @@ export class PurchaseState {
   ): Observable<PurchaseStateModel> {
     const purchase = action.payload.purchase;
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
-    this.finoBackendService.uploadNewPurchase(purchase, action.payload.receipt).pipe(
+    return this.finoBackendService.uploadNewPurchase(purchase, action.payload.receipt).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
       tap(purchase => {
         this.ngZone.run(() => this.router.navigate(['purchase', purchase.purchaseId], {replaceUrl: true}));
@@ -80,7 +80,7 @@ export class PurchaseState {
   ): Observable<PurchaseStateModel> {
     const purchase = action.payload.purchase;
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
-    this.finoBackendService.updatePurchase(purchase).pipe(
+    return this.finoBackendService.updatePurchase(purchase).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
       map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate))
     );
@@ -93,7 +93,7 @@ export class PurchaseState {
   ): Observable<PurchaseStateModel> {
     const purchase = ctx.getState().entities[action.payload.purchaseId];
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
-    this.finoBackendService.updatePurchase(purchase).pipe(
+    return this.finoBackendService.updatePurchase(purchase).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
       map(() => {
         const newState = getClonedState(ctx);
@@ -117,7 +117,7 @@ export class PurchaseState {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     return this.finoBackendService.updateReceipt(action.payload.purchaseId, action.payload.receipt).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId'))
+      map(() => updateEntityState(ctx, [purchase], 'purchaseId'))
     );
   }
 
@@ -137,15 +137,15 @@ export class PurchaseState {
 
   // *************** UTILITIES *************** //
 
-  private handlePurchaseSyncError(error: any, ctx: StateContext<PurchaseStateModel>, purchase: Purchase): void {
+  private handlePurchaseSyncError(error: any, ctx: StateContext<PurchaseStateModel>, purchase: Purchase): never {
     purchase.syncStatus = SyncStatusEnum.Error;
     updateEntityState(ctx, [purchase], 'purchaseId');
     throw error;
   }
 
-  private setPurchaseSyncStatus(ctx: StateContext<PurchaseStateModel>, purchase: Purchase, syncStatus: SyncStatusEnum): StateContext<PurchaseStateModel> {
+  private setPurchaseSyncStatus(ctx: StateContext<PurchaseStateModel>, purchase: Purchase, syncStatus: SyncStatusEnum): PurchaseStateModel {
     purchase.syncStatus = syncStatus;
-    updateEntityState(ctx, [purchase], 'purchaseId');
+    return updateEntityState(ctx, [purchase], 'purchaseId');
   }
 
   private sortPurchasesByDate(a: Purchase, b: Purchase): number {

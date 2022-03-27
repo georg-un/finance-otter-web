@@ -27,7 +27,7 @@ export class SummaryState {
     return createSelector([SummaryState], (state) => state.categorySummary);
   }
 
-  public static selectCategoryByMonthSummary(): (state: SummaryStateModel) => CategoryByMonthSummary {
+  public static selectCategoryByMonthSummary(): (state: SummaryStateModel) => CategoryByMonthSummary[] {
     return createSelector([SummaryState], (state) => state.categoryByMonthSummary);
   }
 
