@@ -17,5 +17,6 @@ export enum SyncStatusEnum {
   LocalUpdate = 'localUpdate',
   LocalDelete = 'localDelete',
   Syncing = 'syncing',
-  Remote = 'remote'
+  Remote = 'remote',
+  Error = 'error'
 }
