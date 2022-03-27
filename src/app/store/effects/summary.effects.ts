@@ -38,7 +38,7 @@ export class SummaryEffects {
 
   requestCategoryMonthSummary$ = createEffect(() => this.actions$.pipe(
     ofType(SummaryActions.requestCategoryMonthSummary),
-    mergeMap((action) => this.restService.fetchCategoryMonthSummary(action.months)
+    mergeMap((action) => this.restService.fetchCategoryByMonthSummary(action.months)
       .pipe(
         map(summary => (SummaryActions.categoryMonthSummaryReceived({summary: summary}))),
         catchError(() => EMPTY)

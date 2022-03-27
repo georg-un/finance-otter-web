@@ -1,9 +1,9 @@
-import { CategoryMonthSummary, CategorySummary } from '../../core/entity/summaries';
+import { Balances, CategoryByMonthSummary, CategorySummary } from '../../core/entity/summaries';
 
 export interface SummaryState {
-  balances: object;
+  balances: Balances;
   categorySummary: CategorySummary[],
-  categoryMonthSummary: CategoryMonthSummary[],
+  categoryMonthSummary: CategoryByMonthSummary[],
   syncJobs: number
 }
 

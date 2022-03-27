@@ -11,7 +11,7 @@ import { ChartData } from '../../core/entity/chart-data';
 import { ChartSeries } from '../../core/entity/chart-series';
 import { Category } from '../../core/entity/category';
 import { CategorySelectors } from '../../store/selectors/category.selectors';
-import { CategoryMonthSummary, CategorySummary } from '../../core/entity/summaries';
+import { Balances, CategoryByMonthSummary, CategorySummary } from '../../core/entity/summaries';
 import { LayoutActions } from '../../store/actions/layout.actions';
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
 import { LayoutService } from '../../layout/layout.service';
@@ -36,11 +36,11 @@ export class SummaryComponent extends Destroyable implements OnInit {
     map(cs => this.isFilledArray(cs) ? cs : [])
   );
 
-  private categoryMonthSummaries$: Observable<CategoryMonthSummary[]> = this.store.select(SummarySelectors.selectCategoryMonthSummary).pipe(
+  private categoryByMonthSummaries$: Observable<CategoryByMonthSummary[]> = this.store.select(SummarySelectors.selectCategoryMonthSummary).pipe(
     map(cms => this.isFilledArray(cms) ? cms : [])
   );
 
-  public balances$: Observable<object[]> = this.store.select(SummarySelectors.selectBalances).pipe(
+  public balances$: Observable<[string, number][]> = this.store.select(SummarySelectors.selectBalances).pipe(
     map(balances => balances ? Object.entries(balances) : undefined)
   );
 
@@ -53,12 +53,12 @@ export class SummaryComponent extends Destroyable implements OnInit {
     })
   );
 
-  public categoryMonthSummaryChartSeries$: Observable<ChartSeries[]> = combineLatest([
-    this.categoryMonthSummaries$,
+  public categoryByMonthSummaryChartSeries$: Observable<ChartSeries[]> = combineLatest([
+    this.categoryByMonthSummaries$,
     this.categories$
   ]).pipe(
-    map(([categoryMonthSummaries, categories]: [CategoryMonthSummary[], Category[]]) => {
-      return this.toCategoryMonthSummaryChartSeries(categoryMonthSummaries, categories);
+    map(([categoryByMonthSummaries, categories]: [CategoryByMonthSummary[], Category[]]) => {
+      return this.toCategoryByMonthSummaryChartSeries(categoryByMonthSummaries, categories);
     }),
     map(cms => cms.sort(this.compareCategorySummaryMonths))
   );
@@ -139,11 +139,11 @@ export class SummaryComponent extends Destroyable implements OnInit {
     });
   }
 
-  private toCategoryMonthSummaryChartSeries(categoryMonthSummaries: CategoryMonthSummary[], categories: Category[]): ChartSeries[] {
-    return categoryMonthSummaries.map(categoryMonthSummary => {
+  private toCategoryByMonthSummaryChartSeries(categoryByMonthSummaries: CategoryByMonthSummary[], categories: Category[]): ChartSeries[] {
+    return categoryByMonthSummaries.map(categoryByMonthSummary => {
       return {
-        name: categoryMonthSummary.name,
-        series: this.toCategorySummaryChartData(categoryMonthSummary.series, categories)
+        name: categoryByMonthSummary.name,
+        series: this.toCategorySummaryChartData(categoryByMonthSummary.series, categories)
       } as ChartSeries;
     });
   }

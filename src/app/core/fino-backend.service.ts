@@ -9,7 +9,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 import { Category } from './entity/category';
-import { CategoryMonthSummary, CategorySummary } from './entity/summaries';
+import { CategoryByMonthSummary, CategorySummary } from './entity/summaries';
 
 @Injectable({
   providedIn: 'root'
@@ -121,10 +121,10 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
   }
 
-  fetchCategoryMonthSummary(months: number): Observable<CategoryMonthSummary[]> {
+  fetchCategoryByMonthSummary(months: number): Observable<CategoryByMonthSummary[]> {
     let params = new HttpParams();
     params = params.set('months', months.toString());
-    return this.http.get<CategoryMonthSummary[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
+    return this.http.get<CategoryByMonthSummary[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
       this.handleRequestFailure()
     );
   }

@@ -39,11 +39,11 @@
 
     <div class="chart">
       <p class="title">MONTHLY EXPENSES BY CATEGORY</p>
-      <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryMonthSummaryChartSeries$ | async); else noDataTemplate">
+      <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryByMonthSummaryChartSeries$ | async); else noDataTemplate">
         <ngx-charts-bar-vertical-stacked
                 [view]="chartSize$ | async"
                 scheme="vivid"
-                [results]="categoryMonthSummaryChartSeries$ | async"
+                [results]="categoryByMonthSummaryChartSeries$ | async"
                 [customColors]="categoryColorMap$ | async"
                 [xAxis]="true"
                 [yAxis]="true"
