@@ -43,7 +43,7 @@ export class PurchaseState {
     action: PurchaseActions.FetchPurchases
   ): Observable<PurchaseStateModel> {
     return this.finoBackendService.fetchPurchases(action.payload.offset, action.payload.limit).pipe(
-      map(purchases => updateEntityState(ctx, purchases, 'purchaseId'))
+      map(purchases => updateEntityState(ctx, purchases, 'purchaseId', this.sortPurchasesByDate))
     );
   }
 
@@ -53,7 +53,7 @@ export class PurchaseState {
     action: PurchaseActions.FetchSinglePurchase
   ): Observable<PurchaseStateModel> {
     return this.finoBackendService.fetchPurchase(action.payload.purchaseId).pipe(
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId'))
+      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate))
     );
   }
 
@@ -69,7 +69,7 @@ export class PurchaseState {
       tap(purchase => {
         this.ngZone.run(() => this.router.navigate(['purchase', purchase.purchaseId], {replaceUrl: true}));
       }),
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId')),
+      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate)),
     );
   }
 
@@ -82,7 +82,7 @@ export class PurchaseState {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     this.finoBackendService.updatePurchase(purchase).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId'))
+      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate))
     );
   }
 
@@ -146,5 +146,15 @@ export class PurchaseState {
   private setPurchaseSyncStatus(ctx: StateContext<PurchaseStateModel>, purchase: Purchase, syncStatus: SyncStatusEnum): StateContext<PurchaseStateModel> {
     purchase.syncStatus = syncStatus;
     updateEntityState(ctx, [purchase], 'purchaseId');
+  }
+
+  private sortPurchasesByDate(a: Purchase, b: Purchase): number {
+    if (a.date > b.date) {
+      return -1;
+    } else if (a.date < b.date) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
