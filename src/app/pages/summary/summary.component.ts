@@ -15,6 +15,8 @@ import { CategoryByMonthSummary, CategorySummary } from '../../core/entity/summa
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
 import { LayoutService } from '../../layout/layout.service';
 import { Destroyable } from '../../shared/destroyable';
+import { Select } from '@ngxs/store';
+import { CategoryState } from '../../store/category/category.state';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true};
 
@@ -27,9 +29,8 @@ const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, right
 })
 export class SummaryComponent extends Destroyable implements OnInit {
 
-  private categories$: Observable<Category[]> = this.store.select(CategorySelectors.selectAllCategories).pipe(
-    filter(this.isFilledArray)
-  );
+  @Select(CategoryState.selectAllCategories())
+  private categories$: Observable<Category[]>;
 
   private categorySummaries$: Observable<CategorySummary[]> = this.store.select(SummarySelectors.selectCategorySummary).pipe(
     map(cs => this.isFilledArray(cs) ? cs : [])

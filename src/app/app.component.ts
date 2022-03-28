@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
       .subscribe((isActivated: boolean) => {
         if (isActivated) {
           this.store.dispatch(UserActions.requestUsers());
-          this.store.dispatch(CategoryActions.requestCategories());
           this.store.dispatch(PurchaseActions.requestPurchases({offset: 0, limit: 10}));
         } else {
           this.store.dispatch(UserActions.checkIfUserIsActive());
