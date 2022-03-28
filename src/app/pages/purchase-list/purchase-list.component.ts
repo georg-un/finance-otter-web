@@ -40,8 +40,8 @@ export class PurchaseListComponent extends Destroyable {
     private dialog: MatDialog
   ) {
     super();
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
-    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
+    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.layoutService.toggleSidenav());
     this.layoutService.registerRightHeaderButtonClickCallback(() => this.showAddPurchaseDialog());
   }
 

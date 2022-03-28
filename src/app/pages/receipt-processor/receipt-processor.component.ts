@@ -54,7 +54,7 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
         this.showErrorSnackMessage();
       });
     }
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
     this.layoutService.registerLeftHeaderButtonClickCallback(() => {});
     this.layoutService.registerRightHeaderButtonClickCallback(() => {});
   }

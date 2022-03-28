@@ -80,7 +80,7 @@ export class PurchaseViewComponent extends Destroyable implements OnInit {
     private layoutService: LayoutService
   ) {
     super();
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.location.back());
   }
 

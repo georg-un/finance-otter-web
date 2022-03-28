@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { fadeOnChange } from '../layout.animations';
 import { HeaderButtonConfig } from '../../shared/domain/header-config';
 
@@ -9,7 +8,7 @@ import { HeaderButtonConfig } from '../../shared/domain/header-config';
   styleUrls: ['./header.component.scss'],
   animations: [fadeOnChange]
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent {
 
   @Input() leftButton: HeaderButtonConfig;
 
@@ -20,13 +19,6 @@ export class HeaderComponent implements OnDestroy {
   @Output() leftButtonClicked: EventEmitter<void> = new EventEmitter<void>();
 
   @Output() rightButtonClicked: EventEmitter<void> = new EventEmitter<void>();
-
-  private onDestroy$: Subject<boolean> = new Subject();
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next(true);
-    this.onDestroy$.complete();
-  }
 
   onLeftButtonClick(): void {
     this.leftButtonClicked.emit();

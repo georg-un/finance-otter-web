@@ -71,7 +71,7 @@ export abstract class AbstractPaymentEditor extends Destroyable implements OnIni
                         protected location: Location
   ) {
     super();
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.closeEditorAfterConfirmation());
     this.layoutService.registerRightHeaderButtonClickCallback(() => this.submitPurchase());
   }

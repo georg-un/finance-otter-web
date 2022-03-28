@@ -11,13 +11,12 @@ import { ChartData } from '../../core/entity/chart-data';
 import { ChartSeries } from '../../core/entity/chart-series';
 import { Category } from '../../core/entity/category';
 import { CategorySelectors } from '../../store/selectors/category.selectors';
-import { Balances, CategoryByMonthSummary, CategorySummary } from '../../core/entity/summaries';
-import { LayoutActions } from '../../store/actions/layout.actions';
+import { CategoryByMonthSummary, CategorySummary } from '../../core/entity/summaries';
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
 import { LayoutService } from '../../layout/layout.service';
 import { Destroyable } from '../../shared/destroyable';
 
-const HEADER_CONFIG: HeaderConfig = { leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true };
+const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true};
 
 
 @Component({
@@ -70,7 +69,7 @@ export class SummaryComponent extends Destroyable implements OnInit {
     const chartHeight = Math.floor(chartWidth * 0.75);
     observer.next([chartWidth, chartHeight]);
     observer.complete();
-  }).pipe(shareReplay(1))
+  }).pipe(shareReplay(1));
 
   private _categorySummaryMonths: BehaviorSubject<number> = new BehaviorSubject<number>(6);
   public categorySummaryMonths$: Observable<number> = this._categorySummaryMonths.asObservable();
@@ -80,9 +79,10 @@ export class SummaryComponent extends Destroyable implements OnInit {
     private layoutService: LayoutService
   ) {
     super();
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG))
-    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.store.dispatch(LayoutActions.toggleSidenav()));
-    this.layoutService.registerRightHeaderButtonClickCallback(() => {});
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
+    this.layoutService.registerLeftHeaderButtonClickCallback(() => this.layoutService.toggleSidenav());
+    this.layoutService.registerRightHeaderButtonClickCallback(() => {
+    });
   }
 
   public ngOnInit(): void {
@@ -126,7 +126,7 @@ export class SummaryComponent extends Destroyable implements OnInit {
         name: category.label,
         value: category.color
       } as ChartData;
-    })
+    });
   }
 
   private toCategorySummaryChartData(categorySummaries: CategorySummary[], categories: Category[]): ChartData[] {
