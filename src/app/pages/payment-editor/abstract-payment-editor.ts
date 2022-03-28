@@ -2,8 +2,6 @@ import { Observable } from 'rxjs';
 import { Purchase } from '../../core/entity/purchase';
 import { takeUntil } from 'rxjs/operators';
 import { User } from '../../core/entity/user';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/states/app.state';
 import { DistributionFragment } from './distribution-fragment';
 import { MultilineSnackbarComponent } from '../../shared/multiline-snackbar/multiline-snackbar.component';
 import { BigNumber } from 'bignumber.js';
@@ -19,8 +17,7 @@ import { Location } from '@angular/common';
 import { Moment } from 'moment';
 import { Destroyable } from '../../shared/destroyable';
 import { Select } from '@ngxs/store';
-import { UserState } from '../../store/user/user.state';
-import { CategoryState } from '../../store/category/category.state';
+import { CategoryState, UserState } from '@fino/store';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
 const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
@@ -62,12 +59,12 @@ export abstract class AbstractPaymentEditor extends Destroyable {
     date: false
   };
 
-  protected constructor(protected store: Store<AppState>,
-                        protected fullscreenDialog: FullscreenDialogService,
-                        protected snackBar: MatSnackBar,
-                        protected dialog: MatDialog,
-                        protected layoutService: LayoutService,
-                        protected location: Location
+  protected constructor(
+    protected fullscreenDialog: FullscreenDialogService,
+    protected snackBar: MatSnackBar,
+    protected dialog: MatDialog,
+    protected layoutService: LayoutService,
+    protected location: Location
   ) {
     super();
     this.layoutService.setHeaderConfig(HEADER_CONFIG);

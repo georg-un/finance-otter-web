@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from '../../../store/states/app.state';
-import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { Purchase } from '../../../core/entity/purchase';
-import { PurchaseActions } from '../../../store/actions/purchase.actions';
-import { PurchaseSelectors } from '../../../store/selectors/purchase.selectors';
-import { UserSelectors } from '../../../store/selectors/user.selectors';
 import { User } from '../../../core/entity/user';
 import { combineLatest } from 'rxjs';
 import { Debit } from '../../../core/entity/debit';
@@ -20,6 +15,9 @@ import { LayoutService } from '../../../layout/layout.service';
 import { Location } from '@angular/common';
 import { cloneDeep } from 'lodash-es';
 import { AbstractPurchaseEditor } from './abstract-purchase-editor';
+import { Store } from '@ngxs/store';
+import { PurchaseActions, PurchaseState, UserState } from '@fino/store';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -37,23 +35,23 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditor implemen
   public customDistribution = true;
 
   constructor(
-    store: Store<AppState>,
     fullscreenDialog: FullscreenDialogService,
     snackBar: MatSnackBar,
     dialog: MatDialog,
     layoutService: LayoutService,
     location: Location,
     idGeneratorService: IdGeneratorService,
+    private store: Store,
+    private route: ActivatedRoute,
     private finoBackendService: FinOBackendService,
   ) {
-    super(store, fullscreenDialog, snackBar, dialog, layoutService, location, idGeneratorService);
+    super(fullscreenDialog, snackBar, dialog, layoutService, location, idGeneratorService);
   }
 
   ngOnInit() {
-    super.ngOnInit();
-
-    const purchase$ = this.store.select(PurchaseSelectors.selectCurrentPurchase);
-    const users$ = this.store.select(UserSelectors.selectAllUsers);
+    const purchaseId = this.route.snapshot.paramMap.get('purchaseId');
+    const purchase$ = this.store.select(PurchaseState.selectPurchaseById(purchaseId));
+    const users$ = this.store.select(UserState.selectAllUsers());
 
     combineLatest([purchase$, users$])
       .pipe(take(1))
@@ -109,10 +107,6 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditor implemen
       return;
     }
     this.mapDistributionFragmentsToPurchaseDebits();
-    this.store.dispatch(
-      PurchaseActions.updatePurchase({
-        purchase: this.purchase
-      })
-    );
+    this.store.dispatch(new PurchaseActions.UpdatePurchase({purchase: this.purchase}));
   }
 }
