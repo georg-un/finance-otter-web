@@ -17,11 +17,19 @@ export function setSingleStateProperty<T>(ctx: StateContext<T>, property: keyof 
  * @param ctx           State context
  * @param entities      Entities to add to the state
  * @param idProperty    Name of the ID property of the respective entity
+ * @param sortFn        An optional compare function used to sort all entities before updating the state
  */
-export function setEntityState<T, S extends EntityStateModel<T>>(ctx: StateContext<S>, entities: T[], idProperty: keyof T & string): S {
+export function setEntityState<T, S extends EntityStateModel<T>>(
+  ctx: StateContext<S>,
+  entities: T[],
+  idProperty: keyof T & string,
+  sortFn?: (a: T, b: T) => number
+): S {
   const prop = idProperty as string;  // required to make the TS compiler happy
   // remove duplicates (by id-property)
   entities = [...new Map(entities.map(item => [item[prop], item])).values()];
+  // sort
+  entities = sortFn ? entities.sort(sortFn) : entities;
   // set the state
   const newState = getClonedState(ctx);
   newState.entityIds = entities.map(entity => entity[prop]);
@@ -42,10 +50,7 @@ export function updateEntityState<T, S extends EntityStateModel<T>>(
   idProperty: keyof T & string,
   sortFn?: (a: T, b: T) => number
   ): S {
-  // combine old & new entities
   const oldEntities = Object.values(ctx.getState().entities || {});
   let allEntities = [...oldEntities, ...entities];
-  // sort the entities
-  allEntities = sortFn ? allEntities.sort(sortFn) : allEntities;
-  return setEntityState(ctx, allEntities, idProperty);
+  return setEntityState(ctx, allEntities, idProperty, sortFn);
 }

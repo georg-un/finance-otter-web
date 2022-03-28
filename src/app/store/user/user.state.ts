@@ -68,8 +68,7 @@ export class UserState {
   @Action(UserActions.FetchUsers)
   public _fetchUsers(ctx: StateContext<UserStateModel>): Observable<UserStateModel> {
     return this.finoBackendService.fetchUsers().pipe(
-      map(users => users.sort(this.sortUsers)),
-      map(users => setEntityState(ctx, users, 'userId'))
+      map(users => setEntityState(ctx, users, 'userId', this.sortUsers))
     );
   }
 
