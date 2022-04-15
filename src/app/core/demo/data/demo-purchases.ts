@@ -1,18 +1,22 @@
 import {Purchase, SyncStatusEnum} from '../../entity/purchase';
 
+function daysInMs(days: number): number {
+  return days * 24 * 60 * 60 * 1000;
+}
+
 export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user3',
     categoryId: 1,
-    date: 1590270491000,
+    date: new Date().getTime() - daysInMs(1),
     debits: [
       {
-        amount: 3.45,
+        amount: 33.45,
         debitId: 'initDebitId20',
         debtorId: 'user2'
       },
       {
-        amount: 3.45,
+        amount: 33.45,
         debitId: 'initDebitId21',
         debtorId: 'user3'
       }
@@ -22,29 +26,36 @@ export const DEMO_PURCHASES: Purchase[] = [
     syncStatus: SyncStatusEnum.Remote
   },
   {
-    buyerId: 'user3',
-    categoryId: 1,
-    date: 1587851291000,
+    buyerId: 'user1',
+    categoryId: 3,
+    date: new Date().getTime() - daysInMs(31),
     debits: [
       {
-        amount: 23.56,
-        debitId: 'initDebitId22',
-        debtorId: 'user2'
+        amount: 12.5,
+        debitId: 'initDebitId19',
+        debtorId: 'user3'
       },
       {
-        amount: 23.56,
-        debitId: 'initDebitId23',
-        debtorId: 'user3'
+        amount: 12.5,
+        debitId: 'initDebitId17',
+        debtorId: 'user1'
+      },
+      {
+        amount: 12.5,
+        debitId: 'initDebitId18',
+        debtorId: 'user2'
       }
     ],
-    purchaseId: 'initPurchaseId10',
-    shop: 'Bierkanter',
+    purchaseId: 'initPurchaseId8',
+    shop: 'GRU',
     syncStatus: SyncStatusEnum.Remote
   },
+
+
   {
     buyerId: 'user3',
     categoryId: 1,
-    date: 1586987291000,
+    date: new Date().getTime() - daysInMs(34),
     debits: [
       {
         amount: 26.8,
@@ -68,7 +79,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   },
   {
     buyerId: 'user2',
-    date: 1582467716000,
+    date: new Date().getTime() - daysInMs(56),
     debits: [
       {
         amount: 20.0,
@@ -83,7 +94,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user2',
     categoryId: 1,
-    date: 1581806891000,
+    date: new Date().getTime() - daysInMs(64),
     debits: [
       {
         amount: 23.45,
@@ -103,7 +114,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user1',
     categoryId: 1,
-    date: 1581806891000,
+    date: new Date().getTime() - daysInMs(73),
     debits: [
       {
         amount: 10.0,
@@ -126,34 +137,29 @@ export const DEMO_PURCHASES: Purchase[] = [
     syncStatus: SyncStatusEnum.Remote
   },
   {
-    buyerId: 'user1',
-    categoryId: 3,
-    date: 1581806891000,
+    buyerId: 'user3',
+    categoryId: 1,
+    date: new Date().getTime() - daysInMs(93),
     debits: [
       {
-        amount: 12.5,
-        debitId: 'initDebitId19',
-        debtorId: 'user3'
-      },
-      {
-        amount: 12.5,
-        debitId: 'initDebitId17',
-        debtorId: 'user1'
-      },
-      {
-        amount: 12.5,
-        debitId: 'initDebitId18',
+        amount: 23.56,
+        debitId: 'initDebitId22',
         debtorId: 'user2'
+      },
+      {
+        amount: 23.56,
+        debitId: 'initDebitId23',
+        debtorId: 'user3'
       }
     ],
-    purchaseId: 'initPurchaseId8',
-    shop: 'GRU',
+    purchaseId: 'initPurchaseId10',
+    shop: 'Bierkanter',
     syncStatus: SyncStatusEnum.Remote
   },
   {
     buyerId: 'user2',
     categoryId: 3,
-    date: 1580856491000,
+    date: new Date().getTime() - daysInMs(98),
     debits: [
       {
         amount: 24.5,
@@ -173,7 +179,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user1',
     categoryId: 1,
-    date: 1580805505000,
+    date: new Date().getTime() - daysInMs(99),
     debits: [
       {
         amount: 12.3,
@@ -199,7 +205,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user1',
     categoryId: 4,
-    date: 1579906091000,
+    date: new Date().getTime() - daysInMs(101),
     debits: [
       {
         amount: 14.4,
@@ -218,7 +224,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   },
   {
     buyerId: 'user1',
-    date: 1579098116000,
+    date: new Date().getTime() - daysInMs(124),
     debits: [
       {
         amount: 38.0,
@@ -233,7 +239,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user2',
     categoryId: 3,
-    date: 1578610091000,
+    date: new Date().getTime() - daysInMs(132),
     debits: [
       {
         amount: 23.45,
@@ -253,7 +259,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user1',
     categoryId: 5,
-    date: 1577833200000,
+    date: new Date().getTime() - daysInMs(151),
     debits: [
       {
         amount: 48.5,
@@ -278,7 +284,7 @@ export const DEMO_PURCHASES: Purchase[] = [
   {
     buyerId: 'user2',
     categoryId: 2,
-    date: 1577542534000,
+    date: new Date().getTime() - daysInMs(185),
     debits: [
       {
         amount: 8.45,
