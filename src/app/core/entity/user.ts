@@ -3,5 +3,5 @@ export class User {
   firstName: string;
   lastName: string;
   avatarUrl: string;
-  deactivated: boolean;
+  deactivated?: boolean;
 }
