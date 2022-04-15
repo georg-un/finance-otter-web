@@ -95,10 +95,13 @@ export class DemoBackendService implements FinOBackendServiceInterface {
     for (let m = 0; m <= _months; m++) {
       const date = new Date();
       date.setMonth(date.getMonth() - m);
+      const year = date.getFullYear().toString();
+      let month = (date.getMonth() + 1).toString();
+      month = month.length === 2 ? month : '0' + month;  // make sure month strings consist of two digits
       const filteredPurchases = this.getPurchasesBetweenMonths(m + 1, m);
       categoryMonthSummaries.push(
         {
-          name: date.getFullYear() + '.' + date.getMonth(),
+          name: year + '.' + month,
           series: this.getCategorySummaries(filteredPurchases)
         }
       );
