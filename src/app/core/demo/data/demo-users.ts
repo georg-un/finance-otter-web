@@ -20,7 +20,7 @@ export const DEMO_USERS: User[] = [
     userId: 'user3'
   },
   {
-    avatarUrl: 'https://s.gravatar.com/avatar/5025805de86e5104c02fe7ef47cb19fd?s=480',
+    avatarUrl: 'https://s.gravatar.com/avatar/5025805de86e5104c02fe7ef47cb19fd?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fge.png',
     firstName: 'Georg',
     lastName: 'Unterholzner',
     userId: 'user4'
