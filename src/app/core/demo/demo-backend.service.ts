@@ -51,12 +51,12 @@ export class DemoBackendService implements FinOBackendServiceInterface {
   uploadNewPurchase(purchase: Purchase, receipt: Blob): Observable<Purchase> {
     this.receipts[purchase.purchaseId] = receipt;
     this.purchases.push(purchase);
-    return of(cloneDeep(purchase));
+    this.sortPurchasesByDate();
   }
 
   updatePurchase(purchase: Purchase): Observable<Purchase> {
     this.purchases = this.purchases.map(p => p.purchaseId === purchase.purchaseId ? purchase : p);
-    return of(purchase);
+    this.sortPurchasesByDate();
   }
 
   deletePurchase(purchaseId: string): Observable<Object> {
@@ -139,6 +139,18 @@ export class DemoBackendService implements FinOBackendServiceInterface {
           .map(p => this.getDebitsAmount(p))
           .reduce(this.add, 0)
       } as CategorySummary;
+    });
+  }
+
+  private sortPurchasesByDate(): void {
+    this.purchases.sort((a, b) => {
+      if (a.date < b.date) {
+        return -1;
+      }
+      if (a.date > b.date) {
+        return 1;
+      }
+      return 0;
     });
   }
 
