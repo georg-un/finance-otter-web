@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  demo: false,
+  demo: true,
   backendUrl: '',
   deployUrl: '',
   auth0: {

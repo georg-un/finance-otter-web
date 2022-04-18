@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  demo: false,
   backendUrl: 'https://honeypot:4200/fino',
   deployUrl: 'https://honeypot:4200',
   auth0: {
