@@ -4,7 +4,7 @@
       <p class="title">BALANCE</p>
       <div class="debit-blockquote">
         <ng-container *ngFor="let balance of (balances$ | async)">
-          <ng-container *ngIf="selectUserById(balance[0]) | async as user">
+          <ng-container *ngIf="(userMap$ | async).get(balance[0]) as user">
             <app-debit-card [amount]="balance[1]" [user]="user"></app-debit-card>
           </ng-container>
         </ng-container>

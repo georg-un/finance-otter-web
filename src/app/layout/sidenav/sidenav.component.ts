@@ -17,7 +17,7 @@ import { UserState } from '@fino/store';
 })
 export class SidenavComponent extends Destroyable implements OnInit {
 
-  @Select(UserState.selectCurrentUser)
+  @Select(UserState.selectCurrentUser())
   public currentUser$: Observable<User>;
 
   private sidenavOpen: boolean;

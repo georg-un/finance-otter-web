@@ -2,12 +2,12 @@ import { Balances, CategoryByMonthSummary, CategorySummary } from '../../core/en
 
 export interface SummaryStateModel {
   balances: Balances;
-  categorySummary: CategorySummary[],
-  categoryByMonthSummary: CategoryByMonthSummary[]
+  categorySummary: CategorySummary[];
+  categoryByMonthSummary: CategoryByMonthSummary[];
 }
 
 export const DEFAULT_SUMMARY_STATE: SummaryStateModel = {
   balances: {},
   categorySummary: [],
-  categoryByMonthSummary: [],
+  categoryByMonthSummary: []
 };

@@ -1,5 +1,5 @@
 import { StateContext } from '@ngxs/store';
-import cloneDeep from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { Dictionary, EntityStateModel } from './entity-state.model';
 
 export function getClonedState<T>(ctx: StateContext<T>): T {

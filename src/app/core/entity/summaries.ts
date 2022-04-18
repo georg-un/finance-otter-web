@@ -3,11 +3,11 @@ export interface Balances {
 }
 
 export interface CategorySummary {
-  categoryId: number,
-  value: number
+  categoryId: number;
+  value: number;
 }
 
 export interface CategoryByMonthSummary {
-  name: string,
-  series: CategorySummary[]
+  name: string;
+  series: CategorySummary[];
 }

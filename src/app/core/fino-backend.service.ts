@@ -120,8 +120,9 @@ export class FinOBackendService implements FinOBackendServiceInterface {
   }
 
   fetchBalances(): Observable<Balances> {
-    return this.http.get<Balances>(this.endpoints.summary + '/balance').pipe(
-      this.handleRequestFailure()
+    return this.http.get<{balances: Balances}>(this.endpoints.summary + '/balance').pipe(
+      this.handleRequestFailure(),
+      map(response => response.balances)
     );
   }
 
@@ -150,7 +151,7 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     return (source: Observable<T>) => source.pipe(
       retry(3),
       catchError(err => this.handleError(err))
-    )
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

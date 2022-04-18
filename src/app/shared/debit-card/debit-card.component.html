@@ -1,7 +1,7 @@
-<div class="debit-card">
-    <img mat-card-avatar class="mat-card-avatar avatar" [src]="user?.avatarUrl" alt="avatar">
+<div class="debit-card" *ngIf="user">
+    <img mat-card-avatar class="mat-card-avatar avatar" [src]="user.avatarUrl" alt="avatar">
     <div class="user-info">
-        <span class="user-name">{{user?.firstName}} {{user?.lastName}}</span>
+        <span class="user-name">{{user.firstName}} {{user.lastName}}</span>
         <span class="user-amount" [ngClass]="amount >= 0 ? 'amount-positive' : 'amount-negative'">
           {{amount | number:'1.2-2'}} €
         </span>

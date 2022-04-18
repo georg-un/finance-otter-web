@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { AppState } from '../../store/states/app.state';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { Observable } from 'rxjs';

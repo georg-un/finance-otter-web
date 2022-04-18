@@ -10,7 +10,7 @@ import {HeaderButtonOptions, HeaderConfig} from '../../shared/domain/header-conf
 import {LayoutService} from '../../layout/layout.service';
 import {Destroyable} from '../../shared/destroyable';
 import {Select, Store} from '@ngxs/store';
-import {CategoryState} from '../../store/category/category.state';
+import {CategoryState} from '@fino/store';
 import {SummaryActions, SummaryState, UserState} from '@fino/store';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true};
@@ -26,6 +26,10 @@ export class SummaryComponent extends Destroyable implements OnInit {
 
   @Select(CategoryState.selectAllCategories())
   private categories$: Observable<Category[]>;
+
+  public userMap$: Observable<Map<string, User>> = this.store.select(UserState.selectAllUsers()).pipe(
+    map(users => users.reduce((acc, curr) => acc.set(curr.userId, curr), new Map<string, User>()))
+  );
 
   private categorySummaries$: Observable<CategorySummary[]> = this.store.select(SummaryState.selectCategorySummary())
     .pipe(map(cs => this.isFilledArray(cs) ? cs : []));
@@ -82,10 +86,6 @@ export class SummaryComponent extends Destroyable implements OnInit {
     this.store.dispatch(new SummaryActions.FetchBalances());
     this.store.dispatch(new SummaryActions.FetchCategorySummary({months: this._categorySummaryMonths.value}));
     this.store.dispatch(new SummaryActions.FetchCategoryByMonthSummary({months: 6}));
-  }
-
-  public selectUserById(id: string): Observable<User> {
-    return this.store.select(UserState.selectUserById(id));
   }
 
   public onCategorySummaryMonthsChange($event: number) {

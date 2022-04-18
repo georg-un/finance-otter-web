@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { AppState } from '../store/states/app.state';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { RouterOutlet } from '@angular/router';
 import { HeaderConfig } from '../shared/domain/header-config';
@@ -16,7 +14,6 @@ export class LayoutComponent {
   public config$: Observable<HeaderConfig> = this.layoutService.headerConfig$;
 
   constructor(
-    private store: Store<AppState>,
     private layoutService: LayoutService
   ) {
   }

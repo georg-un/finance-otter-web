@@ -6,9 +6,9 @@
     opened="false"
     (openedChange)="onOpenedChange($event)"
   >
-    <div *ngIf="(currentUser$ | async)" class="account-card">
-      <img mat-card-avatar [src]='(currentUser$ | async)?.avatarUrl'>
-      <p>{{(currentUser$ | async)?.firstName}} {{(currentUser$ | async)?.lastName}}</p>
+    <div *ngIf="(currentUser$ | async) as user" class="account-card">
+      <img mat-card-avatar [src]='user.avatarUrl'>
+      <p>{{user.firstName}} {{user.lastName}}</p>
     </div>
 
     <div class="link-container">
