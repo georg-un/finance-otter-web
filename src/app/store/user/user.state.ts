@@ -1,4 +1,4 @@
-import { Action, createSelector, State, StateContext, StateToken } from '@ngxs/store';
+import {Action, createSelector, NgxsOnInit, State, StateContext, StateToken} from '@ngxs/store';
 import { DEFAULT_USER_STATE, UserStateModel } from './user-state.model';
 import { Injectable, NgZone } from '@angular/core';
 import { User } from '../../core/entity/user';
@@ -19,7 +19,7 @@ export const USER_STATE_TOKEN = new StateToken<UserStateModel>('USER');
 @Injectable({
   providedIn: 'root'
 })
-export class UserState {
+export class UserState implements NgxsOnInit {
 
   public static isCurrentUserActivated(): (state: UserStateModel) => boolean {
     return createSelector([UserState], (state) => state.currentUserActivated);

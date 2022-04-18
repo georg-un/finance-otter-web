@@ -1,13 +1,14 @@
-import { Action, createSelector, State, StateContext, StateToken } from '@ngxs/store';
-import { Injectable, NgZone } from '@angular/core';
+import {Action, createSelector, NgxsOnInit, State, StateContext, StateToken, Store} from '@ngxs/store';
+import {Injectable, NgZone} from '@angular/core';
 import * as PurchaseActions from './purchase.actions';
-import { Observable } from 'rxjs';
-import { FinOBackendService } from '../../core/fino-backend.service';
-import { getClonedState, updateEntityState } from '../utils/store.utils';
-import { catchError, map, tap } from 'rxjs/operators';
-import { DEFAULT_PURCHASE_STATE, PurchaseStateModel } from './purchase-state.model';
-import { Purchase, SyncStatusEnum } from '../../core/entity/purchase';
-import { Router } from '@angular/router';
+import {Observable} from 'rxjs';
+import {FinOBackendService} from '../../core/fino-backend.service';
+import {getClonedState, updateEntityState} from '../utils/store.utils';
+import {catchError, distinctUntilChanged, filter, map, tap} from 'rxjs/operators';
+import {DEFAULT_PURCHASE_STATE, PurchaseStateModel} from './purchase-state.model';
+import {Purchase, SyncStatusEnum} from '../../core/entity/purchase';
+import {Router} from '@angular/router';
+import {UserState} from '../_index';
 
 export const PURCHASE_STATE_TOKEN = new StateToken<PurchaseStateModel>('PURCHASE');
 
@@ -18,7 +19,7 @@ export const PURCHASE_STATE_TOKEN = new StateToken<PurchaseStateModel>('PURCHASE
 @Injectable({
   providedIn: 'root'
 })
-export class PurchaseState {
+export class PurchaseState implements NgxsOnInit {
 
   public static selectAllPurchases(): (state: PurchaseStateModel) => Purchase[] {
     return createSelector([PurchaseState], (state) => Object.values(state.entities));
@@ -31,6 +32,7 @@ export class PurchaseState {
   constructor(
     private ngZone: NgZone,
     private router: Router,
+    private store: Store,
     private finoBackendService: FinOBackendService
   ) {
   }
@@ -132,6 +134,15 @@ export class PurchaseState {
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
       map(() => this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Remote))
     );
+  }
+
+  public ngxsOnInit(ctx?: StateContext<PurchaseStateModel>): void {
+    this.store.select(UserState.isCurrentUserActivated()).pipe(
+      distinctUntilChanged(),
+      filter(Boolean)
+    ).subscribe(() => {
+      ctx.dispatch(new PurchaseActions.FetchPurchases({offset: 0, limit: 10}));
+    });
   }
 
 
