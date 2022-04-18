@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {FinOBackendServiceInterface} from '../fino-backend.service.interface';
-import {Observable, of} from 'rxjs';
-import {Purchase, SyncStatusEnum} from '../entity/purchase';
+import {MonoTypeOperatorFunction, Observable, of} from 'rxjs';
+import {Purchase} from '../entity/purchase';
 import {DEMO_PURCHASES} from './data/demo-purchases';
 import {User} from '../entity/user';
 import {DEMO_USERS} from './data/demo-users';
@@ -9,6 +9,7 @@ import {cloneDeep} from 'lodash-es';
 import {Category} from '../entity/category';
 import {DEMO_CATEGORIES} from './data/demo-categories';
 import {CategoryMonthSummary, CategorySummary} from '../entity/summaries';
+import {delay} from 'rxjs/operators';
 
 interface UserAmounts {
   [userId: string]: number;
@@ -24,24 +25,28 @@ export class DemoBackendService implements FinOBackendServiceInterface {
   private categories: Category[] = DEMO_CATEGORIES;
   private receipts: { [purchaseId: string]: Blob } = {};
 
+  private readonly MAX_DELAY = 500;
+
   checkIfUserActive(): Observable<boolean> {
     return of(true);
   }
 
   fetchPurchases(offset: number, limit: number): Observable<Purchase[]> {
-    return of(this.purchases.slice(offset, offset + limit));
+    return of(cloneDeep(this.purchases.slice(offset, offset + limit)))
+      .pipe(this.addRandomDelay());
   }
 
   fetchPurchase(purchaseId: string): Observable<Purchase> {
-    return of(this.purchases.find(p => p.purchaseId === purchaseId));
+    return of(cloneDeep(this.purchases.find(p => p.purchaseId === purchaseId)))
+      .pipe(this.addRandomDelay());
   }
 
   fetchUsers(): Observable<User[]> {
-    return of(this.users);
+    return of(cloneDeep(this.users));
   }
 
   fetchCategories(): Observable<Category[]> {
-    return of(this.categories);
+    return of(cloneDeep(this.categories));
   }
 
   fetchReceipt(purchaseId: string): Observable<Blob> {
@@ -52,26 +57,28 @@ export class DemoBackendService implements FinOBackendServiceInterface {
     this.receipts[purchase.purchaseId] = receipt;
     this.purchases.push(purchase);
     this.sortPurchasesByDate();
+    return of(cloneDeep(purchase)).pipe(this.addRandomDelay());
   }
 
   updatePurchase(purchase: Purchase): Observable<Purchase> {
     this.purchases = this.purchases.map(p => p.purchaseId === purchase.purchaseId ? purchase : p);
     this.sortPurchasesByDate();
+    return of(cloneDeep(purchase)).pipe(this.addRandomDelay());
   }
 
   deletePurchase(purchaseId: string): Observable<Object> {
     this.purchases = this.purchases.filter(p => p.purchaseId !== purchaseId);
-    return of(true);
+    return of(true).pipe(this.addRandomDelay());
   }
 
   updateReceipt(purchaseId: string, receipt: Blob): Observable<Object> {
     this.receipts[purchaseId] = receipt;
-    return of(true);
+    return of(true).pipe(this.addRandomDelay());
   }
 
   deleteReceipt(purchaseId: string): Observable<Object> {
     delete this.receipts[purchaseId];
-    return of(true);
+    return of(true).pipe(this.addRandomDelay());
   }
 
   fetchBalances(): Observable<Object> {
@@ -81,12 +88,12 @@ export class DemoBackendService implements FinOBackendServiceInterface {
     this.users.forEach(user => {
       balances[user.userId] = credits[user.userId] - liabilities[user.userId];
     });
-    return of({balances: balances});
+    return of(cloneDeep({balances: balances})).pipe(this.addRandomDelay());
   }
 
   fetchCategorySummary(months: number): Observable<CategorySummary[]> {
     const filteredPurchases = this.getPurchasesBetweenMonths(months || 3);
-    return of(this.getCategorySummaries(filteredPurchases));
+    return of(cloneDeep(this.getCategorySummaries(filteredPurchases))).pipe(this.addRandomDelay());
   }
 
   fetchCategoryMonthSummary(months: number): Observable<CategoryMonthSummary[]> {
@@ -106,7 +113,7 @@ export class DemoBackendService implements FinOBackendServiceInterface {
         }
       );
     }
-    return of(categoryMonthSummaries);
+    return of(cloneDeep(categoryMonthSummaries)).pipe(this.addRandomDelay());
   }
 
   private getLiabilities(): UserAmounts {
@@ -166,5 +173,9 @@ export class DemoBackendService implements FinOBackendServiceInterface {
 
   private add(acc: number, x: number): number {
     return acc + x || 0;
+  }
+
+  private addRandomDelay<T>(): MonoTypeOperatorFunction<T> {
+    return delay<T>(Math.floor(Math.random() * this.MAX_DELAY));
   }
 }
