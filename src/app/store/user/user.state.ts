@@ -61,6 +61,11 @@ export class UserState implements NgxsOnInit {
   public _checkIfCurrentUserIsActivated(ctx: StateContext<UserStateModel>): Observable<UserStateModel> {
     return this.finoBackendService.checkIfUserActive().pipe(
       take(1),
+      tap((isActivated) => {
+        if (!isActivated) {
+          this.ngZone.run(() => this.router.navigate(['/', 'register']));
+        }
+      }),
       map(isActivated => setSingleStateProperty(ctx, 'currentUserActivated', isActivated))
     );
   }
