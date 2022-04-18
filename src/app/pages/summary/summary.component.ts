@@ -1,22 +1,17 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { User } from '../../core/entity/user';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/states/app.state';
-import { BehaviorSubject, combineLatest, Observable, Subscriber } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
-import { UserSelectors } from '../../store/selectors/user.selectors';
-import { SummaryActions } from '../../store/actions/summary.actions';
-import { SummarySelectors } from '../../store/selectors/summary.selectors';
-import { ChartData } from '../../core/entity/chart-data';
-import { ChartSeries } from '../../core/entity/chart-series';
-import { Category } from '../../core/entity/category';
-import { CategorySelectors } from '../../store/selectors/category.selectors';
-import { CategoryByMonthSummary, CategorySummary } from '../../core/entity/summaries';
-import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
-import { LayoutService } from '../../layout/layout.service';
-import { Destroyable } from '../../shared/destroyable';
-import { Select } from '@ngxs/store';
-import { CategoryState } from '../../store/category/category.state';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {User} from '../../core/entity/user';
+import {BehaviorSubject, combineLatest, Observable, Subscriber} from 'rxjs';
+import {map, shareReplay} from 'rxjs/operators';
+import {ChartData} from '../../core/entity/chart-data';
+import {ChartSeries} from '../../core/entity/chart-series';
+import {Category} from '../../core/entity/category';
+import {CategoryByMonthSummary, CategorySummary} from '../../core/entity/summaries';
+import {HeaderButtonOptions, HeaderConfig} from '../../shared/domain/header-config';
+import {LayoutService} from '../../layout/layout.service';
+import {Destroyable} from '../../shared/destroyable';
+import {Select, Store} from '@ngxs/store';
+import {CategoryState} from '../../store/category/category.state';
+import {SummaryActions, SummaryState, UserState} from '@fino/store';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: null, showLogo: true};
 
@@ -32,17 +27,14 @@ export class SummaryComponent extends Destroyable implements OnInit {
   @Select(CategoryState.selectAllCategories())
   private categories$: Observable<Category[]>;
 
-  private categorySummaries$: Observable<CategorySummary[]> = this.store.select(SummarySelectors.selectCategorySummary).pipe(
-    map(cs => this.isFilledArray(cs) ? cs : [])
-  );
+  private categorySummaries$: Observable<CategorySummary[]> = this.store.select(SummaryState.selectCategorySummary())
+    .pipe(map(cs => this.isFilledArray(cs) ? cs : []));
 
-  private categoryByMonthSummaries$: Observable<CategoryByMonthSummary[]> = this.store.select(SummarySelectors.selectCategoryMonthSummary).pipe(
-    map(cms => this.isFilledArray(cms) ? cms : [])
-  );
+  private categoryByMonthSummaries$: Observable<CategoryByMonthSummary[]> = this.store.select(SummaryState.selectCategoryByMonthSummary())
+    .pipe(map(cms => this.isFilledArray(cms) ? cms : []));
 
-  public balances$: Observable<[string, number][]> = this.store.select(SummarySelectors.selectBalances).pipe(
-    map(balances => balances ? Object.entries(balances) : undefined)
-  );
+  public balances$: Observable<[string, number][]> = this.store.select(SummaryState.selectBalances())
+    .pipe(map(balances => balances ? Object.entries(balances) : undefined));
 
   public categorySummaryChartData$: Observable<ChartData[]> = combineLatest([
     this.categorySummaries$,
@@ -76,7 +68,7 @@ export class SummaryComponent extends Destroyable implements OnInit {
   public categorySummaryMonths$: Observable<number> = this._categorySummaryMonths.asObservable();
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private layoutService: LayoutService
   ) {
     super();
@@ -87,19 +79,19 @@ export class SummaryComponent extends Destroyable implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.store.dispatch(SummaryActions.requestBalances());
-    this.store.dispatch(SummaryActions.requestCategorySummary({months: this._categorySummaryMonths.value}));
-    this.store.dispatch(SummaryActions.requestCategoryMonthSummary({months: 6}));
+    this.store.dispatch(new SummaryActions.FetchBalances());
+    this.store.dispatch(new SummaryActions.FetchCategorySummary({months: this._categorySummaryMonths.value}));
+    this.store.dispatch(new SummaryActions.FetchCategoryByMonthSummary({months: 6}));
   }
 
   public selectUserById(id: string): Observable<User> {
-    return this.store.select(UserSelectors.selectUserById(), {id: id});
+    return this.store.select(UserState.selectUserById(id));
   }
 
   public onCategorySummaryMonthsChange($event: number) {
     if ($event) {
       this._categorySummaryMonths.next($event);
-      this.store.dispatch(SummaryActions.requestCategorySummary({months: $event}));
+      this.store.dispatch(new SummaryActions.FetchCategorySummary({months: $event}));
     }
   }
 

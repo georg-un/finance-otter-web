@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Store } from '@ngrx/store';
 import { AppState } from '../../store/states/app.state';
-import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { Observable } from 'rxjs';
@@ -11,6 +9,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AddReceiptDialog, AddReceiptDialogData } from '../../shared/add-purchase-dialog/add-receipt-dialog.component';
 import { takeUntil } from 'rxjs/operators';
+import {Store} from '@ngxs/store';
+import {PurchaseActions} from '@fino/store';
 
 @Component({
   selector: 'app-receipt-view',
@@ -78,7 +78,7 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
   };
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private location: Location,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -147,7 +147,7 @@ export class ReceiptViewComponent extends AbstractFullscreenDialog implements On
 
   private deleteReceipt(): void {
     if (this.purchaseId) {
-      this.store.dispatch(PurchaseActions.deleteReceipt({purchaseId: this.purchaseId}));
+      this.store.dispatch(new PurchaseActions.DeleteReceipt({purchaseId: this.purchaseId}));
       this.close.next();
     } else {
       console.error('No purchase ID.');

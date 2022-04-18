@@ -1,18 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AppState } from '../../store/states/app.state';
-import { Store } from '@ngrx/store';
-import { map, shareReplay, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { Purchase } from '../../core/entity/purchase';
-import { PurchaseSelectors } from '../../store/selectors/purchase.selectors';
-import { PurchaseActions } from '../../store/actions/purchase.actions';
-import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
-import { LayoutActions } from '../../store/actions/layout.actions';
-import { LayoutService } from '../../layout/layout.service';
-import { MatDialog } from '@angular/material/dialog';
-import { AddPurchaseDialogComponent } from '../../shared/add-purchase-dialog/add-purchase-dialog.component';
-import { Destroyable } from '../../shared/destroyable';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
+import {Purchase} from '../../core/entity/purchase';
+import {HeaderButtonOptions, HeaderConfig} from '../../shared/domain/header-config';
+import {LayoutService} from '../../layout/layout.service';
+import {MatDialog} from '@angular/material/dialog';
+import {AddPurchaseDialogComponent} from '../../shared/add-purchase-dialog/add-purchase-dialog.component';
+import {Destroyable} from '../../shared/destroyable';
+import {Select, Store} from '@ngxs/store';
+import {PurchaseActions, PurchaseState} from '@fino/store';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, rightButton: HeaderButtonOptions.Add, showLogo: true};
 
@@ -24,17 +20,14 @@ const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Menu, right
 })
 export class PurchaseListComponent extends Destroyable {
 
-  public purchases$: Observable<Purchase[]> = this.store.select(PurchaseSelectors.selectAllPurchases).pipe(
-    shareReplay(1)
-  );
+  @Select(PurchaseState.selectAllPurchases())
+  public purchases$: Observable<Purchase[]>;
 
-  public isLoading$: Observable<boolean> = this.store.select(PurchaseSelectors.selectSyncJobs).pipe(
-    map((nJobs: number) => nJobs > 0),
-    shareReplay(1)
-  );
+  @Select(PurchaseState.selectIsLoading())
+  public isLoading$: Observable<boolean>;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private layoutService: LayoutService,
     private router: Router,
     private dialog: MatDialog
@@ -50,11 +43,8 @@ export class PurchaseListComponent extends Destroyable {
   }
 
   public onScrolledDown(): void {
-    this.store.select(PurchaseSelectors.selectPurchaseCount)
-      .pipe(take(1))
-      .subscribe((count: number) => {
-        this.store.dispatch(PurchaseActions.requestPurchases({offset: count, limit: 10}));
-      });
+    const purchaseCount = this.store.selectSnapshot(PurchaseState.selectAllPurchases()).length;
+    this.store.dispatch(new PurchaseActions.FetchPurchases({offset: purchaseCount, limit: 10}));
   }
 
   private showAddPurchaseDialog(): void {
