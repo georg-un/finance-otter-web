@@ -30,6 +30,10 @@ export class PurchaseState implements NgxsOnInit {
     return createSelector([PurchaseState], (state) => state.entities[purchaseId]);
   }
 
+  public static selectIsLoading(): (state: PurchaseStateModel) => boolean {
+    return createSelector([PurchaseState], (state) => state.isLoading);
+  }
+
   constructor(
     private ngZone: NgZone,
     private router: Router,
@@ -46,8 +50,10 @@ export class PurchaseState implements NgxsOnInit {
     ctx: StateContext<PurchaseStateModel>,
     action: PurchaseActions.FetchPurchases
   ): Observable<PurchaseStateModel> {
+    ctx.setState(this.setLoadingState(getClonedState(ctx), true));
     return this.finoBackendService.fetchPurchases(action.payload.offset, action.payload.limit).pipe(
-      map(purchases => updateEntityState(ctx, purchases, 'purchaseId', this.sortPurchasesByDate))
+      map(purchases => updateEntityState(ctx, purchases, 'purchaseId', this.sortPurchasesByDate)),
+      map(newState => ctx.setState(this.setLoadingState(newState, false)))
     );
   }
 
@@ -158,6 +164,11 @@ export class PurchaseState implements NgxsOnInit {
   private setPurchaseSyncStatus(ctx: StateContext<PurchaseStateModel>, purchase: Purchase, syncStatus: SyncStatusEnum): PurchaseStateModel {
     purchase.syncStatus = syncStatus;
     return ctx.setState(updateEntityState(ctx, [purchase], 'purchaseId'));
+  }
+
+  private setLoadingState(state: PurchaseStateModel, isLoading: boolean): PurchaseStateModel {
+    state.isLoading = isLoading;
+    return state;
   }
 
   private sortPurchasesByDate(a: Purchase, b: Purchase): number {
