@@ -57,7 +57,7 @@ export class PurchaseState implements NgxsOnInit {
     action: PurchaseActions.FetchSinglePurchase
   ): Observable<PurchaseStateModel> {
     return this.finoBackendService.fetchPurchase(action.payload.purchaseId).pipe(
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate))
+      map(purchase => ctx.setState(updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate)))
     );
   }
 
@@ -71,7 +71,7 @@ export class PurchaseState implements NgxsOnInit {
     return this.finoBackendService.uploadNewPurchase(purchase, action.payload.receipt).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
       tap(p => this.ngZone.run(() => this.router.navigate(['purchase', p.purchaseId], {replaceUrl: true}))),
-      map(p => updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate))
+      map(p => ctx.setState(updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate)))
     );
   }
 
@@ -84,7 +84,7 @@ export class PurchaseState implements NgxsOnInit {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     return this.finoBackendService.updatePurchase(purchase).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      map(p => updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate)),
+      map(p => ctx.setState(updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate))),
       tap(() => this.location.back())
     );
   }
@@ -151,13 +151,13 @@ export class PurchaseState implements NgxsOnInit {
 
   private handlePurchaseSyncError(error: any, ctx: StateContext<PurchaseStateModel>, purchase: Purchase): never {
     purchase.syncStatus = SyncStatusEnum.Error;
-    updateEntityState(ctx, [purchase], 'purchaseId');
+    ctx.setState(updateEntityState(ctx, [purchase], 'purchaseId'));
     throw error;
   }
 
   private setPurchaseSyncStatus(ctx: StateContext<PurchaseStateModel>, purchase: Purchase, syncStatus: SyncStatusEnum): PurchaseStateModel {
     purchase.syncStatus = syncStatus;
-    return updateEntityState(ctx, [purchase], 'purchaseId');
+    return ctx.setState(updateEntityState(ctx, [purchase], 'purchaseId'));
   }
 
   private sortPurchasesByDate(a: Purchase, b: Purchase): number {

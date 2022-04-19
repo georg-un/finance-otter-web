@@ -38,7 +38,7 @@ export class CategoryState implements NgxsOnInit {
   @Action(CategoryActions.FetchCategories)
   public _fetchCategories(ctx: StateContext<CategoryStateModel>): Observable<CategoryStateModel> {
     return this.finoBackendService.fetchCategories().pipe(
-      map(categories => setEntityState(ctx, categories, 'id', this.sortCategories))
+      map(categories => ctx.setState(setEntityState(ctx, categories, 'id', this.sortCategories)))
     );
   }
 

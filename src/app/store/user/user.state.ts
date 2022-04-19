@@ -53,7 +53,7 @@ export class UserState implements NgxsOnInit {
     return this.finoBackendService.createNewUser(action.payload.user).pipe(
       tap(() => ctx.dispatch(new UserActions.FetchUsers())),
       tap(() => this.ngZone.run(() => this.router.navigate(['/']))),
-      map(() => setSingleStateProperty(ctx, 'currentUserActivated', true))
+      map(() => ctx.setState(setSingleStateProperty(ctx, 'currentUserActivated', true)))
     );
   }
 
@@ -66,14 +66,14 @@ export class UserState implements NgxsOnInit {
           this.ngZone.run(() => this.router.navigate(['/', 'register']));
         }
       }),
-      map(isActivated => setSingleStateProperty(ctx, 'currentUserActivated', isActivated))
+      map(isActivated => ctx.setState(setSingleStateProperty(ctx, 'currentUserActivated', isActivated)))
     );
   }
 
   @Action(UserActions.FetchUsers)
   public _fetchUsers(ctx: StateContext<UserStateModel>): Observable<UserStateModel> {
     return this.finoBackendService.fetchUsers().pipe(
-      map(users => setEntityState(ctx, users, 'userId', this.sortUsers))
+      map(users => ctx.setState(setEntityState(ctx, users, 'userId', this.sortUsers)))
     );
   }
 
@@ -82,7 +82,7 @@ export class UserState implements NgxsOnInit {
     ctx: StateContext<UserStateModel>,
     action: UserActions.SetCurrentUserId
   ): UserStateModel {
-    return setSingleStateProperty(ctx, 'currentUserId', action.payload.userId);
+    return ctx.setState(setSingleStateProperty(ctx, 'currentUserId', action.payload.userId));
   }
 
   public ngxsOnInit(ctx?: StateContext<UserStateModel>): void {

@@ -39,7 +39,7 @@ export class SummaryState {
   @Action(SummaryActions.FetchBalances)
   public _fetchBalances(ctx: StateContext<SummaryStateModel>): Observable<SummaryStateModel> {
     return this.finoBackendService.fetchBalances().pipe(
-      map(balances => setSingleStateProperty(ctx, 'balances', balances))
+      map(balances => ctx.setState(setSingleStateProperty(ctx, 'balances', balances)))
     );
   }
 
@@ -49,7 +49,7 @@ export class SummaryState {
     action: SummaryActions.FetchCategorySummary
   ): Observable<SummaryStateModel> {
     return this.finoBackendService.fetchCategorySummary(action.payload.months).pipe(
-      map(categorySummary => setSingleStateProperty(ctx, 'categorySummary', categorySummary))
+      map(categorySummary => ctx.setState(setSingleStateProperty(ctx, 'categorySummary', categorySummary)))
     );
   }
 
@@ -59,7 +59,9 @@ export class SummaryState {
     action: SummaryActions.FetchCategoryByMonthSummary
   ): Observable<SummaryStateModel> {
     return this.finoBackendService.fetchCategoryByMonthSummary(action.payload.months).pipe(
-      map(categoryByMonthSummary => setSingleStateProperty(ctx, 'categoryByMonthSummary', categoryByMonthSummary))
+      map(categoryByMonthSummary => ctx.setState(
+        setSingleStateProperty(ctx, 'categoryByMonthSummary', categoryByMonthSummary))
+      )
     );
   }
 }

@@ -9,7 +9,7 @@ export function getClonedState<T>(ctx: StateContext<T>): T {
 export function setSingleStateProperty<T>(ctx: StateContext<T>, property: keyof T, value: T[keyof T]): T {
   const newState = getClonedState(ctx);
   newState[property] = value;
-  return ctx.setState(newState);
+  return newState;
 }
 
 /**
@@ -34,7 +34,7 @@ export function setEntityState<T, S extends EntityStateModel<T>>(
   const newState = getClonedState(ctx);
   newState.entityIds = entities.map(entity => entity[prop]);
   newState.entities = entities.reduce((acc: Dictionary<T>, cur: T) => ({...acc, [cur[prop]]: cur}), {});
-  return ctx.setState(newState);
+  return newState;
 }
 
 /**
@@ -51,6 +51,6 @@ export function updateEntityState<T, S extends EntityStateModel<T>>(
   sortFn?: (a: T, b: T) => number
   ): S {
   const oldEntities = Object.values(ctx.getState().entities || {});
-  let allEntities = [...oldEntities, ...entities];
+  const allEntities = [...oldEntities, ...entities];
   return setEntityState(ctx, allEntities, idProperty, sortFn);
 }
