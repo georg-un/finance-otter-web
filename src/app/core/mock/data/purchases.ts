@@ -58,7 +58,7 @@ export const PURCHASES: Purchase[] = [
     shop: 'Drugstore',
     description: null,
     isCompensation: false,
-    syncStatus: SyncStatusEnum.LocalDelete,
+    syncStatus: SyncStatusEnum.Error,
     debits: [
       {
         debitId: 'krSe.15544152500224',

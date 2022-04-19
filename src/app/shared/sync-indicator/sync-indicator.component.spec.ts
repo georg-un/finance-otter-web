@@ -45,13 +45,9 @@ describe('SyncIndicatorComponent', () => {
   });
 
   it('should set the icon for Local states', () => {
-    const localStates = [SyncStatusEnum.Local, SyncStatusEnum.LocalDelete, SyncStatusEnum.LocalUpdate];
-    localStates.forEach(state => {
-      component.syncStatus = state;
-      component.ngOnChanges(null);
-      expect(component.icon).toBe('sync_problem');
-      expect(component.colorClass).toBe('error');
-    });
+    component.syncStatus = SyncStatusEnum.Error;
+    component.ngOnChanges(null);
+    expect(component.icon).toBe('sync_problem');
+    expect(component.colorClass).toBe('error');
   });
-
 });

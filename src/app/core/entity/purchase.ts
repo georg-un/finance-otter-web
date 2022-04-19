@@ -13,9 +13,6 @@ export interface Purchase {
 }
 
 export enum SyncStatusEnum {
-  Local = 'local',
-  LocalUpdate = 'localUpdate',
-  LocalDelete = 'localDelete',
   Syncing = 'syncing',
   Remote = 'remote',
   Error = 'error'
