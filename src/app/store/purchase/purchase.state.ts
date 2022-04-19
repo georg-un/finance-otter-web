@@ -8,7 +8,7 @@ import {catchError, distinctUntilChanged, filter, map, tap} from 'rxjs/operators
 import {DEFAULT_PURCHASE_STATE, PurchaseStateModel} from './purchase-state.model';
 import {Purchase, SyncStatusEnum} from '../../core/entity/purchase';
 import {Router} from '@angular/router';
-import {UserState} from '../_index';
+import {UserState} from '../user/user.state';
 
 export const PURCHASE_STATE_TOKEN = new StateToken<PurchaseStateModel>('PURCHASE');
 
@@ -68,10 +68,8 @@ export class PurchaseState implements NgxsOnInit {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     return this.finoBackendService.uploadNewPurchase(purchase, action.payload.receipt).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      tap(purchase => {
-        this.ngZone.run(() => this.router.navigate(['purchase', purchase.purchaseId], {replaceUrl: true}));
-      }),
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate)),
+      tap(p => this.ngZone.run(() => this.router.navigate(['purchase', p.purchaseId], {replaceUrl: true}))),
+      map(p => updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate))
     );
   }
 
@@ -84,7 +82,7 @@ export class PurchaseState implements NgxsOnInit {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     return this.finoBackendService.updatePurchase(purchase).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      map(purchase => updateEntityState(ctx, [purchase], 'purchaseId', this.sortPurchasesByDate))
+      map(p => updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate))
     );
   }
 
@@ -119,7 +117,7 @@ export class PurchaseState implements NgxsOnInit {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     return this.finoBackendService.updateReceipt(action.payload.purchaseId, action.payload.receipt).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      map(() => updateEntityState(ctx, [purchase], 'purchaseId'))
+      map(() => this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Remote))
     );
   }
 
