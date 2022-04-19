@@ -1,14 +1,15 @@
-import {Action, createSelector, NgxsOnInit, State, StateContext, StateToken, Store} from '@ngxs/store';
-import {Injectable, NgZone} from '@angular/core';
+import { Action, createSelector, NgxsOnInit, State, StateContext, StateToken, Store } from '@ngxs/store';
+import { Injectable, NgZone } from '@angular/core';
 import * as PurchaseActions from './purchase.actions';
-import {Observable} from 'rxjs';
-import {FinOBackendService} from '../../core/fino-backend.service';
-import {getClonedState, updateEntityState} from '../utils/store.utils';
-import {catchError, distinctUntilChanged, filter, map, tap} from 'rxjs/operators';
-import {DEFAULT_PURCHASE_STATE, PurchaseStateModel} from './purchase-state.model';
-import {Purchase, SyncStatusEnum} from '../../core/entity/purchase';
-import {Router} from '@angular/router';
-import {UserState} from '../user/user.state';
+import { Observable } from 'rxjs';
+import { FinOBackendService } from '../../core/fino-backend.service';
+import { getClonedState, updateEntityState } from '../utils/store.utils';
+import { catchError, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { DEFAULT_PURCHASE_STATE, PurchaseStateModel } from './purchase-state.model';
+import { Purchase, SyncStatusEnum } from '../../core/entity/purchase';
+import { Router } from '@angular/router';
+import { UserState } from '../user/user.state';
+import { Location } from '@angular/common';
 
 export const PURCHASE_STATE_TOKEN = new StateToken<PurchaseStateModel>('PURCHASE');
 
@@ -32,6 +33,7 @@ export class PurchaseState implements NgxsOnInit {
   constructor(
     private ngZone: NgZone,
     private router: Router,
+    private location: Location,
     private store: Store,
     private finoBackendService: FinOBackendService
   ) {
@@ -82,7 +84,8 @@ export class PurchaseState implements NgxsOnInit {
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
     return this.finoBackendService.updatePurchase(purchase).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
-      map(p => updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate))
+      map(p => updateEntityState(ctx, [p], 'purchaseId', this.sortPurchasesByDate)),
+      tap(() => this.location.back())
     );
   }
 
@@ -93,7 +96,7 @@ export class PurchaseState implements NgxsOnInit {
   ): Observable<PurchaseStateModel> {
     const purchase = ctx.getState().entities[action.payload.purchaseId];
     this.setPurchaseSyncStatus(ctx, purchase, SyncStatusEnum.Syncing);
-    return this.finoBackendService.updatePurchase(purchase).pipe(
+    return this.finoBackendService.deletePurchase(purchase.purchaseId).pipe(
       catchError(err => this.handlePurchaseSyncError(err, ctx, purchase)),
       map(() => {
         const newState = getClonedState(ctx);
