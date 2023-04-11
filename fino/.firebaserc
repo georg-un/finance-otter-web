@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fino-bf3d7": {
+      "hosting": {
+        "fino": [
+          "finance-otter"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fino-bf3d7"
+  }
+}

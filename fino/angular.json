@@ -99,6 +99,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "fino:build:production",
+            "firebaseProject": "fino-bf3d7",
+            "firebaseHostingSite": "finance-otter"
+          }
         }
       }
     }
