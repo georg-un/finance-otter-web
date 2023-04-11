@@ -1,9 +1,9 @@
 <div class="app-container">
   <app-sidenav>
     <app-header
-            [showLogo]="showHeaderLogo$ | async"
-            [leftButton]="leftHeaderButtonConfig$ | async"
-            [rightButton]="rightHeaderButtonConfig$ | async"
+            [showLogo]="(config$ | async).showLogo"
+            [leftButton]="(config$ | async).leftButton"
+            [rightButton]="(config$ | async).rightButton"
             (leftButtonClicked)="onLeftHeaderButtonClicked()"
             (rightButtonClicked)="onRightHeaderButtonClicked()"
     ></app-header>

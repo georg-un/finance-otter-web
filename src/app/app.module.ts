@@ -8,7 +8,6 @@ import { SummaryModule } from './pages/summary/summary.module';
 import { PurchaseListModule } from './pages/purchase-list/purchase-list.module';
 import { PurchaseViewModule } from './pages/purchase-view/purchase-view.module';
 import { PurchaseEditorModule } from './pages/payment-editor/purchase-editor.module';
-import { AppStoreModule } from './store/app-store.module';
 import { CoreModule } from './core/core.module';
 import { RegisterModule } from './pages/register/register.module';
 import { MultilineSnackbarComponent } from './shared/multiline-snackbar/multiline-snackbar.component';
@@ -23,12 +22,12 @@ import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {StoreModule} from '@fino/store';
 
 registerLocaleData(localeDe, 'de-AT');
 
 const APP_MODULES = [
   AppRoutingModule,
-  AppStoreModule,
   LayoutModule,
   SummaryModule,
   PurchaseListModule,
@@ -37,8 +36,9 @@ const APP_MODULES = [
   RegisterModule,
   ReceiptProcessorModule,
   ReceiptViewModule,
+  StoreModule,
   MultilineSnackbarModule // TODO: is this needed here?
-]
+];
 
 
 @NgModule({
@@ -61,7 +61,6 @@ const APP_MODULES = [
     BrowserModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-
     MatCardModule,  // TODO: ?
     ...APP_MODULES
   ],

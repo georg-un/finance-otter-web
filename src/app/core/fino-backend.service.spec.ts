@@ -101,8 +101,8 @@ describe('FinOBackendService', () => {
       mockResult: null,
       httpMethod: 'get'
     },
-    fetchCategoryMonthSummary: {
-      args: <Parameters<typeof FinOBackendService.prototype.fetchCategoryMonthSummary>>[3],
+    fetchCategoryByMonthSummary: {
+      args: <Parameters<typeof FinOBackendService.prototype.fetchCategoryByMonthSummary>>[3],
       mockResult: [{name: 's1'} as ChartSeries],
       httpMethod: 'get'
     },
@@ -194,7 +194,7 @@ describe('FinOBackendService', () => {
   });
 
   it('should fetch the category-by-months summary', () => {
-    const callback = testHttpCall('fetchCategoryMonthSummary');
+    const callback = testHttpCall('fetchCategoryByMonthSummary');
     callback.call.subscribe(() => {
       expect(callback.httpSpy.calls.mostRecent().args.length).toEqual(2);
       expect(callback.httpSpy.calls.mostRecent().args[1]['params'].get('months')).toEqual('3');

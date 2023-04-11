@@ -2,8 +2,8 @@
   <mat-card-content class="card-content" *ngIf="(purchase$ | async) as purchase">
 
     <div class="avatar-column">
-      <div *ngIf="buyerAvatarUrl$ | async" class='grid-cell__r2-c1'>
-        <img mat-card-avatar [src]="buyerAvatarUrl$ | async">
+      <div *ngIf="(buyerAvatarUrl$ | async) as buyerAvatarUrl" class='grid-cell__r2-c1'>
+        <img mat-card-avatar [src]="buyerAvatarUrl">
       </div>
     </div>
     <div class="purchase-details">

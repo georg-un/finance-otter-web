@@ -1,7 +1,7 @@
-export class User {
-  userId: string;
-  firstName: string;
-  lastName: string;
+export interface User {
   avatarUrl: string;
   deactivated: boolean;
+  firstName: string;
+  lastName: string;
+  userId: string;
 }

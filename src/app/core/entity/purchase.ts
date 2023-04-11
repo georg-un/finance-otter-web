@@ -1,6 +1,6 @@
 import { Debit } from './debit';
 
-export class Purchase {
+export interface Purchase {
   purchaseId: string;
   buyerId: string;
   date: number;
@@ -13,9 +13,7 @@ export class Purchase {
 }
 
 export enum SyncStatusEnum {
-  Local = 'local',
-  LocalUpdate = 'localUpdate',
-  LocalDelete = 'localDelete',
   Syncing = 'syncing',
-  Remote = 'remote'
+  Remote = 'remote',
+  Error = 'error'
 }

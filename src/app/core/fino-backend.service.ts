@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { FinOBackendServiceInterface } from './fino-backend.service.interface';
 import { MonoTypeOperatorFunction, Observable, throwError } from 'rxjs';
-import { Purchase } from './entity/purchase';
+import { Purchase, SyncStatusEnum } from './entity/purchase';
 import { environment } from '../../environments/environment';
 import { User } from './entity/user';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MultilineSnackbarComponent } from '../shared/multiline-snackbar/multiline-snackbar.component';
 import { Category } from './entity/category';
-import { CategoryMonthSummary, CategorySummary } from './entity/summaries';
+import { Balances, CategoryByMonthSummary, CategorySummary } from './entity/summaries';
 
 @Injectable({
   providedIn: 'root'
@@ -46,13 +46,15 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     params = params.set('offset', offset.toString());
     params = params.set('limit', limit.toString());
     return this.http.get<Purchase[]>(this.endpoints.purchases, {params: params}).pipe(
-      this.handleRequestFailure()
+      this.handleRequestFailure(),
+      map(purchases => purchases.map(purchase => this.setPurchaseSyncStatus(purchase)))
     );
   }
 
   fetchPurchase(purchaseId: string): Observable<Purchase> {
     return this.http.get<Purchase>(this.endpoints.purchases + `/${purchaseId}`).pipe(
-      this.handleRequestFailure()
+      this.handleRequestFailure(),
+      map(purchase => this.setPurchaseSyncStatus(purchase))
     );
   }
 
@@ -85,13 +87,15 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
     uploadForm.append('receipt', receipt);
     return this.http.post<Purchase>(this.endpoints.purchases, uploadForm).pipe(
-      this.handleRequestFailure()
+      this.handleRequestFailure(),
+      map(purchase => this.setPurchaseSyncStatus(purchase))
     );
   }
 
   updatePurchase(purchase: Purchase): Observable<Purchase> {
     return this.http.put<Purchase>(this.endpoints.purchases, purchase).pipe(
-      this.handleRequestFailure()
+      this.handleRequestFailure(),
+      map(purchase => this.setPurchaseSyncStatus(purchase))
     );
   }
 
@@ -115,16 +119,17 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
   }
 
-  fetchBalances(): Observable<Object> {
-    return this.http.get<Object>(this.endpoints.summary + '/balance').pipe(
-      this.handleRequestFailure()
+  fetchBalances(): Observable<Balances> {
+    return this.http.get<{balances: Balances}>(this.endpoints.summary + '/balance').pipe(
+      this.handleRequestFailure(),
+      map(response => response.balances)
     );
   }
 
-  fetchCategoryMonthSummary(months: number): Observable<CategoryMonthSummary[]> {
+  fetchCategoryByMonthSummary(months: number): Observable<CategoryByMonthSummary[]> {
     let params = new HttpParams();
     params = params.set('months', months.toString());
-    return this.http.get<CategoryMonthSummary[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
+    return this.http.get<CategoryByMonthSummary[]>(this.endpoints.summary + '/month_category', {params: params}).pipe(
       this.handleRequestFailure()
     );
   }
@@ -137,11 +142,16 @@ export class FinOBackendService implements FinOBackendServiceInterface {
     );
   }
 
+  private setPurchaseSyncStatus(purchase: Purchase): Purchase {
+    purchase.syncStatus = SyncStatusEnum.Remote;
+    return purchase;
+  }
+
   private handleRequestFailure<T>(): MonoTypeOperatorFunction<T> {
     return (source: Observable<T>) => source.pipe(
       retry(3),
       catchError(err => this.handleError(err))
-    )
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

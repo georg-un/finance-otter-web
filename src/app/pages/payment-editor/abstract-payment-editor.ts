@@ -1,27 +1,23 @@
-import { OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Purchase } from '../../core/entity/purchase';
-import { UserSelectors } from '../../store/selectors/user.selectors';
 import { takeUntil } from 'rxjs/operators';
 import { User } from '../../core/entity/user';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/states/app.state';
 import { DistributionFragment } from './distribution-fragment';
 import { MultilineSnackbarComponent } from '../../shared/multiline-snackbar/multiline-snackbar.component';
 import { BigNumber } from 'bignumber.js';
 import { Category } from '../../core/entity/category';
-import { CategorySelectors } from '../../store/selectors/category.selectors';
 import { FullscreenDialogService } from '../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { HeaderButtonOptions, HeaderConfig } from '../../shared/domain/header-config';
-import { LayoutActions } from '../../store/actions/layout.actions';
 import { DynamicDialogButton, DynamicDialogData } from '../../shared/dynamic-dialog/dynamic-dialog-data.model';
 import { LayoutService } from '../../layout/layout.service';
 import { DynamicDialogComponent } from '../../shared/dynamic-dialog/dynamic-dialog.component';
 import { Location } from '@angular/common';
 import { Moment } from 'moment';
 import { Destroyable } from '../../shared/destroyable';
+import { Select } from '@ngxs/store';
+import { CategoryState, UserState } from '@fino/store';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: HeaderButtonOptions.Cancel, rightButton: HeaderButtonOptions.Done, showLogo: false};
 const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
@@ -48,13 +44,13 @@ const EXIT_EDITOR_DIALOG_DATA: DynamicDialogData = {
 };
 
 
-export abstract class AbstractPaymentEditor extends Destroyable implements OnInit {
+export abstract class AbstractPaymentEditor extends Destroyable {
 
   purchase: Purchase;
   receipt$: Observable<Blob>;
   sumAmount: number;
-  users$: Observable<User[]>;
-  categories$: Observable<Category[]>;
+  @Select(UserState.selectAllUsers()) users$: Observable<User[]>;
+  @Select(CategoryState.selectAllCategories()) categories$: Observable<Category[]>;
   date: Date;
   distributionFragments: DistributionFragment[] = [];
 
@@ -63,22 +59,17 @@ export abstract class AbstractPaymentEditor extends Destroyable implements OnIni
     date: false
   };
 
-  protected constructor(protected store: Store<AppState>,
-                        protected fullscreenDialog: FullscreenDialogService,
-                        protected snackBar: MatSnackBar,
-                        protected dialog: MatDialog,
-                        protected layoutService: LayoutService,
-                        protected location: Location
+  protected constructor(
+    protected fullscreenDialog: FullscreenDialogService,
+    protected snackBar: MatSnackBar,
+    protected dialog: MatDialog,
+    protected layoutService: LayoutService,
+    protected location: Location
   ) {
     super();
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
     this.layoutService.registerLeftHeaderButtonClickCallback(() => this.closeEditorAfterConfirmation());
     this.layoutService.registerRightHeaderButtonClickCallback(() => this.submitPurchase());
-  }
-
-  ngOnInit(): void {
-    this.users$ = this.store.select(UserSelectors.selectAllUsers);
-    this.categories$ = this.store.select(CategorySelectors.selectAllCategories);
   }
 
   abstract submitPurchase(): void;

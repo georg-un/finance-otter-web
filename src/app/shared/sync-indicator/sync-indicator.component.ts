@@ -41,9 +41,7 @@ export class SyncIndicatorComponent implements OnInit, OnChanges {
         this.icon = 'sync';
         this.colorClass = 'process';
         break;
-      case SyncStatusEnum.Local:
-      case SyncStatusEnum.LocalUpdate:
-      case SyncStatusEnum.LocalDelete:
+      case SyncStatusEnum.Error:
         this.icon = 'sync_problem';
         this.colorClass = 'error';
         break;

@@ -1,20 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractPaymentEditor } from '../abstract-payment-editor';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/states/app.state';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FullscreenDialogService } from '../../../shared/fullscreen-dialog/fullscreen-dialog.service';
 import { IdGeneratorService } from '../../../core/id-generator.service';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { Debit } from '../../../core/entity/debit';
-import { PurchaseActions } from '../../../store/actions/purchase.actions';
 import { Purchase } from '../../../core/entity/purchase';
-import { UserSelectors } from '../../../store/selectors/user.selectors';
 import { User } from '../../../core/entity/user';
 import { combineLatest, Observable } from 'rxjs';
 import { LayoutService } from '../../../layout/layout.service';
 import { Location } from '@angular/common';
+import { Store } from '@ngxs/store';
+import { PurchaseActions, UserState } from '@fino/store';
 
 @Component({
   selector: 'app-compensation-editor-new',
@@ -30,22 +28,22 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
   public recipientId: string;
   private currentUser$: Observable<User>;
 
-  constructor(protected store: Store<AppState>,
-              protected snackBar: MatSnackBar,
-              protected dialog: MatDialog,
-              protected idGeneratorService: IdGeneratorService,
-              protected fullscreenDialog: FullscreenDialogService,
-              protected layoutService: LayoutService,
-              protected location: Location,
+  constructor(
+    protected snackBar: MatSnackBar,
+    protected dialog: MatDialog,
+    protected idGeneratorService: IdGeneratorService,
+    protected fullscreenDialog: FullscreenDialogService,
+    protected layoutService: LayoutService,
+    protected location: Location,
+    private store: Store
   ) {
-    super(store, fullscreenDialog, snackBar, dialog, layoutService, location);
+    super(fullscreenDialog, snackBar, dialog, layoutService, location);
   }
 
   ngOnInit() {
-    super.ngOnInit();
-    this.purchase = new Purchase();
+    this.purchase = {} as Purchase;
 
-    this.currentUser$ = this.store.select(UserSelectors.selectCurrentUser);
+    this.currentUser$ = this.store.select(UserState.selectCurrentUser());
     this.currentUser$.pipe(
       filter(Boolean),
       takeUntil(this.onDestroy$)
@@ -57,7 +55,8 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
     );
   }
 
-  onViewReceiptClick(): void {}
+  onViewReceiptClick(): void {
+  }
 
   submitPurchase(): void {
     if (!this.isPurchaseValid(false)) {
@@ -74,18 +73,16 @@ export class CompensationEditorNewComponent extends AbstractPaymentEditor implem
           this.purchase.purchaseId = purchaseId;
           this.purchase.isCompensation = true;
           this.purchase.debits = [
-            new Debit({
+            {
               debitId: this.idGeneratorService.generateDebitId(purchaseId, 0),
               debtorId: this.recipientId,
               amount: this.sumAmount
-            })
+            } as Debit
           ];
-          this.store.dispatch(
-            PurchaseActions.addNewPurchase({
-              purchase: this.purchase,
-              receipt: null
-            })
-          );
+          this.store.dispatch(new PurchaseActions.AddNewPurchase({
+            purchase: this.purchase,
+            receipt: null
+          }));
         } else {
           this.snackBar.open('Ooops, something went wrong.');
         }

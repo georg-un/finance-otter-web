@@ -4,7 +4,7 @@
       <p class="title">BALANCE</p>
       <div class="debit-blockquote">
         <ng-container *ngFor="let balance of (balances$ | async)">
-          <ng-container *ngIf="selectUserById(balance[0]) | async as user">
+          <ng-container *ngIf="(userMap$ | async).get(balance[0]) as user">
             <app-debit-card [amount]="balance[1]" [user]="user"></app-debit-card>
           </ng-container>
         </ng-container>
@@ -39,11 +39,11 @@
 
     <div class="chart">
       <p class="title">MONTHLY EXPENSES BY CATEGORY</p>
-      <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryMonthSummaryChartSeries$ | async); else noDataTemplate">
+      <ng-container *ngIf="!areAllChartSeriesValuesZero(categoryByMonthSummaryChartSeries$ | async); else noDataTemplate">
         <ngx-charts-bar-vertical-stacked
                 [view]="chartSize$ | async"
                 scheme="vivid"
-                [results]="categoryMonthSummaryChartSeries$ | async"
+                [results]="categoryByMonthSummaryChartSeries$ | async"
                 [customColors]="categoryColorMap$ | async"
                 [xAxis]="true"
                 [yAxis]="true"

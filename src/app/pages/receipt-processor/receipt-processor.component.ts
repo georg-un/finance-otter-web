@@ -2,13 +2,11 @@ import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/co
 import { DocScannerConfig, NgxDocScannerComponent } from '@fino-ngx-doc-scanner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/states/app.state';
 import { ReceiptProcessorService } from './receipt-processor.service';
-import { PurchaseActions } from '../../store/actions/purchase.actions';
 import { HeaderConfig } from '../../shared/domain/header-config';
-import { LayoutActions } from '../../store/actions/layout.actions';
 import { LayoutService } from '../../layout/layout.service';
+import {Store} from '@ngxs/store';
+import {PurchaseActions} from '@fino/store';
 
 const HEADER_CONFIG: HeaderConfig = {leftButton: null, rightButton: null, showLogo: true};
 
@@ -34,7 +32,7 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
     exportImageIcon: 'done'
   };
 
-  public docScannerReady: boolean = false;
+  public docScannerReady = false;
   public purchaseId: string;
 
   public rawImage: File;
@@ -43,7 +41,7 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
     private ngZone: NgZone,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store,
     private snackBar: MatSnackBar,
     private receiptProcessorService: ReceiptProcessorService,
     private layoutService: LayoutService
@@ -54,7 +52,7 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
         this.showErrorSnackMessage();
       });
     }
-    this.store.dispatch(LayoutActions.setHeaderConfig(HEADER_CONFIG));
+    this.layoutService.setHeaderConfig(HEADER_CONFIG);
     this.layoutService.registerLeftHeaderButtonClickCallback(() => {});
     this.layoutService.registerRightHeaderButtonClickCallback(() => {});
   }
@@ -97,7 +95,7 @@ export class ReceiptProcessorComponent implements OnInit, AfterViewInit {
         return;
       }
       // If the purchase already exists, update the receipt and navigate to the purchase-viewer
-      this.store.dispatch(PurchaseActions.updateReceipt({
+      this.store.dispatch(new PurchaseActions.UpdateReceipt({
         receipt: this.receiptProcessorService.receipt,
         purchaseId: this.purchaseId
       }));

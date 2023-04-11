@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Purchase } from '../../../core/entity/purchase';
 import { Debit } from '../../../core/entity/debit';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/states/app.state';
 import { Observable, ReplaySubject } from 'rxjs';
-import { UserSelectors } from '../../../store/selectors/user.selectors';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { User } from '../../../core/entity/user';
 import { Category } from '../../../core/entity/category';
-import { CategorySelectors } from '../../../store/selectors/category.selectors';
+import { Store } from '@ngxs/store';
+import { UserState } from '../../../store/user/user.state';
+import { CategoryState } from 'src/app/store/category/category.state';
 
 @Component({
   selector: 'app-purchase-card',
@@ -31,7 +30,7 @@ export class PurchaseCardComponent {
 
   public buyerAvatarUrl$: Observable<string> = this.purchase$.pipe(
     filter(Boolean),
-    switchMap((purchase: Purchase) => this.store.select(UserSelectors.selectUserById(), {id: purchase.buyerId})),
+    switchMap((purchase: Purchase) => this.store.select(UserState.selectUserById(purchase.buyerId))),
     filter(Boolean),
     map((user: User) => user.avatarUrl),
     shareReplay(1)
@@ -39,7 +38,7 @@ export class PurchaseCardComponent {
 
   public receiverAvatarUrl$?: Observable<string> = this.purchase$.pipe(
     filter((purchase: Purchase) => purchase?.isCompensation),
-    switchMap((purchase: Purchase) => this.store.select(UserSelectors.selectUserById(), {id: purchase.debits[0].debtorId})),
+    switchMap((purchase: Purchase) => this.store.select(UserState.selectUserById(purchase.debits[0].debtorId))),
     filter(Boolean),
     map((user: User) => user.avatarUrl),
     shareReplay(1)
@@ -47,7 +46,7 @@ export class PurchaseCardComponent {
 
   public category$: Observable<Category> = this.purchase$.pipe(
     filter(Boolean),
-    switchMap((purchase: Purchase) => this.store.select(CategorySelectors.selectCategoryById(purchase.categoryId)))
+    switchMap((purchase: Purchase) => this.store.select(CategoryState.selectCategoryById(purchase.categoryId)))
   );
 
   public debitSum$: Observable<number> = this.purchase$.pipe(
@@ -57,7 +56,7 @@ export class PurchaseCardComponent {
     ));
 
   constructor(
-    private store: Store<AppState>
+    private store: Store
   ) {
   }
 
