@@ -1,0 +1,37 @@
+<div class="receipt-view-container">
+
+  <button mat-icon-button aria-label="Close"
+          class="close-button" color="grey"
+          (click)="onCloseButtonClick()">
+    <mat-icon>close</mat-icon>
+  </button>
+    <div class="receipt-container">
+      <img *ngIf="encodedImage" [src]="encodedImage" alt="Receipt" class="receipt"/>
+      <p *ngIf="receiptUnavailable" class="receipt-unavailable-msg">No receipt found.</p>
+    </div>
+  <mat-toolbar
+    color="primary"
+    class="receipt-toolbar"
+    *ngIf="enableEditButtons"
+  >
+    <button
+      mat-flat-button
+      class="receipt-action-button"
+      (click)="onUploadNewButtonClick()"
+    >
+      <mat-icon>add_a_photo</mat-icon>
+      Upload new
+    </button>
+    <button
+      mat-flat-button
+      class="receipt-action-button"
+      aria-label="Delete receipt"
+      [disabled]="receiptUnavailable"
+      (click)="onDeleteButtonClick()"
+    >
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
+  </mat-toolbar>
+
+</div>

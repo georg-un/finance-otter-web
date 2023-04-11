@@ -1,0 +1,18 @@
+@import "../../../assets/variables";
+
+mat-icon {
+  display: block;
+  margin: auto;
+}
+
+.success {
+  color: $indicator-green;
+}
+
+.process {
+  color: $indicator-orange;
+}
+
+.error {
+  color: $indicator-red;
+}

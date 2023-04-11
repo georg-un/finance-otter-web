@@ -1,0 +1,40 @@
+@use "assets/variables" as vars;
+// @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import "~material-design-icons/iconfont/material-icons.css";
+@import '~@angular/material/theming';
+
+@include mat-core();
+@include angular-material-theme(vars.$theme);
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+p {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.cdk-overlay-backdrop {
+  backdrop-filter: vars.$backdrop-blur;
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  backdrop-filter: vars.$backdrop-blur;
+}
+
+button.mat-flat-button {
+  line-height: 48px;
+  background-color: vars.$button-grey;
+}
+
+mat-dialog-actions.mat-dialog-actions {
+  margin-bottom: 12px;
+}

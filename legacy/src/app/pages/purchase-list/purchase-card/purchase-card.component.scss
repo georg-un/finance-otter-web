@@ -1,0 +1,71 @@
+@use "../../../../assets/variables" as vars;
+
+$avatar-diameter: 40px;
+$receiver-avater-diameter: 30px;
+$small-row-height: 18px;
+$column-gap: 16px;
+
+:host {
+  mat-card {
+    margin: 4px 4px 0 4px;
+    border-left: 4px solid vars.$accent-default;
+    padding: 16px 16px 16px 12px;
+  }
+}
+
+.card-content {
+  display: flex;
+}
+
+.avatar-column {
+  width: $avatar-diameter;
+  margin-right: $column-gap;
+  display: flex;
+  align-items: center;
+}
+
+.purchase-details {
+  width: calc(100% - (#{$avatar-diameter} + #{$column-gap}));
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.small-row {
+  height: $small-row-height;
+  .sync-status-indicator {
+    float: right;
+    height: $small-row-height
+  }
+}
+
+.large-row {
+  display: inline-flex;
+  min-height: $avatar-diameter;
+  font-size: 24px;
+  margin: 2px 0;
+  .truncate-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .amount {
+    white-space: nowrap;
+    margin-left: calc(#{$column-gap / 2});
+  }
+  .compensation-icons {
+    display: flex;
+    align-items: center;
+    :first-child {
+      margin-right: calc(#{$column-gap / 2});
+    }
+    .receiver-avatar {
+      height:$receiver-avater-diameter;
+      width: $receiver-avater-diameter;
+    }
+  }
+}

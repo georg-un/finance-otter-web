@@ -1,0 +1,87 @@
+@use "../../../assets/variables" as vars;
+
+$purchase-header-height: calc(43vh - #{vars.$header-height});
+
+:host {
+  display: block;
+  overflow: scroll;
+  height: calc(100vh - #{vars.$header-height});
+}
+
+::ng-deep .mat-tooltip {
+  background-color: slategrey;
+}
+
+.purchase-header {
+  height: $purchase-header-height;
+  background-color: vars.$header-background;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-content {
+  height: 100%;
+  color: vars.$header-font-color;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 16px 14px 16px;
+}
+
+.buyer-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.shop_and_amount {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  p {
+    text-align: center;
+  }
+}
+
+.header-actions {
+  display: flex;
+  button {
+    width: 100%;
+    border-radius: 0;
+    background-color: rgba(0,0,0,0.3);
+    color: vars.$header-font-color;
+    &:nth-child(2) {
+      border-left: 1px solid vars.$light-primary;
+    }
+  }
+}
+.upper-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.font-large {
+  font-size: xx-large;
+}
+
+.detail-container {
+  padding: 32px;
+}
+
+.detail-title {
+  font-size: small;
+  margin: 8px 0 8px 0;
+}
+
+.category-color-dot {
+  $diameter: 0.8em;
+  height: $diameter;
+  width: $diameter;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 0.5em;
+}

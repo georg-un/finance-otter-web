@@ -1,0 +1,35 @@
+@import '../../../assets/variables';
+
+ngx-doc-scanner {
+  ::ng-deep div.editor-actions {
+    padding: 12px 12px 24px 12px !important;
+  }
+}
+
+.receipt-processor-container {
+  height: calc(100vh - #{$header-height});
+}
+
+.capture-button {
+  position: absolute;
+  top: calc((100vh - 56px) * 0.33);
+  left:50%;
+  transform: translateX(-50%);
+  min-height: 33vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.spinner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spinner-message {
+  color: slategrey;
+  margin-top: 32px;
+}

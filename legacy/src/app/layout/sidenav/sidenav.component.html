@@ -1,0 +1,45 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #sidenav
+    class="sidenav"
+    mode="over"
+    opened="false"
+    (openedChange)="onOpenedChange($event)"
+  >
+    <div *ngIf="(currentUser$ | async) as user" class="account-card">
+      <img mat-card-avatar [src]='user.avatarUrl'>
+      <p>{{user.firstName}} {{user.lastName}}</p>
+    </div>
+
+    <div class="link-container">
+      <mat-list>
+
+        <a routerLink="/overview" routerLinkActive="true" (click)="sidenav.toggle(false)">
+          <mat-list-item>
+            <mat-icon mat-list-icon>list</mat-icon>
+            <p>Purchases</p>
+          </mat-list-item>
+        </a>
+
+        <a routerLink="/summary" routerLinkActive="true" (click)="sidenav.toggle(false)">
+          <mat-list-item>
+            <mat-icon mat-list-icon>people</mat-icon>
+            <p>Summary</p>
+          </mat-list-item>
+        </a>
+
+        <a (click)="logOut()">
+          <mat-list-item>
+            <mat-icon mat-list-icon>power_settings_new</mat-icon>
+            <p>Log out</p>
+          </mat-list-item>
+        </a>
+
+      </mat-list>
+    </div>
+  </mat-sidenav>
+
+  <ng-content></ng-content>
+
+</mat-sidenav-container>
+

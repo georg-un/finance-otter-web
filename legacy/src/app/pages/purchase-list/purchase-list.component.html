@@ -1,0 +1,24 @@
+<div
+  class="purchase-list-container"
+  infiniteScroll
+  (scrolled)="onScrolledDown()"
+  [scrollWindow]="false"
+>
+  <app-purchase-card
+    *ngFor="let purchase of (purchases$ | async)"
+    [purchase]="purchase"
+    (cardClick)="onCardClick($event)"
+  ></app-purchase-card>
+
+  <div class="bottom-container">
+    <mat-spinner
+      *ngIf="isLoading$ | async"
+      color="primary"
+      [diameter]="48"
+    ></mat-spinner>
+    <h1
+      class="end-dot"
+      *ngIf="!(isLoading$ | async)"
+    >&#183;</h1>
+  </div>
+</div>

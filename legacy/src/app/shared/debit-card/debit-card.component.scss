@@ -1,0 +1,44 @@
+@use "../../../assets/variables" as vars;
+
+$avatar-diameter: 1.5em;
+$column-gap: 0.5em;
+
+.debit-card {
+  display: flex;
+  justify-content: space-between;
+  font-size: large;
+  margin: 16px 0;
+}
+
+.avatar {
+  height: $avatar-diameter;
+  width: $avatar-diameter;
+  margin-right: $column-gap;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - (#{$avatar-diameter} + #{$column-gap}));
+}
+
+.user-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.user-amount {
+  white-space: nowrap;
+  margin-left: $column-gap
+;
+}
+
+.amount-positive {
+  color: black;
+}
+
+.amount-negative {
+  color: red;
+}

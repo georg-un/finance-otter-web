@@ -1,0 +1,52 @@
+@use "../../../assets/variables" as vars;
+@use "sass:math";
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  z-index: 5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo-link{
+  position: absolute;
+  left: calc(50vw - #{vars.$header-height}/2);
+}
+
+.logo {
+  height: vars.$header-height;
+  width: vars.$header-height;
+  vertical-align: middle;
+}
+
+.rotate-icon {
+  animation: rotate 2s linear infinite;
+  transform-origin: center center;
+}
+
+.header-button {
+  background-color: transparent !important;
+  color: white;
+  min-width: 68px;
+  ::ng-deep .mat-button-wrapper {
+    display: block;
+    & * {
+      display: inline;
+    }
+  }
+  &.right-button {
+    ::ng-deep .mat-button-wrapper {
+      text-align: right;
+      mat-icon {
+        margin-left: 6px;
+      }
+    }
+  }
+}
