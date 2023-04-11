@@ -21,3 +21,4 @@
    ```
 3. Change the file `.firebase.rc` to match your project configuration.
 4. To build and deploy the app, run `ng deploy`.
+5. to build and deploy the cloud functions, `cd` into `functions/` and run `npm run build && npm run deploy`.
