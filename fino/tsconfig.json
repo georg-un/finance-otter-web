@@ -10,6 +10,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,  /* see https://github.com/angular/angularfire/issues/3255 */
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
