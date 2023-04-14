@@ -1,0 +1,34 @@
+/*@use '@angular/material' as mat;
+@include mat.core();
+
+$primary: mat.define-palette($mat-blue, 800);
+$accent: mat-palette($mat-amber, 800);
+$warn: mat-palette($mat-red, 600);
+$theme: mat-light-theme($primary, $accent, $warn);
+
+$light-primary: mat-color($primary, 50);
+$darker-light-primary: mat-color($primary, 200);
+$primary-default: mat-color($primary, 800);
+$light-accent: mat-color($accent, 50);
+$darker-light-accent: mat-color($accent, 200);
+$accent-default: mat-color($accent, 800);
+
+$indicator-green: mat-color(mat-palette($mat-green), 300);
+$indicator-orange: mat-color(mat-palette($mat-orange), 400);
+$indicator-red: mat-color(mat-palette($mat-red), 500);
+
+$button-grey: mat-color(mat-palette($mat-grey), 300);
+
+$header-background: mat-color(mat-palette($mat-purple), 500);
+$header-font-color: mat-color(mat-palette($mat-purple), default-contrast);
+
+$header-height: 56px;
+
+$backdrop-blur: blur(4px);
+
+* {
+  --header-height: 56px;
+  --purchase-header-height: 31vh;
+}*/
+
+$light-primary: #E3F2FD;
