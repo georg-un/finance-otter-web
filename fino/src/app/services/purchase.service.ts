@@ -10,7 +10,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, EMPTY, from, map, Observable, tap } from 'rxjs';
 import { Purchase } from '../model/purchase';
-import { runObservableOnceNow } from '../app/utils';
+import { runObservableOnceNow } from '../utils';
 
 const DEFAULT_PAGE_SIZE = 3;
 const PURCHASES_DB_PATH = '/purchases';
