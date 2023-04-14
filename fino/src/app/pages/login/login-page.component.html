@@ -1,0 +1,16 @@
+<div class="content-wrapper">
+
+  <div class="icon-greeting-wrapper">
+    <img src="./assets/icons/icon-128x128.png"/>
+    <div class="greeting">
+      <h1>Hi there!</h1>
+      <span>Otterly nice to meet you! Please log in to continue.</span>
+    </div>
+  </div>
+
+  <div class="sign-in-button-wrapper">
+    <button mat-raised-button color="primary" class="sign-in-button" (click)="auth.signInWithPopup()">
+      Sign in with Google
+    </button>
+  </div>
+</div>
