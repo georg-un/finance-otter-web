@@ -9,10 +9,17 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { LoginPageComponent } from './pages/login/login-page.component';
+import { LayoutComponent } from './components/layout/layout.component';
+
+const PAGES = [
+  LayoutComponent,
+  LoginPageComponent,
+]
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,6 +29,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    ...PAGES,
   ],
   providers: [],
   bootstrap: [AppComponent]
