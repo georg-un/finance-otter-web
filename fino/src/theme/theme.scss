@@ -1,0 +1,10 @@
+@import './tokens';
+@import './colors.module';
+@import './typography.module';
+
+@media (prefers-color-scheme: light) {
+  @import './theme.light';
+}
+@media (prefers-color-scheme: dark) {
+  @import './theme.dark';
+}

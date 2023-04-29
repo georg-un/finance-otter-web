@@ -1,9 +1,6 @@
-@use '../assets/variables' as vars;
-
 .page-outer-container {
   height: 100vh;
   width: 100vw;
-  background-color: vars.$light-primary;
   display: flex;
   justify-content: center;
   align-items: center;
