@@ -1,0 +1,47 @@
+$avatar-diameter: 56px;
+$padding-horiz: 12px;
+$padding-vert: 8px;
+
+.card {
+  border-radius: 12px;
+  padding: $padding-vert $padding-horiz;
+  background-color: var(--md-sys-color-primary-card);
+  color: var(--md-sys-color-on-primary-card);
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-container {
+  margin-right: $padding-horiz;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-image {
+  width: $avatar-diameter;
+  height: $avatar-diameter;
+  border-radius: 32px;
+}
+
+.middle-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-label {
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+.text-large {
+  font-size: 22px;
+  margin: 4px 0;
+}

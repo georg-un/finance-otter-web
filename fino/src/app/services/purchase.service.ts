@@ -12,7 +12,7 @@ import { BehaviorSubject, EMPTY, from, map, Observable, tap } from 'rxjs';
 import { Purchase } from '../model/purchase';
 import { runObservableOnceNow } from '../utils';
 
-const DEFAULT_PAGE_SIZE = 3;
+const DEFAULT_PAGE_SIZE = 10;
 const PURCHASES_DB_PATH = '/purchases';
 
 const purchaseConverter = {
@@ -72,7 +72,7 @@ export class PurchaseService {
       from(this.lastQuery.get()).pipe(
         tap((snapshot) => this.lastDocumentInQuery = snapshot.docs[snapshot.docs.length - 1]),
         map((snapshot) => this.getPurchasesFromQuerySnapshot(snapshot)),
-        tap((purchases) => this.purchases$.next([...this.purchases$.value, ...purchases]))
+        tap((purchases) => this.purchases$.next([...this.purchases$.value, ...purchases].sort(this.sortPurchasesByDateDescending)))
       )
     );
   }
@@ -84,5 +84,15 @@ export class PurchaseService {
 
   private getPurchasesFromQuerySnapshot(snapshot: QuerySnapshot<Purchase>): Purchase[] {
     return snapshot.docs.map(doc => doc.data());
+  }
+
+  private sortPurchasesByDateDescending(a: Purchase, b: Purchase) {
+    if (a.date < b.date) {
+      return 1;
+    }
+    if (a.date > b.date) {
+      return -1;
+    }
+    return 0;
   }
 }

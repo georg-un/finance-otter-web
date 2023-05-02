@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
 import { LoginPageComponent } from './pages/login/login-page.component';
 import { isAuthenticated, LOGIN_PATH } from './services/auth.service';
+import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
         component: LayoutComponent,
         canActivate: [isAuthenticated],
         children: [
+          { path: 'purchases', component: PurchaseListPageComponent }
         ]
       },
     ],

@@ -6,6 +6,7 @@ export interface Purchase {
   category: string;
   description: string;
   debits: { [debtorUid: string]: number };
+  isCompensation?: boolean;
 }
 
 export interface Category {

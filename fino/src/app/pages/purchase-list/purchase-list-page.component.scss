@@ -1,0 +1,12 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  app-purchase-card {
+    margin-bottom: 8px;
+  }
+}
+
+.month-label {
+  font-size: 12px;
+  font-weight: normal;
+}
