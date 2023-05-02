@@ -1,3 +1,5 @@
+@use '../theme/mixins' as mixins;
+
 .page-outer-container {
   height: 100vh;
   width: 100vw;
@@ -9,9 +11,8 @@
 
 .page-inner-container {
   height: 100%;
-  width: 100%;
   @media (min-width: 600px) {
     max-height: 800px;
-    max-width: 600px;
   }
+  @include mixins.limit-page-width-inner-container;
 }

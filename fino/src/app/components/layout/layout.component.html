@@ -1,2 +1,19 @@
-<router-outlet></router-outlet>
-<button (click)="auth.signOut()">SIGN OUT</button>
+<main>
+  <router-outlet></router-outlet>
+</main>
+<mat-toolbar class="main-toolbar">
+  <div class="main-toolbar__inner-container">
+    <a mat-button routerLinkActive="main-toolbar__active" routerLink="/purchases" class="main-toolbar__link">
+      <mat-icon>shopping_bag</mat-icon>
+      Purchases
+    </a>
+    <a mat-button routerLinkActive="main-toolbar__active" routerLink="/summary" class="main-toolbar__link">
+      <mat-icon>insights</mat-icon>
+      Summary
+    </a>
+    <a mat-button routerLinkActive="main-toolbar__active" routerLink="/more" class="main-toolbar__link">
+      <mat-icon>more_vert</mat-icon>
+      More
+    </a>
+  </div>
+</mat-toolbar>

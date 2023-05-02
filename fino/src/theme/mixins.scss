@@ -1,0 +1,6 @@
+@mixin limit-page-width-inner-container {
+  width: 100%;
+  @media (min-width: 600px) {
+    max-width: 600px;
+  }
+}

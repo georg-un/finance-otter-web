@@ -1,0 +1,61 @@
+@use "../../../theme/mixins" as mixins;
+
+$toolbar-height: 80px;
+
+main {
+  padding: 0 16px calc($toolbar-height + 8px) 16px;
+}
+
+.main-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: $toolbar-height;
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  display: flex;
+  justify-content: center;
+
+  :focus-visible {
+    outline: 2px solid var(--md-sys-color-outline);
+  }
+
+  &__inner-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include mixins.limit-page-width-inner-container;
+  }
+
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100px;
+    color: var(--md-sys-color-on-primary-container);
+    mat-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      height: 32px;
+      width: 64px;
+      font-size: 22px;
+      margin: 0;
+    }
+    ::ng-deep.mdc-button__label {
+      line-height: normal;
+      margin-top: 6px;
+    }
+  }
+
+  &__active {
+    mat-icon {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+  }
+}
