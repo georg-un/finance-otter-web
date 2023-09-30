@@ -43,5 +43,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-docker/ssl/
 env/
+**/.firebase/
+**/dist/
