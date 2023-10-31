@@ -5,8 +5,8 @@ $padding-vert: 8px;
 .card {
   border-radius: 12px;
   padding: $padding-vert $padding-horiz;
-  background-color: var(--md-sys-color-primary-card);
-  color: var(--md-sys-color-on-primary-card);
+  background-color: var(--fino-color-primary-card);
+  color: var(--fino-color-on-primary-card);
   display: flex;
   justify-content: space-between;
 }

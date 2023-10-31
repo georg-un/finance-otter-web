@@ -4,11 +4,12 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-background);
+  background-color: var(--fino-color-background);
+  color: var(--fino-color-on-background);
 }
 a {
   text-decoration: none;
+  color: unset;
 }
 h1 {
   font-size: 45px;
@@ -19,5 +20,5 @@ h1 {
 }
 *:focus-visible {
   outline-width: 2px;
-  outline-color: var(--md-sys-color-outline);
+  outline-color: var(--fino-color-outline);
 }
