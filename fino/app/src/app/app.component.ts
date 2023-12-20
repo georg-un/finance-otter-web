@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UserService } from './services/user.service';
+import { CategoryService } from './services/category.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'fino';
+
+  constructor(private userService: UserService, private categoryService: CategoryService) {
+  }
+
 }

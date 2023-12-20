@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  DocumentData,
   DocumentReference,
   Query,
   QueryDocumentSnapshot,
@@ -11,16 +10,17 @@ import {
 import { BehaviorSubject, EMPTY, from, map, Observable, tap } from 'rxjs';
 import { Purchase } from '../model/purchase';
 import { runObservableOnceNow } from '../utils';
+import { PurchaseDTO } from '../../../../domain';
 
 const DEFAULT_PAGE_SIZE = 10;
 const PURCHASES_DB_PATH = '/purchases';
 
 const purchaseConverter = {
-  toFirestore(purchase: Purchase): DocumentData {
+  toFirestore(purchase: Purchase): PurchaseDTO {
     return purchase;
   },
   fromFirestore(
-    snapshot: QueryDocumentSnapshot<Purchase>,
+    snapshot: QueryDocumentSnapshot<PurchaseDTO>,
     options: SnapshotOptions
   ): Purchase {
     return { uid: snapshot.id, ...snapshot.data(options) };

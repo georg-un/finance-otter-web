@@ -6,7 +6,7 @@ export interface PurchaseDTO {
     shop: string;
     date: number
     debits: DebitDTO;
-    category?: string;
+    category: string;
     description?: string;
     isCompensation?: boolean;
 }
