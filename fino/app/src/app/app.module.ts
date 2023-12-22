@@ -11,13 +11,15 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFirePerformanceModule } from '@angular/fire/compat/performance';
 import { LoginPageComponent } from './pages/login/login-page.component';
-import { LayoutComponent } from './components/layout/layout.component';
+import { ToolbarLayoutComponent } from './components/layout/toolbar-layout.component';
 import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
+import { PurchaseEditorComponent } from './pages/payment-editor/purchase-editor.component';
 
 const PAGES = [
-  LayoutComponent,
+  ToolbarLayoutComponent,
   LoginPageComponent,
   PurchaseListPageComponent,
+  PurchaseEditorComponent
 ]
 
 @NgModule({

@@ -1,0 +1,5 @@
+@use './layout-commons' as commons;
+
+main {
+  padding: 0 commons.$main-side-padding;
+}

@@ -5,6 +5,10 @@ export interface Purchase {
   date: number
   category: string;
   description?: string;
-  debits: { [debtorUid: string]: number };
+  debits: Debits;
   isCompensation?: boolean;
+}
+
+export interface Debits {
+  [debtorUid: string]: number;
 }

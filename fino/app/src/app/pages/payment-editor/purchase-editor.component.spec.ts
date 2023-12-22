@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutComponent } from './layout.component';
+import { PurchaseEditorComponent } from './purchase-editor.component';
 
-describe('LayoutComponent', () => {
-  let component: LayoutComponent;
-  let fixture: ComponentFixture<LayoutComponent>;
+describe('PurchaseEditorComponent', () => {
+  let component: PurchaseEditorComponent;
+  let fixture: ComponentFixture<PurchaseEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LayoutComponent ]
+      declarations: [ PurchaseEditorComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LayoutComponent);
+    fixture = TestBed.createComponent(PurchaseEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

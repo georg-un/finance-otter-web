@@ -1,0 +1,56 @@
+$flex-gap: 8px;
+$debit-padding-left: 8px;
+
+
+mat-form-field {
+  width: 100%;
+}
+
+.datepicker-row {
+  display: flex;
+  gap: $flex-gap;
+  button {
+    height: unset;
+    margin-bottom: 20px;
+  }
+}
+
+.action-button-row {
+  display: flex;
+  width: 100%;
+  gap: $flex-gap;
+  button {
+    flex: 1;
+  }
+}
+
+.custom-distribution-container {
+  margin: 0 0 32px 0;
+}
+
+.debit-list-item {
+  height: 100% !important;
+  padding-left: $debit-padding-left;
+}
+
+.debit-row {
+  display: flex;
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    flex: 1;
+  }
+  mat-form-field {
+    width: 30%;
+  }
+}
+
+.distribution-button-container {
+  padding: 0 16px 0 $debit-padding-left;
+  display: flex;
+  gap: $flex-gap;
+  button {
+    flex: 1;
+  }
+}
