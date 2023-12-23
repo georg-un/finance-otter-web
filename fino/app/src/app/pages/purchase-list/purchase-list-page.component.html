@@ -6,3 +6,7 @@
     <app-purchase-card [purchase]="purchase" [buyer]="(authService.currentUser | async)!"/>
   </div>
 </ng-container>
+
+<app-fab [routerLink]="['/edit/new']">
+  add
+</app-fab>

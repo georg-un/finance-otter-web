@@ -5,6 +5,8 @@ import { PurchaseService } from '../../services/purchase.service';
 import { AuthService } from '../../services/auth.service';
 import { Purchase } from '../../model/purchase';
 import { PurchaseCardComponent } from './purchase-card/purchase-card.component';
+import { FabComponent } from '../../components/fab/fab.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-purchase-list-page',
@@ -15,6 +17,8 @@ import { PurchaseCardComponent } from './purchase-card/purchase-card.component';
     CommonModule,
     MatCardModule,
     PurchaseCardComponent,
+    FabComponent,
+    RouterModule,
   ]
 })
 export class PurchaseListPageComponent implements OnInit {

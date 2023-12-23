@@ -1,0 +1,8 @@
+@use '../layout/layout-commons' as layout-commons;
+
+.fab {
+  position: fixed;
+  right: layout-commons.$main-side-padding;
+  bottom: calc(#{layout-commons.$toolbar-height} + #{layout-commons.$main-side-padding});
+  border-radius: 16px !important;
+}

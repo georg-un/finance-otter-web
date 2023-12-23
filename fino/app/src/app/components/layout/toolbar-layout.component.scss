@@ -1,10 +1,8 @@
 @use "../../../theme/mixins" as mixins;
 @use './layout-commons' as commons;
 
-$toolbar-height: 80px;
-
 main {
-  padding: 0 commons.$main-side-padding calc($toolbar-height + 8px) commons.$main-side-padding;
+  padding: 0 commons.$main-side-padding calc(#{commons.$toolbar-height} + 8px) commons.$main-side-padding;
 }
 
 .main-toolbar {
@@ -12,7 +10,7 @@ main {
   bottom: 0;
   left: 0;
   width: 100vw;
-  height: $toolbar-height;
+  height: commons.$toolbar-height;
   background-color: var(--fino-color-primary-container);
   color: var(--fino-color-on-primary-container);
   display: flex;

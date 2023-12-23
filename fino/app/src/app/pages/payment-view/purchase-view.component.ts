@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { PurchaseService } from '../../services/purchase.service';
 import { filter } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
 import { DebitSumPipe } from '../../utils/debit-sum.pipe';
 import { User } from '../../model/user';
+import { FabComponent } from '../../components/fab/fab.component';
 
 export const PURCHASE_ID_PATH_ID = 'id';
 
@@ -17,7 +18,9 @@ export const PURCHASE_ID_PATH_ID = 'id';
   standalone: true,
   imports: [
     CommonModule,
-    DebitSumPipe
+    DebitSumPipe,
+    FabComponent,
+    RouterModule
   ]
 })
 export class PurchaseViewComponent {
