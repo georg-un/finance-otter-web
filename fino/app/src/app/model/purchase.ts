@@ -1,3 +1,5 @@
+import { PurchaseDTO } from '../../../../domain';
+
 export interface Purchase {
   uid?: string;
   buyerUid: string;
@@ -11,4 +13,8 @@ export interface Purchase {
 
 export interface Debits {
   [debtorUid: string]: number;
+}
+
+export function purchaseFromPurchaseDTO(uid: string, purchaseDTO: PurchaseDTO): Purchase {
+  return { uid, ...purchaseDTO };
 }

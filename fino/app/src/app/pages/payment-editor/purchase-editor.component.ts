@@ -25,7 +25,7 @@ import BigNumber from 'bignumber.js';
 import { UserService } from '../../services/user.service';
 import { User } from '../../model/user';
 import { take } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { Category } from '../../model/category';
 import { CategoryService } from '../../services/category.service';
 import {
@@ -38,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { PurchaseService } from '../../services/purchase.service';
+import { Destroyable } from '../../components/destroyable';
 
 type ObjectValues<T> = T[keyof T];
 
@@ -72,7 +73,7 @@ BigNumber.config({ DECIMAL_PLACES: 2, ROUNDING_MODE: BigNumber.ROUND_DOWN });  /
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })
-export class PurchaseEditorComponent implements OnInit {
+export class PurchaseEditorComponent extends Destroyable implements OnInit {
 
   readonly DISTRIBUTION_MODES = {
     EQUALLY: 'equally',
@@ -113,6 +114,7 @@ export class PurchaseEditorComponent implements OnInit {
     private categoryService: CategoryService,
     private purchaseService: PurchaseService,
   ) {
+    super();
   }
 
   get debits(): FormArray<DebitFormGroup> {
@@ -122,7 +124,8 @@ export class PurchaseEditorComponent implements OnInit {
   ngOnInit() {
     this.userService.users$.pipe(
       filter((users) => !!users?.length),
-      take(1),  // TODO: add takeUntilDestroy after Angular 16 upgrade
+      take(1),
+      takeUntil(this.onDestroy$),
     ).subscribe((users) => {
       this.users = users;
       users.forEach((user) => {
@@ -133,7 +136,8 @@ export class PurchaseEditorComponent implements OnInit {
 
     this.categoryService.activeCategories$.pipe(
       filter((categories) => !!categories?.length),
-      take(1),  // TODO: takeUntilDestroy
+      take(1),
+      takeUntil(this.onDestroy$),
     ).subscribe((categories) => {
       this.categories = categories;
     });
@@ -151,7 +155,12 @@ export class PurchaseEditorComponent implements OnInit {
       alert('Something went wrong. Please try again later.');
       return;
     }
-    this.purchaseService.createPurchase(purchase);
+    this.purchaseService.createPurchase(purchase).pipe(
+      take(1),
+      takeUntil(this.onDestroy$),
+    ).subscribe((purchaseId) => {
+      this.router.navigate(['/purchases', purchaseId]);
+    });
   }
 
   setDateToday(): void {

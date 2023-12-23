@@ -8,7 +8,7 @@ import {
   SnapshotOptions
 } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, EMPTY, from, map, Observable, of, switchMap, tap } from 'rxjs';
-import { Purchase } from '../model/purchase';
+import { Purchase, purchaseFromPurchaseDTO } from '../model/purchase';
 import { runObservableOnceNow } from '../utils';
 import { PurchaseDTO } from '../../../../domain';
 
@@ -17,13 +17,11 @@ const PURCHASES_DB_PATH = '/purchases';
 
 const purchaseConverter = {
   toFirestore(purchase: Purchase): PurchaseDTO {
-    return purchase;
+    const { uid, ...purchaseDTO} = purchase;
+    return purchaseDTO;
   },
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot<PurchaseDTO>,
-    options: SnapshotOptions
-  ): Purchase {
-    return { uid: snapshot.id, ...snapshot.data(options) };
+  fromFirestore(snapshot: QueryDocumentSnapshot<PurchaseDTO>, options: SnapshotOptions): Purchase {
+    return purchaseFromPurchaseDTO(snapshot.id, snapshot.data(options));
   }
 };
 
@@ -34,7 +32,7 @@ export class PurchaseService {
 
   purchases$ = new BehaviorSubject<Purchase[]>([]);
 
-  private readonly purchasesCollection = this.firestore.collection<Purchase>(PURCHASES_DB_PATH);
+  private readonly purchasesCollection = this.firestore.collection<PurchaseDTO>(PURCHASES_DB_PATH);
   private readonly initialQuery = this.purchasesCollection.ref
     .withConverter(purchaseConverter)
     .orderBy('date', 'desc')
@@ -45,12 +43,18 @@ export class PurchaseService {
   constructor(private firestore: AngularFirestore) {
   }
 
-  createPurchase(purchase: Purchase): Observable<DocumentReference<Purchase>> {
-    return from(this.purchasesCollection.add(purchase));
+  createPurchase(purchase: Purchase) {
+    return from(this.purchasesCollection.add(purchase)).pipe(
+      map((docRef) => docRef.id)
+    );
   }
 
-  getPurchase(purchaseId: string, skipCache = false): Observable<Purchase | undefined> {
-    const purchaseFromApi$ = this.purchasesCollection.doc(purchaseId).valueChanges();
+  getPurchase(purchaseId: string, skipCache = false) {
+    const purchaseFromApi$ = this.purchasesCollection.doc(purchaseId).valueChanges().pipe(
+      map((purchase) => {
+        return purchase ? purchaseFromPurchaseDTO(purchaseId, purchase) : undefined;
+      })
+    );
     if (skipCache) {
       return purchaseFromApi$;
     }
@@ -63,7 +67,7 @@ export class PurchaseService {
     );
   }
 
-  requestFirstPage(): Observable<Purchase[]> {
+  requestFirstPage() {
     this.resetPagination();
     return runObservableOnceNow(
       from(this.initialQuery.get()).pipe(
@@ -74,7 +78,7 @@ export class PurchaseService {
     );
   }
 
-  requestNextPage(): Observable<Purchase[]> {
+  requestNextPage() {
     if (!this.lastQuery) {
       throw new Error('Property lastQuery must be defined when requesting the next page.');
     }
@@ -96,7 +100,7 @@ export class PurchaseService {
     this.lastDocumentInQuery = undefined;
   }
 
-  private getPurchasesFromQuerySnapshot(snapshot: QuerySnapshot<Purchase>): Purchase[] {
+  private getPurchasesFromQuerySnapshot(snapshot: QuerySnapshot<Purchase>) {
     return snapshot.docs.map(doc => doc.data());
   }
 
