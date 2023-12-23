@@ -7,7 +7,7 @@ import {
   QuerySnapshot,
   SnapshotOptions
 } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, EMPTY, from, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Purchase } from '../model/purchase';
 import { runObservableOnceNow } from '../utils';
 import { PurchaseDTO } from '../../../../domain';
@@ -47,6 +47,20 @@ export class PurchaseService {
 
   createPurchase(purchase: Purchase): Observable<DocumentReference<Purchase>> {
     return from(this.purchasesCollection.add(purchase));
+  }
+
+  getPurchase(purchaseId: string, skipCache = false): Observable<Purchase | undefined> {
+    const purchaseFromApi$ = this.purchasesCollection.doc(purchaseId).valueChanges();
+    if (skipCache) {
+      return purchaseFromApi$;
+    }
+    // Return the purchase from the store if it is present. Otherwise, call the API and return the response.
+    return this.purchases$.pipe(
+      map((purchases) => purchases.find((purchase) => purchase.uid === purchaseId)),
+      switchMap((purchase) => {
+        return purchase ? of(purchase) : purchaseFromApi$;
+      })
+    );
   }
 
   requestFirstPage(): Observable<Purchase[]> {

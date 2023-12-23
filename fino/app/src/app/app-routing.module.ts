@@ -6,6 +6,7 @@ import { isAuthenticated, LOGIN_PATH } from './services/auth.service';
 import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
 import { PurchaseEditorComponent } from './pages/payment-editor/purchase-editor.component';
 import { EmptyLayoutComponent } from './components/layout/empty-layout.component';
+import { PURCHASE_ID_PATH_ID, PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
 
 const routes: Routes = [
   {
@@ -25,7 +26,13 @@ const routes: Routes = [
         component: ToolbarLayoutComponent,
         canActivate: [isAuthenticated],
         children: [
-          { path: 'purchases', component: PurchaseListPageComponent }
+          {
+            path: 'purchases',
+            children: [
+              { path: `:${PURCHASE_ID_PATH_ID}`, component: PurchaseViewComponent },
+              { path: '', component: PurchaseListPageComponent },
+            ]
+          }
         ]
       },
     ],

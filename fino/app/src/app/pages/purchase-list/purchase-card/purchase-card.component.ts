@@ -5,6 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Purchase } from '../../../model/purchase';
 import { User } from '../../../model/user';
+import { DebitSumPipe } from '../../../utils/debit-sum.pipe';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-purchase-card',
@@ -19,6 +21,8 @@ import { User } from '../../../model/user';
     CommonModule,
     MatCardModule,
     MatIconModule,
+    DebitSumPipe,
+    RouterModule,
   ]
 })
 export class PurchaseCardComponent {
@@ -35,13 +39,6 @@ export class PurchaseCardComponent {
 
   @Input() set purchase(val: Purchase) {
     this._purchase = val;
-    this._debitSum = Object.values(val.debits).reduce((a, b) => a + b, 0);
     this.changeDetection.detectChanges();
   };
-
-  private _debitSum!: number;
-
-  get debitSum(): number {
-    return this._debitSum;
-  }
 }

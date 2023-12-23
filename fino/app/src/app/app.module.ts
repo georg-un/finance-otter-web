@@ -14,12 +14,14 @@ import { LoginPageComponent } from './pages/login/login-page.component';
 import { ToolbarLayoutComponent } from './components/layout/toolbar-layout.component';
 import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
 import { PurchaseEditorComponent } from './pages/payment-editor/purchase-editor.component';
+import { PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
 
 const PAGES = [
   ToolbarLayoutComponent,
   LoginPageComponent,
   PurchaseListPageComponent,
-  PurchaseEditorComponent
+  PurchaseEditorComponent,
+  PurchaseViewComponent,
 ]
 
 @NgModule({

@@ -1,0 +1,47 @@
+<h1>Details</h1>
+
+<ng-container *ngIf="purchase$ | async as purchase; else wait">
+  <ng-container *ngIf="users$ | async as users; else wait">
+    <table>
+      <tr>
+        <th>Shop:</th>
+        <td>{{ purchase.shop }}</td>
+      </tr>
+      <tr>
+        <th>Category:</th>
+        <td>{{ purchase.category }}</td>
+      </tr>
+      <tr>
+        <th>Amount:</th>
+        <td>{{ purchase.debits | debitSum | currency:'EUR':'€ ':'1.2-2' }}</td>
+      </tr>
+      <tr>
+        <th>Date:</th>
+        <td>{{ purchase.date | date }}</td>
+      </tr>
+      <tr *ngIf="purchase.description">
+        <th>Description:</th>
+        <td>{{ purchase.description }}</td>
+      </tr>
+      <tr>
+        <th>Cost distribution:</th>
+        <td>
+          <ng-container *ngTemplateOutlet="debitTable"/>
+        </td>
+      </tr>
+    </table>
+
+    <ng-template #debitTable>
+      <table>
+        <tr *ngFor="let debit of getDebitsEntries(purchase.debits)">
+          <th>{{ findUserByUid(debit.debtorUid, users)?.displayName ?? 'Unknown' }}:</th>
+          <td>{{ debit.amount | currency:'EUR':'€ ':'1.2-2' }}</td>
+        </tr>
+      </table>
+    </ng-template>
+  </ng-container>
+</ng-container>
+
+<ng-template #wait>
+  Loading, please stand by...
+</ng-template>

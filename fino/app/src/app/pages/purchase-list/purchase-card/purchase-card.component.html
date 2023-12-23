@@ -1,4 +1,4 @@
-<a [href]="'purchases/' + purchase.uid">
+<a [routerLink]="['/purchases', purchase.uid]">
   <div class="card">
     <div class="left-container">
       <img *ngIf="buyer" [src]="buyer.photoURL" [alt]="'Image of ' + buyer.displayName" class="avatar-image">
@@ -9,7 +9,7 @@
       <span class="text-label">{{purchase.category || 'uncategorized' | lowercase}}</span>
     </div>
     <div class="right-container text-large">
-      <span>{{debitSum | currency:'EUR':'€ ':'1.2-2'}}</span>
+      <span>{{purchase.debits | debitSum | currency:'EUR':'€ ':'1.2-2'}}</span>
     </div>
   </div>
 </a>
