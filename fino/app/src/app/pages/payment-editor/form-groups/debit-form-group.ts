@@ -1,4 +1,4 @@
-import { User } from '../../model/user';
+import { User } from '../../../model/user';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 export function userToDebitFormGroup(user: User, validators?: ValidatorFn[]) {

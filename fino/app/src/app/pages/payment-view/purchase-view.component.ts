@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { map, switchMap } from 'rxjs';
+import { map, switchMap, withLatestFrom } from 'rxjs';
 import { PurchaseService } from '../../services/purchase.service';
 import { filter } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
@@ -10,6 +10,7 @@ import { User } from '../../model/user';
 import { FabComponent } from '../../components/fab/fab.component';
 
 export const PURCHASE_ID_PATH_ID = 'id';
+export const SKIP_CACHE_QUERY_PARAM = 'skipCache';
 
 @Component({
   selector: 'app-purchase-view',
@@ -31,7 +32,10 @@ export class PurchaseViewComponent {
 
   readonly purchase$ = this.purchaseId$.pipe(
     filter(Boolean),
-    switchMap((purchaseId) => this.purchaseService.getPurchase(purchaseId)),
+    withLatestFrom(this.route.queryParamMap),
+    switchMap(([purchaseId, paramMap]) => {
+      return this.purchaseService.getPurchase(purchaseId, !!paramMap.get(SKIP_CACHE_QUERY_PARAM));
+    })
   );
 
   readonly users$ = this.userService.users$;

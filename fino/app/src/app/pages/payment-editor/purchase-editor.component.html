@@ -1,103 +1,108 @@
 <h1>New Purchase</h1>
 
-<form [formGroup]="form" (ngSubmit)="createPurchase()" *ngIf="!!users?.length && !!categories?.length; else wait">
-  <mat-form-field appearance="outline">
-    <mat-label>Shop</mat-label>
-    <input matInput required [formControlName]="FORM_PROPS.SHOP" type="string"/>
-  </mat-form-field>
+<ng-container *ngIf="users$ | async as users; else wait">
+  <ng-container *ngIf="categories$ | async as categories else wait">
 
-  <mat-form-field appearance="outline">
-    <mat-label>Category</mat-label>
-    <select matNativeControl required [formControlName]="FORM_PROPS.CATEGORY">
-      <option hidden disabled selected></option>
-      <option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
-    </select>
-  </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()" *ngIf="!!users?.length && !!categories?.length; else wait">
+      <mat-form-field appearance="outline">
+        <mat-label>Shop</mat-label>
+        <input matInput required [formControlName]="FORM_PROPS.SHOP" type="string"/>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Amount</mat-label>
-    <input matInput required type="number" [formControlName]="FORM_PROPS.AMOUNT"/>
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <select matNativeControl required [formControlName]="FORM_PROPS.CATEGORY">
+          <option hidden disabled selected></option>
+          <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+        </select>
+      </mat-form-field>
 
-  <div class="datepicker-row">
-    <mat-form-field appearance="outline">
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="datepicker" required type="string" [formControlName]="FORM_PROPS.DATE">
-      <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
-      <mat-datepicker #datepicker></mat-datepicker>
-    </mat-form-field>
-    <button mat-stroked-button type="button" (click)="setDateToday()">Today</button>
-  </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input matInput required type="number" [formControlName]="FORM_PROPS.AMOUNT"/>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Description</mat-label>
-    <input matInput type="string" [formControlName]="FORM_PROPS.DESCRIPTION"/>
-  </mat-form-field>
+      <div class="datepicker-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="datepicker" required type="string" [formControlName]="FORM_PROPS.DATE">
+          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker></mat-datepicker>
+        </mat-form-field>
+        <button mat-stroked-button type="button" (click)="setDateToday()">Today</button>
+      </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Distribute costs</mat-label>
-    <select matNativeControl [formControlName]="FORM_PROPS.DISTRIBUTION_MODE">
-      <option [value]="DISTRIBUTION_MODES.EQUALLY">Distribute equally</option>
-      <option [value]="DISTRIBUTION_MODES.CUSTOM">Custom distribution</option>
-    </select>
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput type="string" [formControlName]="FORM_PROPS.DESCRIPTION"/>
+      </mat-form-field>
 
-  <!-- Custom distribution section -->
-  <div *ngIf="form.get(this.FORM_PROPS.DISTRIBUTION_MODE)?.getRawValue() === DISTRIBUTION_MODES.CUSTOM"
-       class="custom-distribution-container">
-    <h3>Custom cost distribution</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Distribute costs</mat-label>
+        <select matNativeControl [formControlName]="FORM_PROPS.DISTRIBUTION_MODE">
+          <option [value]="DISTRIBUTION_MODES.EQUALLY">Distribute equally</option>
+          <option [value]="DISTRIBUTION_MODES.CUSTOM">Custom distribution</option>
+        </select>
+      </mat-form-field>
 
-    <mat-list [formArrayName]="FORM_PROPS.DEBITS">
-      <mat-list-item *ngFor="let fragment of debits.controls; let i = index" class="debit-list-item">
-        <div [formGroup]="fragment" class="debit-row">
-          <div class="checkbox-wrapper">
-            <mat-checkbox [formControlName]="DEBIT_FORM_PROPS.ENABLED"
-                          (change)="changeDebitInputDisabled($event, fragment)">
-              {{ fragment.get(DEBIT_FORM_PROPS.USER)?.value?.displayName }}
-            </mat-checkbox>
-          </div>
-          <mat-form-field appearance="outline">
-            <input
-              [formControlName]="DEBIT_FORM_PROPS.AMOUNT"
-              (change)="validateAllDebits()"
-              matInput type="number" min="0" step="0.01"
-              placeholder="0"
-            />
-          </mat-form-field>
+      <!-- Custom distribution section -->
+      <div *ngIf="form.get(this.FORM_PROPS.DISTRIBUTION_MODE)?.getRawValue() === DISTRIBUTION_MODES.CUSTOM"
+           class="custom-distribution-container">
+        <h3>Cost distribution</h3>
+
+        <mat-list [formArrayName]="FORM_PROPS.DEBITS">
+          <mat-list-item *ngFor="let fragment of debits.controls; let i = index" class="debit-list-item">
+            <div [formGroup]="fragment" class="debit-row">
+              <div class="checkbox-wrapper">
+                <mat-checkbox [formControlName]="DEBIT_FORM_PROPS.ENABLED"
+                              (change)="changeDebitInputDisabled($event, fragment)">
+                  {{ fragment.get(DEBIT_FORM_PROPS.USER)?.value?.displayName }}
+                </mat-checkbox>
+              </div>
+              <mat-form-field appearance="outline">
+                <input
+                  [formControlName]="DEBIT_FORM_PROPS.AMOUNT"
+                  (change)="validateAllDebits()"
+                  matInput type="number" min="0" step="0.01"
+                  placeholder="0"
+                />
+              </mat-form-field>
+            </div>
+          </mat-list-item>
+        </mat-list>
+
+        <div class="distribution-button-container">
+          <button
+            type="button"
+            (click)="resetDistributionFragments()"
+            mat-stroked-button>
+            <mat-icon>delete_sweep</mat-icon>
+            Reset distribution
+          </button>
+
+          <button
+            type="button"
+            mat-stroked-button
+            [matMenuTriggerFor]="distribute_menu"
+          >
+            <mat-icon>call_split</mat-icon>
+            <span>Distribute equally</span>
+          </button>
+          <mat-menu #distribute_menu="matMenu">
+            <button type="button" mat-menu-item (click)="distributeToAllFields()">On all fields</button>
+            <button type="button" mat-menu-item (click)="distributeToEmptyFields()">Only on empty fields</button>
+          </mat-menu>
         </div>
-      </mat-list-item>
-    </mat-list>
+      </div>
 
-    <div class="distribution-button-container">
-      <button
-        type="button"
-        (click)="resetDistributionFragments()"
-        mat-stroked-button>
-        <mat-icon>delete_sweep</mat-icon>
-        Reset distribution
-      </button>
+      <div class="action-button-row">
+        <button mat-flat-button type="button" (click)="cancel()">Cancel</button>
+        <button mat-flat-button color="primary" type="submit">Create</button>
+      </div>
 
-      <button
-        type="button"
-        mat-stroked-button
-        [matMenuTriggerFor]="distribute_menu"
-      >
-        <mat-icon>call_split</mat-icon>
-        <span>Distribute equally</span>
-      </button>
-      <mat-menu #distribute_menu="matMenu">
-        <button type="button" mat-menu-item (click)="distributeToAllFields()">On all fields</button>
-        <button type="button" mat-menu-item (click)="distributeToEmptyFields()">Only on empty fields</button>
-      </mat-menu>
-    </div>
-  </div>
-
-  <div class="action-button-row">
-    <button mat-flat-button type="button" (click)="cancel()">Cancel</button>
-    <button mat-flat-button color="primary" type="submit">Create</button>
-  </div>
-
-</form>
+    </form>
+  </ng-container>
+</ng-container>
 
 <ng-template #wait>
   Please stand by...

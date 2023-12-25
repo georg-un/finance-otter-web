@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  DocumentReference,
   Query,
   QueryDocumentSnapshot,
   QuerySnapshot,
   SnapshotOptions
 } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, EMPTY, from, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, from, map, of, switchMap, tap } from 'rxjs';
 import { Purchase, purchaseFromPurchaseDTO } from '../model/purchase';
 import { runObservableOnceNow } from '../utils';
 import { PurchaseDTO } from '../../../../domain';
@@ -17,7 +16,7 @@ const PURCHASES_DB_PATH = '/purchases';
 
 const purchaseConverter = {
   toFirestore(purchase: Purchase): PurchaseDTO {
-    const { uid, ...purchaseDTO} = purchase;
+    const { uid, ...purchaseDTO } = purchase;
     return purchaseDTO;
   },
   fromFirestore(snapshot: QueryDocumentSnapshot<PurchaseDTO>, options: SnapshotOptions): Purchase {
@@ -47,6 +46,11 @@ export class PurchaseService {
     return from(this.purchasesCollection.add(purchase)).pipe(
       map((docRef) => docRef.id)
     );
+  }
+
+  updatePurchase(purchaseId: string, purchaseUpdate: Purchase) {
+    const updateDTO = purchaseConverter.toFirestore(purchaseUpdate);
+    return from(this.purchasesCollection.doc(purchaseId).update(updateDTO));
   }
 
   getPurchase(purchaseId: string, skipCache = false) {

@@ -4,9 +4,10 @@ import { ToolbarLayoutComponent } from './components/layout/toolbar-layout.compo
 import { LoginPageComponent } from './pages/login/login-page.component';
 import { isAuthenticated, LOGIN_PATH } from './services/auth.service';
 import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
-import { PurchaseEditorComponent } from './pages/payment-editor/purchase-editor.component';
 import { EmptyLayoutComponent } from './components/layout/empty-layout.component';
 import { PURCHASE_ID_PATH_ID, PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
+import { PurchaseEditorEditComponent } from './pages/payment-editor/purchase-editor-edit.component';
+import { PurchaseEditorNewComponent } from './pages/payment-editor/purchase-editor-new.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
         component: EmptyLayoutComponent,
         canActivate: [isAuthenticated],
         children: [
-          { path: 'new', component: PurchaseEditorComponent }
+          { path: 'new', component: PurchaseEditorNewComponent },
+          { path: `:${'id'}`, component: PurchaseEditorEditComponent },
         ]
       },
       {

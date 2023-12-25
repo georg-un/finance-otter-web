@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Provider } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -24,7 +24,7 @@ import { AuthService } from '../../services/auth.service';
 import BigNumber from 'bignumber.js';
 import { UserService } from '../../services/user.service';
 import { User } from '../../model/user';
-import { take } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Category } from '../../model/category';
 import { CategoryService } from '../../services/category.service';
@@ -32,87 +32,86 @@ import {
   DEBIT_FORM_PROPS,
   DebitFormGroup,
   userToDebitFormGroup
-} from './debit-form-group';
+} from './form-groups/debit-form-group';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { PurchaseService } from '../../services/purchase.service';
 import { Destroyable } from '../../components/destroyable';
-
-type ObjectValues<T> = T[keyof T];
+import { DebitSumPipe } from '../../utils/debit-sum.pipe';
+import {
+  DISTRIBUTION_MODES,
+  generateEmptyPurchaseFormGroup,
+  PURCHASE_FORM_PROPS, PurchaseFormGroup
+} from './form-groups/purchase-form-group';
 
 BigNumber.config({ DECIMAL_PLACES: 2, ROUNDING_MODE: BigNumber.ROUND_DOWN });  // TODO: keep somewhere global
 
+export const PURCHASE_EDITOR_IMPORTS = [
+  CommonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatMomentDateModule,
+  MatButtonModule,
+  MatSlideToggleModule,
+  ReactiveFormsModule,
+  CommonModule,
+  MatButtonModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  ReactiveFormsModule
+]
+
+export const PURCHASE_EDITOR_PROVIDERS: Provider[] = [
+  DebitSumPipe,
+  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+]
+
 @Component({
-  selector: 'app-purchase-editor',
+  selector: 'DO-NOT-USE-abstract-purchase-editor',
   templateUrl: './purchase-editor.component.html',
   styleUrls: ['./purchase-editor.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatMomentDateModule,
-    MatButtonModule,
-    MatSlideToggleModule,
-    ReactiveFormsModule,
-    CommonModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    ReactiveFormsModule
+    ...PURCHASE_EDITOR_IMPORTS,
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-  ],
+    ...PURCHASE_EDITOR_PROVIDERS
+  ]
 })
-export class PurchaseEditorComponent extends Destroyable implements OnInit {
+export abstract class AbstractPurchaseEditorComponent extends Destroyable implements OnInit {
 
-  readonly DISTRIBUTION_MODES = {
-    EQUALLY: 'equally',
-    CUSTOM: 'custom'
-  } as const;
+  readonly DISTRIBUTION_MODES = DISTRIBUTION_MODES
 
-  readonly FORM_PROPS = {
-    SHOP: 'shop',
-    CATEGORY: 'category',
-    AMOUNT: 'amount',
-    DATE: 'date',
-    DESCRIPTION: 'description',
-    DISTRIBUTION_MODE: 'distributionMode',
-    DEBITS: 'debits',
-  } as const;
+  readonly FORM_PROPS = PURCHASE_FORM_PROPS
 
   readonly DEBIT_FORM_PROPS = DEBIT_FORM_PROPS;
 
-  readonly form = new FormGroup({
-    [this.FORM_PROPS.SHOP]: new FormControl(''),
-    [this.FORM_PROPS.CATEGORY]: new FormControl(''),
-    [this.FORM_PROPS.AMOUNT]: new FormControl<number | undefined>(undefined),
-    [this.FORM_PROPS.DATE]: new FormControl<moment.Moment | undefined>(undefined),
-    [this.FORM_PROPS.DESCRIPTION]: new FormControl(''),
-    [this.FORM_PROPS.DISTRIBUTION_MODE]: new FormControl<ObjectValues<typeof this.DISTRIBUTION_MODES>>(
-      this.DISTRIBUTION_MODES.EQUALLY
-    ),
-    [this.FORM_PROPS.DEBITS]: new FormArray<DebitFormGroup>([]),
-  });
+  readonly form = generateEmptyPurchaseFormGroup();
 
-  users?: User[];
-  categories?: Category[];
+  users$: Observable<User[]> = this.userService.users$.pipe(
+    filter((users) => !!users?.length)
+  );
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private userService: UserService,
-    private categoryService: CategoryService,
-    private purchaseService: PurchaseService,
+  categories$: Observable<Category[]> = this.categoryService.activeCategories$.pipe(
+    filter((categories) => !!categories?.length)
+  );
+
+  protected debitFormGroupInitialized = new BehaviorSubject(false);
+
+  protected constructor(
+    protected router: Router,
+    protected authService: AuthService,
+    protected userService: UserService,
+    protected categoryService: CategoryService,
+    protected purchaseService: PurchaseService,
   ) {
     super();
   }
@@ -122,53 +121,24 @@ export class PurchaseEditorComponent extends Destroyable implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.users$.pipe(
-      filter((users) => !!users?.length),
+    this.users$.pipe(
       take(1),
       takeUntil(this.onDestroy$),
     ).subscribe((users) => {
-      this.users = users;
+      this.debits.clear();
       users.forEach((user) => {
-        (this.form.get(this.FORM_PROPS.DEBITS) as FormArray)
-          .push(userToDebitFormGroup(user, [this.validateTotalAmountMatchesDebitsSum(this.form)]));
+        this.debits.push(userToDebitFormGroup(user, [this.validateTotalAmountMatchesDebitsSum(this.form)]));
       });
-    });
-
-    this.categoryService.activeCategories$.pipe(
-      filter((categories) => !!categories?.length),
-      take(1),
-      takeUntil(this.onDestroy$),
-    ).subscribe((categories) => {
-      this.categories = categories;
+      this.debitFormGroupInitialized.next(true);
     });
   }
 
-  createPurchase(): void {
-    this.form.markAllAsTouched();
-    this.form.updateValueAndValidity();
-    if (this.form.invalid) {
-      return;
-    }
-    this.distributeDebitsIfDistributionModeEqual();
-    const purchase = this.getPurchaseFromFormGroup(this.form);
-    if (!purchase) {
-      alert('Something went wrong. Please try again later.');
-      return;
-    }
-    this.purchaseService.createPurchase(purchase).pipe(
-      take(1),
-      takeUntil(this.onDestroy$),
-    ).subscribe((purchaseId) => {
-      this.router.navigate(['/purchases', purchaseId]);
-    });
-  }
+  abstract handleSubmit(): void;
+
+  abstract cancel(): void;
 
   setDateToday(): void {
     this.form.get(this.FORM_PROPS.DATE)?.setValue(moment());
-  }
-
-  cancel(): void {
-    this.router.navigate(['/', 'purchases']);
   }
 
   validateAllDebits(): void {
@@ -240,7 +210,7 @@ export class PurchaseEditorComponent extends Destroyable implements OnInit {
     this.validateAllDebits();
   }
 
-  private distributeToFields(relevantFields: ReturnType<typeof userToDebitFormGroup>[]): void {
+  protected distributeToFields(relevantFields: DebitFormGroup[]): void {
     const totalAmount = this.form.get(this.FORM_PROPS.AMOUNT)!.value;
     if (!totalAmount) {
       alert('Please set the total amount first.');
@@ -275,13 +245,13 @@ export class PurchaseEditorComponent extends Destroyable implements OnInit {
     });
   }
 
-  private getRest(totalAmount: BigNumber, amounts: BigNumber[]): BigNumber {
+  protected getRest(totalAmount: BigNumber, amounts: BigNumber[]): BigNumber {
     return totalAmount.minus(
       amounts.reduce((a, b) => a.plus(b), new BigNumber(0))
     );
   }
 
-  private distributeByBresenham(rest: BigNumber, nFields: BigNumber): BigNumber[] {
+  protected distributeByBresenham(rest: BigNumber, nFields: BigNumber): BigNumber[] {
     const result: BigNumber[] = [];
     // Distribute the rest evenly
     const assignedValue = rest.dividedBy(nFields);
@@ -303,7 +273,7 @@ export class PurchaseEditorComponent extends Destroyable implements OnInit {
     return result;
   }
 
-  private distributeDebitsIfDistributionModeEqual(): void {
+  protected distributeDebitsIfDistributionModeEqual(): void {
     if (this.form.get(this.FORM_PROPS.DISTRIBUTION_MODE)?.value === this.DISTRIBUTION_MODES.EQUALLY) {
       this.debits.controls.forEach((debit) => {
         debit.get(DEBIT_FORM_PROPS.ENABLED)?.setValue(true);
@@ -314,7 +284,7 @@ export class PurchaseEditorComponent extends Destroyable implements OnInit {
     this.validateAllDebits();
   }
 
-  private getPurchaseFromFormGroup(purchaseFormGroup: typeof this.form): Purchase | void {
+  protected getPurchaseFromFormGroup(purchaseFormGroup: PurchaseFormGroup): Purchase | void {
     return {
       buyerUid: this.authService.currentUser.value?.uid!,
       category: purchaseFormGroup.get(this.FORM_PROPS.CATEGORY)!.value!,
@@ -325,7 +295,7 @@ export class PurchaseEditorComponent extends Destroyable implements OnInit {
     };
   }
 
-  private getDebitFromFormArray(debitsFormArray: FormArray<DebitFormGroup> | null | undefined): Debits {
+  protected getDebitFromFormArray(debitsFormArray: FormArray<DebitFormGroup> | null | undefined): Debits {
     const debits: Debits = {};
     debitsFormArray?.controls.forEach((debitFormGroup) => {
       const enabled = debitFormGroup.get(DEBIT_FORM_PROPS.ENABLED)?.value;
