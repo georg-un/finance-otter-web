@@ -1,7 +1,7 @@
 {
   "hosting": {
     "target": "fino",
-    "public": "dist/fino",
+    "public": "app/dist/fino",
     "ignore": [
       "**/.*"
     ],

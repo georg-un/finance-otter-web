@@ -10,6 +10,5 @@ export interface UserDTO {
 export const isUserDTO = (val: unknown): val is UserDTO => {
     return isObject(val) &&
         isString((val as UserDTO).displayName) &&
-        isString((val as UserDTO).email) &&
-        isString((val as UserDTO).uid);
+        isString((val as UserDTO).email);
 }

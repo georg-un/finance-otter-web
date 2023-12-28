@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import { firestore } from 'firebase-admin';
-import { BalancesDTO, DebitDTO, isNumber, isObject, isString, PurchaseDTO, UserDTO } from '../../../domain';
+import { BalancesDTO, DebitDTO, isNumber, isObject, isString, PurchaseDTO } from '../../../domain';
 import { Application, Request, Response } from 'express';
 import {
   getBalances,
@@ -9,22 +9,19 @@ import {
   getPurchase,
   getPurchaseRef,
   getUserCollectionRef,
-  getUsers
+  getUserIds,
 } from '../firestore/firestore-client';
 import { handleErrors } from '../middleware/error-handler';
 import { HttpsError } from 'firebase-functions/v2/https';
-
-export const PURCHASE_ID_PATH_PARAM = 'purchaseId';
-
-const API_BASE_URL = '/purchases';
+import { PURCHASE_API_URLS, PURCHASE_ID_PATH_PARAM, PurchaseApiResponse } from '../../../domain/purchase-api-models';
 
 export const registerPurchaseApi = (app: Application) => {
-  app.post(`${API_BASE_URL}`, addPurchase);
-  app.delete(`${API_BASE_URL}/:${PURCHASE_ID_PATH_PARAM}`, deletePurchase);
-  app.put(`${API_BASE_URL}/:${PURCHASE_ID_PATH_PARAM}`, updatePurchase);
+  app.post(PURCHASE_API_URLS.CREATE.URL, addPurchase);
+  app.put(PURCHASE_API_URLS.UPDATE.URL, updatePurchase);
+  app.delete(PURCHASE_API_URLS.DELETE.URL, deletePurchase);
 };
 
-const addPurchase = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const addPurchase = handleErrors(async (req: Request, res: Response<PurchaseApiResponse['Create']>): Promise<void> => {
   const purchase = req.body as PurchaseDTO;
   const db = firestore();
 
@@ -33,8 +30,8 @@ const addPurchase = handleErrors(async (req: Request, res: Response): Promise<vo
   const usersRef = getUserCollectionRef(db);
 
   await db.runTransaction(async (transaction) => {
-    const users = await getUsers(usersRef);
-    validatePurchase(purchase, users);
+    const userIds = await getUserIds(usersRef);
+    validatePurchase(purchase, userIds);
 
     const balances = await getBalances(balancesRef);
 
@@ -45,7 +42,7 @@ const addPurchase = handleErrors(async (req: Request, res: Response): Promise<vo
   res.json({ id: newPurchaseRef.id });
 });
 
-const deletePurchase = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const deletePurchase = handleErrors(async (req: Request, res: Response<PurchaseApiResponse['Delete']>): Promise<void> => {
   const purchaseId = req.params[PURCHASE_ID_PATH_PARAM];
   const db = firestore();
 
@@ -63,7 +60,7 @@ const deletePurchase = handleErrors(async (req: Request, res: Response): Promise
   res.status(204).send();
 });
 
-const updatePurchase = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const updatePurchase = handleErrors(async (req: Request, res: Response<PurchaseApiResponse['Update']>): Promise<void> => {
   const purchaseId = req.params[PURCHASE_ID_PATH_PARAM];
   const purchaseUpdate = req.body as PurchaseDTO;
   const db = firestore();
@@ -73,8 +70,8 @@ const updatePurchase = handleErrors(async (req: Request, res: Response): Promise
   const usersRef = getUserCollectionRef(db);
 
   await db.runTransaction(async (transaction) => {
-    const users = await getUsers(usersRef);
-    validatePurchase(purchaseUpdate, users);
+    const userIds = await getUserIds(usersRef);
+    validatePurchase(purchaseUpdate, userIds);
 
     const oldPurchase = await getPurchase(purchaseRef);
     const balances = await getBalances(balancesRef);
@@ -101,7 +98,7 @@ const buildBalancesUpdate = (balances: BalancesDTO, purchase: PurchaseDTO, opera
   return newBalances;
 };
 
-function validatePurchase(purchase: PurchaseDTO, users: UserDTO[]): asserts purchase is PurchaseDTO {
+function validatePurchase(purchase: PurchaseDTO, allUserIds: string[]): asserts purchase is PurchaseDTO {
   if (!isObject(purchase)) {
     throw new HttpsError('invalid-argument', `Purchase must be of type object but was of type '${typeof purchase}'.`);
   }
@@ -109,11 +106,10 @@ function validatePurchase(purchase: PurchaseDTO, users: UserDTO[]): asserts purc
     throw new HttpsError('invalid-argument', `Property 'date' is required and must be of type number.`);
   }
   if (!isString(purchase?.payerUid)) {
-    throw new HttpsError('invalid-argument', `Property 'buyerId' is required and must be of type string.`);
+    throw new HttpsError('invalid-argument', `Property 'payerUid' is required and must be of type string.`);
   }
-  const allUserIds = users.map((user) => user.uid);
   if (!allUserIds.includes(purchase?.payerUid)) {
-    throw new HttpsError('invalid-argument', `Property 'buyerId' contains an unknown user-id: '${purchase?.payerUid}'.`);
+    throw new HttpsError('invalid-argument', `Property 'payerUid' contains an unknown user-id: '${purchase?.payerUid}'.`);
   }
   if (!isString(purchase?.shop)) {
     throw new HttpsError('invalid-argument', `Property 'shop' is required and must be of type string.`);

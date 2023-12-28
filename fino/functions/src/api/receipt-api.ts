@@ -4,23 +4,21 @@ import { handleErrors } from '../middleware/error-handler';
 import * as firebase from 'firebase-admin';
 import { v4 as uuidv4 } from 'uuid';
 import { isString } from '../../../domain';
-
-export const RECEIPT_NAME_PATH_PARAM = 'receiptName';
-const API_BASE_URL = '/receipts';
+import { RECEIPT_API_URLS, ReceiptApiResponse, RECEIPT_NAME_PATH_PARAM } from '../../../domain/receipt-api-models';
 
 export const registerReceiptApi = (app: Application) => {
-    app.post(`${API_BASE_URL}`, addReceipt);
-    app.get(`${API_BASE_URL}/:${RECEIPT_NAME_PATH_PARAM}`, getReceipt);
-    app.put(`${API_BASE_URL}/:${RECEIPT_NAME_PATH_PARAM}`, updateReceipt);
-    app.delete(`${API_BASE_URL}/:${RECEIPT_NAME_PATH_PARAM}`, deleteReceipt);
+    app.post(RECEIPT_API_URLS.CREATE.URL, addReceipt);
+    app.get(RECEIPT_API_URLS.READ.URL, getReceipt);
+    app.put(RECEIPT_API_URLS.UPDATE.URL, updateReceipt);
+    app.delete(RECEIPT_API_URLS.DELETE.URL, deleteReceipt);
 };
 
-const addReceipt = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const addReceipt = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['Create']>): Promise<void> => {
     const image = getImageFromRequestBody(req);
 
     const store = firebase.storage();
     const filename = uuidv4() + '.png';
-    await store.bucket().file(getFilePath('filename')).save(image, {
+    await store.bucket().file(getFilePath(filename)).save(image, {
         contentType: 'image/png',
         preconditionOpts: { ifGenerationMatch: 0 }
     });
@@ -30,7 +28,7 @@ const addReceipt = handleErrors(async (req: Request, res: Response): Promise<voi
     });
 });
 
-const getReceipt = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const getReceipt = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['Read']>): Promise<void> => {
     const filename = getReceiptNameFromPath(req);
 
     const store = firebase.storage();
@@ -43,7 +41,7 @@ const getReceipt = handleErrors(async (req: Request, res: Response): Promise<voi
     }
 });
 
-const deleteReceipt = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const deleteReceipt = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['Delete']>): Promise<void> => {
     const filename = getReceiptNameFromPath(req);
 
     const store = firebase.storage();
@@ -52,7 +50,7 @@ const deleteReceipt = handleErrors(async (req: Request, res: Response): Promise<
     res.status(204).send();
 });
 
-const updateReceipt = handleErrors(async (req: Request, res: Response): Promise<void> => {
+const updateReceipt = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['Update']>): Promise<void> => {
     const filename = getReceiptNameFromPath(req);
     const image = getImageFromRequestBody(req);
 

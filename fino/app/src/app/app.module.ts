@@ -16,6 +16,7 @@ import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-p
 import { PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
 import { PurchaseEditorEditComponent } from './pages/payment-editor/purchase-editor-edit.component';
 import { PurchaseEditorNewComponent } from './pages/payment-editor/purchase-editor-new.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const PAGES = [
   ToolbarLayoutComponent,
@@ -33,6 +34,7 @@ const PAGES = [
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

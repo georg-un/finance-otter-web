@@ -10,6 +10,9 @@ import { BehaviorSubject, EMPTY, from, map, of, switchMap, tap } from 'rxjs';
 import { runObservableOnceNow } from '../utils';
 import { PurchaseDTO } from '../../../../domain';
 import { addUid, WithUid } from '../utils/with-uid';
+import { HttpClient } from '@angular/common/http';
+import { PURCHASE_API_URLS } from '../../../../domain/purchase-api-models';
+import { PurchaseApiResponse } from '../../../../domain/purchase-api-models';
 
 const DEFAULT_PAGE_SIZE = 10;
 const PURCHASES_DB_PATH = '/purchases';
@@ -39,17 +42,24 @@ export class PurchaseService {
   private lastQuery?: Query<WithUid<PurchaseDTO>>;
   private lastDocumentInQuery?: QueryDocumentSnapshot<WithUid<PurchaseDTO>>;
 
-  constructor(private firestore: AngularFirestore) {
+  constructor(
+    private firestore: AngularFirestore,
+    private http: HttpClient,
+  ) {
   }
 
   createPurchase(purchase: PurchaseDTO) {
-    return from(this.purchasesCollection.add(purchase)).pipe(
-      map((docRef) => docRef.id)
+    return this.http.post<PurchaseApiResponse['Create']>(PURCHASE_API_URLS.CREATE.get(), purchase).pipe(
+      map((response) => response.id)
     );
   }
 
   updatePurchase(purchaseId: string, purchaseUpdate: PurchaseDTO) {
-    return from(this.purchasesCollection.doc(purchaseId).update(purchaseUpdate));
+    return this.http.put<PurchaseApiResponse['Update']>(PURCHASE_API_URLS.UPDATE.get(purchaseId), purchaseUpdate);
+  }
+
+  deletePurchase(purchaseId: string) {
+    return this.http.delete<PurchaseApiResponse['Delete']>(PURCHASE_API_URLS.DELETE.get(purchaseId));
   }
 
   getPurchase(purchaseId: string, skipCache = false) {

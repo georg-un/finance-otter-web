@@ -47,3 +47,7 @@ export async function getUsers(usersRef: CollectionReference<DocumentData>): Pro
     assertValidUserDocs(users);
     return users;
 }
+
+export async function getUserIds(usersRef: CollectionReference<DocumentData>): Promise<string[]> {
+    return (await usersRef.get()).docs.map((doc) => doc.id).filter(Boolean);
+}
