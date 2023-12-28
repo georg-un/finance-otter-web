@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, map, switchMap, take } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, switchMap, take } from 'rxjs';
 import { AngularFirestore, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from '@angular/fire/compat/firestore';
 import { AuthService } from './auth.service';
 import { filter } from 'rxjs/operators';
-import { Category } from '../model/category';
 import { CategoryDTO } from '../../../../domain';
+import { WithUid } from '../utils/with-uid';
 
 const DEFAULT_PAGE_SIZE = 100;
 const CATEGORIES_DB_PATH = '/categories';
 
 const categoriesConverter = {
-  toFirestore(user: Category): CategoryDTO {
-    return user;
+  toFirestore(category: WithUid<CategoryDTO>): CategoryDTO {
+    const { uid, ...categoryDTO } = category;
+    return categoryDTO;
   },
   fromFirestore(
     snapshot: QueryDocumentSnapshot<CategoryDTO>,
     options: SnapshotOptions
-  ): Category {
-    return { name: snapshot.id, ...snapshot.data(options) };
+  ): WithUid<CategoryDTO> {
+    return { uid: snapshot.id, ...snapshot.data(options) };
   }
 };
 
@@ -26,7 +27,7 @@ const categoriesConverter = {
 })
 export class CategoryService {
 
-  categories$ = new BehaviorSubject<Category[]>([]);
+  categories$ = new BehaviorSubject<WithUid<CategoryDTO>[]>([]);
   activeCategories$ = this.categories$.pipe(
     map((categories) => categories.filter((category) => category.active))
   );
@@ -50,7 +51,13 @@ export class CategoryService {
     });
   }
 
-  private getCategoriesFromQuerySnapshot(snapshot: QuerySnapshot<Category>): Category[] {
+  getByUid(uid: string): Observable<WithUid<CategoryDTO> | undefined> {
+    return this.categories$.pipe(
+      map((categories) => categories.find((category) => category.uid === uid))
+    );
+  }
+
+  private getCategoriesFromQuerySnapshot(snapshot: QuerySnapshot<WithUid<CategoryDTO>>): WithUid<CategoryDTO>[] {
     return snapshot.docs.map(doc => doc.data());
   }
 }

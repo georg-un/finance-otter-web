@@ -1,7 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Purchase } from '../../model/purchase';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { map, switchMap, take, tap, zip } from 'rxjs';
@@ -15,6 +14,8 @@ import {
   PURCHASE_EDITOR_IMPORTS,
   PURCHASE_EDITOR_PROVIDERS
 } from './abstract-purchase-editor.component';
+import { PurchaseDTO } from '../../../../../domain';
+import { WithUid } from '../../utils/with-uid';
 
 @Component({
   selector: 'app-purchase-editor',
@@ -29,6 +30,8 @@ import {
   ]
 })
 export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent implements OnInit {
+
+  override readonly SUBMIT_BUTTON_LABEL = 'Update';
 
   private purchaseId?: string;
 
@@ -82,17 +85,18 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
       return;
     }
     this.distributeDebitsIfDistributionModeEqual();
-    const purchaseUpdate = this.getPurchaseFromFormGroup(this.form);
-    if (!purchaseUpdate || !this.purchaseId) {
-      alert('Something went wrong. Please try again later.');
+    const purchaseId = this.purchaseId;
+    if (!purchaseId) {
+      alert('Purchase ID is missing. Please try again later.');
       return;
     }
-    this.purchaseService.updatePurchase(this.purchaseId, purchaseUpdate).pipe(
+    const purchaseUpdate = this.getPurchaseFromFormGroup(this.form);
+    this.purchaseService.updatePurchase(purchaseId, purchaseUpdate).pipe(
       take(1),
       takeUntil(this.onDestroy$),
     ).subscribe(() => {
       this.router.navigate(
-        ['/purchases', this.purchaseId],
+        ['/purchases', purchaseId],
         { queryParams: { [SKIP_CACHE_QUERY_PARAM]: true } }
       );
     });
@@ -102,9 +106,9 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
     this.router.navigate(['/purchases', `${this.purchaseId ?? ''}`], { replaceUrl: true });
   }
 
-  private mapPurchaseToForm(purchase: Purchase) {
+  private mapPurchaseToForm(purchase: WithUid<PurchaseDTO>) {
     this.form.get(this.FORM_PROPS.SHOP)?.setValue(purchase.shop);
-    this.form.get(this.FORM_PROPS.CATEGORY)?.setValue(purchase.category);
+    this.form.get(this.FORM_PROPS.CATEGORY)?.setValue(purchase.categoryUid);
     this.form.get(this.FORM_PROPS.AMOUNT)?.setValue(this.debitSumPipe.transform(purchase.debits));
     this.form.get(this.FORM_PROPS.DESCRIPTION)?.setValue(purchase.description ?? '');
     this.form.get(this.FORM_PROPS.DATE)?.setValue(moment(purchase.date));

@@ -26,6 +26,8 @@ import {
 })
 export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent implements OnInit {
 
+  override readonly SUBMIT_BUTTON_LABEL = 'Create';
+
   constructor(
     router: Router,
     authService: AuthService,

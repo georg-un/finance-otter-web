@@ -1,26 +1,43 @@
 import { isNumber, isObject, isString } from './type-guards';
 
-export interface PurchaseDTO {
-    uid?: string;
-    buyerUid: string;
-    shop: string;
+interface Transaction {
+    type: 'purchase' | 'compensation';
+    payerUid: string;
     date: number
     debits: DebitDTO;
-    category: string;
     description?: string;
-    isCompensation?: boolean;
+}
+
+export interface PurchaseDTO extends Transaction {
+    shop: string;
+    categoryUid: string;
+    type: 'purchase';
+}
+
+export interface CompensationDTO extends Transaction {
+    type: 'compensation';
 }
 
 export interface DebitDTO {
     [debtorUid: string]: number;
 }
 
-export const isPurchaseDTO = (val: unknown): val is PurchaseDTO => {
+const isTransaction = (val: unknown): val is Transaction => {
     return isObject(val) &&
-        isString((val as PurchaseDTO).buyerUid) &&
-        isString((val as PurchaseDTO).shop) &&
-        isNumber((val as PurchaseDTO).date) &&
-        isDebitDTO((val as PurchaseDTO).debits);
+      isString((val as Transaction).payerUid) &&
+      isNumber((val as Transaction).date) &&
+      isDebitDTO((val as Transaction).debits);
+}
+
+export const isPurchaseDTO = (val: unknown): val is PurchaseDTO => {
+    return isTransaction(val) &&
+      (val as PurchaseDTO).type === 'purchase' &&
+      isString((val as PurchaseDTO).shop) &&
+      isString((val as PurchaseDTO).categoryUid);
+}
+
+export const isCompensationDTO = (val: unknown): val is CompensationDTO => {
+    return isTransaction(val) && (val as CompensationDTO).type === 'compensation';
 }
 
 export const isDebitDTO = (val: unknown): val is DebitDTO => {

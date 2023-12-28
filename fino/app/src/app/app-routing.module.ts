@@ -34,7 +34,8 @@ const routes: Routes = [
               { path: `:${PURCHASE_ID_PATH_ID}`, component: PurchaseViewComponent },
               { path: '', component: PurchaseListPageComponent },
             ]
-          }
+          },
+          { path: '', pathMatch: 'full', redirectTo: '/purchases' }
         ]
       },
     ],

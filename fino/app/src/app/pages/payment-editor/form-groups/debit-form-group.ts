@@ -1,7 +1,8 @@
-import { User } from '../../../model/user';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { WithUid } from '../../../utils/with-uid';
+import { UserDTO } from '../../../../../../domain';
 
-export function userToDebitFormGroup(user: User, validators?: ValidatorFn[]) {
+export function userToDebitFormGroup(user: WithUid<UserDTO>, validators?: ValidatorFn[]) {
   return new FormGroup({
     [DEBIT_FORM_PROPS.ENABLED]: new FormControl(true),
     [DEBIT_FORM_PROPS.USER]: new FormControl(user),

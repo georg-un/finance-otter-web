@@ -6,8 +6,10 @@ import { PurchaseService } from '../../services/purchase.service';
 import { filter } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
 import { DebitSumPipe } from '../../utils/debit-sum.pipe';
-import { User } from '../../model/user';
 import { FabComponent } from '../../components/fab/fab.component';
+import { WithUid } from '../../utils/with-uid';
+import { UserDTO } from '../../../../../domain';
+import { CategoryService } from '../../services/category.service';
 
 export const PURCHASE_ID_PATH_ID = 'id';
 export const SKIP_CACHE_QUERY_PARAM = 'skipCache';
@@ -25,7 +27,6 @@ export const SKIP_CACHE_QUERY_PARAM = 'skipCache';
   ]
 })
 export class PurchaseViewComponent {
-
   private readonly purchaseId$ = this.route.paramMap.pipe(
     map((paramMap) => paramMap.get(PURCHASE_ID_PATH_ID)),
   );
@@ -40,21 +41,27 @@ export class PurchaseViewComponent {
 
   readonly users$ = this.userService.users$;
 
+  readonly category$ = this.purchase$.pipe(
+    filter(Boolean),
+    switchMap((purchase) => this.categoryService.getByUid(purchase.categoryUid)),
+  );
+
   constructor(
     private route: ActivatedRoute,
     private purchaseService: PurchaseService,
+    private categoryService: CategoryService,
     private userService: UserService,
   ) {
   }
 
-  getDebitsEntries(debits: Record<string, number>): {debtorUid: string, amount: number}[] {
+  getDebitsEntries(debits: Record<string, number>): { debtorUid: string, amount: number }[] {
     return Object.keys(debits).map((debtorUid) => ({
       debtorUid,
       amount: debits[debtorUid],
-    }))
+    }));
   }
 
-  findUserByUid(uid: string, users: User[]): User | undefined {
+  findUserByUid(uid: string, users: WithUid<UserDTO>[]): WithUid<UserDTO> | undefined {
     return users.find((user) => user.uid === uid);
   }
 }

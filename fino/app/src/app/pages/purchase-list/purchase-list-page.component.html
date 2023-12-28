@@ -3,7 +3,7 @@
 <ng-container *ngIf="(purchaseService.purchases$ | async) as purchases">
   <div *ngFor="let purchase of purchases; let i = index;" class="list-container">
     <p class="month-label" *ngIf="!areMonthsTheSame(purchases[i-1], purchase)">{{generateMonthLabel(purchase)}}</p>
-    <app-purchase-card [purchase]="purchase" [buyer]="(authService.currentUser | async)!"/>
+    <app-purchase-card [purchase]="purchase"/>
   </div>
 </ng-container>
 

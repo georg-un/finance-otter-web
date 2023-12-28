@@ -2,8 +2,9 @@ import { inject, Injectable, NgZone } from '@angular/core';
 import { GoogleAuthProvider, User as FirebaseUser } from '@firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { BehaviorSubject } from 'rxjs';
-import { firebaseUserToFinoUser, User } from '../model/user';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WithUid } from '../utils/with-uid';
+import { UserDTO } from '../../../../domain';
 
 export function isAuthenticated(): boolean {
   const auth = inject(AuthService);
@@ -17,7 +18,7 @@ const REDIRECT_PARAM_KEY = 'redirectTo';
   providedIn: 'root',
 })
 export class AuthService {
-  readonly currentUser = new BehaviorSubject<User | null>(null);
+  readonly currentUser = new BehaviorSubject<WithUid<UserDTO> | null>(null);
   readonly initialized = new BehaviorSubject<boolean>(false);
   readonly isLoggedIn = new BehaviorSubject<boolean>(false);
 
@@ -42,7 +43,7 @@ export class AuthService {
 
   private onAuthStateChanged(user: FirebaseUser): void {
     const loggedIn = !!user;
-    this.currentUser.next(loggedIn ? firebaseUserToFinoUser(user as FirebaseUser) : null);
+    this.currentUser.next(loggedIn ? this.firebaseUserToUserDTO(user) : null);
 
     // ignore if the service is already initialized and the auth state did not change
     if (loggedIn === this.isLoggedIn.value && this.initialized.value) {
@@ -90,5 +91,17 @@ export class AuthService {
   private decodeRedirectQueryParam(redirectTo?: string): string {
     const url = !!redirectTo ? decodeURI(redirectTo) : '/';
     return url.includes(LOGIN_PATH) ? '/' : url;
+  }
+
+  private firebaseUserToUserDTO(firebaseUser: FirebaseUser): WithUid<UserDTO> {
+    if (!firebaseUser || !firebaseUser.email || !firebaseUser.displayName || !firebaseUser.photoURL) {
+      throw new Error(`One or more required properties are missing in Firebase user object: ${JSON.stringify(firebaseUser)}`);
+    }
+    return {
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      photoUrl: firebaseUser.photoURL,
+    };
   }
 }

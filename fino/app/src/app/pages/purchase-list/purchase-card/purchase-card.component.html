@@ -1,15 +1,25 @@
-<a [routerLink]="['/purchases', purchase.uid]">
+<ng-container *ngIf="purchase$ | async as purchase; else wait">
+  <ng-container *ngIf="buyer$ | async as buyer; else wait">
+      <a [routerLink]="['/purchases', purchase.uid]">
+        <div class="card">
+          <div class="left-container">
+            <img *ngIf="buyer" [src]="buyer.photoUrl" [alt]="'Image of ' + buyer.displayName" class="avatar-image">
+          </div>
+          <div class="middle-container">
+            <span class="text-label">{{ purchase.date | date }}</span>
+            <span class="text-large">{{ purchase.shop | titlecase }}</span>
+            <span class="text-label">{{ (category$ | async)?.displayName || 'uncategorized' | lowercase }}</span>
+          </div>
+          <div class="right-container text-large">
+            <span>{{ purchase.debits | debitSum | currency:'EUR':'€ ':'1.2-2' }}</span>
+          </div>
+        </div>
+      </a>
+  </ng-container>
+</ng-container>
+
+<ng-template #wait>
   <div class="card">
-    <div class="left-container">
-      <img *ngIf="buyer" [src]="buyer.photoURL" [alt]="'Image of ' + buyer.displayName" class="avatar-image">
-    </div>
-    <div class="middle-container">
-      <span class="text-label">{{purchase.date | date}}</span>
-      <span class="text-large">{{purchase.shop | titlecase}}</span>
-      <span class="text-label">{{purchase.category || 'uncategorized' | lowercase}}</span>
-    </div>
-    <div class="right-container text-large">
-      <span>{{purchase.debits | debitSum | currency:'EUR':'€ ':'1.2-2'}}</span>
-    </div>
+    loading...  <!-- TODO: add skeleton effect -->
   </div>
-</a>
+</ng-template>

@@ -10,8 +10,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {
   AbstractControl,
   FormArray,
-  FormControl,
-  FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn
@@ -19,14 +17,11 @@ import {
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Debits, Purchase } from '../../model/purchase';
 import { AuthService } from '../../services/auth.service';
 import BigNumber from 'bignumber.js';
 import { UserService } from '../../services/user.service';
-import { User } from '../../model/user';
 import { BehaviorSubject, Observable, take } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { Category } from '../../model/category';
 import { CategoryService } from '../../services/category.service';
 import {
   DEBIT_FORM_PROPS,
@@ -45,6 +40,8 @@ import {
   generateEmptyPurchaseFormGroup,
   PURCHASE_FORM_PROPS, PurchaseFormGroup
 } from './form-groups/purchase-form-group';
+import { WithUid } from '../../utils/with-uid';
+import { CategoryDTO, DebitDTO, PurchaseDTO, UserDTO } from '../../../../../domain';
 
 BigNumber.config({ DECIMAL_PLACES: 2, ROUNDING_MODE: BigNumber.ROUND_DOWN });  // TODO: keep somewhere global
 
@@ -96,11 +93,13 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable implem
 
   readonly form = generateEmptyPurchaseFormGroup();
 
-  users$: Observable<User[]> = this.userService.users$.pipe(
+  readonly abstract SUBMIT_BUTTON_LABEL: string;
+
+  users$: Observable<WithUid<UserDTO>[]> = this.userService.users$.pipe(
     filter((users) => !!users?.length)
   );
 
-  categories$: Observable<Category[]> = this.categoryService.activeCategories$.pipe(
+  categories$: Observable<WithUid<CategoryDTO>[]> = this.categoryService.activeCategories$.pipe(
     filter((categories) => !!categories?.length)
   );
 
@@ -284,10 +283,11 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable implem
     this.validateAllDebits();
   }
 
-  protected getPurchaseFromFormGroup(purchaseFormGroup: PurchaseFormGroup): Purchase | void {
+  protected getPurchaseFromFormGroup(purchaseFormGroup: PurchaseFormGroup): PurchaseDTO {
     return {
-      buyerUid: this.authService.currentUser.value?.uid!,
-      category: purchaseFormGroup.get(this.FORM_PROPS.CATEGORY)!.value!,
+      type: 'purchase',
+      payerUid: this.authService.currentUser.value?.uid!,
+      categoryUid: purchaseFormGroup.get(this.FORM_PROPS.CATEGORY)!.value!,
       date: purchaseFormGroup.get(this.FORM_PROPS.DATE)!.value!.valueOf(),
       shop: purchaseFormGroup.get(this.FORM_PROPS.SHOP)!.value!,
       description: purchaseFormGroup.get(this.FORM_PROPS.DESCRIPTION)?.value as string | undefined,
@@ -295,8 +295,8 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable implem
     };
   }
 
-  protected getDebitFromFormArray(debitsFormArray: FormArray<DebitFormGroup> | null | undefined): Debits {
-    const debits: Debits = {};
+  protected getDebitFromFormArray(debitsFormArray: FormArray<DebitFormGroup> | null | undefined): DebitDTO {
+    const debits: DebitDTO = {};
     debitsFormArray?.controls.forEach((debitFormGroup) => {
       const enabled = debitFormGroup.get(DEBIT_FORM_PROPS.ENABLED)?.value;
       const debtorUid = debitFormGroup.get(DEBIT_FORM_PROPS.USER)?.value?.uid;

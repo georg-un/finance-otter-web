@@ -7,20 +7,20 @@ import {
   SnapshotOptions
 } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, EMPTY, from, map, of, switchMap, tap } from 'rxjs';
-import { Purchase, purchaseFromPurchaseDTO } from '../model/purchase';
 import { runObservableOnceNow } from '../utils';
 import { PurchaseDTO } from '../../../../domain';
+import { addUid, WithUid } from '../utils/with-uid';
 
 const DEFAULT_PAGE_SIZE = 10;
 const PURCHASES_DB_PATH = '/purchases';
 
 const purchaseConverter = {
-  toFirestore(purchase: Purchase): PurchaseDTO {
+  toFirestore(purchase: WithUid<PurchaseDTO>): PurchaseDTO {
     const { uid, ...purchaseDTO } = purchase;
     return purchaseDTO;
   },
-  fromFirestore(snapshot: QueryDocumentSnapshot<PurchaseDTO>, options: SnapshotOptions): Purchase {
-    return purchaseFromPurchaseDTO(snapshot.id, snapshot.data(options));
+  fromFirestore(snapshot: QueryDocumentSnapshot<PurchaseDTO>, options: SnapshotOptions): WithUid<PurchaseDTO> {
+    return addUid(snapshot.data(options), snapshot.id);
   }
 };
 
@@ -29,34 +29,33 @@ const purchaseConverter = {
 })
 export class PurchaseService {
 
-  purchases$ = new BehaviorSubject<Purchase[]>([]);
+  purchases$ = new BehaviorSubject<WithUid<PurchaseDTO>[]>([]);
 
   private readonly purchasesCollection = this.firestore.collection<PurchaseDTO>(PURCHASES_DB_PATH);
   private readonly initialQuery = this.purchasesCollection.ref
     .withConverter(purchaseConverter)
     .orderBy('date', 'desc')
     .limit(DEFAULT_PAGE_SIZE);
-  private lastQuery?: Query<Purchase>;
-  private lastDocumentInQuery?: QueryDocumentSnapshot<Purchase>;
+  private lastQuery?: Query<WithUid<PurchaseDTO>>;
+  private lastDocumentInQuery?: QueryDocumentSnapshot<WithUid<PurchaseDTO>>;
 
   constructor(private firestore: AngularFirestore) {
   }
 
-  createPurchase(purchase: Purchase) {
+  createPurchase(purchase: PurchaseDTO) {
     return from(this.purchasesCollection.add(purchase)).pipe(
       map((docRef) => docRef.id)
     );
   }
 
-  updatePurchase(purchaseId: string, purchaseUpdate: Purchase) {
-    const updateDTO = purchaseConverter.toFirestore(purchaseUpdate);
-    return from(this.purchasesCollection.doc(purchaseId).update(updateDTO));
+  updatePurchase(purchaseId: string, purchaseUpdate: PurchaseDTO) {
+    return from(this.purchasesCollection.doc(purchaseId).update(purchaseUpdate));
   }
 
   getPurchase(purchaseId: string, skipCache = false) {
     const purchaseFromApi$ = this.purchasesCollection.doc(purchaseId).valueChanges().pipe(
       map((purchase) => {
-        return purchase ? purchaseFromPurchaseDTO(purchaseId, purchase) : undefined;
+        return purchase ? addUid(purchase, purchaseId) : undefined;
       })
     );
     if (skipCache) {
@@ -104,11 +103,11 @@ export class PurchaseService {
     this.lastDocumentInQuery = undefined;
   }
 
-  private getPurchasesFromQuerySnapshot(snapshot: QuerySnapshot<Purchase>) {
+  private getPurchasesFromQuerySnapshot(snapshot: QuerySnapshot<WithUid<PurchaseDTO>>) {
     return snapshot.docs.map(doc => doc.data());
   }
 
-  private sortPurchasesByDateDescending(a: Purchase, b: Purchase) {
+  private sortPurchasesByDateDescending(a: WithUid<PurchaseDTO>, b: WithUid<PurchaseDTO>) {
     if (a.date < b.date) {
       return 1;
     }

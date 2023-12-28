@@ -13,7 +13,7 @@
         <mat-label>Category</mat-label>
         <select matNativeControl required [formControlName]="FORM_PROPS.CATEGORY">
           <option hidden disabled selected></option>
-          <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
+          <option *ngFor="let category of categories" [value]="category.uid">{{ category.displayName }}</option>
         </select>
       </mat-form-field>
 
@@ -97,7 +97,7 @@
 
       <div class="action-button-row">
         <button mat-flat-button type="button" (click)="cancel()">Cancel</button>
-        <button mat-flat-button color="primary" type="submit">Create</button>
+        <button mat-flat-button color="primary" type="submit">{{ SUBMIT_BUTTON_LABEL }}</button>
       </div>
 
     </form>

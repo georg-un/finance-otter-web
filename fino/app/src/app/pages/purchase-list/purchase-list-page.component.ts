@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { PurchaseService } from '../../services/purchase.service';
-import { AuthService } from '../../services/auth.service';
-import { Purchase } from '../../model/purchase';
 import { PurchaseCardComponent } from './purchase-card/purchase-card.component';
 import { FabComponent } from '../../components/fab/fab.component';
 import { RouterModule } from '@angular/router';
+import { WithUid } from '../../utils/with-uid';
+import { PurchaseDTO } from '../../../../../domain';
 
 @Component({
   selector: 'app-purchase-list-page',
@@ -24,7 +24,6 @@ import { RouterModule } from '@angular/router';
 export class PurchaseListPageComponent implements OnInit {
   constructor(
     public purchaseService: PurchaseService,
-    public authService: AuthService,
   ) {
   }
 
@@ -32,12 +31,12 @@ export class PurchaseListPageComponent implements OnInit {
     this.purchaseService.requestFirstPage();
   }
 
-  generateMonthLabel(purchase: Purchase): string {
+  generateMonthLabel(purchase: WithUid<PurchaseDTO>): string {
     const date = new Date(purchase.date);
     return `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
   }
 
-  areMonthsTheSame(purchaseA?: Purchase, purchaseB?: Purchase): boolean {
+  areMonthsTheSame(purchaseA?: WithUid<PurchaseDTO>, purchaseB?: WithUid<PurchaseDTO>): boolean {
     if (!purchaseA || !purchaseB) {
       return false;
     }
