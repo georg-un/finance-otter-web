@@ -93,8 +93,6 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable implem
 
   readonly form = generateEmptyPurchaseFormGroup();
 
-  readonly abstract SUBMIT_BUTTON_LABEL: string;
-
   users$: Observable<WithUid<UserDTO>[]> = this.userService.users$.pipe(
     filter((users) => !!users?.length)
   );
@@ -133,8 +131,6 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable implem
   }
 
   abstract handleSubmit(): void;
-
-  abstract cancel(): void;
 
   setDateToday(): void {
     this.form.get(this.FORM_PROPS.DATE)?.setValue(moment());

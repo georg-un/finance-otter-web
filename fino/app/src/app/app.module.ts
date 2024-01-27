@@ -15,16 +15,16 @@ import { ToolbarLayoutComponent } from './components/layout/toolbar-layout.compo
 import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
 import { PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
 import { PurchaseEditorEditComponent } from './pages/payment-editor/purchase-editor-edit.component';
-import { PurchaseEditorNewComponent } from './pages/payment-editor/purchase-editor-new.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NewPurchaseStepperComponent } from './pages/new-purchase-stepper/new-purchase-stepper.component';
 
 const PAGES = [
   ToolbarLayoutComponent,
   LoginPageComponent,
   PurchaseListPageComponent,
-  PurchaseEditorNewComponent,
   PurchaseEditorEditComponent,
   PurchaseViewComponent,
+  NewPurchaseStepperComponent,
 ]
 
 @NgModule({

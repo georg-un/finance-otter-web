@@ -1,5 +1,8 @@
 @use './layout-commons' as commons;
 
 main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: 0 commons.$main-side-padding;
 }

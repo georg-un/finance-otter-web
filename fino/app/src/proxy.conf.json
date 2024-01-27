@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://127.0.0.1:5001/fino-bf3d7/us-central1",
+    "target": "http://127.0.0.1:5001/fino-bf3d7/us-central1/api",
     "secure": false
   }
 }

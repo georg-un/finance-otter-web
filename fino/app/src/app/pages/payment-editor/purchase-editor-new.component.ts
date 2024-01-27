@@ -1,16 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
-import { take } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CategoryService } from '../../services/category.service';
 import { PurchaseService } from '../../services/purchase.service';
-import {
-  AbstractPurchaseEditorComponent,
-  PURCHASE_EDITOR_IMPORTS,
-  PURCHASE_EDITOR_PROVIDERS
-} from './abstract-purchase-editor.component';
+import { AbstractPurchaseEditorComponent, PURCHASE_EDITOR_IMPORTS, PURCHASE_EDITOR_PROVIDERS } from './abstract-purchase-editor.component';
 
 @Component({
   selector: 'app-purchase-editor-new',
@@ -26,7 +21,9 @@ import {
 })
 export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent implements OnInit {
 
-  override readonly SUBMIT_BUTTON_LABEL = 'Create';
+  @Input() receiptName?: string;
+
+  @Output() purchaseCreated = new EventEmitter<string>();
 
   constructor(
     router: Router,
@@ -46,19 +43,11 @@ export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent 
     }
     this.distributeDebitsIfDistributionModeEqual();
     const purchase = this.getPurchaseFromFormGroup(this.form);
-    if (!purchase) {
-      alert('Something went wrong. Please try again later.');
-      return;
-    }
+    purchase.receiptName = this.receiptName;
     this.purchaseService.createPurchase(purchase).pipe(
-      take(1),
       takeUntil(this.onDestroy$),
     ).subscribe((purchaseId) => {
-      this.router.navigate(['/purchases', purchaseId]);
+      this.purchaseCreated.next(purchaseId);
     });
-  }
-
-  override cancel(): void {
-    this.router.navigate(['/purchases'], { replaceUrl: true });
   }
 }

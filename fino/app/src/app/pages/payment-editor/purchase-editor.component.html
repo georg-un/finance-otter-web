@@ -1,5 +1,3 @@
-<h1>New Purchase</h1>
-
 <ng-container *ngIf="users$ | async as users; else wait">
   <ng-container *ngIf="categories$ | async as categories else wait">
 
@@ -93,11 +91,6 @@
             <button type="button" mat-menu-item (click)="distributeToEmptyFields()">Only on empty fields</button>
           </mat-menu>
         </div>
-      </div>
-
-      <div class="action-button-row">
-        <button mat-flat-button type="button" (click)="cancel()">Cancel</button>
-        <button mat-flat-button color="primary" type="submit">{{ SUBMIT_BUTTON_LABEL }}</button>
       </div>
 
     </form>

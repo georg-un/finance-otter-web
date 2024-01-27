@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { PurchaseDTO } from '../../../../domain';
 import { map, Observable } from 'rxjs';
 import { RECEIPT_API_URLS, ReceiptApiResponse } from '../../../../domain/receipt-api-models';
 
@@ -14,7 +13,7 @@ export class ReceiptService {
   ) {
   }
 
-  uploadReceipt(receipt: unknown): Observable<string> {  // TODO: type correctly
+  uploadReceipt(receipt: File): Observable<string> {
     return this.http.post<ReceiptApiResponse['Create']>(RECEIPT_API_URLS.CREATE.get(), receipt).pipe(
       map((response) => response.name)
     );
@@ -24,7 +23,7 @@ export class ReceiptService {
     return this.http.get<ReceiptApiResponse['Read']>(RECEIPT_API_URLS.READ.get(receiptName));
   }
 
-  replaceReceipt(receiptName: string, newReceipt: PurchaseDTO) {  // TODO: type correctly
+  replaceReceipt(receiptName: string, newReceipt: File) {
     return this.http.put<ReceiptApiResponse['Update']>(RECEIPT_API_URLS.UPDATE.get(receiptName), newReceipt);
   }
 

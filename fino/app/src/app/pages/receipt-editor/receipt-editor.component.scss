@@ -1,0 +1,17 @@
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.receiptImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.hidden-input {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}

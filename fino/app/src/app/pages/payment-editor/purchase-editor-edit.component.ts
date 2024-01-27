@@ -31,8 +31,6 @@ import { WithUid } from '../../utils/with-uid';
 })
 export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent implements OnInit {
 
-  override readonly SUBMIT_BUTTON_LABEL = 'Update';
-
   private purchaseId?: string;
 
   constructor(
@@ -102,9 +100,9 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
     });
   }
 
-  override cancel() {
+  /*override cancel() {
     this.router.navigate(['/purchases', `${this.purchaseId ?? ''}`], { replaceUrl: true });
-  }
+  }*/
 
   private mapPurchaseToForm(purchase: WithUid<PurchaseDTO>) {
     this.form.get(this.FORM_PROPS.SHOP)?.setValue(purchase.shop);

@@ -7,7 +7,7 @@ import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-p
 import { EmptyLayoutComponent } from './components/layout/empty-layout.component';
 import { PURCHASE_ID_PATH_ID, PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
 import { PurchaseEditorEditComponent } from './pages/payment-editor/purchase-editor-edit.component';
-import { PurchaseEditorNewComponent } from './pages/payment-editor/purchase-editor-new.component';
+import { NewPurchaseStepperComponent } from './pages/new-purchase-stepper/new-purchase-stepper.component';
 
 const routes: Routes = [
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
         component: EmptyLayoutComponent,
         canActivate: [isAuthenticated],
         children: [
-          { path: 'new', component: PurchaseEditorNewComponent },
+          { path: 'new-purchase', component: NewPurchaseStepperComponent },
           { path: `:${'id'}`, component: PurchaseEditorEditComponent },
         ]
       },

@@ -11,6 +11,7 @@ interface Transaction {
 export interface PurchaseDTO extends Transaction {
     shop: string;
     categoryUid: string;
+    receiptName?: string;
     type: 'purchase';
 }
 

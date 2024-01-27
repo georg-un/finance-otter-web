@@ -1,0 +1,24 @@
+<div class="button-container" *ngIf="!receiptUri">
+  <button mat-raised-button color="primary" (click)="triggerCameraInput()">Take a picture</button>
+  <button mat-stroked-button (click)="triggerFileInput()">Select from gallery</button>
+</div>
+
+<img *ngIf="receiptUri" [src]="receiptUri" (load)="onImageLoaded()" class="receiptImage"/>
+
+<div class="hidden-input">
+  <input
+    #cameraInput
+    id="cameraInput"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    (change)="onImageCapture($any($event))"
+  />
+  <input
+    #fileInput
+    id="fileInput"
+    type="file"
+    accept="image/*"
+    (change)="onImageCapture($any($event))"
+  />
+</div>
