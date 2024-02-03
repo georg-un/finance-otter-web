@@ -1,0 +1,21 @@
+<h1>Edit Purchase</h1>
+
+<mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="onTabIndexChange($event)">
+  <mat-tab label="Receipt">
+    <app-receipt-editor [receiptName]="receiptName" (receiptNameChange)="onReceiptNameChange($event)"/>
+  </mat-tab>
+  <mat-tab label="Details">
+    <app-purchase-editor-edit *ngIf="purchase; else wait" [purchase]="purchase"
+                              (purchaseUpdated)="onPurchaseUpdated($event)"/>
+    <ng-template #wait>Please stand by...</ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<div class="action-button-row">
+  <button mat-flat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary"
+          (click)="submitPurchase()"
+          [disabled]="!isFormValid">
+    Submit
+  </button>
+</div>

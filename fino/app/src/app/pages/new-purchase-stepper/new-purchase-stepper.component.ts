@@ -35,6 +35,7 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   receiptName?: string;
 
   @ViewChild(PurchaseEditorNewComponent) purchaseEditor?: PurchaseEditorNewComponent;
+  @ViewChild(ReceiptEditorComponent) receiptEditor?: ReceiptEditorComponent;
   @ViewChild(MatStepper) stepper?: MatStepper;
 
   constructor(
@@ -47,6 +48,8 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   }
 
   ngAfterViewInit() {
+    this.syncFormValidity();
+
     // Sync stepIndex param to MatStepper
     this.activatedRoute.queryParamMap.pipe(
       map((paramMap) => paramMap.get(STEP_INDEX_QUERY_PARAM)),
@@ -70,6 +73,13 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
       this.changeDetection.detectChanges();
     });
 
+    // Open camera if applicable
+    if (this.stepper!.selectedIndex === 0 && !this.receiptName) {
+      this.receiptEditor!.triggerCameraInput();
+    }
+  }
+
+  private syncFormValidity(): void {
     // Keep track of form validity
     const form = this.purchaseEditor!.form;
     form.statusChanges.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
@@ -107,7 +117,6 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   }
 }
 
-// TODO: the idea is now the following: refactor the editor components to dumb components and wrap them in a stepper for new & normal smart component for edit.
+// TODO: the idea is now the following: refactor the editor components to dumb components and wrap them in smart stepper/tab components
 
-
-// TODO: In detail view, you can use tabs for receipt & details. Then you have the same mental UI model as in the stepper.
+// TODO: In edit view AND in detail view, you can use tabs for receipt & details. Then you have the same mental UI model as in the stepper.

@@ -14,17 +14,17 @@ import { LoginPageComponent } from './pages/login/login-page.component';
 import { ToolbarLayoutComponent } from './components/layout/toolbar-layout.component';
 import { PurchaseListPageComponent } from './pages/purchase-list/purchase-list-page.component';
 import { PurchaseViewComponent } from './pages/payment-view/purchase-view.component';
-import { PurchaseEditorEditComponent } from './pages/payment-editor/purchase-editor-edit.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NewPurchaseStepperComponent } from './pages/new-purchase-stepper/new-purchase-stepper.component';
+import { EditPurchasePageComponent } from './pages/edit-purchase-page/edit-purchase-page.component';
 
 const PAGES = [
   ToolbarLayoutComponent,
   LoginPageComponent,
   PurchaseListPageComponent,
-  PurchaseEditorEditComponent,
   PurchaseViewComponent,
   NewPurchaseStepperComponent,
+  EditPurchasePageComponent,
 ]
 
 @NgModule({

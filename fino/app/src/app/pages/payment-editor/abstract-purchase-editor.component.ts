@@ -140,6 +140,7 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable implem
     this.debits.controls.forEach((debit) => {
       debit.get(this.DEBIT_FORM_PROPS.AMOUNT)?.updateValueAndValidity();
     });
+    this.debits.controls.forEach((debit) => debit.markAllAsTouched());
   }
 
   validateTotalAmountMatchesDebitsSum(form: AbstractControl): ValidatorFn {

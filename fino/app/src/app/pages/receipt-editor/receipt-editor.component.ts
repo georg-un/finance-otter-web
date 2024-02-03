@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,7 @@ export interface HTMLInputEvent extends Event {
     RouterModule,
   ]
 })
-export class ReceiptEditorComponent extends Destroyable implements AfterViewInit {
+export class ReceiptEditorComponent extends Destroyable {
 
   receiptUri?: string;
   @Output() receiptNameChange = new EventEmitter<string | undefined>();
@@ -45,10 +45,6 @@ export class ReceiptEditorComponent extends Destroyable implements AfterViewInit
   set receiptName(val: string | undefined) {
     this._receiptName = val;
     this.receiptUri = val ? RECEIPT_API_URLS.READ.get(val) : undefined;
-  }
-
-  ngAfterViewInit() {
-    this.triggerCameraInput();
   }
 
   triggerCameraInput(): void {
