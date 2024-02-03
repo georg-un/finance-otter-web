@@ -1,8 +1,8 @@
 <h1>Edit Purchase</h1>
 
-<mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="onTabIndexChange($event)">
+<mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)">
   <mat-tab label="Receipt">
-    <app-receipt-editor [receiptName]="receiptName" (receiptNameChange)="onReceiptNameChange($event)"/>
+    <app-receipt-editor [receiptName]="receiptBehavior.receiptName" (receiptNameChange)="onReceiptNameChange($event)"/>
   </mat-tab>
   <mat-tab label="Details">
     <app-purchase-editor-edit *ngIf="purchase; else wait" [purchase]="purchase"

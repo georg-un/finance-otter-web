@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,7 @@ import { Destroyable } from '../../components/destroyable';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { addQueryParam } from '../../utils/router-utils';
 import { map } from 'rxjs';
-import { RECEIPT_NAME_PATH_PARAM } from '../../../../../domain/receipt-api-models';
+import { ReceiptBehaviorService } from '../../behaviors/receipt-behavior/receipt-behavior.service';
 
 const STEP_INDEX_QUERY_PARAM = 'stepIndex';
 
@@ -27,16 +27,20 @@ const STEP_INDEX_QUERY_PARAM = 'stepIndex';
     MatStepperModule,
     PurchaseEditorNewComponent,
     ReceiptEditorComponent,
+  ],
+  providers: [
+    ReceiptBehaviorService
   ]
 })
 export class NewPurchaseStepperComponent extends Destroyable implements AfterViewInit {
 
   formValid = false;
-  receiptName?: string;
 
   @ViewChild(PurchaseEditorNewComponent) purchaseEditor?: PurchaseEditorNewComponent;
   @ViewChild(ReceiptEditorComponent) receiptEditor?: ReceiptEditorComponent;
   @ViewChild(MatStepper) stepper?: MatStepper;
+
+  readonly receiptBehavior = inject(ReceiptBehaviorService);
 
   constructor(
     private router: Router,
@@ -63,18 +67,8 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
       }
     });
 
-    // Sync receipt name to ReceiptEditor
-    this.activatedRoute.queryParamMap.pipe(
-      map((paramMap) => paramMap.get(RECEIPT_NAME_PATH_PARAM)),
-      filter(Boolean),
-      takeUntil(this.onDestroy$),
-    ).subscribe((receiptName) => {
-      this.receiptName = receiptName;
-      this.changeDetection.detectChanges();
-    });
-
     // Open camera if applicable
-    if (this.stepper!.selectedIndex === 0 && !this.receiptName) {
+    if (this.stepper!.selectedIndex === 0 && !this.receiptBehavior.receiptName) {
       this.receiptEditor!.triggerCameraInput();
     }
   }
@@ -88,8 +82,8 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   }
 
   cancel(): void {
-    if (this.receiptName) {
-      this.receiptService.deleteReceipt(this.receiptName).subscribe();
+    if (this.receiptBehavior.receiptName) {
+      this.receiptService.deleteReceipt(this.receiptBehavior.receiptName).subscribe();
     }
     void this.router.navigate(['/purchases'], { replaceUrl: true });
   }
@@ -105,14 +99,6 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   onSelectedStepChange($event: StepperSelectionEvent) {
     if ($event.selectedIndex !== $event.previouslySelectedIndex) {
       addQueryParam(this.router, this.activatedRoute, { [STEP_INDEX_QUERY_PARAM]: $event.selectedIndex });
-    }
-  }
-
-  onReceiptNameChange(receiptName: string | undefined) {
-    if (receiptName !== this.receiptName) {
-      addQueryParam(this.router, this.activatedRoute, {
-        [RECEIPT_NAME_PATH_PARAM]: receiptName ? receiptName : null  // null removes the query param
-      });
     }
   }
 }

@@ -1,9 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { ReceiptEditorComponent } from '../receipt-editor/receipt-editor.component';
-import { filter, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Destroyable } from '../../components/destroyable';
 import { addQueryParam } from '../../utils/router-utils';
 import { map, switchMap, take, zip } from 'rxjs';
@@ -15,8 +15,8 @@ import { PurchaseDTO } from '../../../../../domain';
 import { WithUid } from '../../utils/with-uid';
 import { MatStepperModule } from '@angular/material/stepper';
 import { SKIP_CACHE_QUERY_PARAM } from '../payment-view/purchase-view.component';
-
-const TAB_INDEX_QUERY_PARAM = 'stepIndex';
+import { TabBehaviorService } from '../../behaviors/tab-behavior/tab-behavior.service';
+import { ReceiptBehaviorService } from '../../behaviors/receipt-behavior/receipt-behavior.service';
 
 @Component({
   selector: 'app-edit-purchase-page',
@@ -31,24 +31,31 @@ const TAB_INDEX_QUERY_PARAM = 'stepIndex';
     PurchaseEditorEditComponent,
     ReceiptEditorComponent,
     MatStepperModule,
+  ],
+  providers: [
+    {
+      provide: TabBehaviorService,
+      useFactory: () => new TabBehaviorService(1),
+    },
+    ReceiptBehaviorService
   ]
 })
-export class EditPurchasePageComponent extends Destroyable implements OnInit, AfterViewInit {
+export class EditPurchasePageComponent extends Destroyable implements OnInit {
 
-  tabIndex = 1;
   areChangesPending = false;
   isFormValid = false;
-  receiptName?: string;
   purchase?: WithUid<PurchaseDTO>;
 
   @ViewChild(PurchaseEditorEditComponent) purchaseEditor?: PurchaseEditorEditComponent;
+
+  readonly tabBehavior = inject(TabBehaviorService);
+  readonly receiptBehavior = inject(ReceiptBehaviorService);
 
   constructor(
     private ngZone: NgZone,
     private router: Router,
     private location: Location,
     private activatedRoute: ActivatedRoute,
-    private changeDetection: ChangeDetectorRef,
     private purchaseService: PurchaseService,
   ) {
     super();
@@ -86,29 +93,6 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit, Af
     });
   }
 
-  ngAfterViewInit() {
-    // Sync stepIndex param to MatStepper
-    this.activatedRoute.queryParamMap.pipe(
-      map((paramMap) => paramMap.get(TAB_INDEX_QUERY_PARAM)),
-      map((tabIndex) => parseInt(tabIndex!)),  // worst case it's NaN
-      filter((tabIndex) => !isNaN(tabIndex)),
-      takeUntil(this.onDestroy$),
-    ).subscribe((tabIndex) => {
-      this.tabIndex = tabIndex;
-      this.changeDetection.detectChanges();
-    });
-
-    // Sync receipt name to ReceiptEditor
-    this.activatedRoute.queryParamMap.pipe(
-      map((paramMap) => paramMap.get(RECEIPT_NAME_PATH_PARAM)),
-      filter(Boolean),
-      takeUntil(this.onDestroy$),
-    ).subscribe((receiptName) => {
-      this.receiptName = receiptName;
-      this.changeDetection.detectChanges();
-    });
-  }
-
   private syncFormValidity(): void {
     // Keep track of form validity
     const form = this.purchaseEditor!.form;
@@ -130,18 +114,9 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit, Af
     void this.router.navigate(['/purchases', purchaseId], { queryParams: { [SKIP_CACHE_QUERY_PARAM]: true } });
   }
 
-  onTabIndexChange(newTabIndex: number) {
-    this.tabIndex = newTabIndex;
-    addQueryParam(this.router, this.activatedRoute, { [TAB_INDEX_QUERY_PARAM]: newTabIndex });
-  }
-
   onReceiptNameChange(receiptName: string | undefined) {
-    if (receiptName !== this.receiptName) {
-      this.areChangesPending = true;
-      addQueryParam(this.router, this.activatedRoute, {
-        [RECEIPT_NAME_PATH_PARAM]: receiptName ? receiptName : null  // null removes the query param
-      });
-    }
+    this.areChangesPending = true;
+    this.receiptBehavior.receiptNameChange(receiptName);
   }
 }
 
