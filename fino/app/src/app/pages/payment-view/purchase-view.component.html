@@ -1,48 +1,23 @@
-<h1>Details</h1>
+<h1>View Purchase</h1>
 
-<ng-container *ngIf="purchase$ | async as purchase; else wait">
-  <ng-container *ngIf="users$ | async as users; else wait">
-      <table>
-        <tr>
-          <th>Shop:</th>
-          <td>{{ purchase.shop }}</td>
-        </tr>
-        <tr>
-          <th>Category:</th>
-          <td>{{ (category$ | async)?.displayName ?? 'uncategorized' }}</td>
-        </tr>
-        <tr>
-          <th>Amount:</th>
-          <td>{{ purchase.debits | debitSum | currency:'EUR':'€ ':'1.2-2' }}</td>
-        </tr>
-        <tr>
-          <th>Date:</th>
-          <td>{{ purchase.date | date }}</td>
-        </tr>
-        <tr *ngIf="purchase.description">
-          <th>Description:</th>
-          <td>{{ purchase.description }}</td>
-        </tr>
-        <tr>
-          <th>Cost distribution:</th>
-          <td>
-            <ng-container *ngTemplateOutlet="debitTable"/>
-          </td>
-        </tr>
-      </table>
+<ng-container *ngIf="(purchase$ | async) as purchase; else wait">
+  <ng-container *ngIf="(users$ | async) as users; else wait">
+    <ng-container *ngIf="(category$ | async) as category; else wait">
 
-      <ng-template #debitTable>
-        <table>
-          <tr *ngFor="let debit of getDebitsEntries(purchase.debits)">
-            <th>{{ findUserByUid(debit.debtorUid, users)?.displayName ?? 'Unknown' }}:</th>
-            <td>{{ debit.amount | currency:'EUR':'€ ':'1.2-2' }}</td>
-          </tr>
-        </table>
-      </ng-template>
+      <mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)">
+        <mat-tab label="Receipt" [disabled]="!purchase.receiptName">
+          <app-receipt-viewer *ngIf="purchase.receiptName" [receiptName]="purchase.receiptName"/>
+        </mat-tab>
+        <mat-tab label="Details">
+          <app-purchase-details [purchase]="purchase" [users]="users" [category]="category"/>
+        </mat-tab>
+      </mat-tab-group>
 
-      <app-fab [routerLink]="['/edit', purchase.uid]">
+      <app-fab *ngIf="purchaseId$ | async as purchaseId" [routerLink]="['/edit', purchaseId]" queryParamsHandling="merge">
         edit
       </app-fab>
+
+    </ng-container>
   </ng-container>
 </ng-container>
 

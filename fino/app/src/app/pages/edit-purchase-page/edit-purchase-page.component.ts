@@ -2,7 +2,7 @@ import { Component, inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { ReceiptEditorComponent } from '../receipt-editor/receipt-editor.component';
+import { ReceiptEditorComponent } from '../../components/receipt-editor/receipt-editor.component';
 import { takeUntil } from 'rxjs/operators';
 import { Destroyable } from '../../components/destroyable';
 import { addQueryParam } from '../../utils/router-utils';

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { ReceiptService } from '../../services/receipt.service';
-import { Destroyable } from '../../components/destroyable';
+import { Destroyable } from '../destroyable';
 import { takeUntil } from 'rxjs/operators';
-import { RECEIPT_API_URLS } from '../../../../../domain/receipt-api-models';
+import { ReceiptViewerComponent } from '../receipt-viewer/receipt-viewer.component';
 
 export interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -20,11 +20,10 @@ export interface HTMLInputEvent extends Event {
     CommonModule,
     MatButtonModule,
     RouterModule,
+    ReceiptViewerComponent,
   ]
 })
 export class ReceiptEditorComponent extends Destroyable {
-
-  receiptUri?: string;
   @Output() receiptNameChange = new EventEmitter<string | undefined>();
   @ViewChild('cameraInput', { static: false }) private cameraInput?: ElementRef;
   @ViewChild('fileInput', { static: false }) private fileInput?: ElementRef;
@@ -44,7 +43,6 @@ export class ReceiptEditorComponent extends Destroyable {
   @Input()
   set receiptName(val: string | undefined) {
     this._receiptName = val;
-    this.receiptUri = val ? RECEIPT_API_URLS.READ.get(val) : undefined;
   }
 
   triggerCameraInput(): void {
@@ -70,6 +68,3 @@ export class ReceiptEditorComponent extends Destroyable {
     this.receiptNameChange.next(this.receiptName);
   }
 }
-
-
-// TODO: the 'add compensation' link will be part of the more page

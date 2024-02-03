@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { map, switchMap, withLatestFrom } from 'rxjs';
-import { PurchaseService } from '../../services/purchase.service';
-import { filter } from 'rxjs/operators';
-import { UserService } from '../../services/user.service';
-import { DebitSumPipe } from '../../utils/debit-sum.pipe';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { map, Observable, switchMap, tap, withLatestFrom } from 'rxjs';
 import { FabComponent } from '../../components/fab/fab.component';
-import { WithUid } from '../../utils/with-uid';
-import { UserDTO } from '../../../../../domain';
+import { PurchaseDetailsComponent } from '../../components/purchase-details/purchase-details.component';
+import { TabBehaviorService } from '../../behaviors/tab-behavior/tab-behavior.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ReceiptViewerComponent } from '../../components/receipt-viewer/receipt-viewer.component';
+import { filter } from 'rxjs/operators';
+import { PurchaseService } from '../../services/purchase.service';
+import { UserService } from '../../services/user.service';
 import { CategoryService } from '../../services/category.service';
+import { WithUid } from '../../utils/with-uid';
+import { PurchaseDTO } from '../../../../../domain';
 
 export const PURCHASE_ID_PATH_ID = 'id';
 export const SKIP_CACHE_QUERY_PARAM = 'skipCache';
@@ -21,22 +24,47 @@ export const SKIP_CACHE_QUERY_PARAM = 'skipCache';
   standalone: true,
   imports: [
     CommonModule,
-    DebitSumPipe,
+    RouterModule,
+    PurchaseDetailsComponent,
+    MatTabsModule,
     FabComponent,
-    RouterModule
+    ReceiptViewerComponent
+  ],
+  providers: [
+    {
+      provide: TabBehaviorService,
+      useFactory: () => new TabBehaviorService(1),
+    },
   ]
 })
 export class PurchaseViewComponent {
-  private readonly purchaseId$ = this.route.paramMap.pipe(
+  readonly tabBehavior = inject(TabBehaviorService);
+
+  private readonly ngZone = inject(NgZone);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly purchaseService = inject(PurchaseService);
+  private readonly userService = inject(UserService);
+  private readonly categoryService = inject(CategoryService);
+
+  public readonly purchaseId$ = this.activatedRoute.paramMap.pipe(
     map((paramMap) => paramMap.get(PURCHASE_ID_PATH_ID)),
   );
 
-  readonly purchase$ = this.purchaseId$.pipe(
+  readonly purchase$: Observable<WithUid<PurchaseDTO>> = this.purchaseId$.pipe(
     filter(Boolean),
-    withLatestFrom(this.route.queryParamMap),
+    withLatestFrom(this.activatedRoute.paramMap),
     switchMap(([purchaseId, paramMap]) => {
       return this.purchaseService.getPurchase(purchaseId, !!paramMap.get(SKIP_CACHE_QUERY_PARAM));
-    })
+    }),
+    tap((purchase) => {
+      if (!purchase) {
+        alert('Purchase not found.');
+        this.ngZone.run(() => this.router.navigate(['/purchases']));
+        return;
+      }
+    }),
+    filter(Boolean),
   );
 
   readonly users$ = this.userService.users$;
@@ -45,23 +73,4 @@ export class PurchaseViewComponent {
     filter(Boolean),
     switchMap((purchase) => this.categoryService.getByUid(purchase.categoryUid)),
   );
-
-  constructor(
-    private route: ActivatedRoute,
-    private purchaseService: PurchaseService,
-    private categoryService: CategoryService,
-    private userService: UserService,
-  ) {
-  }
-
-  getDebitsEntries(debits: Record<string, number>): { debtorUid: string, amount: number }[] {
-    return Object.keys(debits).map((debtorUid) => ({
-      debtorUid,
-      amount: debits[debtorUid],
-    }));
-  }
-
-  findUserByUid(uid: string, users: WithUid<UserDTO>[]): WithUid<UserDTO> | undefined {
-    return users.find((user) => user.uid === uid);
-  }
 }

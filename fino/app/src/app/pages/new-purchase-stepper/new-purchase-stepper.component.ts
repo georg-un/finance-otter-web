@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { PurchaseEditorNewComponent } from '../payment-editor/purchase-editor-new.component';
-import { ReceiptEditorComponent } from '../receipt-editor/receipt-editor.component';
+import { ReceiptEditorComponent } from '../../components/receipt-editor/receipt-editor.component';
 import { ReceiptService } from '../../services/receipt.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Destroyable } from '../../components/destroyable';
@@ -102,7 +102,3 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
     }
   }
 }
-
-// TODO: the idea is now the following: refactor the editor components to dumb components and wrap them in smart stepper/tab components
-
-// TODO: In edit view AND in detail view, you can use tabs for receipt & details. Then you have the same mental UI model as in the stepper.

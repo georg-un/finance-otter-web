@@ -17,7 +17,7 @@ export class TabBehaviorService {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
-  constructor(@Inject('defaultTabIndex') defaultTabIndex = 0) {
+  constructor(@Inject('defaultTabIndex') defaultTabIndex: number) {
     this.tabIndex = defaultTabIndex;
     // Sync query param to property
     this.activatedRoute.queryParamMap.pipe(

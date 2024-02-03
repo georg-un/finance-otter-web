@@ -1,9 +1,9 @@
-<div class="button-container" *ngIf="!receiptUri">
+<div class="button-container" *ngIf="!receiptName">
   <button mat-raised-button color="primary" (click)="triggerCameraInput()">Take a picture</button>
   <button mat-stroked-button (click)="triggerFileInput()">Select from gallery</button>
 </div>
 
-<img *ngIf="receiptUri" [src]="receiptUri" (load)="onImageLoaded()" class="receiptImage"/>
+<app-receipt-viewer *ngIf="receiptName" [receiptName]="receiptName" (imageLoaded)="onImageLoaded()" />
 
 <div class="hidden-input">
   <input
