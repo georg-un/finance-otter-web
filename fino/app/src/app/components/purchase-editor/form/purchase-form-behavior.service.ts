@@ -139,8 +139,7 @@ export class PurchaseFormBehaviorService {
    */
   private validateAtLeastOneDebitEnabled(form: AbstractControl): ValidatorFn {
     return (): ValidationErrors | null => {
-      const { totalAmountControl, enabledDebits } = this.getValidatorControls(form);
-      const isCustomDistribution = form.get(PURCHASE_FORM_PROPS.DISTRIBUTION_MODE)?.value === DISTRIBUTION_MODES.CUSTOM;
+      const { totalAmountControl, enabledDebits, isCustomDistribution } = this.getValidatorControls(form);
 
       if (totalAmountControl && isCustomDistribution && enabledDebits?.length === 0) {
         return { noDebits: true };
@@ -160,13 +159,13 @@ export class PurchaseFormBehaviorService {
    */
   private validateTotalAmountMatchesDebitsSum(form: AbstractControl, perDebitEvaluation: boolean): ValidatorFn {
     return (): ValidationErrors | null => {
-      const { totalAmountControl, enabledDebits } = this.getValidatorControls(form);
+      const { totalAmountControl, enabledDebits, isCustomDistribution } = this.getValidatorControls(form);
 
       const allEnabledDebitsSet = enabledDebits?.every((debit) => {
         return debit.get(DEBIT_FORM_PROPS.AMOUNT)?.value !== null;
       });
 
-      if (totalAmountControl && enabledDebits?.length && (!perDebitEvaluation || allEnabledDebitsSet)) {
+      if (totalAmountControl && isCustomDistribution && enabledDebits?.length && (!perDebitEvaluation || allEnabledDebitsSet)) {
         const totalAmount = totalAmountControl.value;
         const debitAmounts = enabledDebits
           .map((debit) => debit.get(DEBIT_FORM_PROPS.AMOUNT)?.value || 0)
@@ -186,8 +185,9 @@ export class PurchaseFormBehaviorService {
     const debitsArray = form.get(PURCHASE_FORM_PROPS.DEBITS) as FormArray<DebitFormGroup>;
     const enabledDebits = debitsArray?.controls
       .filter((debit) => debit.get(DEBIT_FORM_PROPS.ENABLED)?.value);
+    const isCustomDistribution = form.get(PURCHASE_FORM_PROPS.DISTRIBUTION_MODE)?.value === DISTRIBUTION_MODES.CUSTOM;
 
-    return { totalAmountControl, enabledDebits };
+    return { totalAmountControl, enabledDebits, isCustomDistribution };
   }
 
   private distributeToFields(relevantFields: DebitFormGroup[]): void {
