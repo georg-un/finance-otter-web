@@ -1,11 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
-import { CategoryService } from '../../services/category.service';
-import { PurchaseService } from '../../services/purchase.service';
 import { DebitSumPipe } from '../../utils/debit-sum.pipe';
 import { AbstractPurchaseEditorComponent, PURCHASE_EDITOR_IMPORTS, PURCHASE_EDITOR_PROVIDERS } from './abstract-purchase-editor.component';
 import { PurchaseDTO } from '../../../../../domain';
@@ -25,25 +20,14 @@ import { merge } from 'rxjs';
   ]
 })
 export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent implements OnInit {
+  private debitSumPipe = inject(DebitSumPipe);
 
   @Input() purchase!: WithUid<PurchaseDTO>;
 
   @Output() purchaseUpdated = new EventEmitter<string>();
 
-  constructor(
-    router: Router,
-    authService: AuthService,
-    userService: UserService,
-    categoryService: CategoryService,
-    purchaseService: PurchaseService,
-    private debitSumPipe: DebitSumPipe,
-  ) {
-    super(router, authService, userService, categoryService, purchaseService);
-  }
-
-  override ngOnInit() {
-    super.ngOnInit();
-    this.debitFormGroupInitialized.pipe(
+  ngOnInit() {
+    this.purchaseFormBehavior.debitFormGroupInitialized$.pipe(
       filter(Boolean),
       takeUntil(this.onDestroy$),
     ).subscribe(() => {
@@ -52,27 +36,27 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
 
     merge(
       this.form.get(this.FORM_PROPS.AMOUNT)!.valueChanges,
-      this.debits.valueChanges.pipe(distinctUntilChanged(this.compareByJson))
+      this.purchaseFormBehavior.debits.valueChanges.pipe(distinctUntilChanged(this.compareByJson))
     ).pipe(takeUntil(this.onDestroy$))
       .subscribe(() => {
-        this.validateAllDebits();
+        this.purchaseFormBehavior.validateAllDebits();
       });
   }
 
-  override handleSubmit() {
+  override submitPurchase() {
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
-    this.validateAllDebits();
+    this.purchaseFormBehavior.validateAllDebits();
     if (this.form.invalid) {
       return;
     }
-    this.distributeDebitsIfDistributionModeEqual();
+    this.purchaseFormBehavior.distributeDebitsIfDistributionModeEqual();
     const purchaseId = this.purchase.uid;
     if (!purchaseId) {
       alert('Purchase ID is missing. Please try again later.');
       return;
     }
-    const purchaseUpdate = this.getPurchaseFromFormGroup(this.form);
+    const purchaseUpdate = this.purchaseFormBehavior.getPurchaseFromFormGroup(this.form);
     this.purchaseService.updatePurchase(purchaseId, purchaseUpdate).pipe(
       takeUntil(this.onDestroy$),
     ).subscribe(() => {
@@ -90,7 +74,7 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
     Object.entries(purchase.debits).forEach((debit) => {
       const userUid = debit[0];
       const amount = debit[1];
-      this.debits.controls.find((debitControl) => {
+      this.purchaseFormBehavior.debits.controls.find((debitControl) => {
         return debitControl.get(this.DEBIT_FORM_PROPS.USER)?.value?.uid === userUid;
       })?.get(this.DEBIT_FORM_PROPS.AMOUNT)?.setValue(amount);
     });

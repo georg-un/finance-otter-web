@@ -1,7 +1,7 @@
 <ng-container *ngIf="users$ | async as users; else wait">
   <ng-container *ngIf="categories$ | async as categories else wait">
 
-    <form [formGroup]="form" (ngSubmit)="handleSubmit()" *ngIf="!!users?.length && !!categories?.length; else wait">
+    <form [formGroup]="form" (ngSubmit)="submitPurchase()" *ngIf="!!users?.length && !!categories?.length; else wait">
       <mat-form-field appearance="outline">
         <mat-label>Shop</mat-label>
         <input matInput required [formControlName]="FORM_PROPS.SHOP" type="string"/>
@@ -27,7 +27,7 @@
           <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
           <mat-datepicker #datepicker></mat-datepicker>
         </mat-form-field>
-        <button mat-stroked-button type="button" (click)="setDateToday()">Today</button>
+        <button mat-stroked-button type="button" (click)="purchaseFormBehavior.setDateToday()">Today</button>
       </div>
 
       <mat-form-field appearance="outline">
@@ -53,14 +53,14 @@
             <div [formGroup]="fragment" class="debit-row">
               <div class="checkbox-wrapper">
                 <mat-checkbox [formControlName]="DEBIT_FORM_PROPS.ENABLED"
-                              (change)="changeDebitInputDisabled($event, fragment)">
+                              (change)="purchaseFormBehavior.changeDebitInputDisabled($event, fragment)">
                   {{ fragment.get(DEBIT_FORM_PROPS.USER)?.value?.displayName }}
                 </mat-checkbox>
               </div>
               <mat-form-field appearance="outline">
                 <input
                   [formControlName]="DEBIT_FORM_PROPS.AMOUNT"
-                  (change)="validateAllDebits()"
+                  (change)="purchaseFormBehavior.validateAllDebits()"
                   matInput type="number" min="0" step="0.01"
                   placeholder="0"
                 />
@@ -72,7 +72,7 @@
         <div class="distribution-button-container">
           <button
             type="button"
-            (click)="resetDistributionFragments()"
+            (click)="purchaseFormBehavior.resetDistributionFragments()"
             mat-stroked-button>
             <mat-icon>delete_sweep</mat-icon>
             Reset distribution
@@ -87,8 +87,8 @@
             <span>Distribute equally</span>
           </button>
           <mat-menu #distribute_menu="matMenu">
-            <button type="button" mat-menu-item (click)="distributeToAllFields()">On all fields</button>
-            <button type="button" mat-menu-item (click)="distributeToEmptyFields()">Only on empty fields</button>
+            <button type="button" mat-menu-item (click)="purchaseFormBehavior.distributeToAllFields()">On all fields</button>
+            <button type="button" mat-menu-item (click)="purchaseFormBehavior.distributeToEmptyFields()">Only on empty fields</button>
           </mat-menu>
         </div>
       </div>

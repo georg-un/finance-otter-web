@@ -9,7 +9,7 @@ import { addQueryParam } from '../../utils/router-utils';
 import { map, switchMap, take, zip } from 'rxjs';
 import { RECEIPT_NAME_PATH_PARAM } from '../../../../../domain/receipt-api-models';
 import { MatTabsModule } from '@angular/material/tabs';
-import { PurchaseEditorEditComponent } from '../payment-editor/purchase-editor-edit.component';
+import { PurchaseEditorEditComponent } from '../../components/purchase-editor/purchase-editor-edit.component';
 import { PurchaseService } from '../../services/purchase.service';
 import { PurchaseDTO } from '../../../../../domain';
 import { WithUid } from '../../utils/with-uid';
@@ -94,7 +94,6 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
     // Keep track of form validity
     const form = this.purchaseEditor!.form;
     form.statusChanges.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
-      console.log({ touched: form.touched, valid: form.valid });
       this.isFormValid = form.valid;
     });
   }
@@ -104,7 +103,7 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
   }
 
   submitPurchase(): void {
-    this.purchaseEditor!.handleSubmit();
+    this.purchaseEditor!.submitPurchase();
   }
 
   onPurchaseUpdated(purchaseId: string) {

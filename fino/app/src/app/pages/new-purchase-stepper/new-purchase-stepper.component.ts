@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { PurchaseEditorNewComponent } from '../payment-editor/purchase-editor-new.component';
+import { PurchaseEditorNewComponent } from '../../components/purchase-editor/purchase-editor-new.component';
 import { ReceiptEditorComponent } from '../../components/receipt-editor/receipt-editor.component';
 import { ReceiptService } from '../../services/receipt.service';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -89,7 +89,7 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   }
 
   submitPurchase(): void {
-    this.purchaseEditor?.handleSubmit();
+    this.purchaseEditor?.submitPurchase();
   }
 
   onPurchaseCreated(purchaseId: string) {
