@@ -12,7 +12,7 @@
     <app-purchase-editor-new [receiptName]="receiptBehavior.receiptName" (purchaseCreated)="onPurchaseCreated($event)"/>
     <div class="action-button-row">
       <button mat-flat-button matStepperPrevious>Back</button>
-      <button mat-flat-button matStepperPrevious color="primary"
+      <button mat-flat-button color="primary"
               (click)="submitPurchase()"
               [disabled]="!formValid">
         Submit

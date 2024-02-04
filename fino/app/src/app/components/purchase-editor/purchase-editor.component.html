@@ -46,7 +46,7 @@
       <!-- Custom distribution section -->
       <div *ngIf="form.get(this.FORM_PROPS.DISTRIBUTION_MODE)?.getRawValue() === DISTRIBUTION_MODES.CUSTOM"
            class="custom-distribution-container">
-        <h3>Cost distribution</h3>
+        <h3>Cost distribution*</h3>
 
         <mat-list [formArrayName]="FORM_PROPS.DEBITS">
           <mat-list-item *ngFor="let fragment of debits.controls; let i = index" class="debit-list-item">

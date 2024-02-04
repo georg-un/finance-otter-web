@@ -21,6 +21,7 @@ export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent 
   @Output() purchaseCreated = new EventEmitter<string>();
 
   override submitPurchase(): void {
+    this.purchaseFormBehavior.validateAllDebits();
     this.purchaseFormBehavior.form.markAllAsTouched();
     this.purchaseFormBehavior.form.updateValueAndValidity();
     if (this.form.invalid) {

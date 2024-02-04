@@ -40,12 +40,14 @@ export class PurchaseFormBehaviorService {
   }
 
   constructor() {
+    this.debits.addValidators([this.validateAtLeastOneDebitEnabled(this.form), this.validateTotalAmountMatchesDebitsSum(this.form, false)]);
+
     this.users$.pipe(
       take(1),
     ).subscribe((users) => {
       this.debits.clear();
       users.forEach((user) => {
-        this.debits.push(userToDebitFormGroup(user, [this.validateTotalAmountMatchesDebitsSum(this.form)]));
+        this.debits.push(userToDebitFormGroup(user, [this.validateTotalAmountMatchesDebitsSum(this.form, true)]));
       });
       this._debitFormGroupInitialized.next(true);
     });
@@ -58,52 +60,34 @@ export class PurchaseFormBehaviorService {
   validateAllDebits(): void {
     this.debits.controls.forEach((debit) => {
       debit.get(DEBIT_FORM_PROPS.AMOUNT)?.updateValueAndValidity();
+      debit.markAllAsTouched();
     });
-    this.debits.controls.forEach((debit) => debit.markAllAsTouched());
-  }
-
-  validateTotalAmountMatchesDebitsSum(form: AbstractControl): ValidatorFn {
-    return (): ValidationErrors | null => {
-      const totalAmountControl = form.get(PURCHASE_FORM_PROPS.AMOUNT);
-      const debitsArray = form.get(PURCHASE_FORM_PROPS.DEBITS) as FormArray<DebitFormGroup>;
-      const enabledDebits = debitsArray?.controls
-        .filter((debit) => debit.get(DEBIT_FORM_PROPS.ENABLED)?.value);
-
-      const allEnabledDebitsSet = enabledDebits?.every((debit) => {
-        return debit.get(DEBIT_FORM_PROPS.AMOUNT)?.value !== null;
-      });
-
-      if (totalAmountControl && enabledDebits?.length && allEnabledDebitsSet) {
-        const totalAmount = totalAmountControl.value;
-        const debitAmounts = enabledDebits
-          .map((debit) => debit.get(DEBIT_FORM_PROPS.AMOUNT)?.value || 0)
-          .reduce((acc, curr) => acc + curr, 0);
-
-        if (totalAmount !== debitAmounts) {
-          return { notEqual: true };
-        }
-      }
-
-      return null;
-    };
   }
 
   changeDebitInputDisabled(change: MatCheckboxChange, debit: DebitFormGroup): void {
-    const control = debit.get(DEBIT_FORM_PROPS.AMOUNT);
+    const amountControl = debit.get(DEBIT_FORM_PROPS.AMOUNT);
+    const enabledControl = debit.get(DEBIT_FORM_PROPS.ENABLED);
+
     if (change.checked) {
-      control?.enable();
+      amountControl?.enable();
+      enabledControl?.setValue(true);
     } else {
-      control?.disable();
-      control?.setValue(0);
-      control?.markAsUntouched();
+      amountControl?.disable();
+      amountControl?.setValue(0);
+      amountControl?.markAsUntouched();
+      enabledControl?.setValue(false);
     }
   }
 
   resetDistributionFragments(): void {
     this.debits.controls.forEach((debit) => {
       const amountControl = debit.get(DEBIT_FORM_PROPS.AMOUNT);
+      const enabledControl = debit.get(DEBIT_FORM_PROPS.ENABLED);
+
+      amountControl?.enable();
       amountControl?.setValue(null);
       amountControl?.markAsUntouched();
+      enabledControl?.setValue(true);
     });
   }
 
@@ -146,6 +130,64 @@ export class PurchaseFormBehaviorService {
       description: purchaseFormGroup.get(PURCHASE_FORM_PROPS.DESCRIPTION)?.value as string | undefined,
       debits: this.getDebitFromFormArray(purchaseFormGroup.get(PURCHASE_FORM_PROPS.DEBITS) as FormArray<DebitFormGroup>)
     };
+  }
+
+  /**
+   * Make sure that at least one debit is enabled if we're in custom distribution mode.
+   * @param form  Purchase form
+   * @private
+   */
+  private validateAtLeastOneDebitEnabled(form: AbstractControl): ValidatorFn {
+    return (): ValidationErrors | null => {
+      const { totalAmountControl, enabledDebits } = this.getValidatorControls(form);
+      const isCustomDistribution = form.get(PURCHASE_FORM_PROPS.DISTRIBUTION_MODE)?.value === DISTRIBUTION_MODES.CUSTOM;
+
+      if (totalAmountControl && isCustomDistribution && enabledDebits?.length === 0) {
+        return { noDebits: true };
+      }
+
+      return null;
+    };
+  }
+
+  /**
+   * Make sure the amount of all enabled debits matches the total amount.
+   * @param form  Purchase form
+   * @param perDebitEvaluation  If true, the validator will not return an error as long as not all enabled debits are set.
+   *                            This is required for per-debit evaluation. However, if we want to check if the whole debit array is valid,
+   *                            we need to take all enabled debits into account.
+   * @private
+   */
+  private validateTotalAmountMatchesDebitsSum(form: AbstractControl, perDebitEvaluation: boolean): ValidatorFn {
+    return (): ValidationErrors | null => {
+      const { totalAmountControl, enabledDebits } = this.getValidatorControls(form);
+
+      const allEnabledDebitsSet = enabledDebits?.every((debit) => {
+        return debit.get(DEBIT_FORM_PROPS.AMOUNT)?.value !== null;
+      });
+
+      if (totalAmountControl && enabledDebits?.length && (!perDebitEvaluation || allEnabledDebitsSet)) {
+        const totalAmount = totalAmountControl.value;
+        const debitAmounts = enabledDebits
+          .map((debit) => debit.get(DEBIT_FORM_PROPS.AMOUNT)?.value || 0)
+          .reduce((acc, curr) => acc + curr, 0);
+
+        if (totalAmount !== debitAmounts) {
+          return { notEqual: true };
+        }
+      }
+
+      return null;
+    };
+  }
+
+  private getValidatorControls(form: AbstractControl) {
+    const totalAmountControl = form.get(PURCHASE_FORM_PROPS.AMOUNT);
+    const debitsArray = form.get(PURCHASE_FORM_PROPS.DEBITS) as FormArray<DebitFormGroup>;
+    const enabledDebits = debitsArray?.controls
+      .filter((debit) => debit.get(DEBIT_FORM_PROPS.ENABLED)?.value);
+
+    return { totalAmountControl, enabledDebits };
   }
 
   private distributeToFields(relevantFields: DebitFormGroup[]): void {
