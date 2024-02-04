@@ -1,6 +1,19 @@
+$flex-gap: 8px;
+
 @mixin limit-page-width-inner-container {
   width: 100%;
   @media (min-width: 600px) {
     max-width: 600px;
+  }
+}
+
+@mixin action-button-row {
+  display: flex;
+  width: 100%;
+  gap: $flex-gap;
+  margin-top: $flex-gap;
+  margin-bottom: calc($flex-gap * 2);
+  button {
+    flex: 1;
   }
 }

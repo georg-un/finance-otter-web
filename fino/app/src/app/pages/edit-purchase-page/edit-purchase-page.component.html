@@ -1,6 +1,6 @@
 <h1>Edit Purchase</h1>
 
-<mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)">
+<mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)" class="tab-group" dynamicHeight>
   <mat-tab label="Details">
     <app-purchase-editor-edit *ngIf="purchase; else wait" [purchase]="purchase"
                               (purchaseUpdated)="onPurchaseUpdated($event)"/>
@@ -16,6 +16,6 @@
   <button mat-flat-button color="primary"
           (click)="submitPurchase()"
           [disabled]="!isFormValid">
-    Submit
+    Save
   </button>
 </div>

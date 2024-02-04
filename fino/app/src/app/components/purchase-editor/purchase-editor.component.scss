@@ -1,3 +1,5 @@
+@use '../../../theme/mixins' as mixins;
+
 $flex-gap: 8px;
 $debit-padding-left: 8px;
 
@@ -44,4 +46,8 @@ mat-form-field {
   button {
     flex: 1;
   }
+}
+
+.action-button-row {
+  @include mixins.action-button-row();
 }

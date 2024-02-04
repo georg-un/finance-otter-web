@@ -4,7 +4,7 @@
   <ng-container *ngIf="(users$ | async) as users; else wait">
     <ng-container *ngIf="(category$ | async) as category; else wait">
 
-      <mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)">
+      <mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)" dynamicHeight>
         <mat-tab label="Details">
           <app-purchase-details [purchase]="purchase" [users]="users" [category]="category"/>
         </mat-tab>

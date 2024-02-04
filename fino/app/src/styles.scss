@@ -4,7 +4,7 @@
   --mdc-fab-container-shape: 16px;
 }
 
-html, body { height: 100%; }
+html, body { height: 100dvh; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -25,4 +25,8 @@ h1 {
 *:focus-visible {
   outline-width: 2px;
   outline-color: var(--fino-color-outline);
+}
+
+.mat-mdc-tab-body-content {
+  padding: 16px 0;
 }

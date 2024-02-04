@@ -1,15 +1,9 @@
-$flex-gap: 8px;
+@use '../../../theme/mixins' as mixins;
 
 mat-stepper {
   background: transparent;
 }
 
 .action-button-row {
-  display: flex;
-  width: 100%;
-  gap: $flex-gap;
-  margin-top: $flex-gap;
-  button {
-    flex: 1;
-  }
+  @include mixins.action-button-row();
 }
