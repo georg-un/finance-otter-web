@@ -22,7 +22,7 @@ export class ReceiptBehaviorService {
     // Get the receipt name from the URL query param
     this.activatedRoute.queryParamMap.pipe(
       map((paramMap) => paramMap.get(RECEIPT_NAME_QUERY_PARAM)),
-      filter(Boolean),
+      map((receiptName) => receiptName ?? undefined),  // replace null by undefined for easier typing
     ).subscribe((receiptName) => {
       this.receiptName = receiptName;
     });

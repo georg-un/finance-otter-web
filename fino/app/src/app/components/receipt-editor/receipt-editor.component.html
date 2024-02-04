@@ -5,6 +5,10 @@
 
 <app-receipt-viewer *ngIf="receiptName" [receiptName]="receiptName" (imageLoaded)="onImageLoaded()" />
 
+<div class="button-container" *ngIf="receiptName">
+  <button mat-raised-button color="warn" (click)="deleteReceipt()">Delete receipt</button>
+</div>
+
 <div class="hidden-input">
   <input
     #cameraInput

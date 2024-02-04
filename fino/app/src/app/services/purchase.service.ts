@@ -1,18 +1,11 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  Query,
-  QueryDocumentSnapshot,
-  QuerySnapshot,
-  SnapshotOptions
-} from '@angular/fire/compat/firestore';
-import { BehaviorSubject, EMPTY, from, map, of, switchMap, tap } from 'rxjs';
+import { AngularFirestore, Query, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from '@angular/fire/compat/firestore';
+import { BehaviorSubject, EMPTY, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { runObservableOnceNow } from '../utils';
 import { PurchaseDTO } from '../../../../domain';
 import { addUid, WithUid } from '../utils/with-uid';
 import { HttpClient } from '@angular/common/http';
-import { PURCHASE_API_URLS } from '../../../../domain/purchase-api-models';
-import { PurchaseApiResponse } from '../../../../domain/purchase-api-models';
+import { PURCHASE_API_URLS, PurchaseApiResponse } from '../../../../domain/purchase-api-models';
 
 const DEFAULT_PAGE_SIZE = 10;
 const PURCHASES_DB_PATH = '/purchases';
@@ -55,7 +48,9 @@ export class PurchaseService {
   }
 
   updatePurchase(purchaseId: string, purchaseUpdate: PurchaseDTO) {
-    return this.http.put<PurchaseApiResponse['Update']>(PURCHASE_API_URLS.UPDATE.get(purchaseId), purchaseUpdate);
+    return this.http.put<PurchaseApiResponse['Update']>(PURCHASE_API_URLS.UPDATE.get(purchaseId), purchaseUpdate).pipe(
+      tap(() => this.runLatestQuery())
+    );
   }
 
   deletePurchase(purchaseId: string) {
@@ -99,6 +94,13 @@ export class PurchaseService {
       return EMPTY;  // if lastDocumentInQuery is undefined, we have reached the end of the results list
     }
     this.lastQuery = this.lastQuery.startAfter(this.lastDocumentInQuery);
+    return this.runLatestQuery();
+  }
+
+  private runLatestQuery(): Observable<WithUid<PurchaseDTO>[]> {
+    if (!this.lastQuery) {
+      throw new Error('Property lastQuery must be defined when requesting the next page.');
+    }
     return runObservableOnceNow(
       from(this.lastQuery.get()).pipe(
         tap((snapshot) => this.lastDocumentInQuery = snapshot.docs[snapshot.docs.length - 1]),

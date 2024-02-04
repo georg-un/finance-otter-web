@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,15 +24,13 @@ export interface HTMLInputEvent extends Event {
   ]
 })
 export class ReceiptEditorComponent extends Destroyable {
+  private receiptService = inject(ReceiptService);
+
   @Output() receiptNameChange = new EventEmitter<string | undefined>();
   @ViewChild('cameraInput', { static: false }) private cameraInput?: ElementRef;
   @ViewChild('fileInput', { static: false }) private fileInput?: ElementRef;
 
-  constructor(
-    private receiptService: ReceiptService,
-  ) {
-    super();
-  }
+  @Input() purchaseId?: string;
 
   private _receiptName?: string;
 
@@ -66,5 +64,21 @@ export class ReceiptEditorComponent extends Destroyable {
 
   onImageLoaded(): void {
     this.receiptNameChange.next(this.receiptName);
+  }
+
+  deleteReceipt(): void {
+    if (!this.receiptName) {
+      return;
+    }
+    const deleteResult$ = !!this.purchaseId
+      ? this.receiptService.deleteReceiptForExistingPurchase(this.receiptName, this.purchaseId)
+      : this.receiptService.deleteReceiptWithoutPurchase(this.receiptName);
+
+    deleteResult$.pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe(() => {
+      this.receiptName = undefined;
+      this.receiptNameChange.next(undefined);
+    });
   }
 }

@@ -23,6 +23,13 @@ export const registerPurchaseApi = (app: Application) => {
   app.delete(PURCHASE_API_URLS.DELETE.URL, deletePurchase);
 };
 
+export const deleteReceiptFromPurchase = async (purchaseId: string) => {
+  const db = firestore();
+
+  const purchaseRef = getPurchaseRef(db, purchaseId);
+  await purchaseRef.update({ receiptName: '' });
+}
+
 const addPurchase = handleErrors(async (req: Request, res: Response<PurchaseApiResponse['Create']>): Promise<void> => {
   const purchase = req.body as PurchaseDTO;
   const db = firestore();

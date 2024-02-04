@@ -4,13 +4,15 @@ import { handleErrors } from '../middleware/error-handler';
 import * as firebase from 'firebase-admin';
 import { v4 as uuidv4 } from 'uuid';
 import { isString } from '../../../domain';
-import { RECEIPT_API_URLS, ReceiptApiResponse, RECEIPT_NAME_PATH_PARAM } from '../../../domain/receipt-api-models';
+import { RECEIPT_API_URLS, ReceiptApiResponse, RECEIPT_NAME_PATH_PARAM, PURCHASE_ID_PATH_PARAM } from '../../../domain/receipt-api-models';
+import { deleteReceiptFromPurchase } from './purchase-api';
 
 export const registerReceiptApi = (app: Application) => {
     app.post(RECEIPT_API_URLS.CREATE.URL, addReceipt);
     app.get(RECEIPT_API_URLS.READ.URL, getReceipt);
     app.put(RECEIPT_API_URLS.UPDATE.URL, updateReceipt);
     app.delete(RECEIPT_API_URLS.DELETE.URL, deleteReceipt);
+    app.delete(RECEIPT_API_URLS.DELETE_FOR_EXISTING_PURCHASE.URL, deleteReceiptForExistingPurchase);
 };
 
 const addReceipt = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['Create']>): Promise<void> => {
@@ -50,6 +52,20 @@ const deleteReceipt = handleErrors(async (req: Request, res: Response<ReceiptApi
     res.status(204).send();
 });
 
+const deleteReceiptForExistingPurchase = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['DeleteForExistingPurchase']>): Promise<void> => {
+    const filename = getReceiptNameFromPath(req);
+    const purchaseId = getPurchaseIdFromPath(req);
+
+    if (purchaseId) {
+        await deleteReceiptFromPurchase(purchaseId);
+    }
+
+    const store = firebase.storage();
+    await store.bucket().file(getFilePath(filename)).delete();
+
+    res.status(204).send();
+});
+
 const updateReceipt = handleErrors(async (req: Request, res: Response<ReceiptApiResponse['Update']>): Promise<void> => {
     const filename = getReceiptNameFromPath(req);
     const image = getImageFromRequestBody(req);
@@ -71,6 +87,15 @@ const getReceiptNameFromPath = (req: Request): string => {
 
     return filename;
 };
+
+const getPurchaseIdFromPath = (req: Request): string => {
+    const purchaseId = req.params[PURCHASE_ID_PATH_PARAM];
+    if (!isString(purchaseId)) {
+        throw new HttpsError('invalid-argument', 'No purchase id provided.');
+    }
+
+    return purchaseId;
+}
 
 const getImageFromRequestBody = (req: Request): Buffer => {
     const image = req.body;

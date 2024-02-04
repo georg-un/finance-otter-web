@@ -83,7 +83,7 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
 
   cancel(): void {
     if (this.receiptBehavior.receiptName) {
-      this.receiptService.deleteReceipt(this.receiptBehavior.receiptName).subscribe();
+      this.receiptService.deleteReceiptWithoutPurchase(this.receiptBehavior.receiptName).subscribe();
     }
     void this.router.navigate(['/purchases'], { replaceUrl: true });
   }

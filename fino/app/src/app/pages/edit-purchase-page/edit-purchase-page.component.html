@@ -1,14 +1,14 @@
 <h1>Edit Purchase</h1>
 
+<ng-container *ngIf="purchase; else wait">
 <mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)" class="tab-group" dynamicHeight>
   <mat-tab label="Details">
-    <app-purchase-editor-edit *ngIf="purchase; else wait" [purchase]="purchase"
+    <app-purchase-editor-edit [purchase]="purchase"
                               (purchaseUpdated)="onPurchaseUpdated($event)"
                               (purchaseDeleted)="onPurchaseDeleted()"/>
-    <ng-template #wait>Please stand by...</ng-template>
   </mat-tab>
   <mat-tab label="Receipt">
-    <app-receipt-editor [receiptName]="receiptBehavior.receiptName" (receiptNameChange)="onReceiptNameChange($event)"/>
+    <app-receipt-editor [receiptName]="receiptBehavior.receiptName" [purchaseId]="purchase.uid" (receiptNameChange)="onReceiptNameChange($event)"/>
   </mat-tab>
 </mat-tab-group>
 
@@ -20,3 +20,6 @@
     Save
   </button>
 </div>
+</ng-container>
+
+<ng-template #wait>Loading. Please stand by...</ng-template>

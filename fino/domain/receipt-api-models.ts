@@ -1,5 +1,6 @@
 export const API_BASE_URL = 'api/receipts';
 export const RECEIPT_NAME_PATH_PARAM = 'receiptName';
+export const PURCHASE_ID_PATH_PARAM = 'purchaseId';
 
 export const RECEIPT_API_URLS = {
   CREATE: {
@@ -18,6 +19,10 @@ export const RECEIPT_API_URLS = {
     URL: `/${API_BASE_URL}/:${RECEIPT_NAME_PATH_PARAM}`,
     get: (receiptName: string) => `${API_BASE_URL}/${receiptName}`,
   },
+  DELETE_FOR_EXISTING_PURCHASE: {
+    URL: `/${API_BASE_URL}/:${RECEIPT_NAME_PATH_PARAM}/:${PURCHASE_ID_PATH_PARAM}`,
+    get: (receiptName: string, purchaseId: string) => `${API_BASE_URL}/${receiptName}/${purchaseId}`,
+  }
 } as const;
 
 export interface ReceiptApiResponse {
@@ -25,4 +30,5 @@ export interface ReceiptApiResponse {
   Read: Buffer,
   Update: void,
   Delete: void,
+  DeleteForExistingPurchase: void,
 }

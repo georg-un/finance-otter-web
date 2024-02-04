@@ -27,7 +27,11 @@ export class ReceiptService {
     return this.http.put<ReceiptApiResponse['Update']>(RECEIPT_API_URLS.UPDATE.get(receiptName), newReceipt);
   }
 
-  deleteReceipt(receiptName: string) {
+  deleteReceiptWithoutPurchase(receiptName: string) {
     return this.http.delete<ReceiptApiResponse['Delete']>(RECEIPT_API_URLS.DELETE.get(receiptName));
+  }
+
+  deleteReceiptForExistingPurchase(receiptName: string, purchaseId: string) {
+    return this.http.delete<ReceiptApiResponse['Delete']>(RECEIPT_API_URLS.DELETE_FOR_EXISTING_PURCHASE.get(receiptName, purchaseId));
   }
 }
