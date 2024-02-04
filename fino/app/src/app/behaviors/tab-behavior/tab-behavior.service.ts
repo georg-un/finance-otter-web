@@ -1,4 +1,4 @@
-import { Inject, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -12,13 +12,12 @@ export class TabBehaviorService {
   /**
    * Current tab index
    */
-  tabIndex: number;
+  tabIndex = 0;
 
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
 
-  constructor(@Inject('defaultTabIndex') defaultTabIndex: number) {
-    this.tabIndex = defaultTabIndex;
+  constructor() {
     // Sync query param to property
     this.activatedRoute.queryParamMap.pipe(
       map((paramMap) => paramMap.get(TAB_INDEX_QUERY_PARAM)),

@@ -31,10 +31,7 @@ export const SKIP_CACHE_QUERY_PARAM = 'skipCache';
     ReceiptViewerComponent
   ],
   providers: [
-    {
-      provide: TabBehaviorService,
-      useFactory: () => new TabBehaviorService(1),
-    },
+    TabBehaviorService
   ]
 })
 export class PurchaseViewComponent {

@@ -33,10 +33,7 @@ import { ReceiptBehaviorService } from '../../behaviors/receipt-behavior/receipt
     MatStepperModule,
   ],
   providers: [
-    {
-      provide: TabBehaviorService,
-      useFactory: () => new TabBehaviorService(1),
-    },
+    TabBehaviorService,
     ReceiptBehaviorService
   ]
 })
