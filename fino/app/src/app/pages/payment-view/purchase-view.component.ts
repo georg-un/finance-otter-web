@@ -50,7 +50,7 @@ export class PurchaseViewComponent {
 
   readonly purchase$: Observable<WithUid<PurchaseDTO>> = this.purchaseId$.pipe(
     filter(Boolean),
-    withLatestFrom(this.activatedRoute.paramMap),
+    withLatestFrom(this.activatedRoute.queryParamMap),
     switchMap(([purchaseId, paramMap]) => {
       return this.purchaseService.getPurchase(purchaseId, !!paramMap.get(SKIP_CACHE_QUERY_PARAM));
     }),

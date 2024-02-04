@@ -67,7 +67,7 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
         if (!purchaseId) {
           const errorMessage = 'No purchase-id in URL.';
           alert(errorMessage);
-          this.ngZone.run(() => this.router.navigate(['/purchases']));
+          void this.ngZone.run(() => this.router.navigate(['/purchases']));
           throw new Error(errorMessage);
         }
         return purchaseId!;
@@ -78,7 +78,7 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
     ).subscribe((purchase) => {
       if (!purchase) {
         alert('Purchase not found.');
-        this.router.navigate(['/purchases']);
+        void this.router.navigate(['/purchases']);
         return;
       }
       this.purchase = purchase;
