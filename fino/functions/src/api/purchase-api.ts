@@ -14,6 +14,8 @@ import {
 import { handleErrors } from '../middleware/error-handler';
 import { HttpsError } from 'firebase-functions/v2/https';
 import { PURCHASE_API_URLS, PURCHASE_ID_PATH_PARAM, PurchaseApiResponse } from '../../../domain/purchase-api-models';
+import * as firebase from 'firebase-admin';
+import { getFilePath } from './receipt-api';
 
 export const registerPurchaseApi = (app: Application) => {
   app.post(PURCHASE_API_URLS.CREATE.URL, addPurchase);
@@ -48,6 +50,19 @@ const deletePurchase = handleErrors(async (req: Request, res: Response<PurchaseA
 
   const purchaseRef = getPurchaseRef(db, purchaseId);
   const balancesRef = getBalancesRef(db);
+
+  const purchase = await getPurchase(purchaseRef);
+  const receiptName = purchase.receiptName
+
+  // If purchase has a receipt associated, delete it from the storage
+  if (receiptName) {
+    const store = firebase.storage();
+    try {
+      await store.bucket().file(getFilePath(receiptName)).delete();
+    } catch (e) {
+      console.log(`Unable to delete receipt ${receiptName}. Error: ${e}`);
+    }
+  }
 
   await db.runTransaction(async (transaction) => {
     const purchase = await getPurchase(purchaseRef);

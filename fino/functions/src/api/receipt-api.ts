@@ -84,6 +84,6 @@ const getImageFromRequestBody = (req: Request): Buffer => {
     return image;
 };
 
-const getFilePath = (filename: string): string => {
+export const getFilePath = (filename: string): string => {
     return `receipts/${filename}`
 }
