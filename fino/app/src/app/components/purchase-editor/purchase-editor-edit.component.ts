@@ -20,11 +20,15 @@ import { merge } from 'rxjs';
   ]
 })
 export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent implements OnInit {
+  override readonly EDIT_MODE: 'EDIT' | 'CREATE' = 'EDIT';
+
   private debitSumPipe = inject(DebitSumPipe);
 
   @Input() purchase!: WithUid<PurchaseDTO>;
 
   @Output() purchaseUpdated = new EventEmitter<string>();
+
+  @Output() purchaseDeleted = new EventEmitter<void>();
 
   ngOnInit() {
     this.purchaseFormBehavior.debitFormGroupInitialized$.pipe(
@@ -61,6 +65,19 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
       takeUntil(this.onDestroy$),
     ).subscribe(() => {
       this.purchaseUpdated.next(purchaseId);
+    });
+  }
+
+  override deletePurchase() {
+    const purchaseId = this.purchase.uid;
+    if (!purchaseId) {
+      alert('Purchase ID is missing. Please try again later.');
+      return;
+    }
+    this.purchaseService.deletePurchase(purchaseId).pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe(() => {
+      this.purchaseDeleted.next();
     });
   }
 

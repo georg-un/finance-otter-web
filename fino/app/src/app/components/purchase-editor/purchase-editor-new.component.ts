@@ -15,6 +15,7 @@ import { AbstractPurchaseEditorComponent, PURCHASE_EDITOR_IMPORTS, PURCHASE_EDIT
   ],
 })
 export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent {
+  override readonly EDIT_MODE: 'EDIT' | 'CREATE' = 'CREATE';
 
   @Input() receiptName?: string;
 
@@ -35,5 +36,9 @@ export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent 
     ).subscribe((purchaseId) => {
       this.purchaseCreated.next(purchaseId);
     });
+  }
+
+  override deletePurchase() {
+    throw new Error('Deleting purchase is not implemented for new-purchase flow.');
   }
 }

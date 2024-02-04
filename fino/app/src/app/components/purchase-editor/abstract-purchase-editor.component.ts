@@ -62,5 +62,9 @@ export abstract class AbstractPurchaseEditorComponent extends Destroyable {
   readonly users$ = this.purchaseFormBehavior.users$;
   readonly categories$ = this.purchaseFormBehavior.categories$;
 
+  abstract readonly EDIT_MODE: 'EDIT' | 'CREATE';
+
   abstract submitPurchase(): void;
+
+  abstract deletePurchase(): void;
 }

@@ -93,6 +93,10 @@
         </div>
       </div>
 
+      <div class="action-button-row" *ngIf="EDIT_MODE === 'EDIT'">
+        <button mat-flat-button (click)="deletePurchase()" type="button" color="warn">Delete purchase</button>
+      </div>
+
     </form>
   </ng-container>
 </ng-container>

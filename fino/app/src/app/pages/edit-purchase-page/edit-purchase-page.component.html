@@ -3,7 +3,8 @@
 <mat-tab-group [selectedIndex]="tabBehavior.tabIndex" (selectedIndexChange)="tabBehavior.tabIndexChange($event)" class="tab-group" dynamicHeight>
   <mat-tab label="Details">
     <app-purchase-editor-edit *ngIf="purchase; else wait" [purchase]="purchase"
-                              (purchaseUpdated)="onPurchaseUpdated($event)"/>
+                              (purchaseUpdated)="onPurchaseUpdated($event)"
+                              (purchaseDeleted)="onPurchaseDeleted()"/>
     <ng-template #wait>Please stand by...</ng-template>
   </mat-tab>
   <mat-tab label="Receipt">

@@ -110,6 +110,10 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
     void this.router.navigate(['/purchases', purchaseId], { queryParams: { [SKIP_CACHE_QUERY_PARAM]: true } });
   }
 
+  onPurchaseDeleted() {
+    void this.router.navigate(['/purchases']);
+  }
+
   onReceiptNameChange(receiptName: string | undefined) {
     this.areChangesPending = true;
     this.receiptBehavior.receiptNameChange(receiptName);
