@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RECEIPT_API_URLS } from '../../../../../domain/receipt-api-models';
 import { CommonModule } from '@angular/common';
 
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   template: `
-    <img [src]="receiptUri" (load)="imageLoaded.next()" class="receipt" alt="Picture of the receipt"/>
+    <img [src]="receiptSrc" class="receipt" alt="Picture of the receipt"/>
   `,
   styles: [`
     .receipt {
@@ -20,11 +20,9 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class ReceiptViewerComponent {
-  @Input() set receiptName(name: string) {
-    this.receiptUri = RECEIPT_API_URLS.READ.get(name);
+  @Input() set receiptName(receiptName: string) {
+    this.receiptSrc = receiptName.startsWith('data:') ? receiptName : RECEIPT_API_URLS.READ.get(receiptName);
   }
 
-  @Output() imageLoaded = new EventEmitter<void>();
-
-  receiptUri: string | undefined;
+  receiptSrc!: string;
 }

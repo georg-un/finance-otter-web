@@ -1,7 +1,7 @@
 <ng-container *ngIf="users$ | async as users; else wait">
   <ng-container *ngIf="categories$ | async as categories else wait">
 
-    <form [formGroup]="form" (ngSubmit)="submitPurchase()" *ngIf="!!users?.length && !!categories?.length; else wait">
+    <form [formGroup]="form" (ngSubmit)="validatePurchase()" *ngIf="!!users?.length && !!categories?.length; else wait">
       <mat-form-field appearance="outline">
         <mat-label>Shop</mat-label>
         <input matInput required [formControlName]="FORM_PROPS.SHOP" type="string"/>
@@ -94,7 +94,7 @@
       </div>
 
       <div class="action-button-row" *ngIf="EDIT_MODE === 'EDIT'">
-        <button mat-flat-button (click)="deletePurchase()" type="button" color="warn">Delete purchase</button>
+        <button mat-flat-button (click)="onDeletePurchase()" type="button" color="warn">Delete purchase</button>
       </div>
 
     </form>

@@ -1,11 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addQueryParam } from '../../utils/router-utils';
-import { RECEIPT_NAME_PATH_PARAM } from '../../../../../domain/receipt-api-models';
 
-export const RECEIPT_NAME_QUERY_PARAM = 'receiptName';
+export const RECEIPT_SRC_QUERY_PARAM = 'receiptSrc';
 
 @Injectable()
 export class ReceiptBehaviorService {
@@ -13,7 +11,12 @@ export class ReceiptBehaviorService {
   /**
    * Current receipt name
    */
-  receiptName?: string;
+  receiptSrc?: string;
+
+  /**
+   * Whether the receipt has been changed.
+   */
+  receiptChanged = false;
 
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -21,21 +24,22 @@ export class ReceiptBehaviorService {
   constructor() {
     // Get the receipt name from the URL query param
     this.activatedRoute.queryParamMap.pipe(
-      map((paramMap) => paramMap.get(RECEIPT_NAME_QUERY_PARAM)),
+      map((paramMap) => paramMap.get(RECEIPT_SRC_QUERY_PARAM)),
       map((receiptName) => receiptName ?? undefined),  // replace null by undefined for easier typing
     ).subscribe((receiptName) => {
-      this.receiptName = receiptName;
+      this.receiptSrc = receiptName;
     });
   }
 
   /**
    * Sync receipt name changes to the URL query param
-   * @param receiptName
+   * @param receiptSrc
    */
-  receiptNameChange(receiptName: string | undefined) {
-    if (receiptName !== this.receiptName) {
+  receiptSrcChange(receiptSrc: string | undefined) {
+    if (receiptSrc !== this.receiptSrc) {
+      this.receiptChanged = true;
       addQueryParam(this.router, this.activatedRoute, {
-        [RECEIPT_NAME_PATH_PARAM]: receiptName ? receiptName : null  // null removes the query param
+        [RECEIPT_SRC_QUERY_PARAM]: receiptSrc ? receiptSrc : null  // null removes the query param
       });
     }
   }

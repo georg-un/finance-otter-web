@@ -1,12 +1,12 @@
-<div class="button-container" *ngIf="!receiptName">
+<div class="button-container" *ngIf="!receiptSrc">
   <button mat-raised-button color="primary" (click)="triggerCameraInput()">Take a picture</button>
   <button mat-stroked-button (click)="triggerFileInput()">Select from gallery</button>
 </div>
 
-<app-receipt-viewer *ngIf="receiptName" [receiptName]="receiptName" (imageLoaded)="onImageLoaded()" />
+<app-receipt-viewer *ngIf="receiptSrc" [receiptName]="receiptSrc" />
 
-<div class="button-container" *ngIf="receiptName">
-  <button mat-raised-button color="warn" (click)="deleteReceipt()">Delete receipt</button>
+<div class="button-container" *ngIf="receiptSrc">
+  <button mat-raised-button color="warn" (click)="onDeleteReceipt()">Delete receipt</button>
 </div>
 
 <div class="hidden-input">

@@ -48,9 +48,7 @@ export class PurchaseService {
   }
 
   updatePurchase(purchaseId: string, purchaseUpdate: PurchaseDTO) {
-    return this.http.put<PurchaseApiResponse['Update']>(PURCHASE_API_URLS.UPDATE.get(purchaseId), purchaseUpdate).pipe(
-      tap(() => this.runLatestQuery())
-    );
+    return this.http.put<PurchaseApiResponse['Update']>(PURCHASE_API_URLS.UPDATE.get(purchaseId), purchaseUpdate);
   }
 
   deletePurchase(purchaseId: string) {
@@ -64,7 +62,16 @@ export class PurchaseService {
       })
     );
     if (skipCache) {
-      return purchaseFromApi$;
+      return purchaseFromApi$.pipe(tap((purchaseFromApi) => {
+        if (!purchaseFromApi) {
+          return;
+        }
+        // update element in cache
+        const updatedPurchases = this.purchases$.value.map((purchase) => (
+          purchase.uid === purchaseFromApi.uid ? purchaseFromApi : purchase
+        ));
+        this.purchases$.next(updatedPurchases);
+      }))
     }
     // Return the purchase from the store if it is present. Otherwise, call the API and return the response.
     return this.purchases$.pipe(

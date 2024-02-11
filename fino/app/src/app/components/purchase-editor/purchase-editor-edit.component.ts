@@ -6,6 +6,7 @@ import { AbstractPurchaseEditorComponent, PURCHASE_EDITOR_IMPORTS, PURCHASE_EDIT
 import { PurchaseDTO } from '../../../../../domain';
 import { WithUid } from '../../utils/with-uid';
 import { merge } from 'rxjs';
+import { PURCHASE_FORM_PROPS } from './form/purchase-form-group';
 
 @Component({
   selector: 'app-purchase-editor-edit',
@@ -26,9 +27,15 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
 
   @Input() purchase!: WithUid<PurchaseDTO>;
 
-  @Output() purchaseUpdated = new EventEmitter<string>();
+  @Input() set receiptName(val: string | undefined) {
+    // We set the receipt name as form property in order to track changes as part of form validation
+    // We do not use this form prop for the final receipt name though
+    this.form.get(PURCHASE_FORM_PROPS._RECEIPT_NAME)!.setValue(val);
+  }
 
-  @Output() purchaseDeleted = new EventEmitter<void>();
+  @Output() readonly updatePurchase = new EventEmitter<WithUid<PurchaseDTO>>();
+
+  @Output() deletePurchase = new EventEmitter<void>();
 
   ngOnInit() {
     this.purchaseFormBehavior.debitFormGroupInitialized$.pipe(
@@ -47,7 +54,7 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
       });
   }
 
-  override submitPurchase() {
+  override validatePurchase() {
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
     this.purchaseFormBehavior.validateAllDebits();
@@ -60,25 +67,21 @@ export class PurchaseEditorEditComponent extends AbstractPurchaseEditorComponent
       alert('Purchase ID is missing. Please try again later.');
       return;
     }
-    const purchaseUpdate = this.purchaseFormBehavior.getPurchaseFromFormGroup(this.form);
-    this.purchaseService.updatePurchase(purchaseId, purchaseUpdate).pipe(
-      takeUntil(this.onDestroy$),
-    ).subscribe(() => {
-      this.purchaseUpdated.next(purchaseId);
-    });
+    const purchaseUpdate: WithUid<PurchaseDTO> = {
+      ...this.purchaseFormBehavior.getPurchaseFromFormGroup(this.form),
+      uid: purchaseId,
+    };
+
+    this.updatePurchase.emit(purchaseUpdate);
   }
 
-  override deletePurchase() {
+  override onDeletePurchase() {
     const purchaseId = this.purchase.uid;
     if (!purchaseId) {
       alert('Purchase ID is missing. Please try again later.');
       return;
     }
-    this.purchaseService.deletePurchase(purchaseId).pipe(
-      takeUntil(this.onDestroy$)
-    ).subscribe(() => {
-      this.purchaseDeleted.next();
-    });
+    this.deletePurchase.next();
   }
 
   private mapPurchaseToForm(purchase: WithUid<PurchaseDTO>) {

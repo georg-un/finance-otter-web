@@ -2,14 +2,16 @@
 
 <mat-stepper [linear]="true" (selectionChange)="onSelectedStepChange($event)">
   <mat-step label="Add receipt">
-    <app-receipt-editor [receiptName]="receiptBehavior.receiptName" (receiptNameChange)="receiptBehavior.receiptNameChange($event)" />
+    <app-receipt-editor [receiptSrc]="receiptBehavior.receiptSrc"
+                        (imageCapture)="onNewReceipt($event)"
+                        (deleteReceipt)="onDeleteReceipt()"/>
     <div class="action-button-row">
       <button mat-flat-button (click)="cancel()">Cancel</button>
-      <button mat-flat-button matStepperNext [color]="!!receiptBehavior.receiptName ? 'primary' : undefined">Next</button>
+      <button mat-flat-button matStepperNext [color]="!!receiptBehavior.receiptSrc ? 'primary' : undefined">Next</button>
     </div>
   </mat-step>
   <mat-step label="Enter details">
-    <app-purchase-editor-new [receiptName]="receiptBehavior.receiptName" (purchaseCreated)="onPurchaseCreated($event)"/>
+    <app-purchase-editor-new [receiptName]="receiptBehavior.receiptSrc" (createPurchase)="onCreatePurchase($event)"/>
     <div class="action-button-row">
       <button mat-flat-button matStepperPrevious>Back</button>
       <button mat-flat-button color="primary"

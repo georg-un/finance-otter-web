@@ -5,4 +5,5 @@
   right: layout-commons.$main-side-padding;
   bottom: calc(#{layout-commons.$toolbar-height} + #{layout-commons.$main-side-padding});
   border-radius: 16px !important;
+  z-index: 999;
 }

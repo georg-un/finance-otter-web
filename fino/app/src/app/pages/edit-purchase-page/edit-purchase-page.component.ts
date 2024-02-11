@@ -5,9 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReceiptEditorComponent } from '../../components/receipt-editor/receipt-editor.component';
 import { takeUntil } from 'rxjs/operators';
 import { Destroyable } from '../../components/destroyable';
-import { addQueryParam } from '../../utils/router-utils';
-import { map, switchMap, take, zip } from 'rxjs';
-import { RECEIPT_NAME_PATH_PARAM } from '../../../../../domain/receipt-api-models';
+import { map, Observable, of, switchMap, take, zip } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PurchaseEditorEditComponent } from '../../components/purchase-editor/purchase-editor-edit.component';
 import { PurchaseService } from '../../services/purchase.service';
@@ -17,6 +15,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { SKIP_CACHE_QUERY_PARAM } from '../payment-view/purchase-view.component';
 import { TabBehaviorService } from '../../behaviors/tab-behavior/tab-behavior.service';
 import { ReceiptBehaviorService } from '../../behaviors/receipt-behavior/receipt-behavior.service';
+import { convertImageToDataUrl } from '../../utils/convert-image';
+import { ReceiptService } from '../../services/receipt.service';
 
 @Component({
   selector: 'app-edit-purchase-page',
@@ -38,15 +38,17 @@ import { ReceiptBehaviorService } from '../../behaviors/receipt-behavior/receipt
   ]
 })
 export class EditPurchasePageComponent extends Destroyable implements OnInit {
+  readonly tabBehavior = inject(TabBehaviorService);
+  readonly receiptBehavior = inject(ReceiptBehaviorService);
+  private readonly receiptService = inject(ReceiptService);
 
-  areChangesPending = false;
   isFormValid = false;
   purchase?: WithUid<PurchaseDTO>;
 
   @ViewChild(PurchaseEditorEditComponent) purchaseEditor?: PurchaseEditorEditComponent;
 
-  readonly tabBehavior = inject(TabBehaviorService);
-  readonly receiptBehavior = inject(ReceiptBehaviorService);
+  private originalReceiptSrc?: string;
+  private newReceipt?: File;
 
   constructor(
     private ngZone: NgZone,
@@ -83,9 +85,8 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
       }
       this.purchase = purchase;
       const receiptName = this.purchase.receiptName;
-      if (receiptName) {
-        addQueryParam(this.router, this.activatedRoute, { [RECEIPT_NAME_PATH_PARAM]: receiptName });
-      }
+      this.originalReceiptSrc = receiptName;
+      this.receiptBehavior.receiptSrcChange(receiptName);
       setTimeout(() => this.syncFormValidity());
     });
   }
@@ -102,21 +103,72 @@ export class EditPurchasePageComponent extends Destroyable implements OnInit {
     this.location.back();
   }
 
-  submitPurchase(): void {
-    this.purchaseEditor!.submitPurchase();
+  submitPurchaseUpdate() {
+    this.purchaseEditor!.validatePurchase();
   }
 
-  onPurchaseUpdated(purchaseId: string) {
-    void this.router.navigate(['/purchases', purchaseId], { queryParams: { [SKIP_CACHE_QUERY_PARAM]: true } });
+  private submitReceiptUpdate(purchaseId: string): Observable<string | undefined> {
+    // no changes
+    if (this.receiptBehavior.receiptSrc === this.originalReceiptSrc) {
+      return of();
+    }
+    // no receipt before but now there's a new receipt  -->  upload new
+    if (!this.originalReceiptSrc && this.receiptBehavior.receiptSrc && this.newReceipt) {
+      return this.receiptService.uploadReceipt(this.newReceipt);
+    }
+    // receipt before but now there is no receipt  -->  delete original
+    if (this.originalReceiptSrc && !this.receiptBehavior.receiptSrc) {
+      return this.receiptService.deleteReceiptForExistingPurchase(this.originalReceiptSrc, purchaseId).pipe(map(() => undefined));
+    }
+    // receipt before and now there is a new one  -->  replace original
+    if (this.originalReceiptSrc && this.receiptBehavior.receiptSrc && this.newReceipt) {
+      return this.receiptService.replaceReceipt(this.originalReceiptSrc, this.newReceipt).pipe(map(() => undefined));
+    }
+    // none of the above  -->  unexpected state
+    console.error({
+      originalReceiptSrc: this.originalReceiptSrc,
+      urlReceiptSrc: this.receiptBehavior.receiptSrc,
+      newReceipt: this.newReceipt
+    });
+    throw new Error('Unexpected state when trying to submit the receipt.');
   }
 
-  onPurchaseDeleted() {
-    void this.router.navigate(['/purchases']);
+  onUpdatePurchase(purchaseUpdate: WithUid<PurchaseDTO>) {
+    const purchaseId = purchaseUpdate.uid;
+    return this.submitReceiptUpdate(purchaseId).pipe(
+      switchMap((receiptSrc) => {
+        purchaseUpdate.receiptName = receiptSrc;
+        return this.purchaseService.updatePurchase(purchaseId, purchaseUpdate);
+      })
+    ).subscribe(() => {
+      void this.router.navigate(['/purchases', purchaseId], { queryParams: { [SKIP_CACHE_QUERY_PARAM]: true } });
+    });
   }
 
-  onReceiptNameChange(receiptName: string | undefined) {
-    this.areChangesPending = true;
-    this.receiptBehavior.receiptNameChange(receiptName);
+  onDeletePurchase() {
+    const purchaseId = this.purchase?.uid;
+    if (!purchaseId) {
+      return;
+    }
+    this.purchaseService.deletePurchase(purchaseId)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(() => void this.router.navigate(['/purchases']));
+  }
+
+  onNewReceipt(receipt: File) {
+    convertImageToDataUrl(receipt).subscribe((dataUrl) => {
+      if (typeof dataUrl === 'string') {
+        this.receiptBehavior.receiptSrcChange(dataUrl);
+        this.newReceipt = receipt;
+      } else {
+        console.error('Received unexpected dataUrl:', dataUrl);
+      }
+    });
+  }
+
+  onDeleteReceipt() {
+    this.receiptBehavior.receiptSrcChange(undefined);
+    this.newReceipt = undefined;
   }
 }
 

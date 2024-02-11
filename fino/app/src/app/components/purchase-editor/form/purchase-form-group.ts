@@ -17,6 +17,7 @@ export const PURCHASE_FORM_PROPS = {
   DESCRIPTION: 'description',
   DISTRIBUTION_MODE: 'distributionMode',
   DEBITS: 'debits',
+  _RECEIPT_NAME: '_receiptName'
 } as const;
 
 export function generateEmptyPurchaseFormGroup() {
@@ -30,6 +31,7 @@ export function generateEmptyPurchaseFormGroup() {
       DISTRIBUTION_MODES.EQUALLY
     ),
     [PURCHASE_FORM_PROPS.DEBITS]: new FormArray<DebitFormGroup>([]),
+    [PURCHASE_FORM_PROPS._RECEIPT_NAME]: new FormControl<string | undefined>(undefined),
   });
 }
 

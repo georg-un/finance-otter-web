@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
 import { AbstractPurchaseEditorComponent, PURCHASE_EDITOR_IMPORTS, PURCHASE_EDITOR_PROVIDERS } from './abstract-purchase-editor.component';
+import { PURCHASE_FORM_PROPS } from './form/purchase-form-group';
+import { PurchaseDTO } from '../../../../../domain';
 
 @Component({
   selector: 'app-purchase-editor-new',
@@ -17,11 +18,13 @@ import { AbstractPurchaseEditorComponent, PURCHASE_EDITOR_IMPORTS, PURCHASE_EDIT
 export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent {
   override readonly EDIT_MODE: 'EDIT' | 'CREATE' = 'CREATE';
 
-  @Input() receiptName?: string;
+  @Input() set receiptName(val: string | undefined) {
+    this.form.get(PURCHASE_FORM_PROPS._RECEIPT_NAME)!.setValue(val);
+  }
 
-  @Output() purchaseCreated = new EventEmitter<string>();
+  @Output() readonly createPurchase = new EventEmitter<PurchaseDTO>();
 
-  override submitPurchase(): void {
+  override validatePurchase(): void {
     this.purchaseFormBehavior.validateAllDebits();
     this.purchaseFormBehavior.form.markAllAsTouched();
     this.purchaseFormBehavior.form.updateValueAndValidity();
@@ -30,15 +33,11 @@ export class PurchaseEditorNewComponent extends AbstractPurchaseEditorComponent 
     }
     this.purchaseFormBehavior.distributeDebitsIfDistributionModeEqual();
     const purchase = this.purchaseFormBehavior.getPurchaseFromFormGroup(this.form);
-    purchase.receiptName = this.receiptName;
-    this.purchaseService.createPurchase(purchase).pipe(
-      takeUntil(this.onDestroy$),
-    ).subscribe((purchaseId) => {
-      this.purchaseCreated.next(purchaseId);
-    });
+
+    this.createPurchase.emit(purchase);
   }
 
-  override deletePurchase() {
+  override onDeletePurchase() {
     throw new Error('Deleting purchase is not implemented for new-purchase flow.');
   }
 }

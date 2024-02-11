@@ -6,12 +6,15 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { PurchaseEditorNewComponent } from '../../components/purchase-editor/purchase-editor-new.component';
 import { ReceiptEditorComponent } from '../../components/receipt-editor/receipt-editor.component';
 import { ReceiptService } from '../../services/receipt.service';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { Destroyable } from '../../components/destroyable';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { addQueryParam } from '../../utils/router-utils';
-import { map } from 'rxjs';
+import { map, of } from 'rxjs';
 import { ReceiptBehaviorService } from '../../behaviors/receipt-behavior/receipt-behavior.service';
+import { convertImageToDataUrl } from '../../utils/convert-image';
+import { PurchaseDTO } from '../../../../../domain';
+import { PurchaseService } from '../../services/purchase.service';
 
 const STEP_INDEX_QUERY_PARAM = 'stepIndex';
 
@@ -33,23 +36,19 @@ const STEP_INDEX_QUERY_PARAM = 'stepIndex';
   ]
 })
 export class NewPurchaseStepperComponent extends Destroyable implements AfterViewInit {
-
-  formValid = false;
+  readonly receiptBehavior = inject(ReceiptBehaviorService);
+  private readonly purchaseService = inject(PurchaseService);
+  private readonly receiptService = inject(ReceiptService);
+  private readonly changeDetection = inject(ChangeDetectorRef);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   @ViewChild(PurchaseEditorNewComponent) purchaseEditor?: PurchaseEditorNewComponent;
   @ViewChild(ReceiptEditorComponent) receiptEditor?: ReceiptEditorComponent;
   @ViewChild(MatStepper) stepper?: MatStepper;
 
-  readonly receiptBehavior = inject(ReceiptBehaviorService);
-
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private changeDetection: ChangeDetectorRef,
-    private receiptService: ReceiptService,
-  ) {
-    super();
-  }
+  formValid = false;
+  private receipt?: File;
 
   ngAfterViewInit() {
     this.syncFormValidity();
@@ -68,7 +67,7 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
     });
 
     // Open camera if applicable
-    if (this.stepper!.selectedIndex === 0 && !this.receiptBehavior.receiptName) {
+    if (this.stepper!.selectedIndex === 0 && !this.receiptBehavior.receiptSrc) {
       this.receiptEditor!.triggerCameraInput();
     }
   }
@@ -82,23 +81,45 @@ export class NewPurchaseStepperComponent extends Destroyable implements AfterVie
   }
 
   cancel(): void {
-    if (this.receiptBehavior.receiptName) {
-      this.receiptService.deleteReceiptWithoutPurchase(this.receiptBehavior.receiptName).subscribe();
-    }
     void this.router.navigate(['/purchases'], { replaceUrl: true });
   }
 
   submitPurchase(): void {
-    this.purchaseEditor?.submitPurchase();
+    this.purchaseEditor?.validatePurchase();
   }
 
-  onPurchaseCreated(purchaseId: string) {
-    void this.router.navigate(['/purchases', purchaseId]);
+  onCreatePurchase(purchase: PurchaseDTO): void {
+    const receiptName$ = this.receiptBehavior.receiptSrc && this.receipt
+      ? this.receiptService.uploadReceipt(this.receipt)
+      : of();
+
+    receiptName$.pipe(
+      map((receiptSrc) => ({ ...purchase, receiptName: receiptSrc })),
+      switchMap((purchaseWithReceipt) => this.purchaseService.createPurchase(purchaseWithReceipt)),
+      takeUntil(this.onDestroy$),
+    ).subscribe((purchaseId) => {
+      void this.router.navigate(['/purchases', purchaseId]);
+    });
   }
 
   onSelectedStepChange($event: StepperSelectionEvent) {
     if ($event.selectedIndex !== $event.previouslySelectedIndex) {
       addQueryParam(this.router, this.activatedRoute, { [STEP_INDEX_QUERY_PARAM]: $event.selectedIndex });
     }
+  }
+
+  onNewReceipt(receipt: File) {
+    convertImageToDataUrl(receipt).subscribe((dataUrl) => {
+      if (typeof dataUrl === 'string') {
+        this.receiptBehavior.receiptSrcChange(dataUrl);
+        this.receipt = receipt;
+      } else {
+        console.error('Received unexpected dataUrl:', dataUrl);
+      }
+    });
+  }
+
+  onDeleteReceipt() {
+    this.receiptBehavior.receiptSrcChange(undefined);
   }
 }
